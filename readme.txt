@@ -22,7 +22,7 @@ site's pages.
 
 *By default* the widget and index page become section-targeted by including them on pages below a top-level page:
 e.g. if your site layout has:
-	home
+`	home
 	section1
 		section1a
 		section1b
@@ -30,7 +30,7 @@ e.g. if your site layout has:
 	section2
 		section2a
 		section2b
-		a-z
+		a-z`
 then placing the widget onto either section1, section1a or section1b will target the widget to displaying only children of section1.
 placing the a-z index on a child of section1 will likewise limit the index page to display only children of section1.
 
