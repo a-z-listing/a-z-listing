@@ -3,7 +3,7 @@ Contributors: diddledan
 Tags: a to z, a-z, archive, listing, widget
 Requires at least: 3.5
 Tested up to: 3.7
-Stable tag: trunk
+Stable tag: 0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,6 +65,9 @@ function remove_az_section_targeting($sections) {
 This filter can also be used, by removing entries which are standard $post variables, to limit which top-level pages are used as section identifiers.
 
 == Changelog ==
+
+= 0.2 =
+renamed the plugin file and packaged for release
 
 = 0.1 =
 first release
