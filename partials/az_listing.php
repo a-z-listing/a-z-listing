@@ -34,7 +34,7 @@ function the_az_listing($query=null, $colcount = 1, $minpercol = 10, $heading_le
 					}
 					$i++;$j++;
 					?>
-						<li><a href="<?php echo get_permalink($post->ID); ?>"><?php echo get_the_title($post->ID); ?></a></li>
+						<li><a href="<?php echo get_permalink($post->ID); ?>"><?php echo $name; ?></a></li>
 					<?php
 					if (($minpercol - $i <= 0 && $numpercol - $i <= 0) || $j >= count($letters[$A])) {
 						echo '</ul></div>';
@@ -97,7 +97,11 @@ function bh__az_query($query) {
 	
 	$short_names = array();
 	foreach ($pages as $page) {
-		$terms = array_filter(wp_get_object_terms($page->ID, 'index'));
+		$index_tax = apply_filters('az_additional_titles_taxonomy', '');
+		$terms = array();
+		if (!empty($index_tax)) {
+			$terms = array_filter(wp_get_object_terms($page->ID, $index_tax));
+		}
 		if (!empty($terms)) {
 			foreach ($terms as $term) {
 				$A = strtoupper(substr($term->name, 0, 1));

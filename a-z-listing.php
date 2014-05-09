@@ -41,14 +41,6 @@ function bh_az_listing_init() {
 		}
 	}
 
-	// widgets: auto register
-	foreach (glob($dir."widgets/*.php") as $filename) {
-		require_once($filename);
-		$name = substr($name, 0, strlen($name) - strlen(".php"));
-		$name = substr($name, strrpos($name, "/")+1);
-		register_widget($name);
-	}
-
 	// locale
 	$locale = get_locale();
 	$lang = substr($locale, 0, 2);
@@ -88,5 +80,19 @@ function bh_az_listing_init() {
 		if ($matches[1] != 'admin' || is_admin()) {
 			wp_enqueue_style($code, $url);
 		}
+	}
+}
+
+add_action('widgets_init', 'bh_az_listing_widgets');
+function bh_az_listing_widgets() {
+	$dir = dirname(__FILE__)."/";
+	
+	// widgets: auto register
+	foreach (glob($dir."widgets/*.php") as $filename) {
+		require_once($filename);
+
+		$filename = substr($filename, 0, strlen($filename) - strlen(".php"));
+		$filename = substr($filename, strrpos($filename, "/")+1);
+		register_widget($filename);
 	}
 }
