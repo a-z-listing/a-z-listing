@@ -66,6 +66,10 @@ This filter can also be used, by removing entries which are standard $post varia
 
 == Changelog ==
 
+= 0.3 =
+fixed failure to activate as reported by ml413 and verified by geoffrey (both WordPress.org usernames)
+	see: https://wordpress.org/support/topic/fatal-error-when-trying-to-install-1
+
 = 0.2 =
 renamed the plugin file and packaged for release
 
