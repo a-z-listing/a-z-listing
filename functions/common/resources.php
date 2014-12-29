@@ -1,6 +1,33 @@
 <?php
 // borrowed from Marcus Downing: http://profiles.wordpress.org/marcusdowning/
 
+if (!function_exists('bh_select_post_id')) {
+	function select_post_id($p = null) {
+		if (is_null($p)) {
+			global $post;
+			$p = $post;
+		}
+
+		if (is_string($p)) {
+			$p = get_page_by_path($p);
+		}
+
+		if (is_array($p)) {
+			$p = (object) $p;
+		}
+
+		if (is_object($p)) {
+			if ($p->post_type == 'nav_menu_item') {
+				$p = $p->object_id;
+			} else {
+				$p = $p->ID;
+			}
+		}
+
+		return (int) $p;
+	}
+}
+
 if (!function_exists('bh_get_page_path')) {
 	function bh_get_page_path(&$p = null, $current = false) {
 	  if (empty($p) && $current) {
@@ -48,7 +75,7 @@ if (!function_exists('bh_current_section')) {
 	function bh_current_section(&$p = null, $depth = 0, $current = true) {
 	  if (is_object($p) && !empty($p->_current_section))
 		return $p->_current_section;
-	  $path = get_page_path($p, $current);
+	  $path = bh_get_page_path($p, $current);
 	  if (DEBUG_PATHS) do_action('log', 'current_section: Current path', $path);
 	  $parts = explode("/", $path);
 	  $parts = array_values(array_filter($parts));
