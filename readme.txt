@@ -66,6 +66,9 @@ This filter can also be used, by removing entries which are standard $post varia
 
 == Changelog ==
 
+= 0.4 =
+fixed file locations causing failure to load.
+
 = 0.3 =
 fixed failure to activate as reported by ml413 and verified by geoffrey (both WordPress.org usernames)
 	see: https://wordpress.org/support/topic/fatal-error-when-trying-to-install-1
