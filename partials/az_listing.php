@@ -1,75 +1,71 @@
 <?php
-
-function the_az_listing($query=null, $colcount = 1, $minpercol = 10, $heading_level = 2) {
-	$caps = range('A', 'Z');
-	$letters = bh__az_query($query);
-	?>
-	<div id='letters'><?php the_az_letters($query); ?></div>
-	<div id='az-slider'>
-		<div id='inner-slider'><?php
-		foreach ($caps as $A) {
-			if (!empty($letters[$A])) {
-				//$colcount = $backupcolcount;
-				$id = $A;
-				if ($id == '#') $id = '_';
-				echo "<div class='letter-section' id='letter-$id'><a name='letter-$id'></a><h$heading_level><span>$A</span></h$heading_level>";
-				
-				// $numpercol = 0;
-			  
-				// do {
-				//   $numpercol = ceil(count($letters[$A]) / $colcount);
-				//   do_action('log', 'number of items per column in-loop', $A, $numpercol, $colcount, $minpercol);
-				//   if ($numpercol >= $minpercol) break;
-				//   $colcount--;
-				// } while ($numpercol < $minpercol && $colcount > 1);
-			  
-				// do_action('log', 'number of items per column', $numpercol, $colcount);
-				
-				$numpercol = ceil(count($letters[$A]) / $colcount);
-				
-				$i = $j = 0;
-				foreach ($letters[$A] as $name => $post) {
-					if ($i == 0) {
-						echo '<div><ul>';
-					}
-					$i++;$j++;
-					?>
-						<li><a href="<?php echo get_permalink($post->ID); ?>"><?php echo $name; ?></a></li>
-					<?php
-					if (($minpercol - $i <= 0 && $numpercol - $i <= 0) || $j >= count($letters[$A])) {
-						echo '</ul></div>';
-						$i = 0;
-					}
-				}
-				echo "<div class='clear empty'></div></div><!-- /letter-section -->";
-			}
-		}
-		?></div>
-	</div>
-	<?php
+function the_az_listing($query = null, $colcount = 1, $minpercol = 10, $h = 2) {
+	echo get_the_az_listing($query, $colcount, $minpercol, $h);
 }
-
-function the_az_letters($query = null) {
+function get_the_az_listing($query=null, $colcount = 1, $minpercol = 10, $h = 2) {
+	$heading_level = (int) $h;
+	$heading_level = ($heading_level >= 1 && $heading_level <= 7) ? $heading_level : 2;
 	$caps = range('A', 'Z');
 	$letters = bh__az_query($query);
 	
-	echo '<div class="az-letters"><ul>';
+	$ret = '<div id="letters">' . get_the_az_letters($query) .'</div>';
+	$ret .= '<div id="az-slider"><div id="inner-slider">';
+	
+	foreach ($caps as $letter) {
+		if (!empty($letters[$letter])) {
+			$id = $letter;
+			if ($id == '#') $id = '_';
+			$ret .= '<div class="letter-section" id="letter-' . $id . '"><a name="letter-' . $id . '"></a>';
+			$ret .= '<h' . $heading_level . '><span>' . $letter . '</span></h' . $heading_level . '>';
+			
+			$numpercol = ceil(count($letters[$letter]) / $colcount);
+			
+			$i = $j = 0;
+			foreach ($letters[$letter] as $name => $post) {
+				if ($i == 0) {
+					$ret .= '<div><ul>';
+				}
+				$i++;$j++;
+				$ret .= '<li><a href="' . get_permalink($post->ID) . '">' . $name .'</a></li>';
+				if (($minpercol - $i <= 0 && $numpercol - $i <= 0) || $j >= count($letters[$letter])) {
+					$ret .= '</ul></div>';
+					$i = 0;
+				}
+			}
+			$ret .= "<div class='clear empty'></div></div><!-- /letter-section -->";
+		}
+	}
+	
+	$ret .= '</div></div>';
+	return $ret;
+}
+
+function the_az_letters($query = null) {
+	echo get_the_az_letters($query);
+}
+
+function get_the_az_letters($query = null) {
+	$caps = range('A', 'Z');
+	$letters = bh__az_query($query);
+	
+	$ret = '<div class="az-letters"><ul>';
 	$count = 0;
-	foreach ($caps as $A) {
+	foreach ($caps as $letter) {
 		$count++;
-		$id = $A;
+		$id = $letter;
 		if ($id == '#') $id = '_';
 	  
 		$extra_pre = $extra_post = '';
 		$classes = (($count == 1) ? 'first ' : (($count == count($caps)) ? 'last ' : ''));
 		$classes .= (($count % 2 == 0) ? 'even' : 'odd');
-		if (!empty($letters[$A])) {
+		if (!empty($letters[$letter])) {
 			$extra_pre = "<a href='#letter-$id'>";
 			$extra_post = "</a>";
 		}
-		echo "<li class='$classes'>$extra_pre<span>$A</span>$extra_post</li>";
+		$ret .= "<li class='$classes'>$extra_pre<span>$letter</span>$extra_post</li>";
 	}
-	echo '</ul><div class="clear empty"></div></div>';
+	$ret .= '</ul><div class="clear empty"></div></div>';
+	return $ret;
 }
 
 function bh__az_query($query) {
@@ -120,9 +116,11 @@ function bh__az_query($query) {
 	if (!empty($letters['#'])) $caps[] = '#';
 	
 	//  sort each letter by name
-	foreach ($caps as $A)
-		if (!empty($letters[$A]))
-			ksort($letters[$A], SORT_STRING);
+	foreach ($caps as $letter) {
+		if (!empty($letters[$letter])) {
+			ksort($letters[$letter], SORT_STRING);
+		}
+	}
 	
 	return $letters;
 }

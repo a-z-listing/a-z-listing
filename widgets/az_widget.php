@@ -62,51 +62,15 @@ function the_section_az_widget($args, $instance) {
 		$title = $target->post_title;
 	}
 	
-	//  get the data
-	$sections = apply_filters('az_sections', get_pages(array('parent' => 0)));
-	$section = bh_current_section();
-	if (!in_array($section, $sections))
-	$section = null;
-	
-	do_action('log', 'A-Z section chosen', $section);
-	$pages = get_posts(array(
-		'post_type' => 'page',
-		'nopaging' => true,
-		'child_of' => $section,
-	));
-	
 	// letters from short names
-	$letters = array();
 	$caps = range('A', 'Z');
-	
-	$short_names = array();
-	foreach ($pages as $page) {
-		$names = array_filter(wp_get_object_terms($page->ID, 'index'));
-		if (!empty($names)) {
-			foreach ($names as $name) {
-				$A = strtoupper(substr($name->name, 0, 1));
-				if (!in_array($A, $caps)) $A = '#';
-				$letters[$A] = true;
-			}
-		} else {
-			$A = strtoupper(substr(get_the_title($page->ID), 0, 1));
-			if (!in_array($A, $caps)) $A = '#';
-			$letters[$A] = true;
-		}
-	}
-	$letters = array_filter($letters);
-	$letters = array_keys($letters);
-	sort($letters, (int) SORT_STRINGS);
-	if ($letters[0] == '#') {
-		$letters = array_slice($letters, 1);
-		$letters[] = '#';
-	}
+	$letters = bh__az_query($query);
 	
 	//  write the widget
 	echo $before_widget.$before_title.esc_html($title).$after_title."<ul class='az-links'>";
 	foreach ($caps as $letter) {
 		$extra_pre = $extra_post = '';
-		if (in_array($letter, $letters)) {
+		if (!empty($letters[$letter])) {
 			$affix = $letter == '#' ? '_' : $letter;
 			$extra_pre = "<a href='$targeturl#letter-$affix'>";
 			$extra_post = "</a>";

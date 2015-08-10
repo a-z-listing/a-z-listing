@@ -2,8 +2,8 @@
 Contributors: diddledan
 Tags: a to z, a-z, archive, listing, widget
 Requires at least: 3.5
-Tested up to: 4.1
-Stable tag: 0.4
+Tested up to: 4.2.4
+Stable tag: 0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,17 +37,30 @@ placing the a-z index on a child of section1 will likewise limit the index page 
 Likewise for section2, section2a and section2b.
 
 = NOTE =
-This plugin requires modification of the theme to be able to provide the A to Z Index page. Styling (CSS) is left entirely up to the
-developer or site owner.
+Styling (CSS) is left entirely up to the developer or site owner.
 
 == Installation ==
 
 This section describes how to install the plugin and get it working.
 
-1. Upload the `bh_az_listing` folder to the `/wp-content/plugins/` directory
+1. Upload the `a-z-listing` folder to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Place `<?php the_az_listing(); ?>` in your templates for the index page output
+1. Place `<?php the_az_listing(); ?>` in your templates for the index page output or use the `a-z-listing` shortcode.
 1. Add the A-Z Site Map widget to a sidebar or use `<?php the_az_widget(null, array('post' => get_page($id))); ?>` in your templates (the 'post' variable indicates where the A-Z Index page is located).
+
+== Shortcode ==
+
+New for 0.5 is a shortcode for the full A-Z listing allowing use without modifying your theme's templates.
+
+The usage is as follows:
+
+`[a-z-listing column-count=1 minimum-per-column=10 heading-level=2]`
+
+The arguments are all optional with their defaults shown above, which will be used when omitted.
+
+- `column-count` defines how many columns of titles you want displayed for each alphabet letter.
+- `minimum-per-column` is used to indicate the breakpoint number of posts before using an additional column. This prevents situations such as specifying 3 columns but having only three posts for a particular letter causing one post to be shown in each of the three columns. When using this feature we will keep all three posts in the first column even though we have also specified to use three columns because three is less-than the ten we set as the minimum breakpoint. Once the breakpoint is reached the columns will grow together.
+- `heading-level` tells the code what HTML "heading number" to use, e.g. h1, h2, h3 etc. This is primarily to allow you to set things for correct accessibility as this plugin cannot anticipate how different themes will set-up their heading structure.
 
 == Frequently Asked Questions ==
 
