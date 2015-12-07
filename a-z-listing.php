@@ -1,98 +1,109 @@
 <?php
-/*
-Plugin Name: A-Z Listing
-Plugin URI: http://bowlhat.net/
-Description: Display an A to Z listing of posts
-Version: 0.5
-Author: Daniel Llewellyn
-Author URI: http://bowlhat.net
-License: GPLv2
-*/
+/**
+ * Plugin Name: A-Z Listing
+ * Plugin URI: http://bowlhat.net/
+ * Description: Display an A to Z listing of posts
+ * Version: 0.5
+ * Author: Daniel Llewellyn
+ * Author URI: http://bowlhat.net
+ * License: GPLv2
+ * Text Domain: a-z-listing
+ * @package  a-z-listing
+ */
 
+/**
+ * Called on plugin activation. Includes any php files in ./activate/.
+ */
 function bh_az_listing_activate() {
-	//  activation scripts
-	$dir = dirname(__FILE__)."/";
-	foreach (glob($dir."activate/*.php") as $filename) {
-		require_once($filename);
+	$dir = dirname( __FILE__ ) . '/';
+	foreach ( glob( $dir . 'activate/*.php' ) as $filename ) {
+		require_once( $filename );
 	}
 	bh_az_listing_init();
 	flush_rewrite_rules();
 }
-register_activation_hook(__FILE__, 'bh_az_listing_activate');
+register_activation_hook( __FILE__, 'bh_az_listing_activate' );
 
-add_action('plugins_loaded', 'bh_az_listing_init');
+/**
+ * Initialises the plugin's functions, partials, javascript and css.
+ */
 function bh_az_listing_init() {
-	$dir = dirname(__FILE__)."/";
+	$dir = dirname( __FILE__ ).'/';
 
-	// common functions
-	foreach (glob($dir."functions/common/*.php") as $filename) {
-	  require_once($filename);
+	// Common functions.
+	foreach ( glob( $dir . 'functions/common/*.php' ) as $filename ) {
+		require_once( $filename );
 	}
 
-	// functions: always present
-	foreach (glob($dir."functions/*.php") as $filename) {
-		require_once($filename);
+	// Functions: always present.
+	foreach ( glob( $dir . 'functions/*.php' ) as $filename ) {
+		require_once( $filename );
 	}
 
-	// partials: only visible outside of admin
-	if (!is_admin() && trim($_SERVER['SCRIPT_NAME'], "/") != "wp-login.php") {
-		foreach (glob($dir."partials/*.php") as $filename) {
-			require_once($filename);
+	// Partials: only visible outside of admin.
+	if ( ! is_admin() && 'wp-login.php' != $GLOBALS['pagenow'] ) {
+		foreach ( glob( $dir . 'partials/*.php' ) as $filename ) {
+			require_once( $filename );
 		}
 	}
 
-	// locale
+	// Locale.
 	$locale = get_locale();
-	$lang = substr($locale, 0, 2);
-	$country = substr($locale, 3, 2);
+	$lang = substr( $locale, 0, 2 );
+	$country = substr( $locale, 3, 2 );
 
-	if (is_readable($dir."languages/$lang-$country.php"))
-		require_once($dir."languages/$lang-$country.php");
-	else if (is_readable($dir."languages/$lang.php"))
-		require_once($dir."languages/$lang.php");
+	if ( is_readable( $dir . 'languages/' . $lang . '-' . $country . '.php' ) ) {
+			require_once( $dir . 'languages/' . $lang . '-' . $country . '.php' );
+	} else if ( is_readable( $dir . 'languages/' . $lang . '.php' ) ) {
+		require_once( $dir . 'languages/' . $lang . '.php' );
+	}
 
-	// javascripts: autoload
-	if (is_admin()) {
-		$glob = glob($dir."scripts/admin/*.js");
-		$admin = "admin/";
+	// Javascripts: autoload.
+	if ( is_admin() ) {
+		$glob = glob( $dir . 'scripts/admin/*.js' );
+		$admin = 'admin/';
 	} else {
-		$glob = glob($dir."scripts/*.js");
+		$glob = glob( $dir . 'scripts/*.js' );
 		$admin = '';
 	}
 
-	foreach ($glob as $filename) {
+	foreach ( $glob as $filename ) {
 		$matches = array();
-		preg_match("!([^/]+).js$!", $filename, $matches);
-		$code = "bh-".$matches[1];
-		$url = plugins_url("scripts/".$admin.$matches[1].".js", __FILE__);
-		wp_enqueue_script($code, $url, array('jquery'), NULL, true);
+		preg_match( '!([^/]+).js$!', $filename, $matches );
+		$code = 'bh-' . $matches[1];
+		$url = plugins_url( 'scripts/' . $admin . $matches[1] . '.js', __FILE__ );
+		wp_enqueue_script( $code, $url, array( 'jquery' ), null, true );
 	}
 
-	// css: autoload
-	$glob = glob($dir."*.css");
+	// CSS: autoload.
+	$glob = glob( $dir.'*.css' );
 
-	foreach($glob as $filename) {
+	foreach ( $glob as $filename ) {
 		$matches = array();
-		preg_match("!([^/]+).css!", $filename, $matches);
-		$code = "functionality-css-".$matches[1];
-		$url = plugins_url($matches[1].".css", __FILE__);
+		preg_match( '!([^/]+).css!', $filename, $matches );
+		$code = 'functionality-css-' . $matches[1];
+		$url = plugins_url( $matches[1] . '.css', __FILE__ );
 
-		if ($matches[1] != 'admin' || is_admin()) {
-			wp_enqueue_style($code, $url);
+		if ( 'admin' != $matches[1] || is_admin() ) {
+			wp_enqueue_style( $code, $url );
 		}
 	}
 }
+add_action( 'plugins_loaded', 'bh_az_listing_init' );
 
-add_action('widgets_init', 'bh_az_listing_widgets');
+/**
+ * Automatically registers this plugin's widgets.
+ */
 function bh_az_listing_widgets() {
-	$dir = dirname(__FILE__)."/";
+	$dir = dirname( __FILE__ ) . '/';
 
-	// widgets: auto register
-	foreach (glob($dir."widgets/*.php") as $filename) {
-		require_once($filename);
+	foreach ( glob( $dir . 'widgets/*.php' ) as $filename ) {
+		require_once( $filename );
 
-		$filename = substr($filename, 0, strlen($filename) - strlen(".php"));
-		$filename = substr($filename, strrpos($filename, "/")+1);
-		register_widget($filename);
+		$filename = substr( $filename, 0, strlen( $filename ) - strlen( '.php' ) );
+		$filename = substr( $filename, strrpos( $filename, '/' ) + 1 );
+		$filename = str_replace( '-', '_', $filename );
+		register_widget( $filename );
 	}
 }
+add_action( 'widgets_init', 'bh_az_listing_widgets' );
