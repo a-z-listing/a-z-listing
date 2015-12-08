@@ -41,7 +41,7 @@ function bh_az_listing_init() {
 	}
 
 	// Partials: only visible outside of admin.
-	if ( ! is_admin() && 'wp-login.php' != $GLOBALS['pagenow'] ) {
+	if ( ! is_admin() && 'wp-login.php' !== $GLOBALS['pagenow'] ) {
 		foreach ( glob( $dir . 'partials/*.php' ) as $filename ) {
 			require_once( $filename );
 		}
@@ -84,7 +84,7 @@ function bh_az_listing_init() {
 		$code = 'functionality-css-' . $matches[1];
 		$url = plugins_url( $matches[1] . '.css', __FILE__ );
 
-		if ( 'admin' != $matches[1] || is_admin() ) {
+		if ( 'admin' !== $matches[1] || is_admin() ) {
 			wp_enqueue_style( $code, $url );
 		}
 	}

@@ -1,0 +1,31 @@
+language: php
+
+notifications:
+  email:
+    on_success: never
+    on_failure: change
+
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
+  - hhvm
+
+env:
+  - WP_VERSION=latest WP_MULTISITE=0
+  - WP_VERSION=nightly WP_MULTISITE=0
+  - WP_VERSION=latest WP_MULTISITE=1
+  - WP_VERSION=nightly WP_MULTISITE=1
+
+install:
+  - composer global require wp-coding-standards/wpcs:dev-master
+  - ~/.composer/vendor/bin/phpcs --config-set installed_paths ~/.composer/vendor/wp-coding-standards/wpcs/
+
+before_script:
+  - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
+
+script:
+  - phpunit
+  - ~/.composer/vendor/bin/phpcs -p --standard=WordPress-Extra .

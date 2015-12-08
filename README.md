@@ -1,15 +1,15 @@
-=== A to Z Index ===
-Contributors: diddledan
-Tags: a to z, a-z, archive, listing, widget, index
-Requires at least: 3.5
-Tested up to: 4.2.4
-Stable tag: 0.6
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+# A to Z Index #
+**Contributors:** diddledan
+**Tags:** a to z, a-z, archive, listing, widget, index
+**Requires at least:** 3.5
+**Tested up to:** 4.2.4
+**Stable tag:** 0.6
+**License:** GPLv2 or later
+**License URI:** http://www.gnu.org/licenses/gpl-2.0.html
 
 Provides an A to Z index page and widget. The widget links to the index page at the appropriate letter.
 
-== Description ==
+## Description ##
 
 This plugin provides a widget which aggregates all pages into an A to Z listing. The widget includes just
 the letters as links to the A-Z Index page. Also provided is an implementation for the A-Z Index page.
@@ -36,10 +36,10 @@ placing the a-z index on a child of section1 will likewise limit the index page 
 
 Likewise for section2, section2a and section2b.
 
-= NOTE =
+### NOTE ###
 Styling (CSS) is left entirely up to the developer or site owner.
 
-== Installation ==
+## Installation ##
 
 This section describes how to install the plugin and get it working.
 
@@ -48,7 +48,7 @@ This section describes how to install the plugin and get it working.
 1. Place `<?php the_az_listing(); ?>` in your templates for the index page output or use the `a-z-listing` shortcode.
 1. Add the A-Z Site Map widget to a sidebar or use `<?php the_az_widget(null, array('post' => get_page($id))); ?>` in your templates (the 'post' variable indicates where the A-Z Index page is located).
 
-== Shortcode ==
+## Shortcode ##
 
 New for 0.5 is a shortcode for the full A-Z listing allowing use without modifying your theme's templates.
 
@@ -62,9 +62,9 @@ The arguments are all optional with their defaults shown above, which will be us
 - `minimum-per-column` is used to indicate the breakpoint number of posts before using an additional column. This prevents situations such as specifying 3 columns but having only three posts for a particular letter causing one post to be shown in each of the three columns. When using this feature we will keep all three posts in the first column even though we have also specified to use three columns because three is less-than the ten we set as the minimum breakpoint. Once the breakpoint is reached the columns will grow together.
 - `heading-level` tells the code what HTML "heading number" to use, e.g. h1, h2, h3 etc. This is primarily to allow you to set things for correct accessibility as this plugin cannot anticipate how different themes will set-up their heading structure.
 
-== Frequently Asked Questions ==
+## Frequently Asked Questions ##
 
-= How do I remove section targetting or limit which sections are available? =
+### How do I remove section targetting or limit which sections are available? ###
 
 in your theme's functions.php add the following code:
 
@@ -77,27 +77,27 @@ function remove_az_section_targeting($sections) {
 
 This filter can also be used, by removing entries which are standard $post variables, to limit which top-level pages are used as section identifiers.
 
-== Changelog ==
+## Changelog ##
 
-= 0.6 =
+### 0.6 ###
 STYLING BREAKING change: the widget's CSS class is changed from bh_az_widget to a-z-listing-widget. Please update your CSS accordingly.
 Conformed to WordPress coding style guidelines.
 Updated widget class to call php5-style constructor.
 Applied internationalisation (i18n).
 Added testsuite.
 
-= 0.5 =
+### 0.5 ###
 Added new shortcode to display the index page.
 
-= 0.4 =
+### 0.4 ###
 fixed file locations causing failure to load.
 
-= 0.3 =
+### 0.3 ###
 fixed failure to activate as reported by ml413 and verified by geoffrey (both WordPress.org usernames)
 	see: https://wordpress.org/support/topic/fatal-error-when-trying-to-install-1
 
-= 0.2 =
+### 0.2 ###
 renamed the plugin file and packaged for release
 
-= 0.1 =
+### 0.1 ###
 first release

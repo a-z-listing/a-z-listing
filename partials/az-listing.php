@@ -35,7 +35,7 @@ function get_the_az_listing( $query = null, $colcount = 1, $minpercol = 10, $h =
 	foreach ( $caps as $letter ) {
 		if ( ! empty( $letters[ $letter ] ) ) {
 			$id = $letter;
-			if ( '#' == $id ) {
+			if ( '#' === $id ) {
 				$id = '_';
 			}
 			$ret .= '<div class="letter-section" id="letter-' . $id . '"><a name="letter-' . $id . '"></a>';
@@ -45,7 +45,7 @@ function get_the_az_listing( $query = null, $colcount = 1, $minpercol = 10, $h =
 
 			$i = $j = 0;
 			foreach ( $letters[ $letter ] as $name => $post ) {
-				if ( 0 == $i ) {
+				if ( 0 === $i ) {
 					$ret .= '<div><ul>';
 				}
 				$i++;
@@ -67,38 +67,42 @@ function get_the_az_listing( $query = null, $colcount = 1, $minpercol = 10, $h =
 /**
  * Prints the A-Z Letter list.
  * @param  WP_Query $query Optional WP_Query object defining the posts to index.
+ * @param  string $target  URL of the page to send the browser when a letter is clicked.
  */
-function the_az_letters( $query = null ) {
-	echo get_the_az_letters( $query ); // WPCS: XSS OK.
+function the_az_letters( $query = null, $target = false ) {
+	echo get_the_az_letters( $query, $target ); // WPCS: XSS OK.
 }
 
 /**
  * Returns the A-Z Letter list.
  * @param  WP_Query $query Optional WP_Query object defining the posts to index.
+ * @param  string $target  URL of the page to send the browser when a letter is clicked.
  * @return String          HTML ready for echoing containing the list of A-Z letters with anchor links to the A-Z Index page.
  */
-function get_the_az_letters( $query = null ) {
+function get_the_az_letters( $query = null, $target = false ) {
 	$caps = range( 'A', 'Z' );
 	$letters = bh__az_query( $query );
 
-	$ret = '<div class="az-letters"><ul>';
+	$ret = '<div class="az-letters"><ul class="az-links">';
 	$count = 0;
 	foreach ( $caps as $letter ) {
 		$count++;
 		$id = $letter;
-		if ( '#' == $id ) {
+		if ( '#' === $id ) {
 			$id = '_';
 		}
 
-		$extra_pre = $extra_post = '';
-		$classes = ( ( 1 == $count ) ? 'first ' : ( ( count( $caps ) == $count ) ? 'last ' : '' ) );
-		$classes .= ( ( 0 == $count % 2 ) ? 'even' : 'odd' );
-		if ( ! empty( $letters[ $letter ] ) ) {
-			$extra_pre = '<a href="' . esc_attr( '#letter-' . $id ) . '">';
-			$extra_post = '</a>';
-		}
+		$classes = ( ( 1 === $count ) ? 'first ' : ( ( count( $caps ) === $count ) ? 'last ' : '' ) );
+		$classes .= ( ( 0 === $count % 2 ) ? 'even' : 'odd' );
+
 		$ret .= '<li class="' . esc_attr( $classes ) . '">';
-		$ret .= $extra_pre . '<span>' . esc_html( $letter ) . '</span>' . $extra_post;
+		if ( ! empty( $letters[ $letter ] ) ) {
+			$ret .= '<a href="' . esc_attr( esc_url( $target ) . '#letter-' . $id ) . '">';
+		}
+		$ret .= '<span>' . esc_html( $letter ) . '</span>';
+		if ( ! empty( $letters[ $letter ] ) ) {
+			$ret .= '</a>';
+		}
 		$ret .= '</li>';
 	}
 	$ret .= '</ul><div class="clear empty"></div></div>';
@@ -110,7 +114,7 @@ function get_the_az_letters( $query = null ) {
  * @param  WP_Query $query Query arguments defining the posts to use for the A-Z Listing.
  * @return array           The list of post IDs assigned into a slice for each appropriate letter.
  */
-function bh__az_query( $query ) {
+function bh__az_query( $query = null ) {
 	$sections = apply_filters( 'az_sections', get_pages( array( 'parent' => 0 ) ) );
 	$section = bh_current_section();
 	if ( ! in_array( $section, $sections ) ) {

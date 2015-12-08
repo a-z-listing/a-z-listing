@@ -11,11 +11,18 @@ class AZ_Widget extends WP_Widget {
 	/**
 	 * Register the widget's meta information.
 	 */
-	function AZ_Widget() {
-		$this->WP_Widget('bh_az_widget', 'A-Z Site Map', array(
-			'classname' => 'bh_az_widget',
-			'description' => 'Alphabetised links to the A-Z site map',
+	function __construct() {
+		parent::__construct('bh_az_widget', __( 'A-Z Site Map', 'a-z-listing' ), array(
+			'classname' => 'a-z-listing-widget',
+			'description' => __( 'Alphabetised links to the A-Z site map', 'a-z-listing' ),
 		));
+	}
+
+	/**
+	 * Deprecated constructor.
+	 */
+	function AZ_Widget() {
+		$this->__construct();
 	}
 
 	/**
@@ -31,16 +38,29 @@ class AZ_Widget extends WP_Widget {
 		$postID = $this->get_field_id( 'post' );
 		$postName = $this->get_field_name( 'post' );
 
-		echo '<div><label for="'.esc_attr( $postID ).'">Site map A-Z page</label></div>';
+		?>
+		<div><label for="<?php echo esc_attr( $postID ); ?>">
+			<?php esc_html_e( 'Site map A-Z page', 'a-z-listing' ); ?>
+		</label></div>
+		<?php
 		wp_dropdown_pages(array(
 			'id' => intval( $postID ),
 			'name' => esc_html( $postName ),
 			'selected' => intval( $post ),
 		));
-
-		echo '<div><label for="'.esc_attr( $titleID ).'">Title</label></div>';
-		echo '<input class="widefat" id="'.esc_attr( $titleID ).'" name="'.esc_attr( $titleName ).'" type="text" placeholder="Title" value="'.esc_attr( $title ).'" />';
-		echo '<p style="color: #333;">'.esc_html( __( 'Leave blank to use the title specified by the page', 'a-z-listing' ) ).'</p>';
+		?>
+		<div><label for="<?php echo esc_attr( $titleID ); ?>">
+			<?php esc_html_e( 'Widget Title', 'a-z-listing' ); ?>
+		</label></div>
+		<input class="widefat" type="text"
+				id="<?php echo esc_attr( $titleID ); ?>"
+				name="<?php echo esc_attr( $titleName ); ?>"
+				placeholder="<?php esc_attr_e( 'Widget Title', 'a-z-listing' ); ?>"
+				value="<?php echo esc_attr( $title ); ?>" />
+		<p style="color: #333;">
+			<?php esc_html_e( 'Leave blank to use the title specified by the page', 'a-z-listing' ); ?>
+		</p>
+		<?php
 	}
 
 	/**
@@ -67,11 +87,21 @@ class AZ_Widget extends WP_Widget {
 }
 
 /**
- * Print the user-visible widget to the page implentation
+ * Print the user-visible widget to the page implentation.
  * @param  Array $args     General widget configuration. Often shared between all widgets on the site.
  * @param  Array $instance Configuration of this Widget. Unique to this invocation.
  */
 function the_section_az_widget( $args, $instance ) {
+	echo get_the_section_az_widget( $args, $instance ); // WPCS: XSS OK.
+}
+
+/**
+ * Get the user-visible widget html.
+ * @param  Array $args     General widget configuration. Often shared between all widgets on the site.
+ * @param  Array $instance Configuration of this Widget. Unique to this invocation.
+ * @return  string The complete A-Z Widget HTML ready for echoing to the page.
+ */
+function get_the_section_az_widget( $args, $instance ) {
 	extract( $args );
 
 	$instance = wp_parse_args( $instance, array(
@@ -85,32 +115,15 @@ function the_section_az_widget( $args, $instance ) {
 		return;
 	}
 
-	$targeturl = get_permalink( $target->ID );
-
 	$title = $instance['title'];
 	if ( empty( $title ) ) {
 		$title = $target->post_title;
 	}
 
-	$caps = range( 'A', 'Z' );
-	$letters = bh__az_query( $query );
+	$ret = $before_widget; // WPCS: XSS OK.
+	$ret .= $before_title.esc_html( $title ).$after_title; // WPCS: XSS OK.
+	$ret .= get_the_az_letters( null, get_permalink( $target ) );
+	$ret .= $after_widget; // WPCS: XSS OK.
 
-	echo $before_widget; // WPCS: XSS OK.
-	echo $before_title.esc_html( $title ).$after_title; // WPCS: XSS OK.
-	echo '<ul class="az-links">';
-	foreach ( $caps as $letter ) {
-		$extra_pre = $extra_post = '';
-		if ( ! empty( $letters[ $letter ] ) ) {
-			$affix = '#' == $letter ? '_' : $letter;
-			$extra_pre = '<a href="'.esc_url( $targeturl.'#letter-'.$affix ).'">';
-			$extra_post = '</a>';
-		}
-		echo '<li>';
-		echo $extra_pre; // WPCS: XSS OK.
-		echo '<span>'.$letter.'</span>'; // WPCS: XSS OK.
-		echo $extra_post; // WPCS: XSS OK.
-		echo '</li>';
-	}
-	echo '</ul><div class="clear empty"></div>';
-	echo $after_widget; // WPCS: XSS OK.
+	return $ret;
 }
