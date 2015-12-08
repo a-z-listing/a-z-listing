@@ -1,15 +1,17 @@
 # A to Z Index #
-**Contributors:** diddledan
-**Tags:** a to z, a-z, archive, listing, widget, index
-**Requires at least:** 3.5
-**Tested up to:** 4.2.4
-**Stable tag:** 0.6
-**License:** GPLv2 or later
-**License URI:** http://www.gnu.org/licenses/gpl-2.0.html
+- **Contributors:** diddledan
+- **Tags:** a to z, a-z, archive, listing, widget, index
+- **Requires at least:** 3.5
+- **Tested up to:** 4.2.4
+- **Stable tag:** 0.6
+- **License:** GPLv2 or later
+- **License URI:** http://www.gnu.org/licenses/gpl-2.0.html
 
 Provides an A to Z index page and widget. The widget links to the index page at the appropriate letter.
 
 ## Description ##
+
+[![Build Status](https://travis-ci.org/diddledan/wp-a-z-listing.svg?branch=master)](https://travis-ci.org/diddledan/wp-a-z-listing)
 
 This plugin provides a widget which aggregates all pages into an A to Z listing. The widget includes just
 the letters as links to the A-Z Index page. Also provided is an implementation for the A-Z Index page.
@@ -22,17 +24,19 @@ site's pages.
 
 *By default* the widget and index page become section-targeted by including them on pages below a top-level page:
 e.g. if your site layout has:
-`	home
-	section1
-		section1a
-		section1b
-		a-z
-	section2
-		section2a
-		section2b
-		a-z`
+
+    home
+        section1
+        section1a
+        section1b
+        a-z
+    section2
+        section2a
+        section2b
+        a-z
+
 then placing the widget onto either section1, section1a or section1b will target the widget to displaying only children of section1.
-placing the a-z index on a child of section1 will likewise limit the index page to display only children of section1.
+Placing the a-z index on a child of section1 will likewise limit the index page to display only children of section1.
 
 Likewise for section2, section2a and section2b.
 
@@ -54,7 +58,7 @@ New for 0.5 is a shortcode for the full A-Z listing allowing use without modifyi
 
 The usage is as follows:
 
-`[a-z-listing column-count=1 minimum-per-column=10 heading-level=2]`
+    [a-z-listing column-count=1 minimum-per-column=10 heading-level=2]
 
 The arguments are all optional with their defaults shown above, which will be used when omitted.
 
@@ -66,38 +70,37 @@ The arguments are all optional with their defaults shown above, which will be us
 
 ### How do I remove section targetting or limit which sections are available? ###
 
-in your theme's functions.php add the following code:
+In your theme's functions.php add the following code:
 
-`<?php
-add_filter('az_sections', 'remove_az_section_targeting');
-function remove_az_section_targeting($sections) {
-	return array();
-}
-?>`
+    <?php
+    add_filter('az_sections', 'remove_az_section_targeting');
+    function remove_az_section_targeting($sections) {
+        return array();
+    }
+    ?>
 
 This filter can also be used, by removing entries which are standard $post variables, to limit which top-level pages are used as section identifiers.
 
 ## Changelog ##
 
 ### 0.6 ###
-STYLING BREAKING change: the widget's CSS class is changed from bh_az_widget to a-z-listing-widget. Please update your CSS accordingly.
-Conformed to WordPress coding style guidelines.
-Updated widget class to call php5-style constructor.
-Applied internationalisation (i18n).
-Added testsuite.
+- STYLING BREAKING change: the widget's CSS class is changed from bh_az_widget to a-z-listing-widget. Please update your CSS accordingly.
+- Conformed to WordPress coding style guidelines.
+- Updated widget class to call php5-style constructor.
+- Applied internationalisation (i18n).
+- Added testsuite.
 
 ### 0.5 ###
-Added new shortcode to display the index page.
+- Added new shortcode to display the index page.
 
 ### 0.4 ###
-fixed file locations causing failure to load.
+- fixed file locations causing failure to load.
 
 ### 0.3 ###
-fixed failure to activate as reported by ml413 and verified by geoffrey (both WordPress.org usernames)
-	see: https://wordpress.org/support/topic/fatal-error-when-trying-to-install-1
+- fixed failure to activate as reported by ml413 and verified by geoffrey (both WordPress.org usernames); see: https://wordpress.org/support/topic/fatal-error-when-trying-to-install-1
 
 ### 0.2 ###
-renamed the plugin file and packaged for release
+- renamed the plugin file and packaged for release
 
 ### 0.1 ###
-first release
+- first release
