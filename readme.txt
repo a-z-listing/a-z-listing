@@ -81,6 +81,9 @@ This filter can also be used, by removing entries which are standard $post varia
 
 == Changelog ==
 
+= 0.7 =
+* Added option to choose to apply default styling of the widget.
+
 = 0.6 =
 * STYLING BREAKING change: the widget's CSS class is changed from bh_az_widget to a-z-listing-widget. Please update your CSS accordingly.
 * Conformed to WordPress coding style guidelines.

@@ -69,8 +69,8 @@ function get_the_az_listing( $query = null, $colcount = 1, $minpercol = 10, $h =
  * @param  WP_Query $query Optional WP_Query object defining the posts to index.
  * @param  string $target  URL of the page to send the browser when a letter is clicked.
  */
-function the_az_letters( $query = null, $target = false ) {
-	echo get_the_az_letters( $query, $target ); // WPCS: XSS OK.
+function the_az_letters( $query = null, $target = false, $styling = false ) {
+	echo get_the_az_letters( $query, $target, $styling ); // WPCS: XSS OK.
 }
 
 /**
@@ -79,11 +79,17 @@ function the_az_letters( $query = null, $target = false ) {
  * @param  string $target  URL of the page to send the browser when a letter is clicked.
  * @return String          HTML ready for echoing containing the list of A-Z letters with anchor links to the A-Z Index page.
  */
-function get_the_az_letters( $query = null, $target = false ) {
+function get_the_az_letters( $query = null, $target = false, $styling = false ) {
 	$caps = range( 'A', 'Z' );
 	$letters = bh__az_query( $query );
 
-	$ret = '<div class="az-letters"><ul class="az-links">';
+    $classes = 'az-letters';
+
+    if ( true === $styling ) {
+        $classes .= ' default-styling';
+    }
+
+	$ret = '<div class="' . $classes . '"><ul class="az-links">';
 	$count = 0;
 	foreach ( $caps as $letter ) {
 		$count++;
