@@ -8,21 +8,21 @@ class AZ_Listing_Tests extends WP_UnitTestCase {
 		$listing = get_the_az_listing();
 		$this->assertStringEqualsFile( 'tests/default-listing.txt', $listing );
 	}
-	
+
 	function test_populated_letters() {
 		$p = $this->factory->post->create( array( 'post_title' => 'Test Page', 'post_type' => 'page' ) );
 		$q = new WP_Query( array( 'post_type' => 'page' ) );
 		$letters = get_the_az_letters( $q );
 		$this->assertStringEqualsFile( 'tests/populated-letters.txt', $letters );
 	}
-	
+
 	function test_populated_letters_linked() {
 		$p = $this->factory->post->create( array( 'post_title' => 'Test Page', 'post_type' => 'page' ) );
 		$q = new WP_Query( array( 'post_type' => 'page' ) );
 		$letters = get_the_az_letters( $q, '/test-path' );
 		$this->assertStringEqualsFile( 'tests/populated-letters-linked.txt', $letters );
 	}
-	
+
 	function test_populated_listing() {
 		$p = $this->factory->post->create( array( 'post_title' => 'Test Page', 'post_type' => 'page' ) );
 		$q = new WP_Query( array( 'post_type' => 'page' ) );

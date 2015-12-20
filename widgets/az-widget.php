@@ -17,12 +17,12 @@ class AZ_Widget extends WP_Widget {
 			'description' => __( 'Alphabetised links to the A-Z site map', 'a-z-listing' ),
 		));
 
-        $style_url = plugins_url( 'css/a-z-listing-default.css', dirname( __FILE__ . DIRECTORY_SEPARATOR . '..' ) );
-        wp_register_style( 'a-z-widget', $style_url );
+		$style_url = plugins_url( 'css/a-z-listing-default.css', dirname( __FILE__ . DIRECTORY_SEPARATOR . '..' ) );
+		wp_register_style( 'a-z-widget', $style_url );
 
-        if ( is_active_widget( false, $this->id, false, true ) ) {
-            add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
-        }
+		if ( is_active_widget( false, $this->id, false, true ) ) {
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+		}
 
 	}
 
@@ -33,14 +33,14 @@ class AZ_Widget extends WP_Widget {
 		$this->__construct();
 	}
 
-    function enqueue_styles() {
-        $settings = $this->get_settings();
-        if ( isset( $settings[ $this->id ] ) && isset( $settings[ $this->id ]['apply-styling'] ) ) {
-            if ( true === $settings[ $this->id ]['apply-styling'] ) {
-                wp_enqueue_style( 'a-z-widget' );
-            }
-        }
-    }
+	function enqueue_styles() {
+		$settings = $this->get_settings();
+		if ( isset( $settings[ $this->id ] ) && isset( $settings[ $this->id ]['apply-styling'] ) ) {
+			if ( true === $settings[ $this->id ]['apply-styling'] ) {
+				wp_enqueue_style( 'a-z-widget' );
+			}
+		}
+	}
 
 	/**
 	 * Print-out the configuration form for the widget.
@@ -55,9 +55,9 @@ class AZ_Widget extends WP_Widget {
 		$postID = $this->get_field_id( 'post' );
 		$postName = $this->get_field_name( 'post' );
 
-        $stylingChecked = isset( $instance['apply-styling'] ) ? (bool) $instance['apply-styling'] : false;
-        $stylingID = $this->get_field_id( 'apply-styling' );
-        $stylingName = $this->get_field_name( 'apply-styling' );
+		$stylingChecked = isset( $instance['apply-styling'] ) ? (bool) $instance['apply-styling'] : false;
+		$stylingID = $this->get_field_id( 'apply-styling' );
+		$stylingName = $this->get_field_name( 'apply-styling' );
 
 		?>
 		<div><label for="<?php echo esc_attr( $postID ); ?>">
@@ -145,13 +145,13 @@ function get_the_section_az_widget( $args, $instance ) {
 		$title = $target->post_title;
 	}
 
-    $apply_styling = ( isset( $instance['apply-styling'] ) && true === $instance['apply-styling'] ) ? true : false;
+	$apply_styling = ( isset( $instance['apply-styling'] ) && true === $instance['apply-styling'] ) ? true : false;
 
 	$ret = $before_widget; // WPCS: XSS OK.
 	$ret .= $before_title; // WPCS: XSS OK.
-    $ret .= esc_html( $title );
-    $ret .= $after_title; // WPCS: XSS OK.
-    $ret .= '<div class="az-letters">';
+	$ret .= esc_html( $title );
+	$ret .= $after_title; // WPCS: XSS OK.
+	$ret .= '<div class="az-letters">';
 	$ret .= get_the_az_letters( null, get_permalink( $target ), ( $apply_styling ? 'default-style' : null ) );
 	$ret .= '<div class="clear empty"></div></div>';
 	$ret .= $after_widget; // WPCS: XSS OK.

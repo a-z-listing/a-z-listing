@@ -103,9 +103,9 @@ class A_Z_Listing {
 			$terms = array_filter( wp_get_object_terms( $post->ID, $index_taxonomy ) );
 		}
 
-		$indices[ substr( $post->post_title, 0, 1 ) ][] = array( 'title' =>  $post->post_title, 'post' => $post);
+		$indices[ substr( $post->post_title, 0, 1 ) ][] = array( 'title' => $post->post_title, 'post' => $post );
 		$term_indices = array_reduce( $terms, function( $indices, $term ) {
-			$indices[ substr( $term->name, 0, 1 ) ][] = array( 'title' => $term->name, 'post' => $post);
+			$indices[ substr( $term->name, 0, 1 ) ][] = array( 'title' => $term->name, 'post' => $post );
 			return $indices;
 		});
 		if ( is_array( $term_indices ) ) {
