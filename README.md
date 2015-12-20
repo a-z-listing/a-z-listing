@@ -104,6 +104,7 @@ This filter can also be used, by removing entries which are standard $post varia
 ### 0.7 ###
 - rebuilt most of the logic in preparation for more functionality.
 - added template/theming capability (BIG change!)
+- Added option to choose to apply default styling of the widget.
 
 ### 0.6 ###
 - STYLING BREAKING change: the widget's CSS class is changed from bh_az_widget to a-z-listing-widget. Please update your CSS accordingly.

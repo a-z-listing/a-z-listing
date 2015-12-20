@@ -25,7 +25,7 @@ class A_Z_Listing {
 		$this->index_indices = array_values( array_unique( array_values( self::$alphabet ) ) );
 		$this->index_taxonomy = apply_filters( 'az_additional_titles_taxonomy', '' );
 		$this->query = $query;
-		
+
 		$section = self::get_section();
 		$this->construct_query( $section );
 
@@ -163,8 +163,19 @@ class A_Z_Listing {
 		return $index;
 	}
 
-	public function get_letter_display( $target = "" ) {
-		$ret = '<ul class="az-links">';
+	public function get_letter_display( $target = '', $style = null ) {
+		$classes = array( 'az-links' );
+		if ( $styling ) {
+			if ( is_array( $style ) ) {
+				$classes = array_merge( $classes, $style );
+			} elseif ( is_string( $style ) ) {
+				$c = explode( ' ', $style );
+				$classes = array_merge( $classes, $c );
+			}
+		}
+		$classes = array_unique( $classes );
+
+		$ret = '<ul class="' . esc_attr( implode( ' ', $classes ) ) . '">';
 		$count = count( $this->index_indices );
 		$i = 0;
 		foreach ( $this->index_indices as $letter ) {
@@ -206,7 +217,7 @@ class A_Z_Listing {
 
 		$post = $original_post;
 		wp_reset_postdata();
-		
+
 		$r = ob_get_clean();
 
 		return $r;
@@ -218,7 +229,7 @@ class A_Z_Listing {
 	public function have_a_z_posts() {
 		return ( is_array( $this->current_letter_posts ) && count( $this->current_letter_posts ) > $this->current_post_index );
 	}
-	
+
 	public function the_a_z_letter() {
 		$this->current_post_index = 0;
 		$this->current_letter_posts = array();
@@ -233,14 +244,14 @@ class A_Z_Listing {
 		setup_postdata( $post );
 		$this->current_post_index++;
 	}
-	
+
 	public function num_a_z_letters() {
 		return count( $this->index_indices );
 	}
 	public function num_a_z_posts() {
 		return count( $this->current_letter_posts );
 	}
-	
+
 	public function the_letter_id() {
 		echo $this->get_the_letter_id();
 	}
@@ -322,7 +333,7 @@ function get_the_az_listing( $query = null, $colcount = 1, $minpercol = 10, $h =
 	global $_a_z_listing_object, $_a_z_listing_colcount, $_a_z_listing_minpercol;
 	$_a_z_listing_colcount = $colcount;
 	$_a_z_listing_minpercol = $minpercol;
-	
+
 	$_a_z_listing_object = new A_Z_Listing( $query );
 	return $_a_z_listing_object->get_the_listing();
 }
@@ -332,8 +343,8 @@ function get_the_az_listing( $query = null, $colcount = 1, $minpercol = 10, $h =
  * @param  WP_Query $query Optional WP_Query object defining the posts to index.
  * @param  string $target  URL of the page to send the browser when a letter is clicked.
  */
-function the_az_letters( $query = null, $target = false ) {
-	echo get_the_az_letters( $query, $target ); // WPCS: XSS OK.
+function the_az_letters( $query = null, $target = false, $styling = false ) {
+	echo get_the_az_letters( $query, $target, $styling ); // WPCS: XSS OK.
 }
 
 /**
@@ -342,10 +353,10 @@ function the_az_letters( $query = null, $target = false ) {
  * @param  string $target  URL of the page to send the browser when a letter is clicked.
  * @return String          HTML ready for echoing containing the list of A-Z letters with anchor links to the A-Z Index page.
  */
-function get_the_az_letters( $query = null, $target = false ) {
+function get_the_az_letters( $query = null, $target = false, $styling = false ) {
 	global $_a_z_listing_object;
 	if ( ! $_a_z_listing_object instanceof A_Z_Listing || $query !== null ) {
 		$_a_z_listing_object = new A_Z_Listing( $query );
 	}
-	return $_a_z_listing_object->get_letter_display( $target );
+	return $_a_z_listing_object->get_letter_display( $target, $styling );
 }
