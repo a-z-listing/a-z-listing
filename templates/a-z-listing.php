@@ -7,7 +7,7 @@
 <?php if ( have_a_z_letters() ) : ?>
 <div id="az-slider">
 	<div id="inner-slider">
-		<?php while( have_a_z_letters() ) : the_a_z_letter(); ?>
+		<?php while ( have_a_z_letters() ) : the_a_z_letter(); ?>
 			<?php if ( have_a_z_posts() ) : ?>
 				<div class="letter-section" id="<?php the_a_z_letter_id(); ?>">
 					<a name="<?php the_a_z_letter_id(); ?>"></a>
@@ -16,7 +16,7 @@
 					</h2>
 					<?php $i = $j = 0; ?>
 					<?php $numpercol = ceil( num_a_z_posts() / $_a_z_listing_colcount ); ?>
-					<?php while( have_a_z_posts() ) : the_a_z_post(); ?>
+					<?php while ( have_a_z_posts() ) : the_a_z_post(); ?>
 						<?php if ( 0 === $i++ ) : ?>
 							<div><ul>
 						<?php endif; ?>
@@ -36,5 +36,5 @@
 	</div>
 </div>
 <?php else : ?>
-	<p><?php _e( 'There are no posts included in this index.', 'a-z-listing' ); ?></p>
+	<p><?php esc_html_e( 'There are no posts included in this index.', 'a-z-listing' ); ?></p>
 <?php endif;
