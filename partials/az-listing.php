@@ -165,7 +165,7 @@ class A_Z_Listing {
 
 	public function get_letter_display( $target = '', $style = null ) {
 		$classes = array( 'az-links' );
-		if ( $styling ) {
+		if ( null !== $style ) {
 			if ( is_array( $style ) ) {
 				$classes = array_merge( $classes, $style );
 			} elseif ( is_string( $style ) ) {

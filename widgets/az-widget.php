@@ -36,7 +36,7 @@ class AZ_Widget extends WP_Widget {
     function enqueue_styles() {
         $settings = $this->get_settings();
         if ( isset( $settings[ $this->id ] ) && isset( $settings[ $this->id ]['apply-styling'] ) ) {
-            if ( true === $settings[ $this->id ]['apply-styling'] ) ) {
+            if ( true === $settings[ $this->id ]['apply-styling'] ) {
                 wp_enqueue_style( 'a-z-widget' );
             }
         }
@@ -55,7 +55,7 @@ class AZ_Widget extends WP_Widget {
 		$postID = $this->get_field_id( 'post' );
 		$postName = $this->get_field_name( 'post' );
 
-        $stylingChecked = isset( $instance['apply-styling'] ) ? (bool) $instance['apply-styling'] : false );
+        $stylingChecked = isset( $instance['apply-styling'] ) ? (bool) $instance['apply-styling'] : false;
         $stylingID = $this->get_field_id( 'apply-styling' );
         $stylingName = $this->get_field_name( 'apply-styling' );
 
