@@ -3,7 +3,7 @@ Contributors: diddledan
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 3.5
 Tested up to: 4.4
-Stable tag: 0.7
+Stable tag: 0.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -98,6 +98,9 @@ in your theme's functions.php add the following code:
 This filter can also be used, by removing entries which are standard $post variables, to limit which top-level pages are used as section identifiers.
 
 == Changelog ==
+
+= 0.7.1 =
+* Fix potential XSS vector.
 
 = 0.7 =
 * rebuilt most of the logic in preparation for more functionality.
