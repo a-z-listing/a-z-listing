@@ -47,6 +47,7 @@ Styling (CSS) is left entirely up to the developer or site owner.
 
 This section describes how to install the plugin and get it working.
 
+1. Download the plugin from the WordPress.org plugins repository at https://wordpress.org/plugins/a-z-listing/
 1. Upload the `a-z-listing` folder to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Place `<?php the_az_listing(); ?>` in your templates for the index page output or use the `a-z-listing` shortcode.
