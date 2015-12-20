@@ -215,7 +215,7 @@ class A_Z_Listing {
 			require( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'a-z-listing.php' );
 		}
 
-		$post = $original_post;
+		$post = $original_post; // WPCS: override OK.
 		wp_reset_postdata();
 
 		$r = ob_get_clean();
@@ -240,7 +240,7 @@ class A_Z_Listing {
 	}
 	public function the_a_z_post() {
 		global $post;
-		$post = $this->current_letter_posts[ $this->current_post_index ]['post'];
+		$post = $this->current_letter_posts[ $this->current_post_index ]['post']; // WPCS: override OK.
 		setup_postdata( $post );
 		$this->current_post_index++;
 	}
@@ -253,16 +253,16 @@ class A_Z_Listing {
 	}
 
 	public function the_letter_id() {
-		echo $this->get_the_letter_id();
+		echo esc_attr( $this->get_the_letter_id() );
 	}
 	public function get_the_letter_id() {
-		return esc_attr( 'letter-' . self::$alphabet[ $this->index_indices[ $this->current_letter_index - 1 ] ] );
+		return 'letter-' . self::$alphabet[ $this->index_indices[ $this->current_letter_index - 1 ] ];
 	}
 	public function the_letter_title() {
-		echo $this->get_the_letter_title();
+		echo esc_html( $this->get_the_letter_title() );
 	}
 	public function get_the_letter_title() {
-		return esc_html( self::$alphabet[ $this->index_indices[ $this->current_letter_index - 1 ] ] );
+		return self::$alphabet[ $this->index_indices[ $this->current_letter_index - 1 ] ];
 	}
 }
 
@@ -355,7 +355,7 @@ function the_az_letters( $query = null, $target = false, $styling = false ) {
  */
 function get_the_az_letters( $query = null, $target = false, $styling = false ) {
 	global $_a_z_listing_object;
-	if ( ! $_a_z_listing_object instanceof A_Z_Listing || $query !== null ) {
+	if ( ! $_a_z_listing_object instanceof A_Z_Listing || null !== $query ) {
 		$_a_z_listing_object = new A_Z_Listing( $query );
 	}
 	return $_a_z_listing_object->get_letter_display( $target, $styling );
