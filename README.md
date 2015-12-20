@@ -3,7 +3,7 @@
 - **Tags:** a to z, a-z, archive, listing, widget, index
 - **Requires at least:** 3.5
 - **Tested up to:** 4.4
-- **Stable tag:** 0.7.1
+- **Stable tag:** 0.7.2
 - **License:** GPLv2 or later
 - **License URI:** http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,7 +101,7 @@ This filter can also be used, by removing entries which are standard $post varia
 
 ## Changelog ##
 
-### 0.7.1 ###
+### 0.7.2 ###
 - Fix potential XSS vector.
 
 ### 0.7 ###
