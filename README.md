@@ -2,7 +2,7 @@
 - **Contributors:** diddledan
 - **Tags:** a to z, a-z, archive, listing, widget, index
 - **Requires at least:** 3.5
-- **Tested up to:** 4.2.4
+- **Tested up to:** 4.4
 - **Stable tag:** 0.6
 - **License:** GPLv2 or later
 - **License URI:** http://www.gnu.org/licenses/gpl-2.0.html
@@ -66,6 +66,24 @@ The arguments are all optional with their defaults shown above, which will be us
 - `minimum-per-column` is used to indicate the breakpoint number of posts before using an additional column. This prevents situations such as specifying 3 columns but having only three posts for a particular letter causing one post to be shown in each of the three columns. When using this feature we will keep all three posts in the first column even though we have also specified to use three columns because three is less-than the ten we set as the minimum breakpoint. Once the breakpoint is reached the columns will grow together.
 - `heading-level` tells the code what HTML "heading number" to use, e.g. h1, h2, h3 etc. This is primarily to allow you to set things for correct accessibility as this plugin cannot anticipate how different themes will set-up their heading structure.
 
+## Theming ##
+
+New for 0.7 is themeability! This allows the site owner or theme developer to provide custom templates for the A-Z Listing output.
+
+To add a template to your theme, you need a file similar to the `templates/a-z-listing.php` file in the plugin folder. Your copy needs to be placed within your theme at the theme root directory and called `a-z-listing.php` or `a-z-listing-section.php` (where `-section` is an optional top-level page slug for the section-targeting feature).
+
+The theme system this plugin implements is very similar to the standard WordPress loop, with a few added bits.
+
+Important functions to use in your template are as follows:
+
+- `the_az_letters()` outputs the full alphabet, and links the letters that have posts to their section within the index page.
+- `have_a_z_letters()` returns true or false depending on whether there are any letters left to loop-through. This is part of the Letter Loop.
+- `have_a_z_posts()` this behaves very similarly to Core's `have_posts()` function. It is part of the Post Loop.
+- `the_a_z_letter()` similar to Core's `the_post`, this will set-up the next iteration of the A-Z Listing's Letter Loop. This needs to wrap-around the Post Loop.
+- `the_a_z_post()` similar to Core's `the_post`, this will set-up the next iteration of the A-Z Listing's _Post_ Loop. This needs to be _within_ the Letter Loop.
+
+When you are within the Post Loop you can utilise all in-built WordPress Core post-related functions such as `the_title()`, `the_permalink`, `the_content`, etc.
+
 ## Frequently Asked Questions ##
 
 ### How do I remove section targetting or limit which sections are available? ###
@@ -82,6 +100,10 @@ In your theme's functions.php add the following code:
 This filter can also be used, by removing entries which are standard $post variables, to limit which top-level pages are used as section identifiers.
 
 ## Changelog ##
+
+### 0.7 ###
+- rebuilt most of the logic in preparation for more functionality.
+- added template/theming capability (BIG change!)
 
 ### 0.6 ###
 - STYLING BREAKING change: the widget's CSS class is changed from bh_az_widget to a-z-listing-widget. Please update your CSS accordingly.

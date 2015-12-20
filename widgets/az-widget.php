@@ -122,7 +122,9 @@ function get_the_section_az_widget( $args, $instance ) {
 
 	$ret = $before_widget; // WPCS: XSS OK.
 	$ret .= $before_title.esc_html( $title ).$after_title; // WPCS: XSS OK.
+	$ret .= '<div class="az-letters">';
 	$ret .= get_the_az_letters( null, get_permalink( $target ) );
+	$ret .= '<div class="clear empty"></div></div>';
 	$ret .= $after_widget; // WPCS: XSS OK.
 
 	return $ret;
