@@ -11,6 +11,8 @@ Provides an A to Z index page and widget. The widget links to the index page at 
 
 == Description ==
 
+[![Build Status](https://travis-ci.org/bowlhat/wp-a-z-listing.svg?branch=master)](https://travis-ci.org/bowlhat/wp-a-z-listing)
+
 This plugin provides a widget which aggregates all pages into an A to Z listing. The widget includes just
 the letters as links to the A-Z Index page. Also provided is an implementation for the A-Z Index page.
 If a letter doesn't have any pages then the widget will display the letter unlinked; likewise the index page
@@ -96,6 +98,11 @@ in your theme's functions.php add the following code:
     ?>
 
 This filter can also be used, by removing entries which are standard $post variables, to limit which top-level pages are used as section identifiers.
+
+== Screenshots ==
+
+1. An example of the index listing page.
+2. The Widget is shown here.
 
 == Changelog ==
 
