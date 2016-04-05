@@ -53,7 +53,7 @@ function bh_az_listing_init() {
 	$country = substr( $locale, 3, 2 );
 
 	if ( is_readable( $dir . 'languages/' . $lang . '-' . $country . '.php' ) ) {
-			require_once( $dir . 'languages/' . $lang . '-' . $country . '.php' );
+		require_once( $dir . 'languages/' . $lang . '-' . $country . '.php' );
 	} else if ( is_readable( $dir . 'languages/' . $lang . '.php' ) ) {
 		require_once( $dir . 'languages/' . $lang . '.php' );
 	}

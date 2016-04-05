@@ -3,7 +3,7 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 	function test_widget() {
 		$p = $this->factory->post->create( array( 'post_title' => 'Index Page', 'post_type' => 'page' ) );
 		$this->expectOutputString( sprintf( file_get_contents( 'tests/default-widget.txt' ), $p ) );
-		the_section_az_widget(
+		the_section_a_z_widget(
 			array(
 				'before_widget' => '<div>',
 				'after_widget' => '</div>',
@@ -20,7 +20,7 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 		$p = $this->factory->post->create( array( 'post_title' => 'Index Page', 'post_type' => 'page' ) );
 		$p2 = $this->factory->post->create( array( 'post_title' => 'Test Post', 'post_type' => 'page' ) );
 		$this->expectOutputString( sprintf( file_get_contents( 'tests/populated-widget.txt' ), $p ) );
-		the_section_az_widget(
+		the_section_a_z_widget(
 			array(
 				'before_widget' => '<div>',
 				'after_widget' => '</div>',
