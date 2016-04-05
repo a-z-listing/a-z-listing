@@ -3,7 +3,7 @@
 **Tags:** a to z, a-z, archive, listing, widget, index
 **Requires at least:** 3.5
 **Tested up to:** 4.5
-**Stable tag:** 0.8.0
+**Stable tag:** 0.8.1
 **License:** GPLv2 or later
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html
 
