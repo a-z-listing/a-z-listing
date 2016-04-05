@@ -48,33 +48,33 @@ class A_Z_Widget extends WP_Widget {
 	 */
 	function form( $instance ) {
 		$title = $instance['title'];
-		$title_ID = $this->get_field_id( 'title' );
+		$title_id = $this->get_field_id( 'title' );
 		$title_name = $this->get_field_name( 'title' );
 
 		$post = isset( $instance['post'] ) ? $instance['post'] : ( isset( $instance['page'] ) ? $instance['page'] : 0 );
-		$post_ID = $this->get_field_id( 'post' );
+		$post_id = $this->get_field_id( 'post' );
 		$post_name = $this->get_field_name( 'post' );
 
 		$styling_checked = isset( $instance['apply-styling'] ) ? (bool) $instance['apply-styling'] : false;
-		$styling_ID = $this->get_field_id( 'apply-styling' );
+		$styling_id = $this->get_field_id( 'apply-styling' );
 		$styling_name = $this->get_field_name( 'apply-styling' );
 
 		?>
-		<div><label for="<?php echo esc_attr( $post_ID ); ?>">
+		<div><label for="<?php echo esc_attr( $post_id ); ?>">
 			<?php esc_html_e( 'Site map A-Z page', 'a-z-listing' ); ?>
 		</label></div>
 		<?php
 		wp_dropdown_pages(array(
-			'id' => intval( $post_ID ),
+			'id' => intval( $post_id ),
 			'name' => esc_html( $post_name ),
 			'selected' => intval( $post ),
 		));
 		?>
-		<div><label for="<?php echo esc_attr( $title_ID ); ?>">
+		<div><label for="<?php echo esc_attr( $title_id ); ?>">
 			<?php esc_html_e( 'Widget Title', 'a-z-listing' ); ?>
 		</label></div>
 		<input class="widefat" type="text"
-				id="<?php echo esc_attr( $title_ID ); ?>"
+				id="<?php echo esc_attr( $title_id ); ?>"
 				name="<?php echo esc_attr( $title_name ); ?>"
 				placeholder="<?php esc_attr_e( 'Widget Title', 'a-z-listing' ); ?>"
 				value="<?php echo esc_attr( $title ); ?>" />
@@ -82,7 +82,7 @@ class A_Z_Widget extends WP_Widget {
 			<?php esc_html_e( 'Leave blank to use the title specified by the page', 'a-z-listing' ); ?>
 		</p>
 		<input type="checkbox"
-			id="<?php echo esc_attr( $styling_ID ); ?>"
+			id="<?php echo esc_attr( $styling_id ); ?>"
 			name="<?php echo esc_attr( $styling_name ); ?>"
 			<?php if ( true === $styling_checked ) : ?> checked <?php endif; ?> />
 		<?php
