@@ -1,11 +1,11 @@
 # A to Z Index #
-**Contributors:** diddledan  
-**Tags:** a to z, a-z, archive, listing, widget, index  
-**Requires at least:** 3.5  
-**Tested up to:** 4.4  
-**Stable tag:** 0.7.2  
-**License:** GPLv2 or later  
-**License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
+**Contributors:** diddledan
+**Tags:** a to z, a-z, archive, listing, widget, index
+**Requires at least:** 3.5
+**Tested up to:** 4.5
+**Stable tag:** 0.8.0
+**License:** GPLv2 or later
+**License URI:** http://www.gnu.org/licenses/gpl-2.0.html
 
 Provides an A to Z index page and widget. The widget links to the index page at the appropriate letter.
 
@@ -41,7 +41,7 @@ placing the a-z index on a child of section1 will likewise limit the index page 
 Likewise for section2, section2a and section2b.
 
 ### NOTE ###
-Styling (CSS) is left entirely up to the developer or site owner.
+Styling (CSS) is *off* by default. See the FAQ section for details to turn-on in-built styles.
 
 ## Installation ##
 
@@ -50,7 +50,7 @@ This section describes how to install the plugin and get it working.
 1. Upload the `a-z-listing` folder to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Place `<?php the_az_listing(); ?>` in your templates for the index page output or use the `a-z-listing` shortcode.
-1. Add the A-Z Site Map widget to a sidebar or use `<?php the_az_widget(null, array('post' => get_page($id))); ?>` in your templates (the 'post' variable indicates where the A-Z Index page is located).
+1. Add the A-Z Site Map widget to a sidebar or use `<?php the_a_z_widget(null, array('post' => get_page($id))); ?>` in your templates (the 'post' variable indicates where the A-Z Index page is located).
 
 ## Shortcode ##
 
@@ -76,13 +76,22 @@ The theme system this plugin implements is very similar to the standard WordPres
 
 Important functions to use in your template are as follows:
 
-* `the_az_letters()` outputs the full alphabet, and links the letters that have posts to their section within the index page.
+* `the_a_z_letters()` outputs the full alphabet, and links the letters that have posts to their section within the index page.
 * `have_a_z_letters()` returns true or false depending on whether there are any letters left to loop-through. This is part of the Letter Loop.
-* `have_a_z_posts()` this behaves very similarly to Core's `have_posts()` function. It is part of the Post Loop.
-* `the_a_z_letter()` similar to Core's `the_post`, this will set-up the next iteration of the A-Z Listing's Letter Loop. This needs to wrap-around the Post Loop.
-* `the_a_z_post()` similar to Core's `the_post`, this will set-up the next iteration of the A-Z Listing's _Post_ Loop. This needs to be _within_ the Letter Loop.
+* `have_a_z_items()` this behaves very similarly to Core's `have_posts()` function. It is part of the Item Loop.
+* `the_a_z_letter()` similar to Core's `the_post`, this will set-up the next iteration of the A-Z Listing's Letter Loop. This needs to wrap-around the Item Loop.
+* `the_a_z_item()` similar to Core's `the_post`, this will set-up the next iteration of the A-Z Listing's Item Loop, the same way the normal WordPress Loop works. This needs to be _within_ the Letter Loop.
 
 When you are within the Post Loop you can utilise all in-built WordPress Core post-related functions such as `the_title()`, `the_permalink`, `the_content`, etc.
+
+### Helper functions ###
+
+In 0.8.0 we added taxonomy-terms listings to the featureset. This means that the WordPress functions related to posts such as `the_title` and `the_permalink` are unreliable. We have therefore added helper functions which will return or print the correct output for the item.
+
+These helper functions cope with the duality of the plugin supporting both WP_Query-based and Taxonomy Terms listings. These are:
+
+* `the_a_z_item_title()` - returns the current item's Title
+* `the_a_z_item_permalink()` returns the current item's Permalink
 
 ## Frequently Asked Questions ##
 
@@ -91,13 +100,21 @@ When you are within the Post Loop you can utilise all in-built WordPress Core po
 in your theme's functions.php add the following code:
 
     <?php
-    add_filter('az_sections', 'remove_az_section_targeting');
-    function remove_az_section_targeting($sections) {
+    add_filter('a-z-listing-sections', 'remove_a_z_section_targeting');
+    function remove_a_z_section_targeting($sections) {
         return array();
     }
     ?>
 
 This filter can also be used, by removing entries which are standard $post variables, to limit which top-level pages are used as section identifiers.
+
+### How do I apply the in-built styling? ###
+
+in your theme's functions.php add the following code:
+
+    <?php
+    add_filter( 'a-z-listing-add-styling', '__return_true' );
+    ?>
 
 ## Screenshots ##
 
@@ -107,8 +124,14 @@ This filter can also be used, by removing entries which are standard $post varia
 ### 2. The Widget is shown here. ###
 ![2. The Widget is shown here.](http://ps.w.org/a-to-z-index/assets/screenshot-2.png)
 
-
 ## Changelog ##
+
+### 0.8.0 ###
+* Standardised on naming convention of *_a_z_* in function names, e.g. `get_the_a_z_listing()`, rather than the former *_az_* names, e.g. `get_the_az_listing()`.
+* Converted version numbering to semver style.
+* Fixed the in-built styling.
+* Added filter to determine whether to apply in-built styles in addition to hidden setting: `set_option( a-z-listing-add-styling', true );`.
+* Added taxonomy terms list support.
 
 ### 0.7.1 ###
 * Fix potential XSS vector.

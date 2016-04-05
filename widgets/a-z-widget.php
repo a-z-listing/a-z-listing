@@ -7,7 +7,7 @@
 /**
  * Definition for the AZ_Widget which displays alphabetically-ordered list of latin letters linking to the A-Z Listing page.
  */
-class AZ_Widget extends WP_Widget {
+class A_Z_Widget extends WP_Widget {
 	/**
 	 * Register the widget's meta information.
 	 */
@@ -29,7 +29,7 @@ class AZ_Widget extends WP_Widget {
 	/**
 	 * Deprecated constructor.
 	 */
-	function AZ_Widget() {
+	function A_Z_Widget() {
 		$this->__construct();
 	}
 
@@ -48,43 +48,43 @@ class AZ_Widget extends WP_Widget {
 	 */
 	function form( $instance ) {
 		$title = $instance['title'];
-		$titleID = $this->get_field_id( 'title' );
-		$titleName = $this->get_field_name( 'title' );
+		$title_ID = $this->get_field_id( 'title' );
+		$title_name = $this->get_field_name( 'title' );
 
 		$post = isset( $instance['post'] ) ? $instance['post'] : ( isset( $instance['page'] ) ? $instance['page'] : 0 );
-		$postID = $this->get_field_id( 'post' );
-		$postName = $this->get_field_name( 'post' );
+		$post_ID = $this->get_field_id( 'post' );
+		$post_name = $this->get_field_name( 'post' );
 
-		$stylingChecked = isset( $instance['apply-styling'] ) ? (bool) $instance['apply-styling'] : false;
-		$stylingID = $this->get_field_id( 'apply-styling' );
-		$stylingName = $this->get_field_name( 'apply-styling' );
+		$styling_checked = isset( $instance['apply-styling'] ) ? (bool) $instance['apply-styling'] : false;
+		$styling_ID = $this->get_field_id( 'apply-styling' );
+		$styling_name = $this->get_field_name( 'apply-styling' );
 
 		?>
-		<div><label for="<?php echo esc_attr( $postID ); ?>">
+		<div><label for="<?php echo esc_attr( $post_ID ); ?>">
 			<?php esc_html_e( 'Site map A-Z page', 'a-z-listing' ); ?>
 		</label></div>
 		<?php
 		wp_dropdown_pages(array(
-			'id' => intval( $postID ),
-			'name' => esc_html( $postName ),
+			'id' => intval( $post_ID ),
+			'name' => esc_html( $post_name ),
 			'selected' => intval( $post ),
 		));
 		?>
-		<div><label for="<?php echo esc_attr( $titleID ); ?>">
+		<div><label for="<?php echo esc_attr( $title_ID ); ?>">
 			<?php esc_html_e( 'Widget Title', 'a-z-listing' ); ?>
 		</label></div>
 		<input class="widefat" type="text"
-				id="<?php echo esc_attr( $titleID ); ?>"
-				name="<?php echo esc_attr( $titleName ); ?>"
+				id="<?php echo esc_attr( $title_ID ); ?>"
+				name="<?php echo esc_attr( $title_name ); ?>"
 				placeholder="<?php esc_attr_e( 'Widget Title', 'a-z-listing' ); ?>"
 				value="<?php echo esc_attr( $title ); ?>" />
 		<p style="color: #333;">
 			<?php esc_html_e( 'Leave blank to use the title specified by the page', 'a-z-listing' ); ?>
 		</p>
-        <input type="checkbox"
-                id="<?php echo esc_attr( $stylingID ); ?>"
-                name="<?php echo esc_attr( $stylingName ); ?>"
-                <?php if ( true === $stylingChecked ) : ?> checked <?php endif; ?> />
+		<input type="checkbox"
+			id="<?php echo esc_attr( $styling_ID ); ?>"
+			name="<?php echo esc_attr( $styling_name ); ?>"
+			<?php if ( true === $styling_checked ) : ?> checked <?php endif; ?> />
 		<?php
 	}
 
@@ -112,21 +112,33 @@ class AZ_Widget extends WP_Widget {
 }
 
 /**
+ * @deprecated in favour of the_section_a_z_widget
+ */
+function the_section_az_widget( $args, $instance ) {
+	the_section_a_z_widget( $args, $instance );
+}
+/**
  * Print the user-visible widget to the page implentation.
  * @param  Array $args     General widget configuration. Often shared between all widgets on the site.
  * @param  Array $instance Configuration of this Widget. Unique to this invocation.
  */
-function the_section_az_widget( $args, $instance ) {
+function the_section_a_z_widget( $args, $instance ) {
 	echo get_the_section_az_widget( $args, $instance ); // WPCS: XSS OK.
 }
 
+/**
+ * @deprecated in favour of get_the_section_a_z_widget()
+ */
+function get_the_section_az_widget( $args, $instance ) {
+	return get_the_section_a_z_widget( $args, $instance );
+}
 /**
  * Get the user-visible widget html.
  * @param  Array $args     General widget configuration. Often shared between all widgets on the site.
  * @param  Array $instance Configuration of this Widget. Unique to this invocation.
  * @return  string The complete A-Z Widget HTML ready for echoing to the page.
  */
-function get_the_section_az_widget( $args, $instance ) {
+function get_the_section_a_z_widget( $args, $instance ) {
 	extract( $args );
 
 	$instance = wp_parse_args( $instance, array(

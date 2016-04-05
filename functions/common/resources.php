@@ -1,6 +1,6 @@
 <?php
 if ( ! function_exists( 'bh_select_post_id' ) ) {
-	function select_post_id( $p = null ) {
+	function bh_select_post_id( $p = null ) {
 		if ( is_null( $p ) ) {
 			global $post;
 			$p = $post;
