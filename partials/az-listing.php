@@ -80,7 +80,7 @@ class A_Z_Listing {
 		$sections = apply_filters( 'az_sections', get_pages( array( 'parent' => 0 ) ) );
 		$sections = apply_filters( 'a-z-listing-sections', $sections );
 		$section = bh_current_section();
-		if ( ! in_array( $section, $sections ) ) {
+		if ( ! in_array( $section, $sections, true ) ) {
 			$section = null;
 		}
 		do_action( 'log', 'A-Z Section', $section );
@@ -148,7 +148,7 @@ class A_Z_Listing {
 
 			foreach ( $indices as $indice => $index_entries ) {
 				if ( count( $index_entries ) > 0 ) {
-					if ( in_array( $indice, self::$alphabet ) ) {
+					if ( in_array( $indice, self::$alphabet, true ) ) {
 						$indice = self::$alphabet[ $indice ];
 					} else {
 						$indice = '_';
