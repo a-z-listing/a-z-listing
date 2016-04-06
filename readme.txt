@@ -159,3 +159,4 @@ in your theme's functions.php add the following code:
 
 = 0.1 =
 * first release
+
