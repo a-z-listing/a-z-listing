@@ -51,15 +51,15 @@ class A_Z_Listing {
 	/**
 	 * @see: http://php.net/manual/en/function.mb-split.php#80046
 	 */
-	private static function mbStringToArray( $string ) {
-    $strlen = mb_strlen( $string );
-    while ( $strlen ) {
-        $array[] = mb_substr( $string, 0, 1, 'UTF-8' );
-        $string = mb_substr( $string, 1, $strlen, 'UTF-8' );
-        $strlen = mb_strlen( $string );
-    }
-    return $array;
-}
+	private static function mb_string_to_array( $string ) {
+		$strlen = mb_strlen( $string );
+		while ( $strlen ) {
+			$array[] = mb_substr( $string, 0, 1, 'UTF-8' );
+			$string = mb_substr( $string, 1, $strlen, 'UTF-8' );
+			$strlen = mb_strlen( $string );
+		}
+		return $array;
+	}
 
 	protected static function get_alphabet() {
 		if ( ! empty( self::$alphabet ) ) {
@@ -73,7 +73,7 @@ class A_Z_Listing {
 
 		$alphabet_groups = mb_split( ',', $alphabet );
 		$letters = array_reduce( $alphabet_groups, function( $return, $group ) {
-			$group = self::mbStringToArray( $group );
+			$group = self::mb_string_to_array( $group );
 			$group_index_character = $group[0];
 			$group = array_reduce( $group, function( $group, $character ) use ( $group_index_character ) {
 				$group[ $character ] = $group_index_character;
@@ -318,7 +318,7 @@ class A_Z_Listing {
 		return count( $this->current_letter_items );
 	}
 	public function the_letter_count() {
-		echo count( $this->current_letter_items );
+		echo count( $this->current_letter_items ); // WPCS: XSS OK
 	}
 	public function get_the_letter_count() {
 		return count( $this->current_letter_items );
