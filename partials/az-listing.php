@@ -51,7 +51,7 @@ class A_Z_Listing {
 	/**
 	 * @see: http://php.net/manual/en/function.mb-split.php#80046
 	 */
-	private static function mb_string_to_array( $string ) {
+	public static function mb_string_to_array( $string ) {
 		$strlen = mb_strlen( $string );
 		while ( $strlen ) {
 			$array[] = mb_substr( $string, 0, 1, 'UTF-8' );
