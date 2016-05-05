@@ -306,13 +306,13 @@ class A_Z_Listing {
 		return count( $this->index_indices );
 	}
 	/**
-	 * @deprecated in favour of A_Z_Listing::get_the_letter_count()
+	 * @deprecated in favour of get_the_letter_count()
 	 */
 	public function num_a_z_posts() {
 		return $this->num_a_z_items();
 	}
 	/**
-	 * @deprecated in favour of A_Z_Listing::get_the_letter_count()
+	 * @deprecated in favour of get_the_letter_count()
 	 */
 	public function num_a_z_items() {
 		return count( $this->current_letter_items );
