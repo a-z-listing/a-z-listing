@@ -48,20 +48,33 @@ class A_Z_Listing {
 		$this->item_indices = $this->get_all_indices();
 	}
 
+	/**
+	 * @see: http://php.net/manual/en/function.mb-split.php#80046
+	 */
+	private static function mbStringToArray( $string ) {
+    $strlen = mb_strlen( $string );
+    while ( $strlen ) {
+        $array[] = mb_substr( $string, 0, 1, 'UTF-8' );
+        $string = mb_substr( $string, 1, $strlen, 'UTF-8' );
+        $strlen = mb_strlen( $string );
+    }
+    return $array;
+}
+
 	protected static function get_alphabet() {
 		if ( ! empty( self::$alphabet ) ) {
 			return;
 		}
 
 		/* translators: List the aphabet of your language in the order that your language prefers. list as groups of identical meanings but different characters together, e.g. in English we group A with a because they are both the same letter but different character-code. Each character group should be followed by a comma separating it from the next group. Any amount of characters per group are acceptible, and there is no requirement for all the groups to contain the same amount of characters as all the others. Be careful with the character you place first in each group as that will be used as the identifier for the group which gets displayed on the page, e.g. in English a group definition of "Aa" will indicate that we display all the posts in the group, i.e. whose titles begin with either "A" or "a", listed under a heading of "A" (the first character in the definition). */
-		$alphabet = apply_filters( 'a-z-listing-alphabet', __( 'AÁÀÄÂaáàäâ,Bb,CÇcç,Dd,EÉÈËÊeéèëê,Ff,Gg,Hh,IÍÌÏÎiíìïî,Jj,Kk,Ll,Mm,Nn,OÓÒÖÔoóòöô,Pp,Qq,Rr,Ss,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz' ) );
+		$alphabet = apply_filters( 'a-z-listing-alphabet', __( 'AÁÀÄÂaáàäâ,Bb,Cc,Dd,EÉÈËÊeéèëê,Ff,Gg,Hh,IÍÌÏÎiíìïî,Jj,Kk,Ll,Mm,Nn,OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz' ) );
 		/* translators: This should be a single character to denote "all entries that didn't fit under one of the alphabet character groups defined". This is used in English to categorise posts whose title begins with a numeric (0 through to 9), or some other character that is not a standard English alphabet letter. */
 		$others = apply_filters( 'a-z-listing-non-alpha-char', __( '#', 'a-z-listing' ) );
 
-		$alphabet_groups = explode( ',', $alphabet );
+		$alphabet_groups = mb_split( ',', $alphabet );
 		$letters = array_reduce( $alphabet_groups, function( $return, $group ) {
+			$group = self::mbStringToArray( $group );
 			$group_index_character = $group[0];
-			$group = str_split( $group );
 			$group = array_reduce( $group, function( $group, $character ) use ( $group_index_character ) {
 				$group[ $character ] = $group_index_character;
 				return $group;
@@ -69,7 +82,7 @@ class A_Z_Listing {
 			if ( ! is_array( $return ) ) {
 				return $group;
 			}
-			return array_merge_recursive( $return, $group );
+			return array_merge( $return, $group );
 		} );
 
 		self::$alphabet = $letters;
@@ -126,13 +139,13 @@ class A_Z_Listing {
 			$terms = array_filter( wp_get_object_terms( $item->ID, $index_taxonomy ) );
 		}
 
-		$indices[ substr( $item->post_title, 0, 1 ) ][] = array( 'title' => $item->post_title, 'item' => $item );
+		$indices[ mb_substr( $item->post_title, 0, 1, 'UTF-8' ) ][] = array( 'title' => $item->post_title, 'item' => $item );
 		$term_indices = array_reduce( $terms, function( $indices, $term ) {
-			$indices[ substr( $term->name, 0, 1 ) ][] = array( 'title' => $term->name, 'item' => $item );
+			$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array( 'title' => $term->name, 'item' => $item );
 			return $indices;
 		});
 		if ( is_array( $term_indices ) ) {
-			$indices = array_merge_recursive( $indices, $term_indices );
+			$indices = array_merge( $indices, $term_indices );
 		}
 
 		$indices = apply_filters( 'a-z-listing-post-indices', $indices, $item );
@@ -293,12 +306,21 @@ class A_Z_Listing {
 		return count( $this->index_indices );
 	}
 	/**
-	 * @deprecated in favour of A_Z_Listing::num_a_z_items()
+	 * @deprecated in favour of A_Z_Listing::get_the_letter_count()
 	 */
 	public function num_a_z_posts() {
 		return $this->num_a_z_items();
 	}
+	/**
+	 * @deprecated in favour of A_Z_Listing::get_the_letter_count()
+	 */
 	public function num_a_z_items() {
+		return count( $this->current_letter_items );
+	}
+	public function the_letter_count() {
+		echo count( $this->current_letter_items );
+	}
+	public function get_the_letter_count() {
 		return count( $this->current_letter_items );
 	}
 
@@ -374,15 +396,27 @@ function num_a_z_letters() {
 	return $_a_z_listing_object->num_a_z_letters();
 }
 /**
- * @deprecated in favour of num_a_z_items()
+ * @deprecated in favour of get_the_a_z_letter_count() and the_a_z_letter_count()
  */
 function num_a_z_posts() {
 	return num_a_z_items();
 }
+/**
+ * @deprecated in favour of get_the_a_z_letter_count() and the_a_z_letter_count()
+ */
 function num_a_z_items() {
 	global $_a_z_listing_object;
-	return $_a_z_listing_object->num_a_z_items();
+	return $_a_z_listing_object->get_the_letter_count();
 }
+function the_a_z_letter_count() {
+	global $_a_z_listing_object;
+	return $_a_z_listing_object->the_letter_count();
+}
+function get_the_a_z_letter_count() {
+	global $_a_z_listing_object;
+	return $_a_z_listing_object->get_the_letter_count();
+}
+
 
 function the_a_z_letter_id() {
 	global $_a_z_listing_object;

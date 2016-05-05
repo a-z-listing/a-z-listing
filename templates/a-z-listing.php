@@ -10,7 +10,6 @@
 		<?php while ( have_a_z_letters() ) : the_a_z_letter(); ?>
 			<?php if ( have_a_z_items() ) : ?>
 				<div class="letter-section" id="<?php the_a_z_letter_id(); ?>">
-					<a name="<?php the_a_z_letter_id(); ?>"></a>
 					<h2>
 						<span><?php the_a_z_letter_title(); ?></span>
 					</h2>
