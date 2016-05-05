@@ -73,7 +73,7 @@ class A_Z_Listing {
 
 		$alphabet_groups = mb_split( ',', $alphabet );
 		$letters = array_reduce( $alphabet_groups, function( $return, $group ) {
-			$group = self::mb_string_to_array( $group );
+			$group = A_Z_Listing::mb_string_to_array( $group );
 			$group_index_character = $group[0];
 			$group = array_reduce( $group, function( $group, $character ) use ( $group_index_character ) {
 				$group[ $character ] = $group_index_character;
