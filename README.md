@@ -2,8 +2,8 @@
 **Contributors:** diddledan
 **Tags:** a to z, a-z, archive, listing, widget, index
 **Requires at least:** 3.5
-**Tested up to:** 4.6
-**Stable tag:** 0.8.0
+**Tested up to:** 4.6.1
+**Stable tag:** 1.0.0
 **License:** GPLv2 or later
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -70,28 +70,32 @@ The arguments are all optional with their defaults shown above, which will be us
 
 New for 0.7 is themeability! This allows the site owner or theme developer to provide custom templates for the A-Z Listing output.
 
+*NOTE: These functions have changed name and method of access in 1.0.0. We have dropped the _a_z_ moniker in the function name and within the template file they are accessed via the `$a_z_listing` object.* The former function names are still accessible, but are largely deprecated.
+
 To add a template to your theme, you need a file similar to the `templates/a-z-listing.php` file in the plugin folder. Your copy needs to be placed within your theme at the theme root directory and called `a-z-listing.php` or `a-z-listing-section.php` (where `-section` is an optional top-level page slug for the section-targeting feature).
 
 The theme system this plugin implements is very similar to the standard WordPress loop, with a few added bits.
 
 Important functions to use in your template are as follows:
 
-* `the_a_z_letters()` outputs the full alphabet, and links the letters that have posts to their section within the index page.
-* `have_a_z_letters()` returns true or false depending on whether there are any letters left to loop-through. This is part of the Letter Loop.
-* `have_a_z_items()` this behaves very similarly to Core's `have_posts()` function. It is part of the Item Loop.
-* `the_a_z_letter()` similar to Core's `the_post`, this will set-up the next iteration of the A-Z Listing's Letter Loop. This needs to wrap-around the Item Loop.
-* `the_a_z_item()` similar to Core's `the_post`, this will set-up the next iteration of the A-Z Listing's Item Loop, the same way the normal WordPress Loop works. This needs to be _within_ the Letter Loop.
+* `$a_z_query->the_letters()` prints the full alphabet, and links the letters that have posts to their section within the index page.
+* `$a_z_query->have_letters()` returns true or false depending on whether there are any letters left to loop-through. This is part of the Letter Loop.
+* `$a_z_query->have_items()` this behaves very similarly to Core's `have_posts()` function. It is part of the Item Loop.
+* `$a_z_query->the_letter()` similar to Core's `the_post`, this will set-up the next iteration of the A-Z Listing's Letter Loop. This needs to wrap-around the Item Loop.
+* `$a_z_query->the_item()` similar to Core's `the_post`, this will set-up the next iteration of the A-Z Listing's Item Loop, the same way the normal WordPress Loop works. This needs to be _within_ the Letter Loop.
 
-When you are within the Post Loop you can utilise all in-built WordPress Core post-related functions such as `the_title()`, `the_permalink`, `the_content`, etc.
+When you are within the Item Loop you can utilise all in-built WordPress Core post-related functions such as `the_content`. Note that titles and permalinks have helper functions to cope with the A-Z Listing showing taxonomy terms (see the next section).
 
 ### Helper functions ###
 
-In 0.8.0 we added taxonomy-terms listings to the featureset. This means that the WordPress functions related to posts such as `the_title` and `the_permalink` are unreliable. We have therefore added helper functions which will return or print the correct output for the item.
+In 0.8.0 we added taxonomy-terms listings into the featureset. This means that the WordPress functions related to posts such as `the_title` and `the_permalink` are unreliable. We have therefore added helper functions which will return or print the correct output for the item.
 
-These helper functions cope with the duality of the plugin supporting both WP_Query-based and Taxonomy Terms listings. These are:
+*NOTE: These functions have changed name and method of access in 1.0.0. We have dropped the _a_z_ moniker in the function name and within the template file they are accessed via the `$a_z_listing` object.* The former function names are still accessible, but are largely deprecated.
 
-* `the_a_z_item_title()` - returns the current item's Title
-* `the_a_z_item_permalink()` returns the current item's Permalink
+These helper functions cope with the duality of the plugin supporting both `WP_Query`-based (returning `WP_Post` objects) and Taxonomy Terms (returning `WP_Term` objects) listings. These are:
+
+* `$a_z_query->the_title()` - prints the current item's Title
+* `$a_z_query->the_permalink()` prints the current item's Permalink
 
 ## Frequently Asked Questions ##
 
@@ -125,6 +129,11 @@ in your theme's functions.php add the following code:
 ![2. The Widget is shown here.](http://ps.w.org/a-to-z-index/assets/screenshot-2.png)
 
 ## Changelog ##
+
+### 1.0.0 ###
+* BREAKING CHANGE: Refactored several function names. If you have written your own template/loop you will need to adapt your code. See the readme.txt's Theming section for details.
+* Added `post-type` attribute into the shortcode to display for post-types other than pages.
+* Minor code cleanup.
 
 ### 0.8.0 ###
 * Standardised on naming convention of *_a_z_* in function names, e.g. `get_the_a_z_listing()`, rather than the former *_az_* names, e.g. `get_the_az_listing()`.

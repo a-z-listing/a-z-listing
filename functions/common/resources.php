@@ -36,7 +36,7 @@ if ( ! function_exists( 'bh_get_page_path' ) ) {
 				if ( defined( 'DEBUG_PATHS' ) && DEBUG_PATHS ) {
 					do_action( 'log', 'get_page_path: Reverting to hierarchy top', $p );
 				}
-			} else if ( ! is_search() ) {
+			} elseif ( ! is_search() ) {
 				$p = $post;
 				if ( defined( 'DEBUG_PATHS' ) && DEBUG_PATHS ) {
 					do_action( 'log', 'get_page_path: Reverting to global post', $post );

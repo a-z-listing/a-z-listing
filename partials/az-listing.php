@@ -10,7 +10,7 @@
  * @return bool                                       whether there are letters still to be iterated-over
  */
 function have_a_z_letters( $query = null ) {
-	return a_z_listing_cache( $query )->have_a_z_letters();
+	return a_z_listing_cache( $query )->have_letters();
 }
 /**
  * @deprecated use have_a_z_items()
@@ -24,7 +24,7 @@ function have_a_z_posts() {
  * @return bool                                       whether there are still posts available
  */
 function have_a_z_items( $query = null ) {
-	return a_z_listing_cache( $query )->have_a_z_items();
+	return a_z_listing_cache( $query )->have_items();
 }
 
 /**
@@ -32,7 +32,7 @@ function have_a_z_items( $query = null ) {
  * @param array|string|WP_Query|A_Z_Listing  $query  a valid WordPress query or an A_Z_Listing instance
  */
 function the_a_z_letter( $query = null ) {
-	a_z_listing_cache( $query )->the_a_z_letter();
+	a_z_listing_cache( $query )->the_letter();
 }
 /**
  * @deprecated use the_a_z_item()
@@ -45,7 +45,7 @@ function the_a_z_post() {
  * @param array|string|WP_Query|A_Z_Listing  $query  a valid WordPress query or an A_Z_Listing instance
  */
 function the_a_z_item( $query = null ) {
-	a_z_listing_cache( $query )->the_a_z_item();
+	a_z_listing_cache( $query )->the_item();
 }
 
 /**
@@ -117,7 +117,7 @@ function get_the_a_z_letter_title( $query = null ) {
  * @param array|string|WP_Query|A_Z_Listing  $query  either a valid WordPress query or an A_Z_Listing instance
  */
 function the_a_z_item_title( $query = null ) {
-	a_z_listing_cache( $query )->the_item_title();
+	a_z_listing_cache( $query )->the_title();
 }
 /**
  * Get the current item title
@@ -125,14 +125,14 @@ function the_a_z_item_title( $query = null ) {
  * @return string                                     the post or taxonomy-term title
  */
 function get_the_a_z_item_title( $query = null ) {
-	return a_z_listing_cache( $query )->get_the_item_title();
+	return a_z_listing_cache( $query )->get_the_title();
 }
 /**
  * Print the current item permalink
  * @param array|string|WP_Query|A_Z_Listing  $query  either a valid WordPress query or an A_Z_Listing instance
  */
 function the_a_z_item_permalink( $query = null ) {
-	a_z_listing_cache( $query )->the_item_permalink();
+	a_z_listing_cache( $query )->the_permalink();
 }
 /**
  * Get the current item permalink
@@ -140,7 +140,7 @@ function the_a_z_item_permalink( $query = null ) {
  * @return string                                     the permalink
  */
 function get_the_a_z_item_permalink( $query = null ) {
-	return a_z_listing_cache( $query )->get_the_item_permalink();
+	return a_z_listing_cache( $query )->get_the_permalink();
 }
 
 /**
@@ -206,5 +206,5 @@ function get_the_az_letters( $query = null, $target = false, $styling = false ) 
  * @return string                                      HTML ready for echoing containing the list of A-Z letters with anchor links to the A-Z Index page.
  */
 function get_the_a_z_letters( $query = null, $target = false, $styling = false ) {
-	return a_z_listing_cache( $query )->get_letter_display( $target, $styling );
+	return a_z_listing_cache( $query )->get_the_letters( $target, $styling );
 }

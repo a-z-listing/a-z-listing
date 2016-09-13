@@ -23,7 +23,6 @@ class A_Z_Widget extends WP_Widget {
 		if ( is_active_widget( false, $this->id, false, true ) ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		}
-
 	}
 
 	/**
@@ -139,8 +138,6 @@ function get_the_section_az_widget( $args, $instance ) {
  * @return  string The complete A-Z Widget HTML ready for echoing to the page.
  */
 function get_the_section_a_z_widget( $args, $instance ) {
-	extract( $args );
-
 	$instance = wp_parse_args( $instance, array(
 		'title' => '',
 		'post' => 0,
@@ -159,14 +156,16 @@ function get_the_section_a_z_widget( $args, $instance ) {
 
 	$apply_styling = ( isset( $instance['apply-styling'] ) && true === $instance['apply-styling'] ) ? true : false;
 
-	$ret = $before_widget; // WPCS: XSS OK.
-	$ret .= $before_title; // WPCS: XSS OK.
+	$a_z_query = new A_Z_Listing();
+
+	$ret = $args['before_widget']; // WPCS: XSS OK.
+	$ret .= $args['before_title']; // WPCS: XSS OK.
 	$ret .= esc_html( $title );
-	$ret .= $after_title; // WPCS: XSS OK.
+	$ret .= $args['after_title']; // WPCS: XSS OK.
 	$ret .= '<div class="az-letters">';
-	$ret .= get_the_az_letters( null, get_permalink( $target ), ( $apply_styling ? 'default-style' : null ) );
+	$ret .= $a_z_query->get_the_letters( get_permalink( $target ), ( $apply_styling ? 'default-style' : null ) );
 	$ret .= '<div class="clear empty"></div></div>';
-	$ret .= $after_widget; // WPCS: XSS OK.
+	$ret .= $args['after_widget']; // WPCS: XSS OK.
 
 	return $ret;
 }
