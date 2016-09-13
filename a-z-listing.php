@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: A-Z Listing
- * Plugin URI: http://bowlhat.net/
+ * Plugin URI: https://www.bowlhat.net/
  * Description: Display an A to Z listing of posts
- * Version: 0.9.0
+ * Version: 1.0.0
  * Author: Daniel Llewellyn
- * Author URI: http://bowlhat.net
+ * Author URI: https://www.bowlhat.net
  * License: GPLv2
  * Text Domain: a-z-listing
  * @package  a-z-listing
@@ -28,7 +28,7 @@ register_activation_hook( __FILE__, 'bh_az_listing_activate' );
  * Initialises the plugin's functions, partials, javascript and css.
  */
 function bh_az_listing_init() {
-	$dir = dirname( __FILE__ ).'/';
+	$dir = dirname( __FILE__ ) . '/';
 
 	// Common functions.
 	foreach ( glob( $dir . 'functions/common/*.php' ) as $filename ) {
@@ -54,7 +54,7 @@ function bh_az_listing_init() {
 
 	if ( is_readable( $dir . 'languages/' . $lang . '-' . $country . '.php' ) ) {
 		require_once( $dir . 'languages/' . $lang . '-' . $country . '.php' );
-	} else if ( is_readable( $dir . 'languages/' . $lang . '.php' ) ) {
+	} elseif ( is_readable( $dir . 'languages/' . $lang . '.php' ) ) {
 		require_once( $dir . 'languages/' . $lang . '.php' );
 	}
 
@@ -76,7 +76,7 @@ function bh_az_listing_init() {
 	}
 
 	// CSS: autoload.
-	$glob = glob( $dir.'*.css' );
+	$glob = glob( $dir . '*.css' );
 
 	foreach ( $glob as $filename ) {
 		$matches = array();

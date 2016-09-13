@@ -10,7 +10,7 @@
             <li class="even"><span>F</span></li>
             <li class="odd"><span>G</span></li>
             <li class="even"><span>H</span></li>
-            <li class="odd"><span>I</span></li>
+            <li class="odd"><a href="http://example.org/?page_id=%1$d#letter-I"><span>I</span></a></li>
             <li class="even"><span>J</span></li>
             <li class="odd"><span>K</span></li>
             <li class="even"><span>L</span></li>
@@ -21,7 +21,7 @@
             <li class="odd"><span>Q</span></li>
             <li class="even"><span>R</span></li>
             <li class="odd"><span>S</span></li>
-            <li class="even"><a href="http://example.org/?page_id=%1$s#letter-T"><span>T</span></a></li>
+            <li class="even"><a href="http://example.org/?page_id=%1$d#letter-T"><span>T</span></a></li>
             <li class="odd"><span>U</span></li>
             <li class="even"><span>V</span></li>
             <li class="odd"><span>W</span></li>

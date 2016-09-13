@@ -35,8 +35,7 @@
     <div id="inner-slider"><div class="letter-section" id="letter-T">
         <h2><span>T</span></h2>
         <div><ul>
-            <li><a href="http://example.org/?page_id=%s">Test Page</a></li>
+            <li><a href="http://example.org/?page_id=%d">Test Page</a></li>
         </ul></div>
-        <div class="clear empty"></div>
     </div></div>
 </div>
