@@ -99,26 +99,72 @@ These helper functions cope with the duality of the plugin supporting both `WP_Q
 
 ## Frequently Asked Questions ##
 
-### How do I remove section targetting or limit which sections are available? ###
+### How do I show posts of a different post-type ###
 
-in your theme's functions.php add the following code:
+This can be achieved using the shortcode or PHP.
+
+**Shortcode method**
+
+[a-z-listing post-type=your-post-type-slug]
+
+**PHP method**
+
+PHP code needs to be added to your theme files, and cannot be used as post or page content in the way that a shortcode can.
 
     <?php
-    add_filter('a-z-listing-sections', 'remove_a_z_section_targeting');
-    function remove_a_z_section_targeting($sections) {
-        return array();
-    }
+    the_a_z_listing( array(
+        'post_type' => 'your-post-type-slug'
+    ) );
+    ?>
+
+The argument to `the_a_z_listing()` is an [array](http://php.net/manual/en/language.types.array.php) and takes the same parameters as [WP_Query](https://codex.wordpress.org/Class_Reference/WP_Query)
+
+*The code above needs to be within a php block which is denoted by the `<?php`. Depending on your theme, you might not need the opening and closing php tags shown in the above snippet; if that is the case, you are free to omit them in your code.*
+
+### How do I show posts from a specific category only ###
+
+This can only be done via PHP and cannot currently be achieved using the shortcode.
+
+**PHP method**
+
+PHP code needs to be added to your theme files, and cannot be used as post or page content in the way that a shortcode can.
+
+    <?php
+    the_a_z_listing( array(
+        'tax_query' => array(
+            'taxonomy' => 'your-taxonomy-slug',
+            'terms' => array( 'term1-slug', 'term2-slug' )
+        )
+    ) );
+    ?>
+
+Any number of terms can be added to the `terms` [array](http://php.net/manual/en/language.types.array.php), including one or none.
+
+The argument to `the_a_z_listing()` is an [array](http://php.net/manual/en/language.types.array.php) and takes the same parameters as [WP_Query](https://codex.wordpress.org/Class_Reference/WP_Query)
+
+*The code above needs to be within a php block which is denoted by the `<?php`. Depending on your theme, you might not need the opening and closing php tags shown in the above snippet; if that is the case, you are free to omit them in your code.*
+
+### How do I remove section targetting or limit which sections are available? ###
+
+In your theme's functions.php add the following code:
+
+    <?php
+    add_filter( 'a-z-listing-sections', '__return_empty_array' );
     ?>
 
 This filter can also be used, by removing entries which are standard $post variables, to limit which top-level pages are used as section identifiers.
 
+*If there is code already in your functions.php then add just the line beginning with `add_filter` on a new line directly after the very first instance of `<?php`.*
+
 ### How do I apply the in-built styling? ###
 
-in your theme's functions.php add the following code:
+In your theme's functions.php add the following code:
 
     <?php
     add_filter( 'a-z-listing-add-styling', '__return_true' );
     ?>
+
+*If there is code already in your functions.php then add just the line beginning with `add_filter` on a new line directly after the very first instance of `<?php`.*
 
 ## Screenshots ##
 
