@@ -11,7 +11,7 @@
  * @package  a-z-listing
  */
 
-if ( ! defined('AZLISTINGLOG') ) {
+if ( ! defined( 'AZLISTINGLOG' ) ) {
 	define( 'AZLISTINGLOG', false );
 }
 /**

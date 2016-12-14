@@ -35,13 +35,19 @@ class A_Z_Listing {
 		$this->available_indices = array_values( array_unique( array_values( self::$alphabet ) ) );
 
 		if ( is_string( $query ) && ! empty( $query ) ) {
-			if (AZLISTINGLOG) do_action( 'log', 'A-Z Listing: Setting taxonomy mode', $query );
+			if (AZLISTINGLOG) {
+				do_action( 'log', 'A-Z Listing: Setting taxonomy mode', $query );
+			}
 			$this->type = 'taxonomy';
 			$this->taxonomy = $query;
 			$this->items = get_terms( $query, array( 'hide_empty' => false ) );
-			if (AZLISTINGLOG) do_action( 'log', 'A-Z Listing: Terms', '!slug', $this->items );
+			if (AZLISTINGLOG) {
+				do_action( 'log', 'A-Z Listing: Terms', '!slug', $this->items );
+			}
 		} else {
-			if (AZLISTINGLOG) do_action( 'log', 'A-Z Listing: Setting posts mode', $query );
+			if (AZLISTINGLOG) {
+				do_action( 'log', 'A-Z Listing: Setting posts mode', $query );
+			}
 			$index_taxonomy = apply_filters( 'az_additional_titles_taxonomy', '' );
 			$this->index_taxonomy = apply_filters( 'a_z_listing_additional_titles_taxonomy', $index_taxonomy );
 
@@ -103,7 +109,9 @@ class A_Z_Listing {
 		if ( ! in_array( $section, $sections, true ) ) {
 			$section = null;
 		}
-		if (AZLISTINGLOG) do_action( 'log', 'A-Z Section', $section );
+		if (AZLISTINGLOG) {
+			do_action( 'log', 'A-Z Section', $section );
+		}
 		return $section;
 	}
 
@@ -158,7 +166,9 @@ class A_Z_Listing {
 
 		$indices = apply_filters( 'a_z_listing_post_indices', $indices, $item );
 		$indices = apply_filters( 'a_z_listing_item_indices', $indices, $item, $this->type );
-		if (AZLISTINGLOG) do_action( 'log', 'Item indices', $indices );
+		if (AZLISTINGLOG) {
+			do_action( 'log', 'Item indices', $indices );
+		}
 		return $indices;
 	}
 
