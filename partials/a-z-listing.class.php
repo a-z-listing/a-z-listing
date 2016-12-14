@@ -30,18 +30,28 @@ class A_Z_Listing {
 	// The current letter array-index in $matched_item_indices. internal use only.
 	private $current_letter_index = 0;
 
+	/**
+	 * A_Z_Listing constructor.
+	 * @param null|WP_Query|string $query
+	 */
 	public function __construct( $query = null ) {
 		self::get_alphabet();
 		$this->available_indices = array_values( array_unique( array_values( self::$alphabet ) ) );
 
 		if ( is_string( $query ) && ! empty( $query ) ) {
-			do_action( 'log', 'A-Z Listing: Setting taxonomy mode', $query );
+			if ( AZLISTINGLOG ) {
+				do_action( 'log', 'A-Z Listing: Setting taxonomy mode', $query );
+			}
 			$this->type = 'taxonomy';
 			$this->taxonomy = $query;
 			$this->items = get_terms( $query, array( 'hide_empty' => false ) );
-			do_action( 'log', 'A-Z Listing: Terms', '!slug', $this->items );
+			if ( AZLISTINGLOG ) {
+				do_action( 'log', 'A-Z Listing: Terms', '!slug', $this->items );
+			}
 		} else {
-			do_action( 'log', 'A-Z Listing: Setting posts mode', $query );
+			if ( AZLISTINGLOG ) {
+				do_action( 'log', 'A-Z Listing: Setting posts mode', $query );
+			}
 			$index_taxonomy = apply_filters( 'az_additional_titles_taxonomy', '' );
 			$this->index_taxonomy = apply_filters( 'a_z_listing_additional_titles_taxonomy', $index_taxonomy );
 
@@ -57,13 +67,16 @@ class A_Z_Listing {
 
 	/**
 	 * @see: http://php.net/manual/en/function.mb-split.php#80046
+	 * @param string $string multi-byte string
+	 * @return array individual multi-byte characters from the string
 	 */
 	public static function mb_string_to_array( $string ) {
-		$strlen = mb_strlen( $string );
-		while ( $strlen ) {
+		$array = array();
+		$length = mb_strlen( $string );
+		while ( $length ) {
 			$array[] = mb_substr( $string, 0, 1, 'UTF-8' );
-			$string = mb_substr( $string, 1, $strlen, 'UTF-8' );
-			$strlen = mb_strlen( $string );
+			$string = mb_substr( $string, 1, $length, 'UTF-8' );
+			$length = mb_strlen( $string );
 		}
 		return $array;
 	}
@@ -103,7 +116,9 @@ class A_Z_Listing {
 		if ( ! in_array( $section, $sections, true ) ) {
 			$section = null;
 		}
-		do_action( 'log', 'A-Z Section', $section );
+		if ( AZLISTINGLOG ) {
+			do_action( 'log', 'A-Z Section', $section );
+		}
 		return $section;
 	}
 
@@ -137,19 +152,19 @@ class A_Z_Listing {
 		$terms = $indices = array();
 
 		if ( $item instanceof WP_Term ) {
-			$indices[ substr( $item->name, 0, 1 ) ][] = array( 'title' => $item->name, 'item' => $item );
+			$indices[ mb_substr( $item->name, 0, 1, 'UTF-8' ) ][] = array( 'title' => $item->name, 'item' => $item );
 			$indices = apply_filters( 'a_z_listing_term_indices', $indices, $item );
 			$indices = apply_filters( 'a_z_listing_item_indices', $indices, $item, $this->type );
 			return $indices;
 		}
 
 		if ( ! empty( $this->index_taxonomy ) ) {
-			$terms = array_filter( wp_get_object_terms( $item->ID, $index_taxonomy ) );
+			$terms = array_filter( wp_get_object_terms( $item->ID, $this->index_taxonomy ) );
 		}
 
 		$indices[ mb_substr( $item->post_title, 0, 1, 'UTF-8' ) ][] = array( 'title' => $item->post_title, 'item' => $item );
 		$term_indices = array_reduce( $terms, function( $indices, $term ) {
-			$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array( 'title' => $term->name, 'item' => $item );
+			$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array( 'title' => $term->name, 'item' => $term );
 			return $indices;
 		});
 		if ( is_array( $term_indices ) ) {
@@ -158,6 +173,9 @@ class A_Z_Listing {
 
 		$indices = apply_filters( 'a_z_listing_post_indices', $indices, $item );
 		$indices = apply_filters( 'a_z_listing_item_indices', $indices, $item, $this->type );
+		if ( AZLISTINGLOG ) {
+			do_action( 'log', 'Item indices', $indices );
+		}
 		return $indices;
 	}
 
@@ -167,19 +185,19 @@ class A_Z_Listing {
 		foreach ( $this->items as $item ) {
 			$indices = $this->get_the_item_indices( $item );
 
-			foreach ( $indices as $indice => $index_entries ) {
+			foreach ( $indices as $index => $index_entries ) {
 				if ( count( $index_entries ) > 0 ) {
-					if ( in_array( $indice, self::$alphabet, true ) ) {
-						$indice = self::$alphabet[ $indice ];
+					if ( in_array( $index, array_keys( self::$alphabet ), true ) ) {
+						$index = self::$alphabet[ $index ];
 					} else {
-						$indice = '_';
+						$index = '_';
 					}
 
-					if ( ! isset( $letters[ $indice ] ) || ! is_array( $letters[ $indice ] ) ) {
-						$letters[ $indice ] = array();
+					if ( ! isset( $letters[ $index ] ) || ! is_array( $letters[ $index ] ) ) {
+						$letters[ $index ] = array();
 					}
 
-					$letters[ $indice ] = array_merge_recursive( $letters[ $indice ], $index_entries );
+					$letters[ $index ] = array_merge_recursive( $letters[ $index ], $index_entries );
 				}
 			}
 		}
@@ -188,23 +206,21 @@ class A_Z_Listing {
 	}
 
 	protected function get_all_indices() {
-		$short_names = array();
-
-		$index = $this->get_indexed_items();
+		$indexed_items = $this->get_indexed_items();
 
 		if ( ! empty( $index[ self::$unknown_letters ] ) ) {
 			$this->available_indices[] = self::$unknown_letters;
 		}
 
-		foreach ( $this->available_indices as $indice ) {
-			if ( ! empty( $index[ $indice ] ) ) {
-				usort( $index[ $indice ], function( $a, $b ) {
+		foreach ( $this->available_indices as $index ) {
+			if ( ! empty( $indexed_items[ $index ] ) ) {
+				usort( $indexed_items[ $index ], function( $a, $b ) {
 					return strcmp( $a['title'], $b['title'] );
 				});
 			}
 		}
 
-		return $index;
+		return $indexed_items;
 	}
 
 	public function the_letters() {
@@ -213,6 +229,9 @@ class A_Z_Listing {
 
 	/**
 	 * @deprecated use A_Z_Listing::get_the_letters().
+	 * @param string $target
+	 * @param null $style
+	 * @return string
 	 */
 	public function get_letter_display( $target = '', $style = null  ) {
 		return $this->get_the_letters( $target, $style );
@@ -258,7 +277,9 @@ class A_Z_Listing {
 	}
 
 	protected function do_template( $template_file ) {
+		/** @noinspection PhpUnusedLocalVariableInspection */
 		$a_z_query = $this;
+		/** @noinspection PhpIncludeInspection */
 		include( $template_file );
 	}
 
@@ -327,6 +348,7 @@ class A_Z_Listing {
 	 * @deprecated use A_Z_Listing::get_the_letter_count()
 	 */
 	public function num_a_z_posts() {
+		/** @noinspection PhpDeprecationInspection */
 		return $this->num_a_z_items();
 	}
 	/**
@@ -336,7 +358,7 @@ class A_Z_Listing {
 		return count( $this->current_letter_items );
 	}
 	public function the_letter_count() {
-		echo esc_html( get_the_letter_count() );
+		echo esc_html( count( $this->current_letter_items ) );
 	}
 	public function get_the_letter_count() {
 		return count( $this->current_letter_items );

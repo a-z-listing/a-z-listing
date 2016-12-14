@@ -1,11 +1,11 @@
-# A to Z Index #
-**Contributors:** diddledan
-**Tags:** a to z, a-z, archive, listing, widget, index
-**Requires at least:** 3.5
-**Tested up to:** 4.6.1
-**Stable tag:** 1.0.0
-**License:** GPLv2 or later
-**License URI:** http://www.gnu.org/licenses/gpl-2.0.html
+# A-Z Listing #
+- **Contributors:** diddledan
+- **Tags:** a to z, a-z, archive, listing, widget, index
+- **Requires at least:** 3.5
+- **Tested up to:** 4.7.0
+- **Stable tag:** 1.1.0
+- **License:** GPLv2 or later
+- **License URI:** http://www.gnu.org/licenses/gpl-2.0.html
 
 Provides an A to Z index page and widget. The widget links to the index page at the appropriate letter.
 
@@ -123,12 +123,19 @@ in your theme's functions.php add the following code:
 ## Screenshots ##
 
 ### 1. An example of the index listing page. ###
-![1. An example of the index listing page.](http://ps.w.org/a-to-z-index/assets/screenshot-1.png)
+![1. An example of the index listing page.](https://ps.w.org/a-z-listing/assets/screenshot-1.png)
 
 ### 2. The Widget is shown here. ###
-![2. The Widget is shown here.](http://ps.w.org/a-to-z-index/assets/screenshot-2.png)
+![2. The Widget is shown here.](https://ps.w.org/a-z-listing/assets/screenshot-2.png)
 
 ## Changelog ##
+
+### 1.1.0 ###
+* Minor refactoring to remove unused variables
+* Fix some Code-Smell (phpcs)
+
+### 1.0.1 ###
+* BUGFIX: lower-case titles missing
 
 ### 1.0.0 ###
 * BREAKING CHANGE: Refactored several function names. If you have written your own template/loop you will need to adapt your code. See the readme.txt's Theming section for details.
