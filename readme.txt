@@ -1,4 +1,4 @@
-=== A to Z Index ===
+=== A-Z Listing ===
 Contributors: diddledan
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 3.5
@@ -188,6 +188,10 @@ in your theme's functions.php add the following code:
 2. The Widget is shown here.
 
 == Changelog ==
+
+= 1.1.0 =
+* Minor refactoring to remove unused variables
+* Fix some Code-Smell (phpcs)
 
 = 1.0.1 =
 * BUGFIX: lower-case titles missing

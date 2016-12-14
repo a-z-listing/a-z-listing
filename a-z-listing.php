@@ -20,6 +20,7 @@ if ( ! defined( 'AZLISTINGLOG' ) ) {
 function bh_az_listing_activate() {
 	$dir = dirname( __FILE__ ) . '/';
 	foreach ( glob( $dir . 'activate/*.php' ) as $filename ) {
+		/** @noinspection PhpIncludeInspection */
 		require_once( $filename );
 	}
 	bh_az_listing_init();
@@ -35,31 +36,34 @@ function bh_az_listing_init() {
 
 	// Common functions.
 	foreach ( glob( $dir . 'functions/common/*.php' ) as $filename ) {
+		/** @noinspection PhpIncludeInspection */
 		require_once( $filename );
 	}
 
 	// Functions: always present.
 	foreach ( glob( $dir . 'functions/*.php' ) as $filename ) {
+		/** @noinspection PhpIncludeInspection */
 		require_once( $filename );
 	}
 
 	// Partials: only visible outside of admin.
 	if ( ! is_admin() && 'wp-login.php' !== $GLOBALS['pagenow'] ) {
 		foreach ( glob( $dir . 'partials/*.php' ) as $filename ) {
+			/** @noinspection PhpIncludeInspection */
 			require_once( $filename );
 		}
 	}
 
 	// Locale.
-	$locale = get_locale();
-	$lang = substr( $locale, 0, 2 );
-	$country = substr( $locale, 3, 2 );
-
-	if ( is_readable( $dir . 'languages/' . $lang . '-' . $country . '.php' ) ) {
-		require_once( $dir . 'languages/' . $lang . '-' . $country . '.php' );
-	} elseif ( is_readable( $dir . 'languages/' . $lang . '.php' ) ) {
-		require_once( $dir . 'languages/' . $lang . '.php' );
-	}
+	// $locale = get_locale();
+	// $lang = substr( $locale, 0, 2 );
+	// $country = substr( $locale, 3, 2 );
+	//
+	// if ( is_readable( $dir . 'languages/' . $lang . '-' . $country . '.php' ) ) {
+	// 	require_once( $dir . 'languages/' . $lang . '-' . $country . '.php' );
+	// } elseif ( is_readable( $dir . 'languages/' . $lang . '.php' ) ) {
+	// 	require_once( $dir . 'languages/' . $lang . '.php' );
+	// }
 
 	// Javascripts: autoload.
 	if ( is_admin() ) {
@@ -101,6 +105,7 @@ function bh_az_listing_widgets() {
 	$dir = dirname( __FILE__ ) . '/';
 
 	foreach ( glob( $dir . 'widgets/*.php' ) as $filename ) {
+		/** @noinspection PhpIncludeInspection */
 		require_once( $filename );
 
 		$filename = substr( $filename, 0, strlen( $filename ) - strlen( '.php' ) );

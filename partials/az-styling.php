@@ -7,7 +7,7 @@ function a_z_listing_enqueue_styles() {
 
 function a_z_listing_add_styling() {
 	$add_styles = apply_filters( 'a_z_listing_add_styling', get_option( 'a-z-listing-add-styling' ) );
-	if (AZLISTINGLOG) {
+	if ( AZLISTINGLOG ) {
 		do_action( 'log', 'A-Z Listing: Add Styles', $add_styles );
 	}
 	if ( true === $add_styles ) {
