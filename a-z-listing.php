@@ -11,6 +11,9 @@
  * @package  a-z-listing
  */
 
+if ( ! defined('AZLISTINGLOG') ) {
+	define( 'AZLISTINGLOG', false );
+}
 /**
  * Called on plugin activation. Includes any php files in ./activate/.
  */
