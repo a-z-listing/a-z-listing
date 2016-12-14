@@ -19,4 +19,15 @@ class AZ_Shortcode_Tests extends WP_UnitTestCase {
 		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
 		$this->assertEquals( $expected, $actual );
 	}
+
+	function test_populated_lowercase_titles() {
+		$p = $this->factory->post->create( array( 'post_title' => 'test page', 'post_type' => 'page' ) );
+
+		$expected = sprintf( file_get_contents( 'tests/populated-listing-lowercase.txt' ), $p );
+		$actual = do_shortcode( '[a-z-listing]' );
+
+		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
+		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
+		$this->assertEquals( $expected, $actual );
+	}
 }
