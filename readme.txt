@@ -2,8 +2,8 @@
 Contributors: diddledan
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 3.5
-Tested up to: 4.6.1
-Stable tag: 1.0.0
+Tested up to: 4.7.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -188,6 +188,9 @@ in your theme's functions.php add the following code:
 2. The Widget is shown here.
 
 == Changelog ==
+
+= 1.0.1 =
+* BUGFIX: lower-case titles missing
 
 = 1.0.0 =
 * BREAKING CHANGE: Refactored several function names. If you have written your own template/loop you will need to adapt your code. See the readme.txt's Theming section for details.
