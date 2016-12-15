@@ -3,7 +3,7 @@ Contributors: diddledan
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 3.5
 Tested up to: 4.7.0
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,10 +39,6 @@ then placing the widget onto either section1, section1a or section1b will target
 placing the a-z index on a child of section1 will likewise limit the index page to display only children of section1.
 
 Likewise for section2, section2a and section2b.
-
-= NOTE =
-
-Styling (CSS) is *off* by default. See the FAQ section for details to turn-on in-built styles.
 
 == Installation ==
 
@@ -180,12 +176,12 @@ This filter can also be used, by removing entries which are standard $post varia
 
 *If there is code already in your functions.php then add just the line beginning with `add_filter` on a new line directly after the very first instance of `<?php`.*
 
-= How do I apply the in-built styling? =
+= How do I disable the in-built styling? =
 
 In your theme's functions.php add the following code:
 
     <?php
-    add_filter( 'a-z-listing-add-styling', '__return_true' );
+    add_filter( 'a-z-listing-add-styling', '__return_false' );
     ?>
 
 *If there is code already in your functions.php then add just the line beginning with `add_filter` on a new line directly after the very first instance of `<?php`.*
@@ -196,6 +192,9 @@ In your theme's functions.php add the following code:
 2. The Widget is shown here.
 
 == Changelog ==
+
+= 1.2.0 =
+* Changed default to apply the in-built styles, unless overridden
 
 = 1.1.0 =
 * Minor refactoring to remove unused variables
