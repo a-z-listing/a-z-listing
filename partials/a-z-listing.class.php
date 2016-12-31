@@ -223,8 +223,8 @@ class A_Z_Listing {
 		return $indexed_items;
 	}
 
-	public function the_letters() {
-		echo $this->get_the_letters(); // WPCS: XSS OK.
+	public function the_letters( $target = '', $style = null ) {
+		echo $this->get_the_letters( $target, $style ); // WPCS: XSS OK.
 	}
 
 	/**
