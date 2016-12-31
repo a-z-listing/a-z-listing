@@ -141,7 +141,7 @@ The argument to `the_a_z_listing()` is an [array](http://php.net/manual/en/langu
 
 *The code above needs to be within a php block which is denoted by the `<?php`. Depending on your theme, you might not need the opening and closing php tags shown in the above snippet; if that is the case, you are free to omit them in your code.*
 
-### How do I remove section targetting or limit which sections are available? ###
+### How do I remove section targeting or limit which sections are available? ###
 
 In your theme's functions.php add the following code:
 
@@ -152,6 +152,28 @@ In your theme's functions.php add the following code:
 This filter can also be used, by removing entries which are standard $post variables, to limit which top-level pages are used as section identifiers.
 
 *If there is code already in your functions.php then add just the line beginning with `add_filter` on a new line directly after the very first instance of `<?php`.*
+
+### I am not using the short-code so the styles are not working, can I still use the in-built styles without the short-code? ###
+
+Yes you can. This needs the following code added to your theme's functions.php. We purposely only display the stylesheet on pages where the short-code is active.
+
+    <?php
+    add_action( 'wp', 'a_z_listing_force_enable_styles', 99 );
+    ?>
+
+The sidebar widget styling also works in a similar manner, and will also respond to the same code above to forcibly enable it.
+
+You can add code which detects the page which the user is browsing and only enable the override on that page so that network requests are kept to a minimum (this is the same reason we detect usage of the short-code).
+
+    <?php
+    add_action( 'wp', 'your_override_wrapper_function', 99 );
+    function your_override_wrapper_function() {
+        if ( ! is_page( 'your-a-z-listing-page-slug-or-ID' ) ) { // ID is numeric, slug is a string.
+            return; // we don't want to run for anything except the page we're interested in.
+        }
+        a_z_listing_force_enable_styles(); // this is the page we want, so run the function to enqueue the styles.
+    }
+    ?>
 
 ### How do I disable the in-built styling? ###
 
@@ -172,6 +194,10 @@ In your theme's functions.php add the following code:
 ![2. The Widget is shown here.](https://ps.w.org/a-z-listing/assets/screenshot-2.png)
 
 ## Changelog ##
+
+### 1.3.0 ###
+* Added targeted stylesheet loading to enqueue only on pages where the short-code is active
+* Further improved default stylesheet loading
 
 ### 1.2.0 ###
 * Changed default to apply the in-built styles, unless overridden
