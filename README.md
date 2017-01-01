@@ -3,7 +3,7 @@
 - **Tags:** a to z, a-z, archive, listing, widget, index
 - **Requires at least:** 3.5
 - **Tested up to:** 4.7.0
-- **Stable tag:** 1.3.0
+- **Stable tag:** 1.3.1
 - **License:** GPLv2 or later
 - **License URI:** http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -194,6 +194,9 @@ In your theme's functions.php add the following code:
 ![2. The Widget is shown here.](https://ps.w.org/a-z-listing/assets/screenshot-2.png)
 
 ## Changelog ##
+
+### 1.3.1 ###
+* Fix broken admin pages caused by 1.3.0
 
 ### 1.3.0 ###
 * Added targeted stylesheet loading to enqueue only on pages where the short-code is active
