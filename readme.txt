@@ -3,7 +3,7 @@ Contributors: diddledan
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 3.5
 Tested up to: 4.7.2
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -119,13 +119,19 @@ These helper functions cope with the dual usage of the plugin supporting both `W
 
 == Frequently Asked Questions ==
 
-= How do I show posts of a different post-type =
+= How do I show posts of a different post-type (not pages) or multiple post-types (e.g. posts AND pages) =
 
 This can be achieved using the shortcode or PHP.
 
 **Shortcode method**
 
-[a-z-listing post-type=your-post-type-slug]
+[a-z-listing post-type="your-post-type-slug"]
+
+*Multiple types*
+
+For multiple post-types just separate them with a comma.
+
+[a-z-listing post-type="type1-slug,type2-slug"]
 
 **PHP method**
 
@@ -137,9 +143,19 @@ PHP code needs to be added to your theme files, and cannot be used as post or pa
     ) );
     ?>
 
+*Multiple post-types*
+
+    <?php
+    the_a_z_listing( array(
+        'post_type' => array( 'type1-slug', 'type2-slug' )
+    ) );
+    ?>
+
+*NOTE*
+
 The argument to `the_a_z_listing()` is an [array](http://php.net/manual/en/language.types.array.php) and takes the same parameters as [WP_Query](https://codex.wordpress.org/Class_Reference/WP_Query)
 
-*The code above needs to be within a php block which is denoted by the `<?php`. Depending on your theme, you might not need the opening and closing php tags shown in the above snippet; if that is the case, you are free to omit them in your code.*
+The code above needs to be within a php block which is denoted by the `<?php`. Depending on your theme, you might not need the opening and closing php tags shown in the above snippet; if that is the case, you are free to omit them in your code.
 
 = How do I show posts from a specific category only =
 
@@ -215,6 +231,10 @@ In your theme's functions.php add the following code:
 2. The Widget is shown here.
 
 == Changelog ==
+
+= 1.5.1 =
+* Fix multiple post-types support for shortcode
+* Update documentation to explain how to show multiple post-types with the shortcode
 
 = 1.5.0 =
 * Ensure styling is loaded correctly
