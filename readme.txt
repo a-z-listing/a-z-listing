@@ -3,7 +3,7 @@ Contributors: diddledan
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 3.5
 Tested up to: 4.7.2
-Stable tag: 1.4.0
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -215,6 +215,10 @@ In your theme's functions.php add the following code:
 2. The Widget is shown here.
 
 == Changelog ==
+
+= 1.5.0 =
+* Ensure styling is loaded correctly
+* Ensure styling works correctly when using the multi-column template
 
 = 1.4.1 =
 * Fix warning introduced by 1.4.0 about implicit coercion between WP_Post and string

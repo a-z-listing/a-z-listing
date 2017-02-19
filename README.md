@@ -26,7 +26,7 @@ site's pages.
 e.g. if your site layout has:
 
     home
-        section1
+    section1
         section1a
         section1b
         a-z
@@ -194,6 +194,19 @@ In your theme's functions.php add the following code:
 ![2. The Widget is shown here.](https://ps.w.org/a-z-listing/assets/screenshot-2.png)
 
 ## Changelog ##
+
+### 1.5.0 ###
+* Ensure styling is loaded correctly
+* Ensure styling works correctly when using the multi-column template
+
+### 1.4.1 ###
+* Fix warning introduced by 1.4.0 about implicit coercion between WP_Post and string
+
+### 1.4.0 ###
+* Add support for passing a WP_Post object instead of an ID to the widget function
+* Fix widget config not saving post-type parameter
+* Fix warning of incorrect usage of `has_shortcode()` function
+* Fix section-targeting to work as described
 
 ### 1.3.1 ###
 * Fix broken admin pages caused by 1.3.0

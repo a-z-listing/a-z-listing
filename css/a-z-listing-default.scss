@@ -1,44 +1,49 @@
 @import "mixins.scss";
 
 .az-letters {
-    @include clearfix();
-    display: flex;
-    justify-content: center;
-    ul.az-links {
-        padding: 0;
-        margin: 0;
-        li {
-            list-style: none;
-            float: left;
-            width: 2em;
-            height: 2em;
-            box-sizing: border-box;
-            margin: 0.15em;
-            border: 2px solid #e5e5e5;
-            background: #f5f5f5;
-            color: #adadad;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            a {
-                color: #1f7d9a;
-                text-decoration: none;
-                border: 0;
-                box-shadow: none;
-            }
-        }
-    }
+	@include clearfix();
+	display: flex;
+	justify-content: center;
+	ul.az-links {
+		padding: 0;
+		margin: 0;
+		li {
+			list-style: none;
+			float: left;
+			width: 2em;
+			height: 2em;
+			box-sizing: border-box;
+			margin: 0.15em;
+			border: 2px solid #e5e5e5;
+			background: #f5f5f5;
+			color: #adadad;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			a {
+				color: #1f7d9a;
+				text-decoration: none;
+				border: 0;
+				box-shadow: none;
+			}
+		}
+	}
 }
 
 .letter-section {
-    margin-bottom: 2em;
-    h2 {
-        border-bottom: 1px solid black;
-        margin-bottom: 0.2em;
-        padding-bottom: 0.2em;
-    }
-    ul, ul li {
-        list-style: none;
-        margin: 0;
-    }
+	margin-bottom: 2em;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	align-content: space-between;
+	h2 {
+		border-bottom: 1px solid black;
+		margin-bottom: 0.2em;
+		padding-bottom: 0.2em;
+		width: 100%;
+	}
+	ul, ul li {
+		list-style: none;
+		margin: 0;
+	}
 }
