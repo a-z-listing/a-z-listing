@@ -333,6 +333,9 @@ class A_Z_Listing {
 			$section = $this->taxonomy;
 		} else {
 			$section = self::get_section();
+			if ( $section instanceof WP_Post ) {
+				$section = $section->post_name;
+			}
 		}
 
 		ob_start();

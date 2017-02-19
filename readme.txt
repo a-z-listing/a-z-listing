@@ -3,7 +3,7 @@ Contributors: diddledan
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 3.5
 Tested up to: 4.7.2
-Stable tag: 1.3.1
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,7 +84,7 @@ If you want the multi-column output support, you need to copy the file `a-z-list
 
 The plugin allows the site owner, developer, or themer to provide custom templates for the A-Z Listing output.
 
-*NOTE: These functions have changed name and method of access in 1.0.0. We have dropped the _a_z_ moniker in the function name and within the template file they are accessed via the `$a_z_listing` object.* The former function names are still accessible, but are largely deprecated.
+*NOTE: These functions have changed name and method of access in 1.0.0. We have dropped the `_a_z_` moniker in the function name and within the template file they are accessed via the `$a_z_listing` object.* The former function names are still accessible, but are largely deprecated.
 
 To add a template to your theme, you need a file similar to the `templates/a-z-listing.php` file in the plugin folder. Your copy needs to be placed within your theme at the theme root directory and called `a-z-listing.php` or `a-z-listing-section.php` (where `-section` is an optional top-level page slug for the section-targeting feature).
 
@@ -153,6 +153,7 @@ PHP code needs to be added to your theme files, and cannot be used as post or pa
     the_a_z_listing( array(
         'tax_query' => array(
             'taxonomy' => 'your-taxonomy-slug',
+            'field' => 'slug',
             'terms' => array( 'term1-slug', 'term2-slug' )
         )
     ) );
@@ -214,6 +215,9 @@ In your theme's functions.php add the following code:
 2. The Widget is shown here.
 
 == Changelog ==
+
+= 1.4.1 =
+* Fix warning introduced by 1.4.0 about implicit coercion between WP_Post and string
 
 = 1.4.0 =
 * Add support for passing a WP_Post object instead of an ID to the widget function
