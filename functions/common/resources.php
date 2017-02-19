@@ -94,10 +94,17 @@ if ( ! function_exists( 'bh_current_section' ) ) {
 		$parts = explode( '/', $path );
 		$parts = array_values( array_filter( $parts ) );
 
-		if ( count( $parts ) <= $depth ) {
-			$depth -= count( $parts );
+		if ( defined( 'DEBUG_PATHS' ) && DEBUG_PATHS ) {
+			do_action( 'log', 'current_section: path parts', $parts );
 		}
-		if ( -1 <= $depth || ! isset( $parts[ $depth ] ) ) {
+
+		if ( count( $parts ) <= $depth ) {
+			$depth = count( $parts );
+		}
+		if ( defined( 'DEBUG_PATHS' ) && DEBUG_PATHS ) {
+			do_action( 'log', 'current_section: depth', $depth );
+		}
+		if ( -1 >= $depth || ! isset( $parts[ $depth ] ) ) {
 			$section = 'home';
 		} else {
 			$section = $parts[ $depth ];

@@ -2,7 +2,7 @@
 Contributors: diddledan
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 3.5
-Tested up to: 4.7.0
+Tested up to: 4.7.2
 Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -26,7 +26,7 @@ site's pages.
 e.g. if your site layout has:
 
     home
-        section1
+    section1
         section1a
         section1b
         a-z
@@ -214,6 +214,12 @@ In your theme's functions.php add the following code:
 2. The Widget is shown here.
 
 == Changelog ==
+
+= 1.4.0 =
+* Add support for passing a WP_Post object instead of an ID to the widget function
+* Fix widget config not saving post-type parameter
+* Fix warning of incorrect usage of `has_shortcode()` function
+* Fix section-targeting to work as described
 
 = 1.3.1 =
 * Fix broken admin pages caused by 1.3.0

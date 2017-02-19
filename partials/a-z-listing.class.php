@@ -35,6 +35,7 @@ class A_Z_Listing {
 	 * @param null|WP_Query|string $query
 	 */
 	public function __construct( $query = null ) {
+		global $post;
 		self::get_alphabet();
 		$this->available_indices = array_values( array_unique( array_values( self::$alphabet ) ) );
 
@@ -58,9 +59,22 @@ class A_Z_Listing {
 			$this->query = $query;
 
 			$section = self::get_section();
-			$this->construct_query( $section );
 
-			$this->items = $this->query->get_posts();
+			if ( 'page' !== $query['post_type'] || 'page' !== $post->post_type ) {
+				$section = null;
+			}
+
+			if ( $section ) {
+				$query['child_of'] = $section->ID;
+			}
+
+			if ( isset( $query['child_of'] ) ) {
+
+				$this->items = get_pages( $query );
+			} else {
+				$this->construct_query();
+				$this->items = $this->query->get_posts();
+			}
 		}
 		$this->matched_item_indices = $this->get_all_indices();
 	}
@@ -109,20 +123,52 @@ class A_Z_Listing {
 		self::$unknown_letters = $others;
 	}
 
-	protected static function get_section() {
-		$sections = apply_filters( 'az_sections', get_pages( array( 'parent' => 0 ) ) );
+	public static function find_post_parent( $page = null ) {
+		if ( ! $page instanceof WP_Post ) {
+			$page = get_post( $page );
+		}
+		if ( ! $page->post_parent ) {
+			return $page;
+		}
+		return self::find_post_parent( $page->post_parent );
+	}
+
+	protected static function get_section( $page = 0 ) {
+		global $post;
+
+		$pages = get_pages( array( 'parent' => 0 ) );
+		$sections = array_map( function( $item ) {
+			return $item->post_name;
+		}, $pages );
+		$sections = apply_filters( 'az_sections', $sections );
 		$sections = apply_filters( 'a_z_listing_sections', $sections );
-		$section = bh_current_section();
-		if ( ! in_array( $section, $sections, true ) ) {
+
+		if ( 0 === $page ) {
+			$page = $post;
+		} else {
+			$page = get_post( $page );
+		}
+
+		$section = self::find_post_parent( $page );
+		if ( $section === $page ) {
 			$section = null;
 		}
+
 		if ( AZLISTINGLOG ) {
-			do_action( 'log', 'A-Z Section', $section );
+			do_action( 'log', 'A-Z Section selection', $section->post_name, $sections );
+		}
+
+		if ( ! in_array( $section->post_name, $sections, true ) ) {
+			$section = null;
+		}
+
+		if ( AZLISTINGLOG ) {
+			do_action( 'log', 'A-Z Section', $section->post_name );
 		}
 		return $section;
 	}
 
-	protected function construct_query( $section = null ) {
+	protected function construct_query() {
 		$q = apply_filters( 'a_z_listing_query', $this->query );
 
 		$query = null;
@@ -131,7 +177,6 @@ class A_Z_Listing {
 			$q = wp_parse_args($q, array(
 				'post_type' => 'page',
 				'numberposts' => -1,
-				'section' => $section,
 				'nopaging' => true,
 			) );
 			$query = new WP_Query( $q );

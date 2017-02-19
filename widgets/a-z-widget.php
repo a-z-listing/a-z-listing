@@ -32,6 +32,7 @@ class A_Z_Widget extends WP_Widget {
 	/**
 	 * Print-out the configuration form for the widget.
 	 * @param  Array $instance Widget instance as provided by WordPress core.
+	 * @return void
 	 */
 	function form( $instance ) {
 		$title = $instance['title'];
@@ -97,6 +98,8 @@ class A_Z_Widget extends WP_Widget {
 		$instance = $old_instance;
 		$instance['title'] = strip_tags( $new_instance['title'] );
 		$instance['post'] = (int) $new_instance['post'];
+		$instance['post_type'] = strip_tags( $new_instance['post_type'] );
+		$instance['parent'] = (int) $new_instance['parent'];
 		return $instance;
 	}
 
@@ -145,7 +148,13 @@ function get_the_section_a_z_widget( $args, $instance ) {
 	) );
 
 	if ( $instance['post'] ) {
-		$target = get_post( (int) $instance['post'] );
+		if ( $instance['post'] instanceof WP_Post ) {
+			$target = $instance['post'];
+		} elseif ( is_int( $instance['post'] ) && 0 < $instance['post'] ) {
+			$target = get_post( (int) $instance['post'] );
+		} else {
+			return null;
+		}
 	} else {
 		return null;
 	}
@@ -167,16 +176,31 @@ function get_the_section_a_z_widget( $args, $instance ) {
 		}
 	}
 
+	if ( 'page' === $my_query['post_type'] ) {
+		$parent = A_Z_Listing::find_post_parent( $target );
+		if ( $parent->ID !== $target->ID ) {
+			$my_query['child_of'] = $parent->ID;
+		}
+	}
+
 	$a_z_query = new A_Z_Listing( $my_query );
 
-	$ret = $args['before_widget']; // WPCS: XSS OK.
-	$ret .= $args['before_title']; // WPCS: XSS OK.
-	$ret .= esc_html( $title );
-	$ret .= $args['after_title']; // WPCS: XSS OK.
-	$ret .= '<div class="' . esc_attr( implode( ' ', $classes ) ) . '">';
-	$ret .= $a_z_query->get_the_letters( get_permalink( $target ), null );
-	$ret .= '<div class="clear empty"></div></div>';
-	$ret .= $args['after_widget']; // WPCS: XSS OK.
+	$ret = '';
 
+	ob_start();
+	?>
+
+	<?php echo $args['before_widget']; // WPCS: XSS OK. ?>
+	<?php echo $args['before_title'];  // WPCS: XSS OK. ?>
+		<?php echo esc_html( $title ); ?>
+	<?php echo $args['after_title']; // WPCS: XSS OK. ?>
+	<div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
+		<?php $a_z_query->the_letters( get_permalink( $target ), null ); ?>
+		<div class="clear empty"></div>
+	</div>
+	<?php echo $args['after_widget']; // WPCS: XSS OK. ?>
+
+	<?php
+	$ret = ob_get_clean();
 	return $ret;
 }

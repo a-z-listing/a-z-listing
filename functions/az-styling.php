@@ -1,7 +1,8 @@
 <?php
 
 function a_z_listing_enqueue_styles( $force = false ) {
-	if ( ! ( $force || is_active_widget( false, false, 'bh_az_widget', true ) || ( is_single() && has_shortcode( 'a-z-listing' ) ) ) ) {
+	global $post;
+	if ( ! ( $force || is_active_widget( false, false, 'bh_az_widget', true ) || ( is_single() && has_shortcode( $post->post_content, 'a-z-listing' ) ) ) ) {
 		return;
 	}
 	wp_enqueue_style( 'a-z-listing' );
