@@ -6,6 +6,8 @@
 
 /**
  * Handle the a-z-listing shortcode.
+ *
+ * @since 1.0.0
  * @param  array $attributes Provided by WordPress core. Contains the shortcode attributes.
  * @return string      The A-Z Listing HTML.
  */

@@ -3,7 +3,7 @@
  * Plugin Name: A-Z Listing
  * Plugin URI: https://www.bowlhat.net/
  * Description: Display an A to Z listing of posts
- * Version: 1.5.1
+ * Version: 1.5.2
  * Author: Daniel Llewellyn
  * Author URI: https://www.bowlhat.net/
  * License: GPLv2
@@ -12,10 +12,19 @@
  */
 
 if ( ! defined( 'AZLISTINGLOG' ) ) {
+	/**
+	 * Toggle logging via the Bang-Syslog plugin
+	 *
+	 * @since 1.0.1
+	 * @var bool
+	 */
 	define( 'AZLISTINGLOG', false );
 }
+
 /**
  * Called on plugin activation. Includes any php files in ./activate/.
+ *
+ * @since 0.1
  */
 function bh_az_listing_activate() {
 	$dir = dirname( __FILE__ ) . '/';
@@ -30,6 +39,8 @@ register_activation_hook( __FILE__, 'bh_az_listing_activate' );
 
 /**
  * Initialises the plugin's functions, partials, javascript and css.
+ *
+ * @since 0.1
  */
 function bh_az_listing_init() {
 	$dir = dirname( __FILE__ ) . '/';
@@ -100,6 +111,8 @@ add_action( 'plugins_loaded', 'bh_az_listing_init' );
 
 /**
  * Automatically registers this plugin's widgets.
+ *
+ * @since 0.1
  */
 function bh_az_listing_widgets() {
 	$dir = dirname( __FILE__ ) . '/';

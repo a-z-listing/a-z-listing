@@ -3,7 +3,7 @@ Contributors: diddledan
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 3.5
 Tested up to: 4.7.2
-Stable tag: 1.5.1
+Stable tag: 1.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,22 +59,13 @@ Basic usage is as follows:
 
 To specify a post-type to display instead of "page" then use:
 
-    [a-z-listing post-type=my-post-type]
-
-If you are using the multi-column example template (see below for details on using the template) then you can specify the following options:
-
-    [a-z-listing post-type=my-post-type column-count=1 minimum-per-column=10 heading-level=2]
+    [a-z-listing post-type="my-post-type"]
 
 The arguments are all optional.
 
 * `post-type` sets the listing to show a specific post-type.
-  * default value: page
-* `column-count` defines how many columns of titles you want displayed for each alphabet letter.
-  * default value: 1
-* `minimum-per-column` is used to indicate the breakpoint number of posts before using an additional column. This prevents situations such as specifying 3 columns but having only three posts for a particular letter causing one post to be shown in each of the three columns. When using this feature we will keep all three posts in the first column even though we have also specified to use three columns because three is less-than the ten we set as the minimum breakpoint. Once the breakpoint is reached the columns will grow together.
-  * default value: 10
-* `heading-level` tells the code what HTML "heading number" to use, e.g. h1, h2, h3 etc. This is primarily to allow you to set things for correct accessibility as this plugin cannot anticipate how different themes will set-up their heading structure.
-  * default value: 2
+  * Default value: page
+  * You may specify any number of multiple post-types separated by commas, e.g. `post-type="page,post"`
 
 = Multi Column Output =
 
@@ -106,7 +97,7 @@ I advise that you start with a copy of the default template or the multi-column 
 
 = Helper functions =
 
-In 0.8.0 we added taxonomy-terms listings to the plugin. This means that the WordPress functions related to posts such as `the_title()` and `the_permalink()` are unreliable. We have therefore added helper functions which will return or print the correct output for the item.
+The plugin supports displaying taxonomy terms as though each term were a post. This means that the WordPress functions related to posts such as `the_title()` and `the_permalink()` are unreliable. We have therefore added helper functions which will return or print the correct output for the item.
 
 *NOTE: These functions have changed name and method of access in 1.0.0. We have dropped the _a_z_ moniker in the function name and within the template file they are accessed via the `$a_z_listing` object.* The previous function names are still accessible, but are largely deprecated.
 
@@ -125,13 +116,13 @@ This can be achieved using the shortcode or PHP.
 
 **Shortcode method**
 
-[a-z-listing post-type="your-post-type-slug"]
+    [a-z-listing post-type="your-post-type-slug"]
 
 *Multiple types*
 
 For multiple post-types just separate them with a comma.
 
-[a-z-listing post-type="type1-slug,type2-slug"]
+    [a-z-listing post-type="type1-slug,type2-slug"]
 
 **PHP method**
 
@@ -232,6 +223,10 @@ In your theme's functions.php add the following code:
 
 == Changelog ==
 
+= 1.5.2 =
+* Regression fix for styling loading - seems the widget code was still causing issues
+* Add inline PHPdoc to all functions and custom filters
+
 = 1.5.1 =
 * Fix multiple post-types support for shortcode
 * Update documentation to explain how to show multiple post-types with the shortcode
@@ -271,40 +266,5 @@ In your theme's functions.php add the following code:
 * Added `post-type` attribute into the shortcode to display for post-types other than pages.
 * Minor code cleanup.
 
-= 0.8.0 =
-* Standardised on naming convention of *_a_z_* in function names, e.g. `get_the_a_z_listing()`, rather than the former *_az_* names, e.g. `get_the_az_listing()`.
-* Converted version numbering to semver style.
-* Fixed the in-built styling.
-* Added filter to determine whether to apply in-built styles in addition to hidden setting: `set_option( a-z-listing-add-styling', true );`.
-* Added taxonomy terms list support.
-
-= 0.7.1 =
-* Fix potential XSS vector.
-
-= 0.7 =
-* rebuilt most of the logic in preparation for more functionality.
-* added template/theming capability (BIG change!)
-* Added option to choose to apply default styling of the widget.
-
-= 0.6 =
-* STYLING BREAKING change: the widget's CSS class is changed from bh_az_widget to a-z-listing-widget. Please update your CSS accordingly.
-* Conformed to WordPress coding style guidelines.
-* Updated widget class to call php5-style constructor.
-* Applied internationalisation (i18n).
-* Added testsuite.
-
-= 0.5 =
-* Added new shortcode to display the index page.
-
-= 0.4 =
-* fixed file locations causing failure to load.
-
-= 0.3 =
-* fixed failure to activate as reported by ml413 and verified by geoffrey (both WordPress.org usernames); see: https://wordpress.org/support/topic/fatal-error-when-trying-to-install-1
-
-= 0.2 =
-* renamed the plugin file and packaged for release
-
-= 0.1 =
-* first release
-
+= Previous =
+See the file called `changelog` for the full release history.
