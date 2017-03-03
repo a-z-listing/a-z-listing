@@ -1,5 +1,7 @@
 ### 1.5.4
 * Fix post links when using an alternative titles taxonomy (discovered by [bugnumber9](https://profiles.wordpress.org/bugnumber9))
+* Ensure that we don't access rogue objects. Warnings and errors in 1.5.3 are squashed now.
+* Verified that [tests](https://travis-ci.org/bowlhat/wp-a-z-listing) pass correctly before releasing this version.
 
 ### 1.5.3
 * Regression in 1.5.2 causing empty listing is fixed
