@@ -397,20 +397,15 @@ class A_Z_Listing {
 			$indices = apply_filters_deprecated( 'a_z_listing_term_indices', array( $indices, $item ), '1.0.0', 'a_z_listing_item_indices' );
 		} else {
 			$index = mb_substr( $item->post_title, 0, 1, 'UTF-8' );
-			$indices[ $index ][] = array(
-				'title' => $item->post_title,
-				'item' => $item
-			);
+			$indices[ $index ][] = array( 'title' => $item->post_title, 'item' => $item );
 
 			if ( ! empty( $this->index_taxonomy ) ) {
 				$terms = array_filter( wp_get_object_terms( $item->ID, $this->index_taxonomy ) );
-				$term_indices = array_reduce( $terms, function( $indices, $term ) use ( $item ) {
-					$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array(
-						'title' => $term->name,
-						'item' => $item,
-					);
-					return $indices;
-				} );
+			}
+			$term_indices = array_reduce( $terms, function( $indices, $term ) use( $item ) {
+				$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array( 'title' => $term->name, 'item' => $item );
+				return $indices;
+			} );
 
 				if ( ! empty( $term_indices ) ) {
 					$indices = array_merge( $indices, $term_indices );
