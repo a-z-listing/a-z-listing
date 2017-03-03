@@ -3,3 +3,5 @@ packages
 .vs
 *.tmp
 .idea
+
+/vendor/
