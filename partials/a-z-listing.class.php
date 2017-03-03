@@ -96,21 +96,26 @@ class A_Z_Listing {
 			 */
 			$this->index_taxonomy = apply_filters( 'a_z_listing_additional_titles_taxonomy', $index_taxonomy );
 
-			$this->query = $query;
+			if ( $query instanceof WP_Query ) {
+				$this->query = $query;
+			} else {
+				$this->query = (object) $query;
+			}
 
 			$section = self::get_section();
 
-			if ( 'page' !== $query['post_type'] || 'page' !== $post->post_type ) {
+			if ( ! isset( $this->query->post_type ) || 'page' !== $this->query->post_type
+				|| ! isset( $post ) || 'page' !== $post->post_type ) {
 				$section = null;
 			}
 
 			if ( $section ) {
-				$query['child_of'] = $section->ID;
+				$this->query->child_of = $section->ID;
 			}
 
-			if ( isset( $query['child_of'] ) ) {
+			if ( isset( $this->query->child_of ) ) {
 
-				$this->items = get_pages( $query );
+				$this->items = get_pages( $this->query );
 			} else {
 				$this->construct_query();
 				$this->items = $this->query->get_posts();
@@ -236,13 +241,7 @@ class A_Z_Listing {
 		$section = self::find_post_parent( $page );
 		if ( $section === $page ) {
 			$section = null;
-		}
-
-		if ( AZLISTINGLOG ) {
-			do_action( 'log', 'A-Z Section selection', $section->post_name, $sections );
-		}
-
-		if ( ! in_array( $section->post_name, $sections, true ) ) {
+		} elseif ( ! $section || ! in_array( $section->post_name, $sections, true ) ) {
 			$section = null;
 		}
 
@@ -298,7 +297,7 @@ class A_Z_Listing {
 	 * Reducer used by get_the_item_indices() to filter the indices for each post to unique array_values (see: https://secure.php.net/array_reduce)
 	 *
 	 * @param array $carry Holds the return value of the previous iteration
-	 * @param array $item  Holds the value of the current iteration
+	 * @param array $value  Holds the value of the current iteration
 	 * @return array The previous iteration return value with the current iteration added after running through array_unique()
 	 */
 	public function index_reduce( $carry, $value ) {
@@ -313,7 +312,7 @@ class A_Z_Listing {
 	 * Find and return the index letter for a post
 	 *
 	 * @since 1.0.0
-	 * @param WP_Post|WP_Term The item whose index letters we want to find
+	 * @param WP_Post|WP_Term $item The item whose index letters we want to find
 	 * @return Array The post's index letters (usually matching the first character of the post title)
 	 */
 	protected function get_the_item_indices( $item ) {
@@ -329,17 +328,16 @@ class A_Z_Listing {
 			 */
 			$indices = apply_filters( 'a_z_listing_term_indices', $indices, $item );
 		} else {
-			if ( ! empty( $this->index_taxonomy ) ) {
-				$terms = array_filter( wp_get_object_terms( $item->ID, $this->index_taxonomy ) );
-			}
-
 			$index = mb_substr( $item->post_title, 0, 1, 'UTF-8' );
 			$indices[ $index ][] = array( 'title' => $item->post_title, 'item' => $item );
 
-			$term_indices = array_reduce( $terms, function( $indices, $term ) {
-				$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array( 'title' => $term->name, 'item' => $term );
+			if ( ! empty( $this->index_taxonomy ) ) {
+				$terms = array_filter( wp_get_object_terms( $item->ID, $this->index_taxonomy ) );
+			}
+			$term_indices = array_reduce( $terms, function( $indices, $term ) use ( $item ) {
+				$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array( 'title' => $term->name, 'item' => $item );
 				return $indices;
-			});
+			} );
 
 			if ( is_array( $term_indices ) && ! empty( $term_indices ) ) {
 				$indices = array_merge( $indices, $term_indices );
@@ -352,7 +350,13 @@ class A_Z_Listing {
 			$indices = apply_filters( 'a_z_listing_post_indices', $indices, $item );
 		}
 
-		$indices[ $index ] = array_reduce( $indices[ $index ], array( $this, 'index_reduce' ) );
+		// $indices[ $index ] = array_reduce( $indices[ $index ], function( $carry, $value ) {
+		// 	$v = array_unique( $value );
+		// 	if ( ! empty( $v ) ) {
+		// 		$carry[] = $v;
+		// 	}
+		// 	return $carry;
+		// } );
 
 		/**
 		 * Modify the indice(s) to group this post under
