@@ -339,7 +339,7 @@ class A_Z_Listing {
 	 * Find and return the index letter for a post
 	 *
 	 * @since 1.0.0
-	 * @param WP_Post|WP_Term The item whose index letters we want to find
+	 * @param WP_Post|WP_Term $item The item whose index letters we want to find
 	 * @return Array The post's index letters (usually matching the first character of the post title)
 	 */
 	protected function get_the_item_indices( $item ) {
@@ -359,25 +359,16 @@ class A_Z_Listing {
 			 */
 			$indices = apply_filters_deprecated( 'a_z_listing_term_indices', array( $indices, $item ), '1.0.0', 'a_z_listing_item_indices' );
 		} else {
+			$index = mb_substr( $item->post_title, 0, 1, 'UTF-8' );
+			$indices[ $index ][] = array( 'title' => $item->post_title, 'item' => $item );
+
 			if ( ! empty( $this->index_taxonomy ) ) {
 				$terms = array_filter( wp_get_object_terms( $item->ID, $this->index_taxonomy ) );
 			}
-
-			$index = mb_substr( $item->post_title, 0, 1, 'UTF-8' );
-			$indices[ $index ][] = array(
-				'title' => $item->post_title,
-				'item' => $item,
-			);
-
-			$term_indices = array_reduce(
-				$terms, function( $indices, $term ) {
-					$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array(
-						'title' => $term->name,
-						'item' => $term,
-					);
-					return $indices;
-				}
-			);
+			$term_indices = array_reduce( $terms, function( $indices, $term ) use( $item ) {
+				$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array( 'title' => $term->name, 'item' => $item );
+				return $indices;
+			} );
 
 			if ( is_array( $term_indices ) && ! empty( $term_indices ) ) {
 				$indices = array_merge( $indices, $term_indices );
