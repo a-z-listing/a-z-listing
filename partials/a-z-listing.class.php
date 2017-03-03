@@ -318,10 +318,11 @@ class A_Z_Listing {
 	 */
 	protected function get_the_item_indices( $item ) {
 		$terms = $indices = array();
+		$index = '';
 
 		if ( $item instanceof WP_Term ) {
-			$indices[ mb_substr( $item->name, 0, 1, 'UTF-8' ) ][] = array( 'title' => $item->name, 'item' => $item );
-			$indices = array_reduce( $indices, array( $this, 'index_reduce' ) );
+			$index = mb_substr( $item->name, 0, 1, 'UTF-8' );
+			$indices[ $index ][] = array( 'title' => $item->name, 'item' => $item );
 			/**
 			 * @deprecated Use a_z_listing_item_indices
 			 * @see a_z_listing_item_indices
@@ -332,7 +333,8 @@ class A_Z_Listing {
 				$terms = array_filter( wp_get_object_terms( $item->ID, $this->index_taxonomy ) );
 			}
 
-			$indices[ mb_substr( $item->post_title, 0, 1, 'UTF-8' ) ][] = array( 'title' => $item->post_title, 'item' => $item );
+			$index = mb_substr( $item->post_title, 0, 1, 'UTF-8' );
+			$indices[ $index ][] = array( 'title' => $item->post_title, 'item' => $item );
 
 			$term_indices = array_reduce( $terms, function( $indices, $term ) {
 				$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array( 'title' => $term->name, 'item' => $term );
@@ -342,15 +344,16 @@ class A_Z_Listing {
 			if ( is_array( $term_indices ) && ! empty( $term_indices ) ) {
 				$indices = array_merge( $indices, $term_indices );
 			}
+
+			/**
+			 * @deprecated Use a_z_listing_item_indices
+			 * @see a_z_listing_item_indices
+			 */
+			$indices = apply_filters( 'a_z_listing_post_indices', $indices, $item );
 		}
 
-		$indices = array_reduce( $indices, array( $this, 'index_reduce' ) );
+		$indices[ $index ] = array_reduce( $indices[ $index ], array( $this, 'index_reduce' ) );
 
-		/**
-		 * @deprecated Use a_z_listing_item_indices
-		 * @see a_z_listing_item_indices
-		 */
-		$indices = apply_filters( 'a_z_listing_post_indices', $indices, $item );
 		/**
 		 * Modify the indice(s) to group this post under
 		 *
