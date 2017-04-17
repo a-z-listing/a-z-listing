@@ -88,7 +88,7 @@ class A_Z_Listing {
 			 * @deprecated Use a_z_listing_additional_titles_taxonomy
 			 * @see a_z_listing_additional_titles_taxonomy
 			 */
-			$index_taxonomy = apply_filters( 'az_additional_titles_taxonomy', '' );
+			$index_taxonomy = apply_filters_deprecated( 'az_additional_titles_taxonomy', array( '' ), '1.0.0', 'a_z_listing_additional_titles_taxonomy' );
 			/**
 			 * Taxonomy containing terms which are used as the title for associated posts
 			 *
@@ -218,7 +218,7 @@ class A_Z_Listing {
 		 * @deprecated Use a_z_listing_sections
 		 * @see a_z_listing_sections
 		 */
-		$sections = apply_filters( 'az_sections', $sections );
+		$sections = apply_filters_deprecated( 'az_sections', array( $sections ), '1.0.0', 'a_z_listing_sections' );
 		/**
 		 * Override the detected top-level sections for the site. Defaults to contain each page with no post-parent.
 		 *
@@ -255,7 +255,7 @@ class A_Z_Listing {
 	/**
 	 * Build a WP_Query object to actually fetch the posts
 	 *
-	 * @since
+	 * @since 1.0.0
 	 */
 	protected function construct_query() {
 		/**
@@ -298,7 +298,7 @@ class A_Z_Listing {
 	 * Reducer used by get_the_item_indices() to filter the indices for each post to unique array_values (see: https://secure.php.net/array_reduce)
 	 *
 	 * @param array $carry Holds the return value of the previous iteration
-	 * @param array $item  Holds the value of the current iteration
+	 * @param array $value  Holds the value of the current iteration
 	 * @return array The previous iteration return value with the current iteration added after running through array_unique()
 	 */
 	public function index_reduce( $carry, $value ) {
@@ -327,7 +327,7 @@ class A_Z_Listing {
 			 * @deprecated Use a_z_listing_item_indices
 			 * @see a_z_listing_item_indices
 			 */
-			$indices = apply_filters( 'a_z_listing_term_indices', $indices, $item );
+			$indices = apply_filters_deprecated( 'a_z_listing_term_indices', array( $indices, $item ), '1.0.0', 'a_z_listing_item_indices' );
 		} else {
 			if ( ! empty( $this->index_taxonomy ) ) {
 				$terms = array_filter( wp_get_object_terms( $item->ID, $this->index_taxonomy ) );
@@ -349,7 +349,7 @@ class A_Z_Listing {
 			 * @deprecated Use a_z_listing_item_indices
 			 * @see a_z_listing_item_indices
 			 */
-			$indices = apply_filters( 'a_z_listing_post_indices', $indices, $item );
+			$indices = apply_filters_deprecated( 'a_z_listing_post_indices', array( $indices, $item ), '1.5.0', 'a_z_listing_item_indices' );
 		}
 
 		$indices[ $index ] = array_reduce( $indices[ $index ], array( $this, 'index_reduce' ) );
@@ -435,10 +435,11 @@ class A_Z_Listing {
 
 	/**
 	 * @since 0.1
-	 * @see A_Z_Listing::get_the_letterss()
+	 * @see A_Z_Listing::get_the_letters()
 	 * @deprecated use A_Z_Listing::get_the_letters().
 	 */
 	public function get_letter_display( $target = '', $style = null  ) {
+		_deprecated_function( __METHOD_, '1.0.0', 'A_Z_Listing::get_the_letters' );
 		return $this->get_the_letters( $target, $style );
 	}
 
@@ -538,6 +539,7 @@ class A_Z_Listing {
 	 * @deprecated use A_Z_Listing::have_letters()
 	 */
 	public function have_a_z_letters() {
+		_deprecated_function( __METHOD__, '1.0.0', 'A_Z_Listing::have_letters' );
 		return $this->have_letters();
 	}
 
@@ -557,6 +559,7 @@ class A_Z_Listing {
 	 * @deprecated use A_Z_Listing::have_items()
 	 */
 	public function have_a_z_posts() {
+		_deprecated_function( __METHOD__, '1.0.0', 'have_items' );
 		return $this->have_items();
 	}
 
@@ -593,6 +596,7 @@ class A_Z_Listing {
 	 * @deprecated use A_Z_Listing::the_item()
 	 */
 	public function the_a_z_post() {
+		_deprecated_function( __METHOD__, '1.0.0', 'A_Z_Listing::the_item' );
 		$this->the_item();
 	}
 
@@ -627,6 +631,7 @@ class A_Z_Listing {
 	 * @deprecated use A_Z_Listing::get_the_letter_count()
 	 */
 	public function num_a_z_posts() {
+		_deprecated_function( __METHOD__, '1.0.0', 'A_Z_Listing::get_the_letter_count' );
 		/** @noinspection PhpDeprecationInspection */
 		return $this->num_a_z_items();
 	}
@@ -637,6 +642,7 @@ class A_Z_Listing {
 	 * @deprecated use A_Z_Listing::get_the_letter_count()
 	 */
 	public function num_a_z_items() {
+		_deprecated_function( __METHOD__, '1.0.0', 'A_Z_Listing::get_the_letter_count' );
 		return count( $this->current_letter_items );
 	}
 

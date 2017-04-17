@@ -132,6 +132,7 @@ class A_Z_Widget extends WP_Widget {
  * @deprecated use the_section_a_z_widget()
  */
 function the_section_az_widget( $args, $instance ) {
+	_deprecated_function( __FUNCTION__, '0.8.0', 'the_section_a_z_widget' );
 	the_section_a_z_widget( $args, $instance );
 }
 
@@ -143,7 +144,7 @@ function the_section_az_widget( $args, $instance ) {
  * @param  Array $instance Configuration of this Widget. Unique to this invocation.
  */
 function the_section_a_z_widget( $args, $instance ) {
-	echo get_the_section_az_widget( $args, $instance ); // WPCS: XSS OK.
+	echo get_the_section_a_z_widget( $args, $instance ); // WPCS: XSS OK.
 }
 
 /**
@@ -154,6 +155,7 @@ function the_section_a_z_widget( $args, $instance ) {
  * @deprecated use get_the_section_a_z_widget()
  */
 function get_the_section_az_widget( $args, $instance ) {
+	_deprecated_function( __FUNCTION__, '0.8.0', 'get_the_section_a_z_widget' );
 	return get_the_section_a_z_widget( $args, $instance );
 }
 

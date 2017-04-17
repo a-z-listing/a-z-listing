@@ -21,6 +21,7 @@ function have_a_z_letters( $query = null ) {
  * @deprecated use have_a_z_items()
  */
 function have_a_z_posts() {
+	_deprecated_function( __FUNCTION__, '0.8.0', 'have_a_z_items' );
 	return have_a_z_items();
 }
 
@@ -51,6 +52,7 @@ function the_a_z_letter( $query = null ) {
  * @deprecated use the_a_z_item()
  */
 function the_a_z_post() {
+	_deprecated_function( __FUNCTION__, '0.8.0', 'the_a_z_item' );
 	the_a_z_item();
 }
 
@@ -70,6 +72,7 @@ function the_a_z_item( $query = null ) {
  * @deprecated use get_the_a_z_letter_count()
  */
 function num_a_z_letters() {
+	_deprecated_function( __FUNCTION__, '1.0.0', 'get_the_a_z_letter_count' );
 	return get_the_a_z_letter_count();
 }
 
@@ -79,7 +82,7 @@ function num_a_z_letters() {
  * @deprecated use get_the_a_z_letter_count()
  */
 function num_a_z_posts() {
-	/** @noinspection PhpDeprecationInspection */
+	_deprecated_function( __FUNCTION__, '1.0.0', 'get_the_a_z_letter_count' );
 	return get_the_a_z_letter_count();
 }
 
@@ -89,6 +92,7 @@ function num_a_z_posts() {
  * @deprecated use get_the_a_z_letter_count()
  */
 function num_a_z_items() {
+	_deprecated_function( __FUNCTION__, '1.0.0', 'get_the_a_z_letter_count' );
 	return get_the_a_z_letter_count();
 }
 
@@ -202,6 +206,7 @@ function get_the_a_z_item_permalink( $query = null ) {
  * @deprecated use the_a_z_listing()
  */
 function the_az_listing( $query = null ) {
+	_deprecated_function( __FUNCTION__, '0.8.0', 'the_a_z_listing' );
 	the_a_z_listing( $query );
 }
 
@@ -221,6 +226,7 @@ function the_a_z_listing( $query = null ) {
  * @deprecated use get_the_a_z_listing()
  */
 function get_the_az_listing( $query = null ) {
+	_deprecated_function( __FUNCTION__, '0.8.0', 'get_the_a_z_listing' );
 	return get_the_a_z_listing( $query );
 }
 
@@ -241,6 +247,7 @@ function get_the_a_z_listing( $query = null ) {
  * @deprecated use the_a_z_letters()
  */
 function the_az_letters( $query = null, $target = false, $styling = false ) {
+	_deprecated_function( __FUNCTION__, '0.8.0', 'the_a_z_letters' );
 	the_a_z_letters( $query, $target, $styling );
 }
 
@@ -262,6 +269,7 @@ function the_a_z_letters( $query = null, $target = false, $styling = false ) {
  * @deprecated use get_the_a_z_letters()
  */
 function get_the_az_letters( $query = null, $target = false, $styling = false ) {
+	_deprecated_function( __FUNCTION__, '0.8.0', 'get_the_a_z_letters' );
 	return get_the_a_z_letters( $query, $target, $styling );
 }
 
