@@ -192,7 +192,9 @@ function get_the_section_a_z_widget( $args, $instance ) {
 	}
 
 	$post_type = ( isset( $instance['post_type'] ) ) ? $instance['post_type'] : 'page';
-	$my_query = array( 'post_type' => $post_type );
+	$my_query = array(
+		'post_type' => $post_type,
+	);
 
 	if ( isset( $instance['taxonomy'] ) && isset( $instance['terms'] ) ) {
 		if ( ! empty( $instance['taxonomy'] ) && ! empty( $instance['terms'] ) ) {

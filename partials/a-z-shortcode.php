@@ -21,9 +21,13 @@ function a_z_shortcode_handler( $attributes ) {
 
 	$post_types = explode( ',', $attributes['post-type'] );
 	$post_types = array_unique( $post_types );
-	$post_types = array_map( function( $item ) { return trim( $item ); }, $post_types );
+	$post_types = array_map( function( $item ) {
+		return trim( $item );
+	}, $post_types );
 
-	$query = array( 'post_type' => $post_types );
+	$query = array(
+		'post_type' => $post_types
+	);
 	$a_z_query = new A_Z_Listing( $query );
 	return $a_z_query->get_the_listing();
 }
