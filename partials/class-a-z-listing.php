@@ -76,7 +76,9 @@ class A_Z_Listing {
 			}
 			$this->type = 'taxonomy';
 			$this->taxonomy = $query;
-			$this->items = get_terms( $query, array( 'hide_empty' => false ) );
+			$this->items = get_terms( $query, array(
+				'hide_empty' => false,
+			) );
 			if ( AZLISTINGLOG ) {
 				do_action( 'log', 'A-Z Listing: Terms', '!slug', $this->items );
 			}
@@ -88,7 +90,7 @@ class A_Z_Listing {
 			 * @deprecated Use a_z_listing_additional_titles_taxonomy
 			 * @see a_z_listing_additional_titles_taxonomy
 			 */
-			$index_taxonomy = apply_filters( 'az_additional_titles_taxonomy', '' );
+			$index_taxonomy = apply_filters_deprecated( 'az_additional_titles_taxonomy', array( '' ), '1.0.0', 'a_z_listing_additional_titles_taxonomy' );
 			/**
 			 * Taxonomy containing terms which are used as the title for associated posts
 			 *
@@ -96,26 +98,26 @@ class A_Z_Listing {
 			 */
 			$this->index_taxonomy = apply_filters( 'a_z_listing_additional_titles_taxonomy', $index_taxonomy );
 
-			$this->query = $query;
+			$this->query = (array) $query;
 
 			$section = self::get_section();
 
-			if ( 'page' !== $query['post_type'] || 'page' !== $post->post_type ) {
+			if ( ( isset( $this->query->post_type ) && 'page' !== $this->query->post_type )
+				|| ( isset( $post ) && 'page' !== $post->post_type ) ) {
 				$section = null;
 			}
 
 			if ( $section ) {
-				$query['child_of'] = $section->ID;
+				$this->query->child_of = $section->ID;
 			}
 
-			if ( isset( $query['child_of'] ) ) {
-
-				$this->items = get_pages( $query );
+			if ( isset( $this->query->child_of ) ) {
+				$this->items = get_pages( $this->query );
 			} else {
 				$this->construct_query();
 				$this->items = $this->query->get_posts();
 			}
-		}
+		} // End if().
 		$this->matched_item_indices = $this->get_all_indices();
 	}
 
@@ -210,7 +212,9 @@ class A_Z_Listing {
 	protected static function get_section( $page = 0 ) {
 		global $post;
 
-		$pages = get_pages( array( 'parent' => 0 ) );
+		$pages = get_pages( array(
+			'parent' => 0,
+		) );
 		$sections = array_map( function( $item ) {
 			return $item->post_name;
 		}, $pages );
@@ -218,7 +222,7 @@ class A_Z_Listing {
 		 * @deprecated Use a_z_listing_sections
 		 * @see a_z_listing_sections
 		 */
-		$sections = apply_filters( 'az_sections', $sections );
+		$sections = apply_filters_deprecated( 'az_sections', array( $sections ), '1.0.0', 'a_z_listing_sections' );
 		/**
 		 * Override the detected top-level sections for the site. Defaults to contain each page with no post-parent.
 		 *
@@ -233,29 +237,39 @@ class A_Z_Listing {
 			$page = get_post( $page );
 		}
 
-		$section = self::find_post_parent( $page );
-		if ( $section === $page ) {
-			$section = null;
+		$section_object = self::find_post_parent( $page );
+		if ( $section_object === $page ) {
+			$section_object = null;
+		}
+
+		if ( null !== $section_object ) {
+			if ( isset( $section_object->post_name ) ) {
+				$section_name = $section_object->post_name;
+			} else {
+				$section_name = null;
+				$section_object = null;
+			}
 		}
 
 		if ( AZLISTINGLOG ) {
-			do_action( 'log', 'A-Z Section selection', $section->post_name, $sections );
+			do_action( 'log', 'A-Z Section selection', $section_name, $sections );
 		}
 
-		if ( ! in_array( $section->post_name, $sections, true ) ) {
-			$section = null;
+		if ( null !== $section_name && ! in_array( $section_name, $sections, true ) ) {
+			$section_name = null;
+			$section_object = null;
 		}
 
 		if ( AZLISTINGLOG ) {
-			do_action( 'log', 'A-Z Section', $section->post_name );
+			do_action( 'log', 'A-Z Section', $section_name );
 		}
-		return $section;
+		return $section_object;
 	}
 
 	/**
 	 * Build a WP_Query object to actually fetch the posts
 	 *
-	 * @since
+	 * @since 1.0.0
 	 */
 	protected function construct_query() {
 		/**
@@ -298,7 +312,7 @@ class A_Z_Listing {
 	 * Reducer used by get_the_item_indices() to filter the indices for each post to unique array_values (see: https://secure.php.net/array_reduce)
 	 *
 	 * @param array $carry Holds the return value of the previous iteration
-	 * @param array $item  Holds the value of the current iteration
+	 * @param array $value  Holds the value of the current iteration
 	 * @return array The previous iteration return value with the current iteration added after running through array_unique()
 	 */
 	public function index_reduce( $carry, $value ) {
@@ -317,27 +331,37 @@ class A_Z_Listing {
 	 * @return Array The post's index letters (usually matching the first character of the post title)
 	 */
 	protected function get_the_item_indices( $item ) {
-		$terms = $indices = array();
+		$terms = array();
+		$indices = array();
 		$index = '';
 
 		if ( $item instanceof WP_Term ) {
 			$index = mb_substr( $item->name, 0, 1, 'UTF-8' );
-			$indices[ $index ][] = array( 'title' => $item->name, 'item' => $item );
+			$indices[ $index ][] = array(
+				'title' => $item->name,
+				'item' => $item,
+			);
 			/**
 			 * @deprecated Use a_z_listing_item_indices
 			 * @see a_z_listing_item_indices
 			 */
-			$indices = apply_filters( 'a_z_listing_term_indices', $indices, $item );
+			$indices = apply_filters_deprecated( 'a_z_listing_term_indices', array( $indices, $item ), '1.0.0', 'a_z_listing_item_indices' );
 		} else {
 			if ( ! empty( $this->index_taxonomy ) ) {
 				$terms = array_filter( wp_get_object_terms( $item->ID, $this->index_taxonomy ) );
 			}
 
 			$index = mb_substr( $item->post_title, 0, 1, 'UTF-8' );
-			$indices[ $index ][] = array( 'title' => $item->post_title, 'item' => $item );
+			$indices[ $index ][] = array(
+				'title' => $item->post_title,
+				'item' => $item,
+			);
 
 			$term_indices = array_reduce( $terms, function( $indices, $term ) {
-				$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array( 'title' => $term->name, 'item' => $term );
+				$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array(
+					'title' => $term->name,
+					'item' => $term,
+				);
 				return $indices;
 			});
 
@@ -349,10 +373,10 @@ class A_Z_Listing {
 			 * @deprecated Use a_z_listing_item_indices
 			 * @see a_z_listing_item_indices
 			 */
-			$indices = apply_filters( 'a_z_listing_post_indices', $indices, $item );
-		}
+			$indices = apply_filters_deprecated( 'a_z_listing_post_indices', array( $indices, $item ), '1.5.0', 'a_z_listing_item_indices' );
+		} // End if().
 
-		$indices[ $index ] = array_reduce( $indices[ $index ], array( $this, 'index_reduce' ) );
+		//$indices = array_reduce( $indices, array( $this, 'index_reduce' ) );
 
 		/**
 		 * Modify the indice(s) to group this post under
@@ -416,7 +440,7 @@ class A_Z_Listing {
 		foreach ( $this->available_indices as $index ) {
 			if ( ! empty( $indexed_items[ $index ] ) ) {
 				usort( $indexed_items[ $index ], function( $a, $b ) {
-					return strcmp( $a['title'], $b['title'] );
+					return strcasecmp( $a['title'], $b['title'] );
 				});
 			}
 		}
@@ -435,10 +459,11 @@ class A_Z_Listing {
 
 	/**
 	 * @since 0.1
-	 * @see A_Z_Listing::get_the_letterss()
+	 * @see A_Z_Listing::get_the_letters()
 	 * @deprecated use A_Z_Listing::get_the_letters().
 	 */
-	public function get_letter_display( $target = '', $style = null  ) {
+	public function get_letter_display( $target = '', $style = null ) {
+		_deprecated_function( __METHOD__, '1.0.0', 'A_Z_Listing::get_the_letters' );
 		return $this->get_the_letters( $target, $style );
 	}
 
@@ -466,7 +491,7 @@ class A_Z_Listing {
 		$count = count( $this->available_indices );
 		$i = 0;
 		foreach ( $this->available_indices as $letter ) {
-			$i += 1;
+			$i++;
 			$id = $letter;
 			if ( self::$unknown_letters === $id ) {
 				$id = '_';
@@ -538,6 +563,7 @@ class A_Z_Listing {
 	 * @deprecated use A_Z_Listing::have_letters()
 	 */
 	public function have_a_z_letters() {
+		_deprecated_function( __METHOD__, '1.0.0', 'A_Z_Listing::have_letters' );
 		return $this->have_letters();
 	}
 
@@ -557,6 +583,7 @@ class A_Z_Listing {
 	 * @deprecated use A_Z_Listing::have_items()
 	 */
 	public function have_a_z_posts() {
+		_deprecated_function( __METHOD__, '1.0.0', 'have_items' );
 		return $this->have_items();
 	}
 
@@ -593,6 +620,7 @@ class A_Z_Listing {
 	 * @deprecated use A_Z_Listing::the_item()
 	 */
 	public function the_a_z_post() {
+		_deprecated_function( __METHOD__, '1.0.0', 'A_Z_Listing::the_item' );
 		$this->the_item();
 	}
 
@@ -627,6 +655,7 @@ class A_Z_Listing {
 	 * @deprecated use A_Z_Listing::get_the_letter_count()
 	 */
 	public function num_a_z_posts() {
+		_deprecated_function( __METHOD__, '1.0.0', 'A_Z_Listing::get_the_letter_count' );
 		/** @noinspection PhpDeprecationInspection */
 		return $this->num_a_z_items();
 	}
@@ -637,6 +666,7 @@ class A_Z_Listing {
 	 * @deprecated use A_Z_Listing::get_the_letter_count()
 	 */
 	public function num_a_z_items() {
+		_deprecated_function( __METHOD__, '1.0.0', 'A_Z_Listing::get_the_letter_count' );
 		return count( $this->current_letter_items );
 	}
 
@@ -764,7 +794,7 @@ function a_z_listing_cache( $query = null ) {
 	}
 
 	// check the cache and return any pre-existing A_Z_Listing instance we have.
-	$key = serialize( $query );
+	$key = wp_json_encode( $query );
 	if ( array_key_exists( $key, $cache ) ) {
 		return $cache[ $key ];
 	}
