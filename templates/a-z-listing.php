@@ -14,18 +14,20 @@
 	<div id="inner-slider">
 		<?php while ( $a_z_query->have_letters() ) : $a_z_query->the_letter(); ?>
 			<?php if ( $a_z_query->have_items() ) : ?>
-				<div class="letter-section" id="<?php $a_z_query->the_letter_id(); ?>">
-					<h2>
-						<span><?php $a_z_query->the_letter_title(); ?></span>
-					</h2>
-					<div><ul>
-						<?php while ( $a_z_query->have_items() ) : $a_z_query->the_item(); ?>
-							<li>
-								<a href="<?php $a_z_query->the_permalink(); ?>"><?php $a_z_query->the_title(); ?></a>
-							</li>
-						<?php endwhile; ?>
-					</ul></div>
-				</div>
+				<?php $a_z_query->the_letter_section( function() use ( $a_z_query ) { ?>
+					<div class="letter-section" id="<?php $a_z_query->the_letter_id(); ?>">
+						<h2>
+							<span><?php $a_z_query->the_letter_title(); ?></span>
+						</h2>
+						<div><ul>
+							<?php while ( $a_z_query->have_items() ) : $a_z_query->the_item(); ?>
+								<li>
+									<a href="<?php $a_z_query->the_permalink(); ?>"><?php $a_z_query->the_title(); ?></a>
+								</li>
+							<?php endwhile; ?>
+						</ul></div>
+					</div>
+				<?php } ); ?>
 			<?php endif; ?>
 		<?php endwhile; ?>
 	</div>

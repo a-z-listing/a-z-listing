@@ -80,7 +80,7 @@ if ( ! function_exists( 'bh_get_page_path' ) ) {
 		}
 		return $path;
 	}
-}
+} // End if().
 
 if ( ! function_exists( 'bh_current_section' ) ) {
 	function bh_current_section( &$p = null, $depth = 0, $current = true ) {
@@ -119,4 +119,4 @@ if ( ! function_exists( 'bh_current_section' ) ) {
 		}
 		return $section2;
 	}
-}
+} // End if().

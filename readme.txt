@@ -270,4 +270,4 @@ In your theme's functions.php add the following code:
 * Minor code cleanup.
 
 = Previous =
-See the file called `changelog` for the full release history.
+See the file called `changelog.md` for the full release history.
