@@ -123,7 +123,7 @@ class A_Z_Listing {
 			}
 
 			if ( $section ) {
-				$query['child_of'] = $section->ID;
+				$this->query->child_of = $section->ID;
 			}
 
 			if ( isset( $query['child_of'] ) ) {
@@ -510,11 +510,9 @@ class A_Z_Listing {
 
 		foreach ( $this->available_indices as $index ) {
 			if ( ! empty( $indexed_items[ $index ] ) ) {
-				usort(
-					$indexed_items[ $index ], function( $a, $b ) {
-						return strcasecmp( $a['title'], $b['title'] );
-					}
-				);
+				usort( $indexed_items[ $index ], function( $a, $b ) {
+					return strcasecmp( $a['title'], $b['title'] );
+				});
 			}
 		}
 
@@ -837,6 +835,33 @@ class A_Z_Listing {
 		$letter = apply_filters( 'the-a-z-letter-title', $letter );
 
 		return $letter;
+	}
+
+	/**
+	 * Build, Cache, and print the letter section, or just print a pre-cached copy if it exists
+	 *
+	 * @since 2.0.0
+	 * @param function A function containing the logic for formatting the posts
+	 */
+	public function the_letter_section( $func ) {
+		$id = $this->get_the_letter_id();
+		$query = md5( $this->query );
+		$transient_name = "a-z-listing:{$id}:{$query}";
+
+		$cache = get_transient( $transient_name );
+		if ( false === $cache && $cache['posts'] !== $this->current_letter_items ) {
+			ob_start();
+			if ( is_callable( $func ) ) {
+				call_user_func( $func );
+			}
+			$content = ob_get_clean();
+
+			$cache['html'] = $content;
+			$cache['posts'] = $this->current_letter_items;
+
+			set_transient( $transient_name, $cache, /* 1 */ DAY_IN_SECONDS );
+		}
+		print $cache['html']; // WPCS: XSS OK.
 	}
 
 	/**

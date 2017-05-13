@@ -203,7 +203,7 @@ function get_the_section_a_z_widget( $args, $instance ) {
 	}
 
 	$post_type = ( isset( $instance['post_type'] ) ) ? $instance['post_type'] : 'page';
-	$my_query  = array(
+	$my_query = array(
 		'post_type' => $post_type,
 	);
 
