@@ -47,7 +47,6 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 
 		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
 		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
-
 		$this->assertEquals( $expected, $actual );
 	}
 
@@ -74,7 +73,6 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 
 		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
 		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
-
 		$this->assertEquals( $expected, $actual );
 	}
 }
