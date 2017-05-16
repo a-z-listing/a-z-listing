@@ -238,6 +238,7 @@ class A_Z_Listing {
 		}
 
 		$section_object = self::find_post_parent( $page );
+		$section_name = null;
 		if ( $section_object === $page ) {
 			$section_object = null;
 		}
