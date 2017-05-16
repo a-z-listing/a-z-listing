@@ -2,6 +2,11 @@
 $_a_z_listing_colcount = 3;
 $_a_z_listing_minpercol = 10;
 ?>
+<style>
+	.letter-section > div {
+		width: calc( 100% / <?php echo esc_html( $a_z_listing_colcount ); ?> );
+	}
+</style>
 <div id="letters">
 	<div class="az-letters">
 		<?php $a_z_query->the_letters(); ?><div class="clear empty"></div>

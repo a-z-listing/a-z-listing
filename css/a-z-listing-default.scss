@@ -31,11 +31,12 @@
 }
 
 .letter-section {
+	@include clearfix();
 	margin-bottom: 2em;
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	flex-wrap: wrap;
-	align-content: space-between;
+	justify-content: space-between;
 	h2 {
 		border-bottom: 1px solid black;
 		margin-bottom: 0.2em;
@@ -45,5 +46,8 @@
 	ul, ul li {
 		list-style: none;
 		margin: 0;
+	}
+	> div:nth-last-child(1) {
+		flex-grow: 1;
 	}
 }
