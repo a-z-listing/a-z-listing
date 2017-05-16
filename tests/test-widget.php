@@ -4,7 +4,6 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 		$p = $this->factory->post->create( array( 'post_title' => 'Index Page', 'post_type' => 'page' ) );
 
 		$expected = sprintf( file_get_contents( 'tests/default-widget.txt' ), $p );
-		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
 
 		ob_start();
 		the_section_a_z_widget(
@@ -20,8 +19,9 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 			)
 		);
 		$actual = ob_get_clean();
-		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
 
+		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
+		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
 		$this->assertEquals( $expected, $actual );
 	}
 	function test_populated_widget() {
@@ -29,7 +29,6 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 		$p2 = $this->factory->post->create( array( 'post_title' => 'Test Post', 'post_type' => 'page' ) );
 
 		$expected = sprintf( file_get_contents( 'tests/populated-widget.txt' ), $p );
-		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
 
 		ob_start();
 		the_section_a_z_widget(
@@ -45,8 +44,9 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 			)
 		);
 		$actual = ob_get_clean();
-		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
 
+		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
+		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
 		$this->assertEquals( $expected, $actual );
 	}
 
@@ -55,7 +55,6 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 		$p2 = $this->factory->post->create( array( 'post_title' => 'test post', 'post_type' => 'page' ) );
 
 		$expected = sprintf( file_get_contents( 'tests/populated-widget.txt' ), $p );
-		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
 
 		ob_start();
 		the_section_a_z_widget(
@@ -71,8 +70,9 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 			)
 		);
 		$actual = ob_get_clean();
-		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
 
+		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
+		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
 		$this->assertEquals( $expected, $actual );
 	}
 }

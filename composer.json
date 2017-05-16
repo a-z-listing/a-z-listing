@@ -16,7 +16,7 @@
     ],
     "require": {},
     "scripts": {
-        "post-install-cmd": "[ -x \"vendor/bin/phpcs\" -a -d \"vendor/wp-coding-standards/wpcs\" ] && \"vendor/bin/phpcs\" --config-set installed_paths ../../../vendor/wp-coding-standards/wpcs",
-		"post-update-cmd" : "[ -x \"vendor/bin/phpcs\" -a -d \"vendor/wp-coding-standards/wpcs\" ] && \"vendor/bin/phpcs\" --config-set installed_paths ../../../vendor/wp-coding-standards/wpcs"
+        "post-install-cmd": "[ -x \"vendor/bin/phpcs\" -a -d \"vendor/wp-coding-standards/wpcs\" ] && \"vendor/bin/phpcs\" --config-set installed_paths ../../../wp-coding-standards/wpcs",
+		"post-update-cmd" : "[ -x \"vendor/bin/phpcs\" -a -d \"vendor/wp-coding-standards/wpcs\" ] && \"vendor/bin/phpcs\" --config-set installed_paths ../../../wp-coding-standards/wpcs"
     }
 }
