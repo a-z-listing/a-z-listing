@@ -631,10 +631,12 @@ class A_Z_Listing {
 	 * @since 1.0.0
 	 */
 	public function the_item() {
+		global $post;
 		$this->current_item = $this->current_letter_items[ $this->current_item_index ];
 		$item_object = $this->current_item['item'];
 		if ( $item_object instanceof WP_Post ) {
-			setup_postdata( $item_object );
+			$post = $item_object;
+			setup_postdata( $post );
 		}
 
 		$this->current_item_index += 1;
