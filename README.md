@@ -3,7 +3,7 @@
 - **Tags:** a to z, a-z, archive, listing, widget, index
 - **Requires at least:** 3.5
 - **Tested up to:** 4.7.4
-- **Stable tag:** 1.6.2
+- **Stable tag:** 1.6.3
 - **License:** GPLv2 or later
 - **License URI:** http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -225,6 +225,15 @@ In your theme's functions.php add the following code:
 ![The Widget is shown here.](https://ps.w.org/a-z-listing/assets/screenshot-2.png)
 
 ## Changelog
+
+### 1.6.3
+* Bugfix for multi column example and styling - if you tried using the multi column before but had problems, try using the new example file.
+  To manually patch your a-z-listin.php template, add the following to the top, underneath the php block which sets the number of columns:
+    <style>
+        .letter-section > div {
+            width: calc( 100% / <?php echo esc_html( $a_z_listing_colcount ); ?> );
+        }
+    </style>
 
 ### 1.6.2
 * Bugfix for more complex templates - accessing post thumbnails failed.
