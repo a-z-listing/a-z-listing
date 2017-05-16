@@ -3,7 +3,7 @@
 - **Tags:** a to z, a-z, archive, listing, widget, index
 - **Requires at least:** 3.5
 - **Tested up to:** 4.7.4
-- **Stable tag:** 1.6.0
+- **Stable tag:** 1.6.1
 - **License:** GPLv2 or later
 - **License URI:** http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -225,6 +225,9 @@ In your theme's functions.php add the following code:
 ![The Widget is shown here.](https://ps.w.org/a-z-listing/assets/screenshot-2.png)
 
 ## Changelog
+
+### 1.6.1
+* Regression fix: Notice was emitted by PHP about invalid variable. This was cosmetic only, and had no impact on functionality.
 
 ### 1.6.0
 * Fix bug of case sensitity in listings order

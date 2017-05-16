@@ -1,4 +1,7 @@
-= 1.5.4 =
+= 1.6.1 =
+* Regression fix: Notice was emitted by PHP about invalid variable. This was cosmetic only, and had no impact on functionality.
+
+= 1.6.0 =
 * Fix bug of case sensitity in listings order
 * Better warning of deprecated functions when called by other plugins or themes
 
