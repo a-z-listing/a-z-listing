@@ -96,21 +96,26 @@ class A_Z_Listing {
 			 */
 			$this->index_taxonomy = apply_filters( 'a_z_listing_additional_titles_taxonomy', $index_taxonomy );
 
-			$this->query = $query;
+			if ( $query instanceof WP_Query ) {
+				$this->query = $query;
+			} else {
+				$this->query = (object) $query;
+			}
 
 			$section = self::get_section();
 
-			if ( 'page' !== $query['post_type'] || 'page' !== $post->post_type ) {
+			if ( ! isset( $this->query->post_type ) || 'page' !== $this->query->post_type
+				|| ! isset( $post ) || 'page' !== $post->post_type ) {
 				$section = null;
 			}
 
 			if ( $section ) {
-				$query['child_of'] = $section->ID;
+				$this->query->child_of = $section->ID;
 			}
 
-			if ( isset( $query['child_of'] ) ) {
+			if ( isset( $this->query->child_of ) ) {
 
-				$this->items = get_pages( $query );
+				$this->items = get_pages( $this->query );
 			} else {
 				$this->construct_query();
 				$this->items = $this->query->get_posts();
@@ -329,7 +334,7 @@ class A_Z_Listing {
 			if ( ! empty( $this->index_taxonomy ) ) {
 				$terms = array_filter( wp_get_object_terms( $item->ID, $this->index_taxonomy ) );
 			}
-			$term_indices = array_reduce( $terms, function( $indices, $term ) use( $item ) {
+			$term_indices = array_reduce( $terms, function( $indices, $term ) use ( $item ) {
 				$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array( 'title' => $term->name, 'item' => $item );
 				return $indices;
 			} );
@@ -345,7 +350,13 @@ class A_Z_Listing {
 			$indices = apply_filters( 'a_z_listing_post_indices', $indices, $item );
 		}
 
-		$indices[ $index ] = array_reduce( $indices[ $index ], array( $this, 'index_reduce' ) );
+		// $indices[ $index ] = array_reduce( $indices[ $index ], function( $carry, $value ) {
+		// 	$v = array_unique( $value );
+		// 	if ( ! empty( $v ) ) {
+		// 		$carry[] = $v;
+		// 	}
+		// 	return $carry;
+		// } );
 
 		/**
 		 * Modify the indice(s) to group this post under

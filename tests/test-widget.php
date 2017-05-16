@@ -6,8 +6,7 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 		$expected = sprintf( file_get_contents( 'tests/default-widget.txt' ), $p );
 		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
 
-		$this->expectOutputString( $expected );
-
+		ob_start();
 		the_section_a_z_widget(
 			array(
 				'before_widget' => '<div>',
@@ -20,6 +19,10 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 				'post' => $p,
 			)
 		);
+		$actual = ob_get_clean();
+		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
+
+		$this->assertEquals( $expected, $actual );
 	}
 	function test_populated_widget() {
 		$p = $this->factory->post->create( array( 'post_title' => 'Index Page', 'post_type' => 'page' ) );
@@ -28,8 +31,7 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 		$expected = sprintf( file_get_contents( 'tests/populated-widget.txt' ), $p );
 		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
 
-		$this->expectOutputString( $expected );
-
+		ob_start();
 		the_section_a_z_widget(
 			array(
 				'before_widget' => '<div>',
@@ -42,6 +44,10 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 				'post' => $p,
 			)
 		);
+		$actual = ob_get_clean();
+		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
+
+		$this->assertEquals( $expected, $actual );
 	}
 
 	function test_populated_widget_lowercase_titles() {
@@ -51,8 +57,7 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 		$expected = sprintf( file_get_contents( 'tests/populated-widget.txt' ), $p );
 		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
 
-		$this->expectOutputString( $expected );
-
+		ob_start();
 		the_section_a_z_widget(
 			array(
 				'before_widget' => '<div>',
@@ -65,5 +70,9 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 				'post' => $p,
 			)
 		);
+		$actual = ob_get_clean();
+		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
+
+		$this->assertEquals( $expected, $actual );
 	}
 }
