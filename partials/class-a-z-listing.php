@@ -98,12 +98,16 @@ class A_Z_Listing {
 			 */
 			$this->index_taxonomy = apply_filters( 'a_z_listing_additional_titles_taxonomy', $index_taxonomy );
 
-			$this->query = (array) $query;
+			if ( $query instanceof WP_Query ) {
+				$this->query = $query;
+			} else {
+				$this->query = (object) $query;
+			}
 
 			$section = self::get_section();
 
-			if ( ( isset( $this->query->post_type ) && 'page' !== $this->query->post_type )
-				|| ( isset( $post ) && 'page' !== $post->post_type ) ) {
+			if ( ! isset( $this->query->post_type ) || 'page' !== $this->query->post_type
+				|| ! isset( $post ) || 'page' !== $post->post_type ) {
 				$section = null;
 			}
 
@@ -356,7 +360,7 @@ class A_Z_Listing {
 			if ( ! empty( $this->index_taxonomy ) ) {
 				$terms = array_filter( wp_get_object_terms( $item->ID, $this->index_taxonomy ) );
 			}
-			$term_indices = array_reduce( $terms, function( $indices, $term ) use( $item ) {
+			$term_indices = array_reduce( $terms, function( $indices, $term ) use ( $item ) {
 				$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array( 'title' => $term->name, 'item' => $item );
 				return $indices;
 			} );
