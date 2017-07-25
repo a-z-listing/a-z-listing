@@ -277,7 +277,6 @@ class A_Z_Listing {
 		if ( AZLISTINGLOG ) {
 			do_action( 'log', 'A-Z Section', $section_name );
 		}
-
 		return $section_object;
 	}
 
