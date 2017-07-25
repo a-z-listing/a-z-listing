@@ -76,9 +76,11 @@ class A_Z_Listing {
 			}
 			$this->type = 'taxonomy';
 			$this->taxonomy = $query;
-			$this->items = get_terms( $query, array(
-				'hide_empty' => false,
-			) );
+			$this->items = get_terms(
+				$query, array(
+					'hide_empty' => false,
+				)
+			);
 			if ( AZLISTINGLOG ) {
 				do_action( 'log', 'A-Z Listing: Terms', '!slug', $this->items );
 			}
@@ -98,26 +100,29 @@ class A_Z_Listing {
 			 */
 			$this->index_taxonomy = apply_filters( 'a_z_listing_additional_titles_taxonomy', $index_taxonomy );
 
-			$this->query = (array) $query;
+			$query = (array) $query;
 
 			$section = self::get_section();
 
-			if ( ( isset( $this->query->post_type ) && 'page' !== $this->query->post_type )
-				|| ( isset( $post ) && 'page' !== $post->post_type ) ) {
+			if ( ( isset( $query['post_type'] ) && 'page' !== $query['post_type'] )
+				|| ( isset( $post ) && 'page' !== $post['post_type'] ) ) {
 				$section = null;
 			}
 
 			if ( $section ) {
-				$this->query->child_of = $section->ID;
+				$query['child_of'] = $section->ID;
 			}
 
-			if ( isset( $this->query->child_of ) ) {
-				$this->items = get_pages( $this->query );
+			if ( isset( $query['child_of'] ) ) {
+				$this->items = get_pages( $query );
 			} else {
-				$this->construct_query();
-				$this->items = $this->query->get_posts();
+				$query = $this->construct_query( $query );
+				$this->items = $query->get_posts();
 			}
+
+			$this->query = $query;
 		} // End if().
+
 		$this->matched_item_indices = $this->get_all_indices();
 	}
 
@@ -165,18 +170,22 @@ class A_Z_Listing {
 		$others = apply_filters( 'a_z_listing_non_alpha_char', __( '#', 'a-z-listing' ) );
 
 		$alphabet_groups = mb_split( ',', $alphabet );
-		$letters = array_reduce( $alphabet_groups, function( $return, $group ) {
-			$group = A_Z_Listing::mb_string_to_array( $group );
-			$group_index_character = $group[0];
-			$group = array_reduce( $group, function( $group, $character ) use ( $group_index_character ) {
-				$group[ $character ] = $group_index_character;
-				return $group;
-			} );
-			if ( ! is_array( $return ) ) {
-				return $group;
+		$letters = array_reduce(
+			$alphabet_groups, function( $return, $group ) {
+				$group = A_Z_Listing::mb_string_to_array( $group );
+				$group_index_character = $group[0];
+				$group = array_reduce(
+					$group, function( $group, $character ) use ( $group_index_character ) {
+						$group[ $character ] = $group_index_character;
+						return $group;
+					}
+				);
+				if ( ! is_array( $return ) ) {
+					return $group;
+				}
+				return array_merge( $return, $group );
 			}
-			return array_merge( $return, $group );
-		} );
+		);
 
 		self::$alphabet = $letters;
 		self::$unknown_letters = $others;
@@ -212,12 +221,16 @@ class A_Z_Listing {
 	protected static function get_section( $page = 0 ) {
 		global $post;
 
-		$pages = get_pages( array(
-			'parent' => 0,
-		) );
-		$sections = array_map( function( $item ) {
-			return $item->post_name;
-		}, $pages );
+		$pages = get_pages(
+			array(
+				'parent' => 0,
+			)
+		);
+		$sections = array_map(
+			function( $item ) {
+					return $item->post_name;
+			}, $pages
+		);
 		/**
 		 * @deprecated Use a_z_listing_sections
 		 * @see a_z_listing_sections
@@ -272,32 +285,30 @@ class A_Z_Listing {
 	 * Build a WP_Query object to actually fetch the posts
 	 *
 	 * @since 1.0.0
+	 * @param Array|Object|WP_Query Query params as an array/object or WP_Query object
+	 * @return WP_Query the query
 	 */
-	protected function construct_query() {
+	protected function construct_query( $q ) {
 		/**
 		 * Modify or replace the query
 		 *
 		 * @since 1.0.0
-		 * @param WP_Query $query The query object
+		 * @param Array|Object|WP_Query $query The query object
 		 */
-		$q = apply_filters( 'a_z_listing_query', $this->query );
+		$q = apply_filters( 'a_z_listing_query', $q );
 
-		$query = null;
+		if ( $q instanceof WP_Query ) {
+			return $q;
+		}
 
-		if ( ! $q instanceof WP_Query ) {
-			$q = wp_parse_args($q, array(
+		$q = wp_parse_args(
+			(array) $q, array(
 				'post_type' => 'page',
 				'numberposts' => -1,
 				'nopaging' => true,
-			) );
-			$query = new WP_Query( $q );
-		}
-
-		if ( ! $query instanceof WP_Query ) {
-			$query = $q;
-		}
-
-		$this->query = $query;
+			)
+		);
+		return new WP_Query( $q );
 	}
 
 	/**
@@ -359,13 +370,15 @@ class A_Z_Listing {
 				'item' => $item,
 			);
 
-			$term_indices = array_reduce( $terms, function( $indices, $term ) {
-				$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array(
-					'title' => $term->name,
-					'item' => $term,
-				);
-				return $indices;
-			});
+			$term_indices = array_reduce(
+				$terms, function( $indices, $term ) {
+					$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array(
+						'title' => $term->name,
+						'item' => $term,
+					);
+					return $indices;
+				}
+			);
 
 			if ( is_array( $term_indices ) && ! empty( $term_indices ) ) {
 				$indices = array_merge( $indices, $term_indices );
@@ -441,9 +454,11 @@ class A_Z_Listing {
 
 		foreach ( $this->available_indices as $index ) {
 			if ( ! empty( $indexed_items[ $index ] ) ) {
-				usort( $indexed_items[ $index ], function( $a, $b ) {
-					return strcasecmp( $a['title'], $b['title'] );
-				});
+				usort(
+					$indexed_items[ $index ], function( $a, $b ) {
+						return strcasecmp( $a['title'], $b['title'] );
+					}
+				);
 			}
 		}
 
@@ -636,7 +651,7 @@ class A_Z_Listing {
 		$this->current_item = $this->current_letter_items[ $this->current_item_index ];
 		$item_object = $this->current_item['item'];
 		if ( $item_object instanceof WP_Post ) {
-			$post = $item_object;
+			$post = $item_object; // WPCS: Override OK.
 			setup_postdata( $post );
 		}
 

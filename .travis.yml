@@ -28,4 +28,4 @@ before_script:
 
 script:
   - phpunit
-  - ~/.composer/vendor/bin/phpcs -p --standard=WordPress-Extra --extensions=php .
+  - ~/.composer/vendor/bin/phpcs -p --standard=WordPress-Extra --extensions=php --ignore=tests .

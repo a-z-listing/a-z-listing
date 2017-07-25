@@ -15,7 +15,10 @@ $_a_z_listing_minpercol = 10;
 <?php if ( $a_z_query->have_letters() ) : ?>
 <div id="az-slider">
 	<div id="inner-slider">
-		<?php while ( $a_z_query->have_letters() ) : $a_z_query->the_letter(); ?>
+		<?php
+		while ( $a_z_query->have_letters() ) :
+			$a_z_query->the_letter();
+		?>
 			<?php if ( $a_z_query->have_items() ) : ?>
 				<div class="letter-section" id="<?php $a_z_query->the_letter_id(); ?>">
 					<h2>
@@ -24,7 +27,10 @@ $_a_z_listing_minpercol = 10;
 					<?php $i = 0; ?>
 					<?php $j = 0; ?>
 					<?php $numpercol = ceil( $a_z_query->get_the_letter_count() / $_a_z_listing_colcount ); ?>
-					<?php while ( $a_z_query->have_items() ) : $a_z_query->the_item(); ?>
+					<?php
+					while ( $a_z_query->have_items() ) :
+						$a_z_query->the_item();
+					?>
 						<?php if ( 0 === $i++ ) : ?>
 							<div><ul>
 						<?php endif; ?>
@@ -45,4 +51,5 @@ $_a_z_listing_minpercol = 10;
 </div>
 <?php else : ?>
 	<p><?php esc_html_e( 'There are no posts included in this index.', 'a-z-listing' ); ?></p>
-<?php endif;
+<?php
+endif;
