@@ -10,7 +10,10 @@ class AZ_Shortcode_Tests extends WP_UnitTestCase {
 	}
 
 	function test_populated() {
-		$p = $this->factory->post->create( array( 'post_title' => 'Test Page', 'post_type' => 'page' ) );
+		$p = $this->factory->post->create( array(
+			'post_title' => 'Test Page',
+			'post_type' => 'page',
+		) );
 
 		$expected = sprintf( file_get_contents( 'tests/populated-listing.txt' ), $p );
 		$actual = do_shortcode( '[a-z-listing]' );
@@ -21,7 +24,10 @@ class AZ_Shortcode_Tests extends WP_UnitTestCase {
 	}
 
 	function test_populated_lowercase_titles() {
-		$p = $this->factory->post->create( array( 'post_title' => 'test page', 'post_type' => 'page' ) );
+		$p = $this->factory->post->create( array(
+			'post_title' => 'test page',
+			'post_type' => 'page',
+		) );
 
 		$expected = sprintf( file_get_contents( 'tests/populated-listing-lowercase.txt' ), $p );
 		$actual = do_shortcode( '[a-z-listing]' );

@@ -1,7 +1,10 @@
 <?php
 class AZ_Widget_Tests extends WP_UnitTestCase {
 	function test_widget() {
-		$p = $this->factory->post->create( array( 'post_title' => 'Index Page', 'post_type' => 'page' ) );
+		$p = $this->factory->post->create( array(
+			'post_title' => 'Index Page',
+			'post_type' => 'page',
+		) );
 
 		$expected = sprintf( file_get_contents( 'tests/default-widget.txt' ), $p );
 
@@ -25,8 +28,14 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 		$this->assertEquals( $expected, $actual );
 	}
 	function test_populated_widget() {
-		$p = $this->factory->post->create( array( 'post_title' => 'Index Page', 'post_type' => 'page' ) );
-		$p2 = $this->factory->post->create( array( 'post_title' => 'Test Post', 'post_type' => 'page' ) );
+		$p = $this->factory->post->create( array(
+			'post_title' => 'Index Page',
+			'post_type' => 'page',
+		) );
+		$p2 = $this->factory->post->create( array(
+			'post_title' => 'Test Post',
+			'post_type' => 'page',
+		) );
 
 		$expected = sprintf( file_get_contents( 'tests/populated-widget.txt' ), $p );
 
@@ -51,8 +60,14 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 	}
 
 	function test_populated_widget_lowercase_titles() {
-		$p = $this->factory->post->create( array( 'post_title' => 'Index Page', 'post_type' => 'page' ) );
-		$p2 = $this->factory->post->create( array( 'post_title' => 'test post', 'post_type' => 'page' ) );
+		$p = $this->factory->post->create( array(
+			'post_title' => 'Index Page',
+			'post_type' => 'page',
+		) );
+		$p2 = $this->factory->post->create( array(
+			'post_title' => 'test post',
+			'post_type' => 'page',
+		) );
 
 		$expected = sprintf( file_get_contents( 'tests/populated-widget.txt' ), $p );
 

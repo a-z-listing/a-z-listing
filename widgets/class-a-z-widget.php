@@ -16,10 +16,12 @@ class A_Z_Widget extends WP_Widget {
 	 * @since 0.1
 	 */
 	function __construct() {
-		parent::__construct('bh_az_widget', __( 'A-Z Site Map', 'a-z-listing' ), array(
-			'classname' => 'a-z-listing-widget',
-			'description' => __( 'Alphabetised links to the A-Z site map', 'a-z-listing' ),
-		));
+		parent::__construct(
+			'bh_az_widget', __( 'A-Z Site Map', 'a-z-listing' ), array(
+				'classname' => 'a-z-listing-widget',
+				'description' => __( 'Alphabetised links to the A-Z site map', 'a-z-listing' ),
+			)
+		);
 
 		if ( is_active_widget( false, false, $this->id_base, true ) ) {
 			a_z_listing_add_styling();
@@ -72,11 +74,13 @@ class A_Z_Widget extends WP_Widget {
 				<?php esc_html_e( 'Site map A-Z page', 'a-z-listing' ); ?>
 			</label></div>
 		<?php
-		wp_dropdown_pages( array(
-			'id' => intval( $post_id ),
-			'name' => esc_html( $post_name ),
-			'selected' => intval( $post ),
-		) );
+		wp_dropdown_pages(
+			array(
+				'id' => intval( $post_id ),
+				'name' => esc_html( $post_name ),
+				'selected' => intval( $post ),
+			)
+		);
 		?>
 
 		<div><label for="<?php echo esc_attr( $post_type_id ); ?>">
@@ -88,7 +92,12 @@ class A_Z_Widget extends WP_Widget {
 		?>
 		<select id="<?php echo esc_attr( $post_type_id ); ?>" name="<?php echo esc_attr( $post_type_name ); ?>">
 			<?php foreach ( $post_types as $t ) : ?>
-				<option value="<?php echo esc_attr( $t ); ?>" <?php if ( $post_type === $t ) { echo 'selected'; } ?>>
+				<option value="<?php echo esc_attr( $t ); ?>" 
+											<?php
+											if ( $post_type === $t ) {
+												echo 'selected'; }
+?>
+>
 					<?php echo esc_html( $t ); ?>
 				</option>
 			<?php endforeach; ?>
@@ -169,10 +178,12 @@ function get_the_section_az_widget( $args, $instance ) {
  */
 function get_the_section_a_z_widget( $args, $instance ) {
 	$classes = array( 'az-letters' );
-	$instance = wp_parse_args( $instance, array(
-		'title' => '',
-		'post' => 0,
-	) );
+	$instance = wp_parse_args(
+		$instance, array(
+			'title' => '',
+			'post' => 0,
+		)
+	);
 
 	if ( $instance['post'] ) {
 		if ( $instance['post'] instanceof WP_Post ) {
@@ -217,19 +228,19 @@ function get_the_section_a_z_widget( $args, $instance ) {
 	$ret = '';
 
 	ob_start();
-	?>
 
-	<?php echo $args['before_widget']; // WPCS: XSS OK. ?>
-	<?php echo $args['before_title'];  // WPCS: XSS OK. ?>
-		<?php echo esc_html( $title ); ?>
-	<?php echo $args['after_title']; // WPCS: XSS OK. ?>
+	echo $args['before_widget']; // WPCS: XSS OK.
+	echo $args['before_title'];  // WPCS: XSS OK.
+	echo esc_html( $title );
+	echo $args['after_title']; // WPCS: XSS OK.
+	?>
 	<div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
 		<?php $a_z_query->the_letters( get_permalink( $target ), null ); ?>
 		<div class="clear empty"></div>
 	</div>
-	<?php echo $args['after_widget']; // WPCS: XSS OK. ?>
-
 	<?php
+	echo $args['after_widget']; // WPCS: XSS OK.
+
 	$ret = ob_get_clean();
 	return $ret;
 }
