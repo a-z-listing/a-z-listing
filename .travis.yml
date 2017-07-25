@@ -1,5 +1,8 @@
 language: php
 
+dist: trusty
+sudo: false
+
 notifications:
   email:
     on_success: never
