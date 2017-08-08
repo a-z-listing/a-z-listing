@@ -1,3 +1,15 @@
+= 1.6.4 =
+* Regression fix for widget accessing WP_Post object as array
+
+= 1.6.3 =
+* Bugfix for multi column example and styling - if you tried using the multi column before but had problems, try using the new example file.
+  To manually patch your a-z-listin.php template, add the following to the top, underneath the php block which sets the number of columns:
+    <style>
+        .letter-section > div {
+            width: calc( 100% / <?php echo esc_html( $a_z_listing_colcount ); ?> );
+        }
+    </style>
+
 = 1.6.2 =
 * Bugfix for more complex templates - accessing post thumbnails failed.
 

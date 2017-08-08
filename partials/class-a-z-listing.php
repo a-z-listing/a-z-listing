@@ -105,7 +105,7 @@ class A_Z_Listing {
 			$section = self::get_section();
 
 			if ( ( isset( $query['post_type'] ) && 'page' !== $query['post_type'] )
-				|| ( isset( $post ) && 'page' !== $post['post_type'] ) ) {
+				|| ( isset( $post ) && 'page' !== $post->post_type ) ) {
 				$section = null;
 			}
 
