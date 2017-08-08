@@ -1,3 +1,9 @@
+### 1.6.5
+* Regression fix for widget accessing WP_Post object as array
+
+### 1.6.4
+* Bugfix for accessing array as object PHP Warning. Reported by @babraham76
+
 ### 1.6.2
 * Bugfix for more complex templates - accessing post thumbnails failed.
 
