@@ -247,12 +247,8 @@ class A_Z_Listing {
 	protected static function get_section( $page = 0 ) {
 		global $post;
 
-		$pages = get_pages( array(
-			'parent' => 0,
-		) );
-		$sections = array_map( function( $item ) {
-			return $item->post_name;
-		}, $pages );
+		$pages = get_pages( array( 'parent' => 0 ) );
+		$sections = array_map( function( $item ) { return $item->post_name; }, $pages );
 		/**
 		 * @deprecated Use a_z_listing_sections
 		 * @see a_z_listing_sections
