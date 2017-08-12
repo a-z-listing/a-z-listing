@@ -63,7 +63,7 @@ class A_Z_Listing {
 	 * A_Z_Listing constructor.
 	 *
 	 * @since 0.1
-	 * @param null|WP_Query|string $query
+	 * @param null|WP_Query|array|string $query
 	 */
 	public function __construct( $query = null ) {
 		global $post;
@@ -215,22 +215,14 @@ class A_Z_Listing {
 	 * Calculate the top-level section of the requested page
 	 *
 	 * @since 0.1
-	 * @param WP_Post|int Optional: The post object, or post-ID, of the page whose section we want to find.
+	 * @param WP_Post|int $page Optional: The post object, or post-ID, of the page whose section we want to find.
 	 * @return WP_Post|null The post object of the current section's top-level page.
 	 */
 	protected static function get_section( $page = 0 ) {
 		global $post;
 
-		$pages = get_pages(
-			array(
-				'parent' => 0,
-			)
-		);
-		$sections = array_map(
-			function( $item ) {
-					return $item->post_name;
-			}, $pages
-		);
+		$pages = get_pages( array( 'parent' => 0 ) );
+		$sections = array_map( function( $item ) { return $item->post_name; }, $pages );
 		/**
 		 * @deprecated Use a_z_listing_sections
 		 * @see a_z_listing_sections
