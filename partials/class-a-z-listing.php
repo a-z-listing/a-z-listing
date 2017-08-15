@@ -371,7 +371,7 @@ class A_Z_Listing {
 					);
 					return $indices;
 				} );
-				
+
 				if ( ! empty( $term_indices ) ) {
 					$indices = array_merge( $indices, $term_indices );
 				}
