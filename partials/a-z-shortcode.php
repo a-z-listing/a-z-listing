@@ -49,8 +49,8 @@ function a_z_shortcode_handler( $attributes ) {
 					'taxonomy' => $taxonomy,
 					'field' => 'slug',
 					'terms' => $terms,
-				)
-			)
+				),
+			),
 		) );
 	}
 

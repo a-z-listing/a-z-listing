@@ -77,7 +77,9 @@ class A_Z_Listing {
 
 			$this->type = 'taxonomy';
 			$this->taxonomy = $query;
-			$this->items = get_terms( $query, array( 'hide_empty' => false ) );
+			$this->items = get_terms( $query, array(
+				'hide_empty' => false,
+			) );
 
 			if ( AZLISTINGLOG ) {
 				do_action( 'log', 'A-Z Listing: Terms', '!slug', $this->items );
@@ -219,8 +221,12 @@ class A_Z_Listing {
 	protected static function get_section( $page = 0 ) {
 		global $post;
 
-		$pages = get_pages( array( 'parent' => 0 ) );
-		$sections = array_map( function( $item ) { return $item->post_name; }, $pages );
+		$pages = get_pages( array(
+			'parent' => 0,
+		) );
+		$sections = array_map( function( $item ) {
+			return $item->post_name;
+		}, $pages );
 		/**
 		 * @deprecated Use a_z_listing_sections
 		 * @see a_z_listing_sections
@@ -353,15 +359,15 @@ class A_Z_Listing {
 			$index = mb_substr( $item->post_title, 0, 1, 'UTF-8' );
 			$indices[ $index ][] = array(
 				'title' => $item->post_title,
-				'item' => $item
+				'item' => $item,
 			);
 
 			if ( ! empty( $this->index_taxonomy ) ) {
 				$terms = array_filter( wp_get_object_terms( $item->ID, $this->index_taxonomy ) );
-				$term_indices = array_reduce( $terms, function( $indices, $term ) use( $item ) {
+				$term_indices = array_reduce( $terms, function( $indices, $term ) use ( $item ) {
 					$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array(
 						'title' => $term->name,
-						'item' => $item
+						'item' => $item,
 					);
 					return $indices;
 				} );
@@ -370,7 +376,7 @@ class A_Z_Listing {
 					$indices = array_merge( $indices, $term_indices );
 				}
 			}
-				
+
 			/**
 			 * @deprecated Use a_z_listing_item_indices
 			 * @see a_z_listing_item_indices
