@@ -17,21 +17,43 @@ function a_z_shortcode_handler( $attributes ) {
 			'column-count' => 1,
 			'minimum-per-column' => 10,
 			'heading-level' => 2,
+			'display' => 'posts',
 			'post-type' => 'page',
+			'taxonomy' => '',
+			'terms' => '',
 		), $attributes, 'a-z-listing'
 	);
 
+	if ( ! empty( $attributes['taxonomy'] ) && 'terms' === $attributes['display'] ) {
+		$a_z_query = new A_Z_Listing( $attributes['taxonomy'] );
+		return $a_z_query->get_the_listing();
+	}
+
 	$post_types = explode( ',', $attributes['post-type'] );
+	$post_types = array_map( 'trim', $post_types );
 	$post_types = array_unique( $post_types );
-	$post_types = array_map(
-		function( $item ) {
-				return trim( $item );
-		}, $post_types
-	);
 
 	$query = array(
 		'post_type' => $post_types,
 	);
+
+	if ( '' !== $attributes['terms'] ) {
+		$taxonomy = '' !== $attributes['taxonomy'] ? $attributes['taxonomy'] : 'category';
+		$terms = explode( ',', $attributes['terms'] );
+		$terms = array_map( 'trim', $terms );
+		$terms = array_unique( $terms );
+
+		$query = array_merge( $query, array(
+			'tax_query' => array(
+				array(
+					'taxonomy' => $taxonomy,
+					'field' => 'slug',
+					'terms' => $terms,
+				),
+			),
+		) );
+	}
+
 	$a_z_query = new A_Z_Listing( $query );
 	return $a_z_query->get_the_listing();
 }

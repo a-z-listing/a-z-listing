@@ -63,7 +63,7 @@ class A_Z_Listing {
 	 * A_Z_Listing constructor.
 	 *
 	 * @since 0.1
-	 * @param null|WP_Query|string $query
+	 * @param null|WP_Query|array|string $query
 	 */
 	public function __construct( $query = null ) {
 		global $post;
@@ -74,13 +74,13 @@ class A_Z_Listing {
 			if ( AZLISTINGLOG ) {
 				do_action( 'log', 'A-Z Listing: Setting taxonomy mode', $query );
 			}
+
 			$this->type = 'taxonomy';
 			$this->taxonomy = $query;
-			$this->items = get_terms(
-				$query, array(
-					'hide_empty' => false,
-				)
-			);
+			$this->items = get_terms( $query, array(
+				'hide_empty' => false,
+			) );
+
 			if ( AZLISTINGLOG ) {
 				do_action( 'log', 'A-Z Listing: Terms', '!slug', $this->items );
 			}
@@ -105,7 +105,7 @@ class A_Z_Listing {
 			$section = self::get_section();
 
 			if ( ( isset( $query['post_type'] ) && 'page' !== $query['post_type'] )
-				|| ( isset( $post ) && 'page' !== $post['post_type'] ) ) {
+				|| ( isset( $post ) && 'page' !== $post->post_type ) ) {
 				$section = null;
 			}
 
@@ -215,22 +215,18 @@ class A_Z_Listing {
 	 * Calculate the top-level section of the requested page
 	 *
 	 * @since 0.1
-	 * @param WP_Post|int Optional: The post object, or post-ID, of the page whose section we want to find.
+	 * @param WP_Post|int $page Optional: The post object, or post-ID, of the page whose section we want to find.
 	 * @return WP_Post|null The post object of the current section's top-level page.
 	 */
 	protected static function get_section( $page = 0 ) {
 		global $post;
 
-		$pages = get_pages(
-			array(
-				'parent' => 0,
-			)
-		);
-		$sections = array_map(
-			function( $item ) {
-					return $item->post_name;
-			}, $pages
-		);
+		$pages = get_pages( array(
+			'parent' => 0,
+		) );
+		$sections = array_map( function( $item ) {
+			return $item->post_name;
+		}, $pages );
 		/**
 		 * @deprecated Use a_z_listing_sections
 		 * @see a_z_listing_sections
@@ -339,12 +335,13 @@ class A_Z_Listing {
 	 * Find and return the index letter for a post
 	 *
 	 * @since 1.0.0
-	 * @param WP_Post|WP_Term The item whose index letters we want to find
+	 * @param WP_Post|WP_Term $item The item whose index letters we want to find
 	 * @return Array The post's index letters (usually matching the first character of the post title)
 	 */
 	protected function get_the_item_indices( $item ) {
 		$terms = array();
 		$indices = array();
+		$term_indices = array();
 		$index = '';
 
 		if ( $item instanceof WP_Term ) {
@@ -359,28 +356,25 @@ class A_Z_Listing {
 			 */
 			$indices = apply_filters_deprecated( 'a_z_listing_term_indices', array( $indices, $item ), '1.0.0', 'a_z_listing_item_indices' );
 		} else {
-			if ( ! empty( $this->index_taxonomy ) ) {
-				$terms = array_filter( wp_get_object_terms( $item->ID, $this->index_taxonomy ) );
-			}
-
 			$index = mb_substr( $item->post_title, 0, 1, 'UTF-8' );
 			$indices[ $index ][] = array(
 				'title' => $item->post_title,
 				'item' => $item,
 			);
 
-			$term_indices = array_reduce(
-				$terms, function( $indices, $term ) {
+			if ( ! empty( $this->index_taxonomy ) ) {
+				$terms = array_filter( wp_get_object_terms( $item->ID, $this->index_taxonomy ) );
+				$term_indices = array_reduce( $terms, function( $indices, $term ) use ( $item ) {
 					$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array(
 						'title' => $term->name,
-						'item' => $term,
+						'item' => $item,
 					);
 					return $indices;
-				}
-			);
+				} );
 
-			if ( is_array( $term_indices ) && ! empty( $term_indices ) ) {
-				$indices = array_merge( $indices, $term_indices );
+				if ( ! empty( $term_indices ) ) {
+					$indices = array_merge( $indices, $term_indices );
+				}
 			}
 
 			/**
@@ -798,32 +792,40 @@ class A_Z_Listing {
 /**
  * Get a saved copy of the A_Z_Listing instance if we have one, or make a new one and save it for later
  *
- * @param  array|string|WP_Query|A_Z_Listing  $query  a valid WordPress query or an A_Z_Listing instance
- * @return A_Z_Listing                                a new or previously-saved instance of A_Z_Listing using the provided construct_query
+ * @param  array|string|WP_Query|A_Z_Listing  $query      a valid WordPress query or an A_Z_Listing instance
+ * @param  bool                               $use_cache  use the plugin's in-built query cache
+ * @return A_Z_Listing                                    a new or previously-saved instance of A_Z_Listing using the provided construct_query
  */
-function a_z_listing_cache( $query = null ) {
+function a_z_listing_cache( $query = null, $use_cache = true ) {
 	static $cache = array();
 
-	// copy $query into $obj in case it already is a valid A_Z_Listing instance.
-	$obj = $query;
-	if ( $obj instanceof A_Z_Listing ) {
+	if ( $query instanceof A_Z_Listing ) {
 		// we received a valid A_Z_Listing instance so we get the query from it for the cache lookup/save key.
-		$query = $obj->get_the_query();
+		if ( true === $use_cache ) {
+			$key = wp_json_encode( $query->get_the_query() );
+			if ( array_key_exists( $key, $cache ) ) {
+				return $cache[ $key ];
+			}
+
+			$cache[ $key ] = $obj;
+		}
+		return $query;
 	}
 
 	// check the cache and return any pre-existing A_Z_Listing instance we have.
 	$key = wp_json_encode( $query );
-	if ( array_key_exists( $key, $cache ) ) {
+	if ( true === $use_cache && array_key_exists( $key, $cache ) ) {
 		return $cache[ $key ];
 	}
 
 	// if $query is $obj then we did not get an A_Z_Listing instance as our argument, so we will make a new one.
-	if ( $query === $obj ) {
-		$obj = new A_Z_Listing( $query );
+	$obj = new A_Z_Listing( $query );
+
+	if ( true === $use_cache ) {
+		// save the new A_Z_Listing instance into the cache.
+		$cache[ $key ] = $obj;
 	}
-	// save the new A_Z_Listing instance into the cache.
-	$cache[ $key ] = $obj;
 
 	// return the new A_Z_Listing instance.
-	return $cache[ $key ];
+	return $obj;
 }
