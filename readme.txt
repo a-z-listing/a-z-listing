@@ -1,5 +1,6 @@
 === A-Z Listing ===
 Contributors: diddledan
+Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=N7QFVVD4PZVFE
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 3.5
 Tested up to: 4.8

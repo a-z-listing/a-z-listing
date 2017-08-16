@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: A-Z Listing
- * Plugin URI: https://www.bowlhat.net/
+ * Plugin URI: https://a-z-listing.com/
  * Description: Display an A to Z listing of posts
  * Version: 1.7.0
  * Author: Daniel Llewellyn
