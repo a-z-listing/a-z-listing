@@ -42,12 +42,22 @@ function a_z_listing_force_enable_styles() {
  */
 function a_z_listing_add_styling() {
 	wp_register_style( 'a-z-listing', plugins_url( 'css/a-z-listing-default.css', dirname( __FILE__ ) ) );
+
+	$add_styles = get_option( 'a-z-listing-add-styling', true );
 	/**
 	 * Determine whether to add default listing styling
 	 *
 	 * @param bool True to add default styling, False to disable
 	 */
-	$add_styles = apply_filters( 'a_z_listing_add_styling', get_option( 'a-z-listing-add-styling', true ) );
+	$add_styles = apply_filters( 'a_z_listing_add_styling', $add_styles );
+	/**
+	 * Determine whether to add default listing styling
+	 *
+	 * @param bool True to add default styling, False to disable
+	 * @since 1.7.1
+	 */
+	$add_styles = apply_filters( 'a-z-listing-add-styling', $add_styles );
+
 	if ( AZLISTINGLOG ) {
 		do_action( 'log', 'A-Z Listing: Add Styles', $add_styles );
 	}

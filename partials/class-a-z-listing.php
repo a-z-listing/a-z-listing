@@ -98,7 +98,15 @@ class A_Z_Listing {
 			 *
 			 * @param string $taxonomy The taxonomy mapping alternative titles to posts
 			 */
-			$this->index_taxonomy = apply_filters( 'a_z_listing_additional_titles_taxonomy', $index_taxonomy );
+			$index_taxonomy = apply_filters( 'a_z_listing_additional_titles_taxonomy', $index_taxonomy );
+			/**
+			 * Taxonomy containing terms which are used as the title for associated posts
+			 *
+			 * @since 1.7.1
+			 * @param string $taxonomy The taxonomy mapping alternative titles to posts
+			 */
+			$index_taxonomy = apply_filters( 'a-z-listing-additional-titles-taxonomy', $index_taxonomy );
+			$this->index_taxonomy = $index_taxonomy;
 
 			$query = (array) $query;
 
@@ -154,20 +162,38 @@ class A_Z_Listing {
 			return;
 		}
 
+		/* translators: List the aphabet of your language in the order that your language prefers. list as groups of identical meanings but different characters together, e.g. in English we group A with a because they are both the same letter but different character-code. Each character group should be followed by a comma separating it from the next group. Any amount of characters per group are acceptible, and there is no requirement for all the groups to contain the same amount of characters as all the others. Be careful with the character you place first in each group as that will be used as the identifier for the group which gets displayed on the page, e.g. in English a group definition of "Aa" will indicate that we display all the posts in the group, i.e. whose titles begin with either "A" or "a", listed under a heading of "A" (the first character in the definition). */
+		$alphabet = __( 'AÁÀÄÂaáàäâ,Bb,Cc,Dd,EÉÈËÊeéèëê,Ff,Gg,Hh,IÍÌÏÎiíìïî,Jj,Kk,Ll,Mm,Nn,OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz' );
+		/* translators: This should be a single character to denote "all entries that didn't fit under one of the alphabet character groups defined". This is used in English to categorise posts whose title begins with a numeric (0 through to 9), or some other character that is not a standard English alphabet letter. */
+		$others = __( '#', 'a-z-listing' );
+
 		/**
 		 * Filters the alphabet. The string should contain groups of similar or identical characters separated by commas. The first character in each group is the one used for the group title.
 		 *
 		 * @param string $alphabet The $alphabet
 		 */
-		/* translators: List the aphabet of your language in the order that your language prefers. list as groups of identical meanings but different characters together, e.g. in English we group A with a because they are both the same letter but different character-code. Each character group should be followed by a comma separating it from the next group. Any amount of characters per group are acceptible, and there is no requirement for all the groups to contain the same amount of characters as all the others. Be careful with the character you place first in each group as that will be used as the identifier for the group which gets displayed on the page, e.g. in English a group definition of "Aa" will indicate that we display all the posts in the group, i.e. whose titles begin with either "A" or "a", listed under a heading of "A" (the first character in the definition). */
-		$alphabet = apply_filters( 'a_z_listing_alphabet', __( 'AÁÀÄÂaáàäâ,Bb,Cc,Dd,EÉÈËÊeéèëê,Ff,Gg,Hh,IÍÌÏÎiíìïî,Jj,Kk,Ll,Mm,Nn,OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz' ) );
+		$alphabet = apply_filters( 'a_z_listing_alphabet', $alphabet );
+		/**
+		 * Filters the alphabet. The string should contain groups of similar or identical characters separated by commas. The first character in each group is the one used for the group title.
+		 *
+		 * @since 1.7.1
+		 * @param string $alphabet The $alphabet
+		 */
+		$alphabet = apply_filters( 'a-z-listing-alphabet', $alphabet );
+
 		/**
 		 * Specifies the character used for all non-alphabetic titles, such as numeric titles in the default setup for English. Defaults to '#' unless overidden by a language pack.
 		 *
 		 * @param string $non_alpha_char The character for non-alphabetic post titles
 		 */
-		/* translators: This should be a single character to denote "all entries that didn't fit under one of the alphabet character groups defined". This is used in English to categorise posts whose title begins with a numeric (0 through to 9), or some other character that is not a standard English alphabet letter. */
-		$others = apply_filters( 'a_z_listing_non_alpha_char', __( '#', 'a-z-listing' ) );
+		$others = apply_filters( 'a_z_listing_non_alpha_char', $others );
+		/**
+		 * Specifies the character used for all non-alphabetic titles, such as numeric titles in the default setup for English. Defaults to '#' unless overidden by a language pack.
+		 *
+		 * @since 1.7.1
+		 * @param string $non_alpha_char The character for non-alphabetic post titles
+		 */
+		$others = apply_filters( 'a-z-listing-non-alpha-char', $others );
 
 		$alphabet_groups = mb_split( ',', $alphabet );
 		$letters = array_reduce(
@@ -238,6 +264,13 @@ class A_Z_Listing {
 		 * @param array $sections The sections for the site
 		 */
 		$sections = apply_filters( 'a_z_listing_sections', $sections );
+		/**
+		 * Override the detected top-level sections for the site. Defaults to contain each page with no post-parent.
+		 *
+		 * @since 1.7.1
+		 * @param array $sections The sections for the site
+		 */
+		$sections = apply_filters( 'a-z-listing-sections', $sections );
 
 		if ( ! $page ) {
 			$page = $post;
@@ -291,6 +324,13 @@ class A_Z_Listing {
 		 * @param Array|Object|WP_Query $query The query object
 		 */
 		$q = apply_filters( 'a_z_listing_query', $q );
+		/**
+		 * Modify or replace the query
+		 *
+		 * @since 1.7.1
+		 * @param Array|Object|WP_Query $query The query object
+		 */
+		$q = apply_filters( 'a-z-listing-query', $q );
 
 		if ( $q instanceof WP_Query ) {
 			return $q;
@@ -394,6 +434,15 @@ class A_Z_Listing {
 		 * @param string          $item_type The type of the item
 		 */
 		$indices = apply_filters( 'a_z_listing_item_indices', $indices, $item, $this->type );
+		/**
+		 * Modify the indice(s) to group this post under
+		 *
+		 * @since 1.7.1
+		 * @param array           $indices The current indices
+		 * @param WP_Term|WP_Post $item The item
+		 * @param string          $item_type The type of the item
+		 */
+		$indices = apply_filters( 'a-z-listing-item-indices', $indices, $item, $this->type );
 		if ( AZLISTINGLOG ) {
 			do_action( 'log', 'Item indices', $indices );
 		}
