@@ -35,4 +35,4 @@ before_script:
 
 script:
   - phpunit
-  - ~/.composer/vendor/bin/phpcs -p --standard=WordPress-Extra --extensions=php --ignore=tests .
+  - ~/.composer/vendor/bin/phpcs -p --standard=phpcs-custom-rules.xml --extensions=php --ignore=tests .
