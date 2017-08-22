@@ -21,6 +21,7 @@ function a_z_shortcode_handler( $attributes ) {
 			'post-type' => 'page',
 			'taxonomy' => '',
 			'terms' => '',
+			'numbers' => 'none',
 		), $attributes, 'a-z-listing'
 	);
 
@@ -52,6 +53,10 @@ function a_z_shortcode_handler( $attributes ) {
 				),
 			),
 		) );
+	}
+
+	if ( 'none ' !== $attributes['numbers'] ) {
+		add_filter( 'a_z_listing_alphabet', add_a_z_numbers( $attributes['numbers'] ), 1, 75 );
 	}
 
 	$a_z_query = new A_Z_Listing( $query );

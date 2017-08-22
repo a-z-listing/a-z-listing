@@ -287,3 +287,13 @@ function get_the_az_letters( $query = null, $target = false, $styling = false ) 
 function get_the_a_z_letters( $query = null, $target = false, $styling = false ) {
 	return a_z_listing_cache( $query )->get_the_letters( $target, $styling );
 }
+
+function add_a_z_numbers( $position = 'after' ) {
+	return function( $alphabet ) use ( $position ) {
+		$numbers = '1,2,3,4,5,6,7,8,9,0';
+		if ( $position === 'before' ) {
+			return join( ',', $numbers, $alphabet );
+		}
+		return join( ',', $alphabet, $numbers );
+	};
+}
