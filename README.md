@@ -4,7 +4,7 @@
 - **Tags:** a to z, a-z, archive, listing, widget, index
 - **Requires at least:** 3.5
 - **Tested up to:** 4.8
-- **Stable tag:** 1.7.1
+- **Stable tag:** 1.7.2
 - **License:** GPLv2 or later
 - **License URI:** http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -268,6 +268,9 @@ In your theme's functions.php add the following code:
 ![The Widget is shown here.](https://ps.w.org/a-z-listing/assets/screenshot-2.png)
 
 ## Changelog
+
+### 1.7.2
+* Bugfix: Previous release broke the shortcode
 
 ### 1.7.1
 * Add additional filters allowing for hyphens or underscores to be used when defining. The readme.txt incorrectly used then-unsupported names with hyphens in examples so now we support both.
