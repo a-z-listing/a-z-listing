@@ -31,14 +31,14 @@ function a_z_shortcode_handler( $attributes ) {
 	}
 
 	$post_types = explode( ',', $attributes['post-type'] );
-	$post_types = array_map( 'trim', $post_types );
+	$post_types = array_map( trim, $post_types );
 	$post_types = array_unique( $post_types );
 
 	$query = array(
 		'post_type' => $post_types,
 	);
 
-	if ( '' !== $attributes['terms'] ) {
+	if ( ! empty( $attributes['terms'] ) ) {
 		$taxonomy = '' !== $attributes['taxonomy'] ? $attributes['taxonomy'] : 'category';
 		$terms = explode( ',', $attributes['terms'] );
 		$terms = array_map( 'trim', $terms );
@@ -55,7 +55,7 @@ function a_z_shortcode_handler( $attributes ) {
 		) );
 	}
 
-	if ( 'none ' !== $attributes['numbers'] ) {
+	if ( !empty( $attributes['numbers'] ) && 'none' !== $attributes['numbers'] ) {
 		add_filter( 'a_z_listing_alphabet', add_a_z_numbers( $attributes['numbers'] ), 1, 75 );
 	}
 

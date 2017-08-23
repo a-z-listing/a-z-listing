@@ -292,8 +292,8 @@ function add_a_z_numbers( $position = 'after' ) {
 	return function( $alphabet ) use ( $position ) {
 		$numbers = '1,2,3,4,5,6,7,8,9,0';
 		if ( 'before' === $position ) {
-			return join( ',', $numbers, $alphabet );
+			return join( ',', array( $numbers, $alphabet ) );
 		}
-		return join( ',', $alphabet, $numbers );
+		return join( ',', array( $alphabet, $numbers ) );
 	};
 }
