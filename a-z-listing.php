@@ -1,9 +1,9 @@
 <?php
 /**
  * Plugin Name: A-Z Listing
- * Plugin URI: https://www.bowlhat.net/
+ * Plugin URI: https://a-z-listing.com/
  * Description: Display an A to Z listing of posts
- * Version: 1.6.5
+ * Version: 1.7.2
  * Author: Daniel Llewellyn
  * Author URI: https://www.bowlhat.net/
  * License: GPLv2

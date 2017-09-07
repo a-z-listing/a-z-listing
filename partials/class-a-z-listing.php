@@ -74,13 +74,13 @@ class A_Z_Listing {
 			if ( AZLISTINGLOG ) {
 				do_action( 'log', 'A-Z Listing: Setting taxonomy mode', $query );
 			}
+
 			$this->type = 'taxonomy';
 			$this->taxonomy = $query;
-			$this->items = get_terms(
-				$query, array(
-					'hide_empty' => false,
-				)
-			);
+			$this->items = get_terms( $query, array(
+				'hide_empty' => false,
+			) );
+
 			if ( AZLISTINGLOG ) {
 				do_action( 'log', 'A-Z Listing: Terms', '!slug', $this->items );
 			}
@@ -98,7 +98,15 @@ class A_Z_Listing {
 			 *
 			 * @param string $taxonomy The taxonomy mapping alternative titles to posts
 			 */
-			$this->index_taxonomy = apply_filters( 'a_z_listing_additional_titles_taxonomy', $index_taxonomy );
+			$index_taxonomy = apply_filters( 'a_z_listing_additional_titles_taxonomy', $index_taxonomy );
+			/**
+			 * Taxonomy containing terms which are used as the title for associated posts
+			 *
+			 * @since 1.7.1
+			 * @param string $taxonomy The taxonomy mapping alternative titles to posts
+			 */
+			$index_taxonomy = apply_filters( 'a-z-listing-additional-titles-taxonomy', $index_taxonomy );
+			$this->index_taxonomy = $index_taxonomy;
 
 			$query = (array) $query;
 
@@ -154,20 +162,38 @@ class A_Z_Listing {
 			return;
 		}
 
+		/* translators: List the aphabet of your language in the order that your language prefers. list as groups of identical meanings but different characters together, e.g. in English we group A with a because they are both the same letter but different character-code. Each character group should be followed by a comma separating it from the next group. Any amount of characters per group are acceptible, and there is no requirement for all the groups to contain the same amount of characters as all the others. Be careful with the character you place first in each group as that will be used as the identifier for the group which gets displayed on the page, e.g. in English a group definition of "Aa" will indicate that we display all the posts in the group, i.e. whose titles begin with either "A" or "a", listed under a heading of "A" (the first character in the definition). */
+		$alphabet = __( 'AÁÀÄÂaáàäâ,Bb,Cc,Dd,EÉÈËÊeéèëê,Ff,Gg,Hh,IÍÌÏÎiíìïî,Jj,Kk,Ll,Mm,Nn,OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz' );
+		/* translators: This should be a single character to denote "all entries that didn't fit under one of the alphabet character groups defined". This is used in English to categorise posts whose title begins with a numeric (0 through to 9), or some other character that is not a standard English alphabet letter. */
+		$others = __( '#', 'a-z-listing' );
+
 		/**
 		 * Filters the alphabet. The string should contain groups of similar or identical characters separated by commas. The first character in each group is the one used for the group title.
 		 *
 		 * @param string $alphabet The $alphabet
 		 */
-		/* translators: List the aphabet of your language in the order that your language prefers. list as groups of identical meanings but different characters together, e.g. in English we group A with a because they are both the same letter but different character-code. Each character group should be followed by a comma separating it from the next group. Any amount of characters per group are acceptible, and there is no requirement for all the groups to contain the same amount of characters as all the others. Be careful with the character you place first in each group as that will be used as the identifier for the group which gets displayed on the page, e.g. in English a group definition of "Aa" will indicate that we display all the posts in the group, i.e. whose titles begin with either "A" or "a", listed under a heading of "A" (the first character in the definition). */
-		$alphabet = apply_filters( 'a_z_listing_alphabet', __( 'AÁÀÄÂaáàäâ,Bb,Cc,Dd,EÉÈËÊeéèëê,Ff,Gg,Hh,IÍÌÏÎiíìïî,Jj,Kk,Ll,Mm,Nn,OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz' ) );
+		$alphabet = apply_filters( 'a_z_listing_alphabet', $alphabet );
+		/**
+		 * Filters the alphabet. The string should contain groups of similar or identical characters separated by commas. The first character in each group is the one used for the group title.
+		 *
+		 * @since 1.7.1
+		 * @param string $alphabet The $alphabet
+		 */
+		$alphabet = apply_filters( 'a-z-listing-alphabet', $alphabet );
+
 		/**
 		 * Specifies the character used for all non-alphabetic titles, such as numeric titles in the default setup for English. Defaults to '#' unless overidden by a language pack.
 		 *
 		 * @param string $non_alpha_char The character for non-alphabetic post titles
 		 */
-		/* translators: This should be a single character to denote "all entries that didn't fit under one of the alphabet character groups defined". This is used in English to categorise posts whose title begins with a numeric (0 through to 9), or some other character that is not a standard English alphabet letter. */
-		$others = apply_filters( 'a_z_listing_non_alpha_char', __( '#', 'a-z-listing' ) );
+		$others = apply_filters( 'a_z_listing_non_alpha_char', $others );
+		/**
+		 * Specifies the character used for all non-alphabetic titles, such as numeric titles in the default setup for English. Defaults to '#' unless overidden by a language pack.
+		 *
+		 * @since 1.7.1
+		 * @param string $non_alpha_char The character for non-alphabetic post titles
+		 */
+		$others = apply_filters( 'a-z-listing-non-alpha-char', $others );
 
 		$alphabet_groups = mb_split( ',', $alphabet );
 		$letters = array_reduce(
@@ -221,8 +247,12 @@ class A_Z_Listing {
 	protected static function get_section( $page = 0 ) {
 		global $post;
 
-		$pages = get_pages( array( 'parent' => 0 ) );
-		$sections = array_map( function( $item ) { return $item->post_name; }, $pages );
+		$pages = get_pages( array(
+			'parent' => 0,
+		) );
+		$sections = array_map( function( $item ) {
+			return $item->post_name;
+		}, $pages );
 		/**
 		 * @deprecated Use a_z_listing_sections
 		 * @see a_z_listing_sections
@@ -234,6 +264,13 @@ class A_Z_Listing {
 		 * @param array $sections The sections for the site
 		 */
 		$sections = apply_filters( 'a_z_listing_sections', $sections );
+		/**
+		 * Override the detected top-level sections for the site. Defaults to contain each page with no post-parent.
+		 *
+		 * @since 1.7.1
+		 * @param array $sections The sections for the site
+		 */
+		$sections = apply_filters( 'a-z-listing-sections', $sections );
 
 		if ( ! $page ) {
 			$page = $post;
@@ -287,6 +324,13 @@ class A_Z_Listing {
 		 * @param Array|Object|WP_Query $query The query object
 		 */
 		$q = apply_filters( 'a_z_listing_query', $q );
+		/**
+		 * Modify or replace the query
+		 *
+		 * @since 1.7.1
+		 * @param Array|Object|WP_Query $query The query object
+		 */
+		$q = apply_filters( 'a-z-listing-query', $q );
 
 		if ( $q instanceof WP_Query ) {
 			return $q;
@@ -337,6 +381,7 @@ class A_Z_Listing {
 	protected function get_the_item_indices( $item ) {
 		$terms = array();
 		$indices = array();
+		$term_indices = array();
 		$index = '';
 
 		if ( $item instanceof WP_Term ) {
@@ -359,17 +404,17 @@ class A_Z_Listing {
 
 			if ( ! empty( $this->index_taxonomy ) ) {
 				$terms = array_filter( wp_get_object_terms( $item->ID, $this->index_taxonomy ) );
-			}
-			$term_indices = array_reduce( $terms, function( $indices, $term ) use( $item ) {
-				$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array(
-					'title' => $term->name,
-					'item' => $item
-				);
-				return $indices;
-			} );
+				$term_indices = array_reduce( $terms, function( $indices, $term ) use ( $item ) {
+					$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array(
+						'title' => $term->name,
+						'item' => $item,
+					);
+					return $indices;
+				} );
 
-			if ( is_array( $term_indices ) && ! empty( $term_indices ) ) {
-				$indices = array_merge( $indices, $term_indices );
+				if ( ! empty( $term_indices ) ) {
+					$indices = array_merge( $indices, $term_indices );
+				}
 			}
 
 			/**
@@ -389,6 +434,15 @@ class A_Z_Listing {
 		 * @param string          $item_type The type of the item
 		 */
 		$indices = apply_filters( 'a_z_listing_item_indices', $indices, $item, $this->type );
+		/**
+		 * Modify the indice(s) to group this post under
+		 *
+		 * @since 1.7.1
+		 * @param array           $indices The current indices
+		 * @param WP_Term|WP_Post $item The item
+		 * @param string          $item_type The type of the item
+		 */
+		$indices = apply_filters( 'a-z-listing-item-indices', $indices, $item, $this->type );
 		if ( AZLISTINGLOG ) {
 			do_action( 'log', 'Item indices', $indices );
 		}
@@ -787,32 +841,40 @@ class A_Z_Listing {
 /**
  * Get a saved copy of the A_Z_Listing instance if we have one, or make a new one and save it for later
  *
- * @param  array|string|WP_Query|A_Z_Listing  $query  a valid WordPress query or an A_Z_Listing instance
- * @return A_Z_Listing                                a new or previously-saved instance of A_Z_Listing using the provided construct_query
+ * @param  array|string|WP_Query|A_Z_Listing  $query      a valid WordPress query or an A_Z_Listing instance
+ * @param  bool                               $use_cache  use the plugin's in-built query cache
+ * @return A_Z_Listing                                    a new or previously-saved instance of A_Z_Listing using the provided construct_query
  */
-function a_z_listing_cache( $query = null ) {
+function a_z_listing_cache( $query = null, $use_cache = true ) {
 	static $cache = array();
 
-	// copy $query into $obj in case it already is a valid A_Z_Listing instance.
-	$obj = $query;
-	if ( $obj instanceof A_Z_Listing ) {
+	if ( $query instanceof A_Z_Listing ) {
 		// we received a valid A_Z_Listing instance so we get the query from it for the cache lookup/save key.
-		$query = $obj->get_the_query();
+		if ( true === $use_cache ) {
+			$key = wp_json_encode( $query->get_the_query() );
+			if ( array_key_exists( $key, $cache ) ) {
+				return $cache[ $key ];
+			}
+
+			$cache[ $key ] = $obj;
+		}
+		return $query;
 	}
 
 	// check the cache and return any pre-existing A_Z_Listing instance we have.
 	$key = wp_json_encode( $query );
-	if ( array_key_exists( $key, $cache ) ) {
+	if ( true === $use_cache && array_key_exists( $key, $cache ) ) {
 		return $cache[ $key ];
 	}
 
 	// if $query is $obj then we did not get an A_Z_Listing instance as our argument, so we will make a new one.
-	if ( $query === $obj ) {
-		$obj = new A_Z_Listing( $query );
+	$obj = new A_Z_Listing( $query );
+
+	if ( true === $use_cache ) {
+		// save the new A_Z_Listing instance into the cache.
+		$cache[ $key ] = $obj;
 	}
-	// save the new A_Z_Listing instance into the cache.
-	$cache[ $key ] = $obj;
 
 	// return the new A_Z_Listing instance.
-	return $cache[ $key ];
+	return $obj;
 }

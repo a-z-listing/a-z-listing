@@ -1,9 +1,10 @@
 === A-Z Listing ===
 Contributors: diddledan
+Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=N7QFVVD4PZVFE
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 3.5
 Tested up to: 4.8
-Stable tag: 1.6.5
+Stable tag: 1.7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -146,11 +147,21 @@ PHP code needs to be added to your theme files, and cannot be used as post or pa
 
 The argument to `the_a_z_listing()` is an [array](http://php.net/manual/en/language.types.array.php) and takes the same parameters as [WP_Query](https://codex.wordpress.org/Class_Reference/WP_Query)
 
-The code above needs to be within a php block which is denoted by the `<?php`. Depending on your theme, you might not need the opening and closing php tags shown in the above snippet; if that is the case, you are free to omit them in your code.
+*The code above needs to be within a php block which is denoted by the `<?php` and `?>` pair. Depending on your theme, you might not need the opening and closing php tags shown in the above snippet; if that is the case, you are free to omit them in your code.*
 
 = How do I show posts from a specific category only =
 
-This can only be done via PHP and cannot currently be achieved using the shortcode.
+This can be achieved using the shortcode or PHP.
+
+**Shortcode method**
+
+    [a-z-listing taxonomy="taxonomy-slug" terms="term-slug"]
+
+*Multiple terms*
+
+For multiple terms just separate them with a comma.
+
+    [a-z-listing taxonomy="taxonomy-slug" terms="term1-slug,term2-slug"]
 
 **PHP method**
 
@@ -170,7 +181,31 @@ Any number of terms can be added to the `terms` [array](http://php.net/manual/en
 
 The argument to `the_a_z_listing()` is an [array](http://php.net/manual/en/language.types.array.php) and takes the same parameters as [WP_Query](https://codex.wordpress.org/Class_Reference/WP_Query)
 
-*The code above needs to be within a php block which is denoted by the `<?php`. Depending on your theme, you might not need the opening and closing php tags shown in the above snippet; if that is the case, you are free to omit them in your code.*
+*The code above needs to be within a php block which is denoted by the `<?php` and `?>` pair. Depending on your theme, you might not need the opening and closing php tags shown in the above snippet; if that is the case, you are free to omit them in your code.*
+
+= How do I show terms from a taxonomy instead of posts =
+
+This can be achieved using the shortcode or PHP.
+
+**Shortcode method**
+
+    [a-z-listing taxonomy="taxonomy-slug" display="terms"]
+
+The taxonomy parameter takes a single taxonomy's slug, e.g. `category` or `post_tag`.
+
+The `display="terms"` attribute is required to display taxonomy terms instead of posts.
+
+**PHP method**
+
+PHP code needs to be added to your theme files, and cannot be used as post or page content in the way that a shortcode can.
+
+    <?php
+    the_a_z_listing( 'taxonomy-slug' );
+    ?>
+
+The argument to `the_a_z_listing()` is a [string](http://php.net/manual/en/language.types.string.php) and contains the slug of a single taxonomy, e.g. `category` or `post_tag`.
+
+*The code above needs to be within a php block which is denoted by the `<?php` and `?>` pair. Depending on your theme, you might not need the opening and closing php tags shown in the above snippet; if that is the case, you are free to omit them in your code.*
 
 = How do I remove section targeting or limit which sections are available? =
 
@@ -182,7 +217,7 @@ In your theme's functions.php add the following code:
 
 This filter can also be used, by removing entries which are standard $post variables, to limit which top-level pages are used as section identifiers.
 
-*If there is code already in your functions.php then add just the line beginning with `add_filter` on a new line directly after the very first instance of `<?php`.*
+*If there is code already in your functions.php then add just the lines between `<?php` and `?>` on the line directly after the very first instance of `<?php`.*
 
 = I am not using the short-code so the styles are not working, can I still use the in-built styles without the short-code? =
 
@@ -191,6 +226,8 @@ Yes you can. This needs the following code added to your theme's functions.php. 
     <?php
     add_action( 'wp', 'a_z_listing_force_enable_styles', 99 );
     ?>
+
+*If there is code already in your functions.php then add just the lines between `<?php` and `?>` on the line directly after the very first instance of `<?php`.*
 
 The sidebar widget styling also works in a similar manner, and will also respond to the same code above to forcibly enable it.
 
@@ -206,6 +243,8 @@ You can add code which detects the page which the user is browsing and only enab
     }
     ?>
 
+*If there is code already in your functions.php then add just the lines between `<?php` and `?>` on the line directly after the very first instance of `<?php`.*
+
 = How do I disable the in-built styling? =
 
 In your theme's functions.php add the following code:
@@ -214,7 +253,7 @@ In your theme's functions.php add the following code:
     add_filter( 'a-z-listing-add-styling', '__return_false' );
     ?>
 
-*If there is code already in your functions.php then add just the line beginning with `add_filter` on a new line directly after the very first instance of `<?php`.*
+*If there is code already in your functions.php then add just the lines between `<?php` and `?>` on the line directly after the very first instance of `<?php`.*
 
 == Screenshots ==
 
@@ -222,6 +261,17 @@ In your theme's functions.php add the following code:
 2. The Widget is shown here.
 
 == Changelog ==
+
+= 1.7.2 -
+* Bugfix: Previous release broke the shortcode
+
+= 1.7.1 =
+* Add additional filters allowing for hyphens or underscores to be used when defining. The readme.txt incorrectly used then-unsupported names with hyphens in examples so now we support both.
+* Add numbers="before" and numbers="after" in shortcode
+
+= 1.7.0 =
+* Add support for taxonomy term listings to the shortcode
+* Add support for filtering by taxonomy terms to the shortcode
 
 = 1.6.5 =
 * Regression fix for widget accessing WP_Post object as array
@@ -248,56 +298,5 @@ In your theme's functions.php add the following code:
 * Fix bug of case sensitity in listings order
 * Better warning of deprecated functions when called by other plugins or themes
 
-= 1.5.4 =
-* Fix post links when using an alternative titles taxonomy (discovered by [bugnumber9](https://profiles.wordpress.org/bugnumber9))
-* Ensure that we don't access rogue objects. Warnings and errors in 1.5.3 are squashed now.
-* Verified that [tests](https://travis-ci.org/bowlhat/wp-a-z-listing) pass correctly before releasing this version.
-
-= 1.5.3 =
-* Regression in 1.5.2 causing empty listing is fixed
-
-= 1.5.2 =
-* Regression fix for styling loading - seems the widget code was still causing issues
-* Add inline PHPdoc to all functions and custom filters
-
-= 1.5.1 =
-* Fix multiple post-types support for shortcode
-* Update documentation to explain how to show multiple post-types with the shortcode
-
-= 1.5.0 =
-* Ensure styling is loaded correctly
-* Ensure styling works correctly when using the multi-column template
-
-= 1.4.1 =
-* Fix warning introduced by 1.4.0 about implicit coercion between WP_Post and string
-
-= 1.4.0 =
-* Add support for passing a WP_Post object instead of an ID to the widget function
-* Fix widget config not saving post-type parameter
-* Fix warning of incorrect usage of `has_shortcode()` function
-* Fix section-targeting to work as described
-
-= 1.3.1 =
-* Fix broken admin pages caused by 1.3.0
-
-= 1.3.0 =
-* Added targeted stylesheet loading to enqueue only on pages where the short-code is active
-* Further improved default stylesheet loading
-
-= 1.2.0 =
-* Changed default to apply the in-built styles, unless overridden
-
-= 1.1.0 =
-* Minor refactoring to remove unused variables
-* Fix some Code-Smell (phpcs)
-
-= 1.0.1 =
-* BUGFIX: lower-case titles missing
-
-= 1.0.0 =
-* BREAKING CHANGE: Refactored several function names. If you have written your own template/loop you will need to adapt your code. See the readme.txt's Theming section for details.
-* Added `post-type` attribute into the shortcode to display for post-types other than pages.
-* Minor code cleanup.
-
 = Previous =
-See the file called `changelog` for the full release history.
+See the file called `changelog.md` for the full release history.

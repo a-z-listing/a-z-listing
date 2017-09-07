@@ -215,9 +215,10 @@ function the_az_listing( $query = null ) {
  *
  * @since 0.8.0
  * @param array|string|WP_Query|A_Z_Listing  $query      a valid WordPress query or an A_Z_Listing instance
+ * @param bool                               $use_cache  use the plugin's in-built query cache
  */
-function the_a_z_listing( $query = null ) {
-	echo get_the_a_z_listing( $query ); // WPCS: XSS OK.
+function the_a_z_listing( $query = null, $use_cache = true ) {
+	echo get_the_a_z_listing( $query, $use_cache ); // WPCS: XSS OK.
 }
 
 /**
@@ -235,10 +236,11 @@ function get_the_az_listing( $query = null ) {
  *
  * @since 0.8.0
  * @param  array|string|WP_Query|A_Z_Listing  $query      a valid WordPress query or an A_Z_Listing instance
+ * @param  bool                               $use_cache  use the plugin's in-built query cache
  * @return string                                         The listing html content ready for echoing to the page.
  */
-function get_the_a_z_listing( $query = null ) {
-	return a_z_listing_cache( $query )->get_the_listing();
+function get_the_a_z_listing( $query = null, $use_cache = true ) {
+	return a_z_listing_cache( $query, $use_cache )->get_the_listing();
 }
 
 /**
@@ -284,4 +286,14 @@ function get_the_az_letters( $query = null, $target = false, $styling = false ) 
  */
 function get_the_a_z_letters( $query = null, $target = false, $styling = false ) {
 	return a_z_listing_cache( $query )->get_the_letters( $target, $styling );
+}
+
+function add_a_z_numbers( $position = 'after' ) {
+	return function( $alphabet ) use ( $position ) {
+		$numbers = '1,2,3,4,5,6,7,8,9,0';
+		if ( 'before' === $position ) {
+			return join( ',', array( $numbers, $alphabet ) );
+		}
+		return join( ',', array( $alphabet, $numbers ) );
+	};
 }

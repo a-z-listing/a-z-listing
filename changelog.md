@@ -1,3 +1,13 @@
+## Full Changelog
+
+### 1.7.1
+* Add additional filters allowing for hyphens or underscores to be used when defining. The readme.txt incorrectly used then-unsupported names with hyphens in examples so now we support both.
+* Add numbers="before" and numbers="after" in shortcode
+
+### 1.7.0
+* Add support for taxonomy term listings to the shortcode
+* Add support for filtering by taxonomy terms to the shortcode
+
 ### 1.6.5
 * Regression fix for widget accessing WP_Post object as array
 
