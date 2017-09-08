@@ -399,7 +399,7 @@ class A_Z_Listing {
 			$index = mb_substr( $item->post_title, 0, 1, 'UTF-8' );
 			$indices[ $index ][] = array(
 				'title' => $item->post_title,
-				'item' => $item
+				'item' => $item,
 			);
 
 			if ( ! empty( $this->index_taxonomy ) ) {
@@ -785,12 +785,12 @@ class A_Z_Listing {
 	 * @return string The letter title
 	 */
 	public function get_the_letter_title( $index = '' ) {
-	    if ( '' !== $index ) {
-	        $letter = self::$alphabet[ $index ];
-        } else {
-            $letter = self::$alphabet[ $this->available_indices[ $this->current_letter_index - 1 ] ];
-        }
-		
+		if ( '' !== $index ) {
+			$letter = self::$alphabet[ $index ];
+		} else {
+			$letter = self::$alphabet[ $this->available_indices[ $this->current_letter_index - 1 ] ];
+		}
+
 		/**
 		 * Modify the letter title or heading
 		 *

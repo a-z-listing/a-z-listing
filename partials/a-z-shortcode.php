@@ -15,17 +15,17 @@
  */
 function a_z_shortcode_handler( $attributes ) {
 	$attributes = shortcode_atts( array(
-			'column-count' => 1,
-			'minimum-per-column' => 10,
-			'heading-level' => 2,
-			'alphabet' => '',
-			'display' => 'posts',
-			'grouping' => '',
-			'numbers' => '',
-			'post-type' => 'page',
-			'taxonomy' => '',
-			'terms' => '',
-		), $attributes, 'a-z-listing' );
+		'column-count' => 1,
+		'minimum-per-column' => 10,
+		'heading-level' => 2,
+		'alphabet' => '',
+		'display' => 'posts',
+		'grouping' => '',
+		'numbers' => '',
+		'post-type' => 'page',
+		'taxonomy' => '',
+		'terms' => '',
+	), $attributes, 'a-z-listing' );
 
 	if ( ! empty( $attributes['alphabet'] ) ) {
 		$override = $attributes['alphabet'];
@@ -36,15 +36,15 @@ function a_z_shortcode_handler( $attributes ) {
 
 	$grouping = $attributes['grouping'];
 	$group_numbers = false;
-    if ( 'numbers' === $grouping ) {
-        $group_numbers = true;
-        $grouping = 0;
-    } else {
-        $grouping = intval( $grouping );
-        if ( 1 < $grouping ) {
-            $group_numbers = true;
-        }
-    }
+	if ( 'numbers' === $grouping ) {
+		$group_numbers = true;
+		$grouping = 0;
+	} else {
+		$grouping = intval( $grouping );
+		if ( 1 < $grouping ) {
+			$group_numbers = true;
+		}
+	}
 
 	if ( 1 < $grouping ) {
 		add_filter( 'a-z-listing-alphabet', function( $alphabet ) use ( $grouping ) {
@@ -73,18 +73,18 @@ function a_z_shortcode_handler( $attributes ) {
 			} );
 
 			$headings = array_reduce( $headings, function( $carry, $heading ) {
-			    $carry[ mb_substr( $heading[0], 0, 1 ) ] = $heading;
-			    return $carry;
-            } );
+				$carry[ mb_substr( $heading[0], 0, 1 ) ] = $heading;
+				return $carry;
+			} );
 
 			$heading_filter = function( $title ) use ( $headings ) {
-			    if ( isset( $headings[ $title ] ) && is_array( $headings[ $title ] ) ) {
-                    $first = array_shift($headings[$title]);
-                    $last = array_pop($headings[$title]);
-                    return $first . '-' . $last;
-                }
+				if ( isset( $headings[ $title ] ) && is_array( $headings[ $title ] ) ) {
+					$first = array_shift($headings[$title]);
+					$last = array_pop($headings[$title]);
+					return $first . '-' . $last;
+				}
 
-                return $title;
+				return $title;
 			};
 
 			if ( has_filter( 'the-a-z-letter-title', $heading_filter ) ) {
@@ -99,17 +99,17 @@ function a_z_shortcode_handler( $attributes ) {
 	if ( ! empty( $attributes['numbers'] ) ) {
 		add_a_z_numbers( $attributes['numbers'], $group_numbers );
 		if ( $group_numbers ) {
-            $numbers_titlefunc = function ($title) {
-                if ('0' == $title) {
-                    return '0-9';
-                }
-                return $title;
-            };
-            if (has_filter('the-a-z-letter-title', $numbers_titlefunc)) {
-                remove_filter('the-a-z-letter-title', $numbers_titlefunc);
-            }
-            add_filter('the-a-z-letter-title', $numbers_titlefunc, 5);
-        }
+			$numbers_titlefunc = function ($title) {
+				if ('0' === strval( $title ) ) {
+					return '0-9';
+				}
+				return $title;
+			};
+			if ( has_filter( 'the-a-z-letter-title', $numbers_titlefunc ) ) {
+				remove_filter( 'the-a-z-letter-title', $numbers_titlefunc );
+			}
+			add_filter( 'the-a-z-letter-title', $numbers_titlefunc, 5 );
+		}
 	}
 
 	if ( ! empty( $attributes['taxonomy'] ) && 'terms' === $attributes['display'] ) {
