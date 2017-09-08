@@ -10,3 +10,15 @@ packages
 /assets/
 /bin/
 .git
+Dockunit.json
+Gulpfile.js
+composer.*
+docker-compose.yml
+package.json
+phpcs-custom-rules.xml
+phpunit.xml
+.travis.yml
+.gitignore
+.editorconfig
+.eslint*
+*.scss
