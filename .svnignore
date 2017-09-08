@@ -8,3 +8,5 @@ packages
 /vendor/
 /tests/
 /assets/
+/bin/
+.git
