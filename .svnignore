@@ -1,7 +1,10 @@
-node_modules
+/node_modules/
 packages
 .vs
 *.tmp
 .idea
+*.phar
 
 /vendor/
+/tests/
+/assets/

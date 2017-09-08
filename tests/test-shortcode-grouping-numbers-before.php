@@ -1,8 +1,8 @@
 <?php
-class AZ_Shortcode_Tests extends WP_UnitTestCase {
+class AZ_Shortcode_Grouping_Numbers_Before_Tests extends WP_UnitTestCase {
 	function test_empty() {
-		$expected = file_get_contents( 'tests/data/default-listing.txt' );
-		$actual = do_shortcode( '[a-z-listing]' );
+		$expected = file_get_contents( 'tests/data/default-listing-grouped-numbers-before.txt' );
+		$actual = do_shortcode( '[a-z-listing grouping="3" numbers="before"]' );
 
 		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
 		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
@@ -16,8 +16,8 @@ class AZ_Shortcode_Tests extends WP_UnitTestCase {
 			'post_type' => 'page',
 		) );
 
-		$expected = sprintf( file_get_contents( 'tests/data/populated-listing.txt' ), $title, $p );
-		$actual = do_shortcode( '[a-z-listing]' );
+		$expected = sprintf( file_get_contents( 'tests/data/populated-listing-grouped-numbers-before.txt' ), $title, $p );
+		$actual = do_shortcode( '[a-z-listing grouping="3" numbers="before"]' );
 
 		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
 		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
@@ -31,8 +31,8 @@ class AZ_Shortcode_Tests extends WP_UnitTestCase {
 			'post_type' => 'page',
 		) );
 
-		$expected = sprintf( file_get_contents( 'tests/data/populated-listing.txt' ), $title, $p );
-		$actual = do_shortcode( '[a-z-listing]' );
+		$expected = sprintf( file_get_contents( 'tests/data/populated-listing-grouped-numbers-before.txt' ), $title, $p );
+		$actual = do_shortcode( '[a-z-listing grouping="3" numbers="before"]' );
 
 		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
 		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
@@ -46,8 +46,8 @@ class AZ_Shortcode_Tests extends WP_UnitTestCase {
 			'taxonomy' => 'category',
 		) );
 
-		$expected = sprintf( file_get_contents( 'tests/data/populated-taxonomy-listing.txt' ) , $title, $t );
-		$actual = do_shortcode( '[a-z-listing display="terms" taxonomy="category"]' );
+		$expected = sprintf( file_get_contents( 'tests/data/populated-taxonomy-listing-grouped-numbers-before.txt' ) , $title, $t );
+		$actual = do_shortcode( '[a-z-listing display="terms" taxonomy="category" grouping="3" numbers="before"]' );
 
 		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
 		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
@@ -72,8 +72,8 @@ class AZ_Shortcode_Tests extends WP_UnitTestCase {
 
 		$term = get_term( $t, 'category' );
 
-		$expected = sprintf( file_get_contents( 'tests/data/populated-listing.txt' ), $title, $p );
-		$actual = do_shortcode( sprintf( '[a-z-listing taxonomy="category" terms="%s"]', $term->slug ) );
+		$expected = sprintf( file_get_contents( 'tests/data/populated-listing-grouped-numbers-before.txt' ), $title, $p );
+		$actual = do_shortcode( sprintf( '[a-z-listing taxonomy="category" terms="%s" grouping="3" numbers="before"]', $term->slug ) );
 
 		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
 		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );

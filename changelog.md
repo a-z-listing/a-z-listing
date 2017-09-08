@@ -1,5 +1,32 @@
 ## Full Changelog
 
+### 1.8.0
+* Add extra shortcode attributes:
+  * `numbers`: appends or prepends numerals to the alphabet
+    - Default value: unset
+    - Can be set to either `before` or `after`.
+    - Any value other than unset, `before` or `after` will default to **appending** numerals to the alphabet
+  * `grouping`: tells the plugin if and how to group the alphabet
+    - Default value: unset
+    - Can be set to any positive number higher than `1` or the value `numbers`
+    - Any value other than a positive number or the value `numbers` will default to disabling all grouping functionality
+    - When set to a number higher than `1` the listing will group letters together into ranges
+      - For example, if you chose `3` then a latin alphabet will group together `A`, `B`, and `C` into `A-C`. Likewise for `D-F`, `G-I` and so-on
+      - When using this setting, if numbers are also shown via the `numbers="before"` or `numbers="after"` attribute then they will be shown as a single separate group `0-9`
+    - When set to the value `numbers` it will group numerals into a single group `0-9`
+      - This requires the numbers to be displayed via the `numbers="before"` or `numbers="after"` attributes
+  * `alphabet`: allows you to override the alphabet that the plugin uses
+    - Default value: unset.
+    - When this attribute is unset, the plugin will either use the untranslated default, or if [glotpress](https://translate.wordpress.org/projects/wp-plugins/a-z-listing) includes a translation for your site's language as set in `Admin -> Settings -> Site Language` it will use that translation.
+    - The current untranslated default is: `AÁÀÄÂaáàäâ,Bb,Cc,Dd,EÉÈËÊeéèëê,Ff,Gg,Hh,IÍÌÏÎiíìïî,Jj,Kk,Ll,Mm,Nn,OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz`
+    - Accepts a single line of letters/symbols, which need to be separated via the comma character `,`
+    - Including more than one letter/symbol in each group will display posts starting with any of those under the same section
+    - The first letter/symbol in each group is used as the group's heading when displayed on your site
+* Bugfix: Shortcode to display taxonomy terms wouldn't also display numbers groups. Hat-tip to @sotos for the report.
+
+### 1.7.2
+* Bugfix: Previous release broke the shortcode
+
 ### 1.7.1
 * Add additional filters allowing for hyphens or underscores to be used when defining. The readme.txt incorrectly used then-unsupported names with hyphens in examples so now we support both.
 * Add numbers="before" and numbers="after" in shortcode

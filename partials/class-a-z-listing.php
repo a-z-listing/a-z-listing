@@ -399,7 +399,7 @@ class A_Z_Listing {
 			$index = mb_substr( $item->post_title, 0, 1, 'UTF-8' );
 			$indices[ $index ][] = array(
 				'title' => $item->post_title,
-				'item' => $item,
+				'item' => $item
 			);
 
 			if ( ! empty( $this->index_taxonomy ) ) {
@@ -563,7 +563,7 @@ class A_Z_Listing {
 			if ( ! empty( $this->matched_item_indices[ $letter ] ) ) {
 				$ret .= '<a href="' . esc_url( $target . '#letter-' . $id ) . '">';
 			}
-			$ret .= '<span>' . esc_html( $letter ) . '</span>';
+			$ret .= '<span>' . esc_html( $this->get_the_letter_title( $letter ) ) . '</span>';
 			if ( ! empty( $this->matched_item_indices[ $letter ] ) ) {
 				$ret .= '</a>';
 			}
@@ -717,8 +717,7 @@ class A_Z_Listing {
 	 */
 	public function num_a_z_posts() {
 		_deprecated_function( __METHOD__, '1.0.0', 'A_Z_Listing::get_the_letter_count' );
-		/** @noinspection PhpDeprecationInspection */
-		return $this->num_a_z_items();
+		return $this->get_the_letter_count();
 	}
 
 	/**
@@ -728,7 +727,7 @@ class A_Z_Listing {
 	 */
 	public function num_a_z_items() {
 		_deprecated_function( __METHOD__, '1.0.0', 'A_Z_Listing::get_the_letter_count' );
-		return count( $this->current_letter_items );
+		return $this->get_the_letter_count();
 	}
 
 	/**
@@ -737,7 +736,7 @@ class A_Z_Listing {
 	 * @since 1.0.0
 	 */
 	public function the_letter_count() {
-		echo esc_html( count( $this->current_letter_items ) );
+		echo esc_html( $this->get_the_letter_count() );
 	}
 
 	/**
@@ -774,18 +773,40 @@ class A_Z_Listing {
 	 *
 	 * @since 0.7
 	 */
-	public function the_letter_title() {
-		echo esc_html( $this->get_the_letter_title() );
+	public function the_letter_title( $index = '' ) {
+		echo esc_html( $this->get_the_letter_title( $index ) );
 	}
 
 	/**
 	 * Return the title of the current letter. For example, upper-case A or B or C etc. This is not escaped!
 	 *
 	 * @since 0.7
+	 * @since 1.8.0 Add filters to modify the title of the letter.
 	 * @return string The letter title
 	 */
-	public function get_the_letter_title() {
-		return self::$alphabet[ $this->available_indices[ $this->current_letter_index - 1 ] ];
+	public function get_the_letter_title( $index = '' ) {
+	    if ( '' !== $index ) {
+	        $letter = self::$alphabet[ $index ];
+        } else {
+            $letter = self::$alphabet[ $this->available_indices[ $this->current_letter_index - 1 ] ];
+        }
+		
+		/**
+		 * Modify the letter title or heading
+		 *
+		 * @since 1.8.0
+		 * @param string $letter The title of the letter
+		 */
+		$letter = apply_filters( 'the_a_z_letter_title', $letter );
+		/**
+		 * Modify the letter title or heading
+		 *
+		 * @since 1.8.0
+		 * @param string $letter The title of the letter
+		 */
+		$letter = apply_filters( 'the-a-z-letter-title', $letter );
+
+		return $letter;
 	}
 
 	/**
@@ -856,14 +877,14 @@ function a_z_listing_cache( $query = null, $use_cache = true ) {
 				return $cache[ $key ];
 			}
 
-			$cache[ $key ] = $obj;
+			$cache[ $key ] = $query;
 		}
 		return $query;
 	}
 
 	// check the cache and return any pre-existing A_Z_Listing instance we have.
 	$key = wp_json_encode( $query );
-	if ( true === $use_cache && array_key_exists( $key, $cache ) ) {
+	if ( null !== $query && true === $use_cache && array_key_exists( $key, $cache ) ) {
 		return $cache[ $key ];
 	}
 
