@@ -79,8 +79,8 @@ function a_z_shortcode_handler( $attributes ) {
 
 			$heading_filter = function( $title ) use ( $headings ) {
 				if ( isset( $headings[ $title ] ) && is_array( $headings[ $title ] ) ) {
-					$first = array_shift($headings[$title]);
-					$last = array_pop($headings[$title]);
+					$first = array_shift( $headings[ $title ] );
+					$last = array_pop( $headings[ $title ] );
 					return $first . '-' . $last;
 				}
 
@@ -99,8 +99,8 @@ function a_z_shortcode_handler( $attributes ) {
 	if ( ! empty( $attributes['numbers'] ) ) {
 		add_a_z_numbers( $attributes['numbers'], $group_numbers );
 		if ( $group_numbers ) {
-			$numbers_titlefunc = function ($title) {
-				if ('0' === strval( $title ) ) {
+			$numbers_titlefunc = function ( $title ) {
+				if ( '0' === strval( $title ) ) {
 					return '0-9';
 				}
 				return $title;
