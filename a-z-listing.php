@@ -3,7 +3,7 @@
  * Plugin Name: A-Z Listing
  * Plugin URI: https://a-z-listing.com/
  * Description: Display an A to Z listing of posts
- * Version: 1.7.2
+ * Version: 1.8.0
  * Author: Daniel Llewellyn
  * Author URI: https://www.bowlhat.net/
  * License: GPLv2

@@ -1,0 +1,19 @@
+<div id="letters">
+    <div class="az-letters">
+        <ul class="az-links">
+            <li class="first odd"><span>A-C</span></li>
+            <li class="even"><span>D-F</span></li>
+            <li class="odd"><span>G-I</span></li>
+            <li class="even"><span>J-L</span></li>
+            <li class="odd"><span>M-O</span></li>
+            <li class="even"><span>P-R</span></li>
+            <li class="odd"><span>S-U</span></li>
+            <li class="even"><span>V-X</span></li>
+            <li class="last odd"><span>Y-Z</span></li>
+        </ul>
+        <div class="clear empty"></div>
+    </div>
+</div>
+<div id="az-slider">
+    <div id="inner-slider"></div>
+</div>
