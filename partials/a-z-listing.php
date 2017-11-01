@@ -12,7 +12,7 @@
  * @return bool                                       whether there are letters still to be iterated-over
  */
 function have_a_z_letters( $query = null ) {
-	return a_z_listing_cache( $query )->have_letters();
+	return new A_Z_Query( $query )->have_letters();
 }
 
 /**
@@ -33,7 +33,7 @@ function have_a_z_posts() {
  * @return bool                                       whether there are still posts available
  */
 function have_a_z_items( $query = null ) {
-	return a_z_listing_cache( $query )->have_items();
+	return new A_Z_Query( $query )->have_items();
 }
 
 /**
@@ -43,7 +43,7 @@ function have_a_z_items( $query = null ) {
  * @param array|string|WP_Query|A_Z_Listing  $query  a valid WordPress query or an A_Z_Listing instance
  */
 function the_a_z_letter( $query = null ) {
-	a_z_listing_cache( $query )->the_letter();
+	new A_Z_Query( $query )->the_letter();
 }
 
 /**
@@ -63,7 +63,7 @@ function the_a_z_post() {
  * @param array|string|WP_Query|A_Z_Listing  $query  a valid WordPress query or an A_Z_Listing instance
  */
 function the_a_z_item( $query = null ) {
-	a_z_listing_cache( $query )->the_item();
+	new A_Z_Query( $query )->the_item();
 }
 
 /**
@@ -103,7 +103,7 @@ function num_a_z_items() {
  * @param array|string|WP_Query|A_Z_Listing  $query  a valid WordPress query or an A_Z_Listing instance
  */
 function the_a_z_letter_count( $query = null ) {
-	a_z_listing_cache( $query )->the_letter_count();
+	new A_Z_Query( $query )->the_letter_count();
 }
 /**
  * Get the number of letters for the query
@@ -113,7 +113,7 @@ function the_a_z_letter_count( $query = null ) {
  * @return int                                        the number of letters
  */
 function get_the_a_z_letter_count( $query = null ) {
-	return a_z_listing_cache( $query )->get_the_letter_count();
+	return new A_Z_Query( $query )->get_the_letter_count();
 }
 
 /**
@@ -123,7 +123,7 @@ function get_the_a_z_letter_count( $query = null ) {
  * @param array|string|WP_Query|A_Z_Listing  $query  either a valid WordPress query or an A_Z_Listing instance
  */
 function the_a_z_letter_id( $query = null ) {
-	a_z_listing_cache( $query )->the_letter_id();
+	new A_Z_Query( $query )->the_letter_id();
 }
 
 /**
@@ -134,7 +134,7 @@ function the_a_z_letter_id( $query = null ) {
  * @return String                                     the current letter ID
  */
 function get_the_a_z_letter_id( $query = null ) {
-	return a_z_listing_cache( $query )->get_the_letter_id();
+	return new A_Z_Query( $query )->get_the_letter_id();
 }
 
 /**
@@ -144,7 +144,7 @@ function get_the_a_z_letter_id( $query = null ) {
  * @param array|string|WP_Query|A_Z_Listing  $query  either a valid WordPress query or an A_Z_Listing instance
  */
 function the_a_z_letter_title( $query = null ) {
-	a_z_listing_cache( $query )->the_letter_title();
+	new A_Z_Query( $query )->the_letter_title();
 }
 
 /**
@@ -155,7 +155,7 @@ function the_a_z_letter_title( $query = null ) {
  * @return string                                     the letter title
  */
 function get_the_a_z_letter_title( $query = null ) {
-	return a_z_listing_cache( $query )->get_the_letter_title();
+	return new A_Z_Query( $query )->get_the_letter_title();
 }
 
 /**
@@ -165,7 +165,7 @@ function get_the_a_z_letter_title( $query = null ) {
  * @param array|string|WP_Query|A_Z_Listing  $query  either a valid WordPress query or an A_Z_Listing instance
  */
 function the_a_z_item_title( $query = null ) {
-	a_z_listing_cache( $query )->the_title();
+	new A_Z_Query( $query )->the_title();
 }
 
 /**
@@ -176,7 +176,7 @@ function the_a_z_item_title( $query = null ) {
  * @return string                                     the post or taxonomy-term title
  */
 function get_the_a_z_item_title( $query = null ) {
-	return a_z_listing_cache( $query )->get_the_title();
+	return new A_Z_Query( $query )->get_the_title();
 }
 
 /**
@@ -186,7 +186,7 @@ function get_the_a_z_item_title( $query = null ) {
  * @param array|string|WP_Query|A_Z_Listing  $query  either a valid WordPress query or an A_Z_Listing instance
  */
 function the_a_z_item_permalink( $query = null ) {
-	a_z_listing_cache( $query )->the_permalink();
+	new A_Z_Query( $query )->the_permalink();
 }
 
 /**
@@ -197,7 +197,7 @@ function the_a_z_item_permalink( $query = null ) {
  * @return string                                     the permalink
  */
 function get_the_a_z_item_permalink( $query = null ) {
-	return a_z_listing_cache( $query )->get_the_permalink();
+	return new A_Z_Query( $query )->get_the_permalink();
 }
 
 /**
@@ -240,7 +240,7 @@ function get_the_az_listing( $query = null ) {
  * @return string                                         The listing html content ready for echoing to the page.
  */
 function get_the_a_z_listing( $query = null, $use_cache = true ) {
-	return a_z_listing_cache( $query, $use_cache )->get_the_listing();
+	return new A_Z_Query( $query, $use_cache )->get_the_listing();
 }
 
 /**
@@ -285,7 +285,7 @@ function get_the_az_letters( $query = null, $target = false, $styling = false ) 
  * @return string HTML ready for echoing containing the list of A-Z letters with anchor links to the A-Z Index page.
  */
 function get_the_a_z_letters( $query = null, $target = false, $styling = false ) {
-	return a_z_listing_cache( $query )->get_the_letters( $target, $styling );
+	return new A_Z_Query( $query )->get_the_letters( $target, $styling );
 }
 
 /**

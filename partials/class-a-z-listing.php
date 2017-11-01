@@ -60,6 +60,11 @@ class A_Z_Listing {
 	private $current_letter_index = 0;
 
 	/**
+	 * Cache key for current query.
+	 */
+	private $the_letters_output = '';
+
+	/**
 	 * A_Z_Listing constructor.
 	 *
 	 * @since 0.1
@@ -74,20 +79,18 @@ class A_Z_Listing {
 			if ( AZLISTINGLOG ) {
 				do_action( 'log', 'A-Z Listing: Setting taxonomy mode', $query );
 			}
-
+			
+			$this->cache_key = "a-z-listing:taxonomy:$query";
 			$this->type = 'taxonomy';
 			$this->taxonomy = $query;
-			$this->items = get_terms( $query, array(
-				'hide_empty' => false,
-			) );
-
-			if ( AZLISTINGLOG ) {
-				do_action( 'log', 'A-Z Listing: Terms', '!slug', $this->items );
-			}
 		} else {
 			if ( AZLISTINGLOG ) {
 				do_action( 'log', 'A-Z Listing: Setting posts mode', $query );
 			}
+
+			$encoded_query = wp_json_encode( $query );
+			$this->cache_key = "a-z-listing:query:$encoded_query";
+
 			/**
 			 * @deprecated Use a_z_listing_additional_titles_taxonomy
 			 * @see a_z_listing_additional_titles_taxonomy
@@ -108,8 +111,33 @@ class A_Z_Listing {
 			$index_taxonomy = apply_filters( 'a-z-listing-additional-titles-taxonomy', $index_taxonomy );
 			$this->index_taxonomy = $index_taxonomy;
 
-			$query = (array) $query;
+			$this->query = $query;
+		} // End if().
 
+		$found = false;
+		$items = wp_cache_get( $this->cache_key, 'a-z-listing', false, $found );
+		if ( false === $items || false === $found ) {
+			$items = $this->get_the_items();
+			wp_cache_set( $this->cache_key, $items, 'a-z-listing', 3600 );
+		}
+
+		$this->matched_item_indices = $this->get_all_indices();
+	}
+
+	/**
+	 * Construct the query and fetch the items.
+	 *
+	 * @since 2.0.0
+	 * @param null|WP_Query|array|string $query
+	 */
+	protected function get_the_items( $query = null ) {
+		if ( is_string( $query ) && ! empty( $query ) ) {
+			$items = get_terms( $query, array(
+				'hide_empty' => false,
+			) );
+		} else {
+			$query = (array) $query;
+			
 			$section = self::get_section();
 
 			if ( ( isset( $query['post_type'] ) && 'page' !== $query['post_type'] )
@@ -118,20 +146,16 @@ class A_Z_Listing {
 			}
 
 			if ( $section ) {
-				$query['child_of'] = $section->ID;
+				$query['post_parent'] = $section->ID;
 			}
 
-			if ( isset( $query['child_of'] ) ) {
-				$this->items = get_pages( $query );
-			} else {
-				$query = $this->construct_query( $query );
-				$this->items = $query->get_posts();
-			}
+			$query['fields'] = 'ids';
 
-			$this->query = $query;
-		} // End if().
+			$query = $this->construct_query( $query );
+			$items = $query->get_posts();
+		}
 
-		$this->matched_item_indices = $this->get_all_indices();
+		return $items;
 	}
 
 	/**
@@ -399,7 +423,7 @@ class A_Z_Listing {
 			$index = mb_substr( $item->post_title, 0, 1, 'UTF-8' );
 			$indices[ $index ][] = array(
 				'title' => $item->post_title,
-				'item' => $item
+				'item' => $item,
 			);
 
 			if ( ! empty( $this->index_taxonomy ) ) {
@@ -529,12 +553,12 @@ class A_Z_Listing {
 	/**
 	 * Return the letter links HTML
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @param string $target The page to point links toward
 	 * @param string $style Optional CSS classes to apply to the output
 	 * @return string The letter links HTML
 	 */
-	public function get_the_letters( $target = '', $style = null ) {
+	protected function render_the_letters( $target = '', $style = null ) {
 		$classes = array( 'az-links' );
 		if ( null !== $style ) {
 			if ( is_array( $style ) ) {
@@ -570,6 +594,25 @@ class A_Z_Listing {
 			$ret .= '</li>';
 		}
 		$ret .= '</ul>';
+	}
+
+	/**
+	 * Return the letter links HTML
+	 *
+	 * @since 1.0.0
+	 * @param string $target The page to point links toward
+	 * @param string $style Optional CSS classes to apply to the output
+	 * @return string The letter links HTML
+	 */
+	public function get_the_letters( $target = '', $style = null ) {
+		$cache_key = wp_json_encode( array( $target, $style ) );
+		if ( isset( $the_letters_output[ $cache_key ] ) ) {
+			return $the_letters_output[ $cache_key ];
+		}
+
+		$ret = $this->render_the_letters( $target, $style );
+
+		wp_cache_set( $cache_key, $ret );
 		return $ret;
 	}
 
@@ -857,45 +900,4 @@ class A_Z_Listing {
 		}
 		return get_permalink( $item );
 	}
-}
-
-/**
- * Get a saved copy of the A_Z_Listing instance if we have one, or make a new one and save it for later
- *
- * @param  array|string|WP_Query|A_Z_Listing  $query      a valid WordPress query or an A_Z_Listing instance
- * @param  bool                               $use_cache  use the plugin's in-built query cache
- * @return A_Z_Listing                                    a new or previously-saved instance of A_Z_Listing using the provided construct_query
- */
-function a_z_listing_cache( $query = null, $use_cache = true ) {
-	static $cache = array();
-
-	if ( $query instanceof A_Z_Listing ) {
-		// we received a valid A_Z_Listing instance so we get the query from it for the cache lookup/save key.
-		if ( true === $use_cache ) {
-			$key = wp_json_encode( $query->get_the_query() );
-			if ( array_key_exists( $key, $cache ) ) {
-				return $cache[ $key ];
-			}
-
-			$cache[ $key ] = $query;
-		}
-		return $query;
-	}
-
-	// check the cache and return any pre-existing A_Z_Listing instance we have.
-	$key = wp_json_encode( $query );
-	if ( null !== $query && true === $use_cache && array_key_exists( $key, $cache ) ) {
-		return $cache[ $key ];
-	}
-
-	// if $query is $obj then we did not get an A_Z_Listing instance as our argument, so we will make a new one.
-	$obj = new A_Z_Listing( $query );
-
-	if ( true === $use_cache ) {
-		// save the new A_Z_Listing instance into the cache.
-		$cache[ $key ] = $obj;
-	}
-
-	// return the new A_Z_Listing instance.
-	return $obj;
 }
