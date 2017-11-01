@@ -219,7 +219,7 @@ function get_the_section_a_z_widget( $args, $instance ) {
 	if ( 'page' === $my_query['post_type'] ) {
 		$parent = A_Z_Listing::find_post_parent( $target );
 		if ( $parent->ID !== $target->ID ) {
-			$my_query['child_of'] = $parent->ID;
+			$my_query['post_parent'] = $parent->ID;
 		}
 	}
 
