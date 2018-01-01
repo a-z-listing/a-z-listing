@@ -1,7 +1,6 @@
 <phpunit
 	bootstrap="tests/bootstrap.php"
 	backupGlobals="false"
-	backupStaticAttributes="true"
 	colors="true"
 	convertErrorsToExceptions="true"
 	convertNoticesToExceptions="true"
@@ -12,17 +11,4 @@
 			<directory prefix="test-" suffix=".php">./tests/</directory>
 		</testsuite>
 	</testsuites>
-
-	<filter>
-		<whitelist addUncoveredFilesFromWhitelist="true">
-			<directory suffix=".php">.</directory>
-			<exclude>
-				<directory suffix=".php">vendor</directory>
-				<directory suffix=".php">tests</directory>
-				<directory suffix=".php">functions/common</directory>
-				<file>templates/a-z-listing-multi-column.example.php</file>
-				<file>wp-includes/version.php</file>
-			</exclude>
-		</whitelist>
-	</filter>
 </phpunit>

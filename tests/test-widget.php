@@ -6,7 +6,7 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 			'post_type' => 'page',
 		) );
 
-		$expected = sprintf( file_get_contents( 'tests/data/default-widget.txt' ), $p );
+		$expected = sprintf( file_get_contents( 'tests/default-widget.txt' ), $p );
 
 		ob_start();
 		the_section_a_z_widget(
@@ -37,7 +37,7 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 			'post_type' => 'page',
 		) );
 
-		$expected = sprintf( file_get_contents( 'tests/data/populated-widget.txt' ), $p );
+		$expected = sprintf( file_get_contents( 'tests/populated-widget.txt' ), $p );
 
 		ob_start();
 		the_section_a_z_widget(
@@ -69,7 +69,7 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 			'post_type' => 'page',
 		) );
 
-		$expected = sprintf( file_get_contents( 'tests/data/populated-widget.txt' ), $p );
+		$expected = sprintf( file_get_contents( 'tests/populated-widget.txt' ), $p );
 
 		ob_start();
 		the_section_a_z_widget(

@@ -8,109 +8,22 @@
  * Handle the a-z-listing shortcode.
  *
  * @since 1.0.0
- * @since 1.7.0 Add numbers attribute to append or prepend numerics to the listing.
- * @since 1.8.0 Fix numbers attribute when selecting to display terms. Add grouping to numbers via attribute. Add alphabet override via new attribute.
  * @param  array $attributes Provided by WordPress core. Contains the shortcode attributes.
  * @return string      The A-Z Listing HTML.
  */
 function a_z_shortcode_handler( $attributes ) {
-	$attributes = shortcode_atts( array(
-		'column-count' => 1,
-		'minimum-per-column' => 10,
-		'heading-level' => 2,
-		'alphabet' => '',
-		'display' => 'posts',
-		'grouping' => '',
-		'numbers' => '',
-		'post-type' => 'page',
-		'taxonomy' => '',
-		'terms' => '',
-	), $attributes, 'a-z-listing' );
-
-	if ( ! empty( $attributes['alphabet'] ) ) {
-		$override = $attributes['alphabet'];
-		add_filter( 'a-z-listing-alphabet', function( $alphabet ) use ( $override ) {
-			return $override;
-		} );
-	}
-
-	$grouping = $attributes['grouping'];
-	$group_numbers = false;
-	if ( 'numbers' === $grouping ) {
-		$group_numbers = true;
-		$grouping = 0;
-	} else {
-		$grouping = intval( $grouping );
-		if ( 1 < $grouping ) {
-			$group_numbers = true;
-		}
-	}
-
-	if ( 1 < $grouping ) {
-		add_filter( 'a-z-listing-alphabet', function( $alphabet ) use ( $grouping ) {
-			$headings = array();
-			$letters = mb_split( ',', $alphabet );
-
-			$i = 0;
-			$j = 0;
-
-			$groups = array_reduce( $letters, function( $carry, $letter ) use ( $grouping, &$headings, &$i, &$j ) {
-				if ( ! isset( $carry[ $j ] ) ) {
-					$carry[ $j ] = $letter;
-				} else {
-					$carry[ $j ] = $carry[ $j ] . $letter;
-				}
-				$headings[ $j ][] = mb_substr( $letter, 0, 1 );
-
-				if ( $i + 1 === $grouping ) {
-					$i = 0;
-					$j++;
-				} else {
-					$i++;
-				}
-
-				return $carry;
-			} );
-
-			$headings = array_reduce( $headings, function( $carry, $heading ) {
-				$carry[ mb_substr( $heading[0], 0, 1 ) ] = $heading;
-				return $carry;
-			} );
-
-			$heading_filter = function( $title ) use ( $headings ) {
-				if ( isset( $headings[ $title ] ) && is_array( $headings[ $title ] ) ) {
-					$first = array_shift( $headings[ $title ] );
-					$last = array_pop( $headings[ $title ] );
-					return $first . '-' . $last;
-				}
-
-				return $title;
-			};
-
-			if ( has_filter( 'the-a-z-letter-title', $heading_filter ) ) {
-				remove_filter( 'the-a-z-letter-title', $heading_filter );
-			}
-			add_filter( 'the-a-z-letter-title', $heading_filter, 5 );
-
-			return join( ',', $groups );
-		}, 2 );
-	}
-
-	if ( ! empty( $attributes['numbers'] ) ) {
-		add_a_z_numbers( $attributes['numbers'], $group_numbers );
-		if ( $group_numbers ) {
-			$numbers_titlefunc = function ( $title ) {
-				if ( '0' === strval( $title ) ) {
-					return '0-9';
-				}
-				return $title;
-			};
-			if ( has_filter( 'the-a-z-letter-title', $numbers_titlefunc ) ) {
-				remove_filter( 'the-a-z-letter-title', $numbers_titlefunc );
-			}
-			add_filter( 'the-a-z-letter-title', $numbers_titlefunc, 5 );
-		}
-	}
+	$attributes = shortcode_atts(
+		array(
+			'column-count' => 1,
+			'minimum-per-column' => 10,
+			'heading-level' => 2,
+			'display' => 'posts',
+			'post-type' => 'page',
+			'taxonomy' => '',
+			'terms' => '',
+			'numbers' => 'none',
+		), $attributes, 'a-z-listing'
+	);
 
 	if ( ! empty( $attributes['taxonomy'] ) && 'terms' === $attributes['display'] ) {
 		$a_z_query = new A_Z_Listing( $attributes['taxonomy'] );
@@ -143,6 +56,10 @@ function a_z_shortcode_handler( $attributes ) {
 				),
 			),
 		) );
+	}
+
+	if ( ! empty( $attributes['numbers'] ) && 'none' !== $attributes['numbers'] ) {
+		add_filter( 'a_z_listing_alphabet', add_a_z_numbers( $attributes['numbers'] ), 1, 75 );
 	}
 
 	$a_z_query = new A_Z_Listing( $query );

@@ -4,7 +4,7 @@
 - **Tags:** a to z, a-z, archive, listing, widget, index
 - **Requires at least:** 3.5
 - **Tested up to:** 4.8
-- **Stable tag:** 1.6.5
+- **Stable tag:** 1.7.2
 - **License:** GPLv2 or later
 - **License URI:** http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -62,74 +62,15 @@ To specify a post-type to display instead of `page` then use, e.g. `Posts`:
 
     [a-z-listing post-type="post"]
 
-To filter the posts by a term from a taxonomy:
-
-    [a-z-listing taxonomy="category" terms="my-term-slug"]
-
 To show terms from a taxonomy instead of posts and pages, e.g. Terms from the `Categories` taxonomy:
 
-    [a-z-listing taxonomy="category" display="terms"]
+    [a-z-listing taxonomy="category"]
 
-To override the alphabet used by the plugin:
+The arguments are all optional.
 
-    [a-z-listing alphabet="Aa,Bb,Cc,Dd,Ee,Ff,Gg,Hh,Ii,Jj,Kk,Ll,Mm,Nn,Oo,Pp,Qq,Rr,Ss,Tt,Uu,Vv,Ww,Xx,Yy,Zz"]
-
-To add numbers to the listing:
-
-    [a-z-listing numbers="after"]
-
-The numbers can also be shown before the alphabet:
-
-    [a-z-listing numbers="before"]
-
-You can group the numbers into a single collection for all posts beginning with a numeral:
-
-    [a-z-listing numbers="after" grouping="numbers"]
-
-To group the alphabet letters into a range:
-
-    [a-z-listing grouping="3"]
-
-**The arguments are all optional.**
-
-* `post-type`: sets the listing to show a specific post-type.
-  - Default value: `page`
-  - You may specify multiple post-types by separating with commas (`,`) e.g. `post-type="page,post"`
-* `taxonomy`: does nothing by itself, see the combinations below
-  - Default value: unset
-  - Uses the `slug` of the taxonomy
-  - When combined with:
-    - `terms`, will filter your posts by the terms you set there, which appear in the taxonomy set here
-    - `display="terms"`, will switch from displaying post titles to displaying the names of terms from the taxonomy specified
-* `terms`: sets the taxonomy terms for filtering posts
-  - Default value: unset
-  - The taxonomy must also be specified in `taxonomy`
-  - Uses the `slug` of the term(s)
-  - Multiple terms can be specified by separating with commas: `,`
-* `display`: specifies whether to display posts or terms from a taxonomy
-  - Default value: unset
-  - Can be set to either `posts` or `terms`.
-  - Any value other than unset, `posts` or `terms` will default to displaying posts
-* `numbers`: appends or prepends numerals to the alphabet
-  - Default value: unset
-  - Can be set to either `before` or `after`.
-  - Any value other than unset, `before` or `after` will default to **appending** numerals to the alphabet
-* `grouping`: tells the plugin if and how to group the alphabet
-  - Default value: unset
-  - Can be set to any positive number higher than `1` or the value `numbers`
-  - Any value other than a positive number or the value `numbers` will default to disabling all grouping functionality
-  - When set to a number higher than `1` the listing will group letters together into ranges
-    - For example, if you chose `3` then a latin alphabet will group together `A`, `B`, and `C` into `A-C`. Likewise for `D-F`, `G-I` and so-on
-    - When using this setting, if numbers are also shown via the `numbers="before"` or `numbers="after"` attribute then they will be shown as a single separate group `0-9`
-  - When set to the value `numbers` it will group numerals into a single group `0-9`
-    - This requires the numbers to be displayed via the `numbers="before"` or `numbers="after"` attributes
-* `alphabet`: allows you to override the alphabet that the plugin uses
-  - Default value: unset.
-  - When this attribute is unset, the plugin will either use the untranslated default, or if [glotpress](https://translate.wordpress.org/projects/wp-plugins/a-z-listing) includes a translation for your site's language as set in `Admin -> Settings -> Site Language` it will use that translation.
-  - The current untranslated default is: `AÁÀÄÂaáàäâ,Bb,Cc,Dd,EÉÈËÊeéèëê,Ff,Gg,Hh,IÍÌÏÎiíìïî,Jj,Kk,Ll,Mm,Nn,OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz`
-  - Accepts a single line of letters/symbols, which need to be separated via the comma character `,`
-  - Including more than one letter/symbol in each group will display posts starting with any of those under the same section
-  - The first letter/symbol in each group is used as the group's heading when displayed on your site
+* `post-type` sets the listing to show a specific post-type.
+  * Default value: page
+  * You may specify any number of multiple post-types separated by commas, e.g. `post-type="page,post"`
 
 ### Multi Column Output
 
@@ -328,6 +269,17 @@ In your theme's functions.php add the following code:
 
 ## Changelog
 
+### 1.7.2
+* Bugfix: Previous release broke the shortcode
+
+### 1.7.1
+* Add additional filters allowing for hyphens or underscores to be used when defining. The readme.txt incorrectly used then-unsupported names with hyphens in examples so now we support both.
+* Add numbers="before" and numbers="after" in shortcode
+
+### 1.7.0
+* Add support for taxonomy term listings to the shortcode
+* Add support for filtering by taxonomy terms to the shortcode
+
 ### 1.6.5
 * Regression fix for widget accessing WP_Post object as array
 
@@ -352,57 +304,6 @@ In your theme's functions.php add the following code:
 ### 1.6.0
 * Fix bug of case sensitity in listings order
 * Better warning of deprecated functions when called by other plugins or themes
-
-### 1.5.4
-* Fix post links when using an alternative titles taxonomy (discovered by [bugnumber9](https://profiles.wordpress.org/bugnumber9))
-* Ensure that we don't access rogue objects. Warnings and errors in 1.5.3 are squashed now.
-* Verified that [tests](https://travis-ci.org/bowlhat/wp-a-z-listing) pass correctly before releasing this version.
-
-### 1.5.3
-* Regression in 1.5.2 causing empty listing is fixed
-
-### 1.5.2
-* Regression fix for styling loading - seems the widget code was still causing issues
-* Add inline PHPdoc to all functions and custom filters
-
-### 1.5.1
-* Fix multiple post-types support for shortcode
-* Update documentation to explain how to show multiple post-types with the shortcode
-
-### 1.5.0
-* Ensure styling is loaded correctly
-* Ensure styling works correctly when using the multi-column template
-
-### 1.4.1
-* Fix warning introduced by 1.4.0 about implicit coercion between WP_Post and string
-
-### 1.4.0
-* Add support for passing a WP_Post object instead of an ID to the widget function
-* Fix widget config not saving post-type parameter
-* Fix warning of incorrect usage of `has_shortcode()` function
-* Fix section-targeting to work as described
-
-### 1.3.1
-* Fix broken admin pages caused by 1.3.0
-
-### 1.3.0
-* Added targeted stylesheet loading to enqueue only on pages where the short-code is active
-* Further improved default stylesheet loading
-
-### 1.2.0
-* Changed default to apply the in-built styles, unless overridden
-
-### 1.1.0
-* Minor refactoring to remove unused variables
-* Fix some Code-Smell (phpcs)
-
-### 1.0.1
-* BUGFIX: lower-case titles missing
-
-### 1.0.0
-* BREAKING CHANGE: Refactored several function names. If you have written your own template/loop you will need to adapt your code. See the readme.txt's Theming section for details.
-* Added `post-type` attribute into the shortcode to display for post-types other than pages.
-* Minor code cleanup.
 
 ### Previous
 See the file called `changelog.md` for the full release history.
