@@ -1,5 +1,5 @@
 <?php
-class AZ_Widget_Tests extends WP_UnitTestCase {
+class AZ_Widget_Tests extends AZ_UnitTestCase {
 	function test_widget() {
 		$p = $this->factory->post->create( array(
 			'post_title' => 'Index Page',
@@ -23,9 +23,7 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 		);
 		$actual = ob_get_clean();
 
-		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
-		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
-		$this->assertEquals( $expected, $actual );
+		$this->assertHTMLEquals( $expected, $actual );
 	}
 	function test_populated_widget() {
 		$p = $this->factory->post->create( array(
@@ -54,9 +52,7 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 		);
 		$actual = ob_get_clean();
 
-		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
-		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
-		$this->assertEquals( $expected, $actual );
+		$this->assertHTMLEquals( $expected, $actual );
 	}
 
 	function test_populated_widget_lowercase_titles() {
@@ -86,8 +82,6 @@ class AZ_Widget_Tests extends WP_UnitTestCase {
 		);
 		$actual = ob_get_clean();
 
-		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
-		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
-		$this->assertEquals( $expected, $actual );
+		$this->assertHTMLEquals( $expected, $actual );
 	}
 }

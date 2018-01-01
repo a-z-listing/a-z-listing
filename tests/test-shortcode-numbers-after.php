@@ -1,21 +1,17 @@
 <?php
-class AZ_Shortcode_Numbers_After_Tests extends WP_UnitTestCase {
+class AZ_Shortcode_Numbers_After_Tests extends AZ_UnitTestCase {
 	function test_empty() {
 		$expected = file_get_contents( 'tests/data/default-listing-numbers-after.txt' );
 		$actual = do_shortcode( '[a-z-listing numbers="after"]' );
 
-		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
-		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
-		$this->assertEquals( $expected, $actual );
+		$this->assertHTMLEquals( $expected, $actual );
 	}
 
 	function test_empty_grouped() {
 		$expected = file_get_contents( 'tests/data/default-listing-numbers-after-grouped.txt' );
 		$actual = do_shortcode( '[a-z-listing numbers="after" grouping="numbers"]' );
 
-		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
-		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
-		$this->assertEquals( $expected, $actual );
+		$this->assertHTMLEquals( $expected, $actual );
 	}
 
 	function test_populated_listing() {
@@ -28,9 +24,7 @@ class AZ_Shortcode_Numbers_After_Tests extends WP_UnitTestCase {
 		$expected = sprintf( file_get_contents( 'tests/data/populated-listing-numbers-after.txt' ), $title, $p );
 		$actual = do_shortcode( '[a-z-listing numbers="after"]' );
 
-		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
-		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
-		$this->assertEquals( $expected, $actual );
+		$this->assertHTMLEquals( $expected, $actual );
 	}
 
 	function test_populated_listing_grouped() {
@@ -43,11 +37,9 @@ class AZ_Shortcode_Numbers_After_Tests extends WP_UnitTestCase {
 		$expected = sprintf( file_get_contents( 'tests/data/populated-listing-numbers-after-grouped.txt' ), $title, $p );
 		$actual = do_shortcode( '[a-z-listing numbers="after" grouping="numbers"]' );
 
-		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
-		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
-		$this->assertEquals( $expected, $actual );
+		$this->assertHTMLEquals( $expected, $actual );
 	}
-	
+
 	function test_populated_lowercase_titles() {
 		$title = 'test page';
 		$p = $this->factory->post->create( array(
@@ -58,9 +50,7 @@ class AZ_Shortcode_Numbers_After_Tests extends WP_UnitTestCase {
 		$expected = sprintf( file_get_contents( 'tests/data/populated-listing-numbers-after.txt' ), $title, $p );
 		$actual = do_shortcode( '[a-z-listing numbers="after"]' );
 
-		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
-		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
-		$this->assertEquals( $expected, $actual );
+		$this->assertHTMLEquals( $expected, $actual );
 	}
 
 	function test_populated_taxonomy_listing() {
@@ -73,10 +63,7 @@ class AZ_Shortcode_Numbers_After_Tests extends WP_UnitTestCase {
 		$expected = sprintf( file_get_contents( 'tests/data/populated-taxonomy-listing-numbers-after.txt' ) , $title, $t );
 		$actual = do_shortcode( '[a-z-listing display="terms" taxonomy="category" numbers="after"]' );
 
-		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
-		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
-
-		$this->assertEquals( $expected, $actual );
+		$this->assertHTMLEquals( $expected, $actual );
 	}
 
 	function test_populated_taxonomy_listing_grouped() {
@@ -89,10 +76,7 @@ class AZ_Shortcode_Numbers_After_Tests extends WP_UnitTestCase {
 		$expected = sprintf( file_get_contents( 'tests/data/populated-taxonomy-listing-numbers-after-grouped.txt' ) , $title, $t );
 		$actual = do_shortcode( '[a-z-listing display="terms" taxonomy="category" numbers="after" grouping="numbers"]' );
 
-		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
-		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
-
-		$this->assertEquals( $expected, $actual );
+		$this->assertHTMLEquals( $expected, $actual );
 	}
 
 	function test_populated_filtered_listing() {
@@ -115,9 +99,7 @@ class AZ_Shortcode_Numbers_After_Tests extends WP_UnitTestCase {
 		$expected = sprintf( file_get_contents( 'tests/data/populated-listing-numbers-after.txt' ), $title, $p );
 		$actual = do_shortcode( sprintf( '[a-z-listing taxonomy="category" terms="%s" numbers="after"]', $term->slug ) );
 
-		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
-		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
-		$this->assertEquals( $expected, $actual );
+		$this->assertHTMLEquals( $expected, $actual );
 	}
 
 	function test_populated_filtered_listing_grouped() {
@@ -140,8 +122,6 @@ class AZ_Shortcode_Numbers_After_Tests extends WP_UnitTestCase {
 		$expected = sprintf( file_get_contents( 'tests/data/populated-listing-numbers-after-grouped.txt' ), $title, $p );
 		$actual = do_shortcode( sprintf( '[a-z-listing taxonomy="category" terms="%s" numbers="after" grouping="numbers"]', $term->slug ) );
 
-		$expected = preg_replace( '/\s{2,}|\t|\n/', '', $expected );
-		$actual = preg_replace( '/\s{2,}|\t|\n/', '', $actual );
-		$this->assertEquals( $expected, $actual );
+		$this->assertHTMLEquals( $expected, $actual );
 	}
 }
