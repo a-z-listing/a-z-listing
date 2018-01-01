@@ -4,7 +4,7 @@
 - **Tags:** a to z, a-z, archive, listing, widget, index
 - **Requires at least:** 3.5
 - **Tested up to:** 4.8
-- **Stable tag:** 1.7.2
+- **Stable tag:** 1.8.0
 - **License:** GPLv2 or later
 - **License URI:** http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -62,15 +62,74 @@ To specify a post-type to display instead of `page` then use, e.g. `Posts`:
 
     [a-z-listing post-type="post"]
 
+To filter the posts by a term from a taxonomy:
+
+    [a-z-listing taxonomy="category" terms="my-term-slug"]
+
 To show terms from a taxonomy instead of posts and pages, e.g. Terms from the `Categories` taxonomy:
 
-    [a-z-listing taxonomy="category"]
+    [a-z-listing taxonomy="category" display="terms"]
 
-The arguments are all optional.
+To override the alphabet used by the plugin:
 
-* `post-type` sets the listing to show a specific post-type.
-  * Default value: page
-  * You may specify any number of multiple post-types separated by commas, e.g. `post-type="page,post"`
+    [a-z-listing alphabet="Aa,Bb,Cc,Dd,Ee,Ff,Gg,Hh,Ii,Jj,Kk,Ll,Mm,Nn,Oo,Pp,Qq,Rr,Ss,Tt,Uu,Vv,Ww,Xx,Yy,Zz"]
+
+To add numbers to the listing:
+
+    [a-z-listing numbers="after"]
+
+The numbers can also be shown before the alphabet:
+
+    [a-z-listing numbers="before"]
+
+You can group the numbers into a single collection for all posts beginning with a numeral:
+
+    [a-z-listing numbers="after" grouping="numbers"]
+
+To group the alphabet letters into a range:
+
+    [a-z-listing grouping="3"]
+
+**The arguments are all optional.**
+
+* `post-type`: sets the listing to show a specific post-type.
+  - Default value: `page`
+  - You may specify multiple post-types by separating with commas (`,`) e.g. `post-type="page,post"`
+* `taxonomy`: does nothing by itself, see the combinations below
+  - Default value: unset
+  - Uses the `slug` of the taxonomy
+  - When combined with:
+    - `terms`, will filter your posts by the terms you set there, which appear in the taxonomy set here
+    - `display="terms"`, will switch from displaying post titles to displaying the names of terms from the taxonomy specified
+* `terms`: sets the taxonomy terms for filtering posts
+  - Default value: unset
+  - The taxonomy must also be specified in `taxonomy`
+  - Uses the `slug` of the term(s)
+  - Multiple terms can be specified by separating with commas: `,`
+* `display`: specifies whether to display posts or terms from a taxonomy
+  - Default value: unset
+  - Can be set to either `posts` or `terms`.
+  - Any value other than unset, `posts` or `terms` will default to displaying posts
+* `numbers`: appends or prepends numerals to the alphabet
+  - Default value: unset
+  - Can be set to either `before` or `after`.
+  - Any value other than unset, `before` or `after` will default to **appending** numerals to the alphabet
+* `grouping`: tells the plugin if and how to group the alphabet
+  - Default value: unset
+  - Can be set to any positive number higher than `1` or the value `numbers`
+  - Any value other than a positive number or the value `numbers` will default to disabling all grouping functionality
+  - When set to a number higher than `1` the listing will group letters together into ranges
+    - For example, if you chose `3` then a latin alphabet will group together `A`, `B`, and `C` into `A-C`. Likewise for `D-F`, `G-I` and so-on
+    - When using this setting, if numbers are also shown via the `numbers="before"` or `numbers="after"` attribute then they will be shown as a single separate group `0-9`
+  - When set to the value `numbers` it will group numerals into a single group `0-9`
+    - This requires the numbers to be displayed via the `numbers="before"` or `numbers="after"` attributes
+* `alphabet`: allows you to override the alphabet that the plugin uses
+  - Default value: unset.
+  - When this attribute is unset, the plugin will either use the untranslated default, or if [glotpress](https://translate.wordpress.org/projects/wp-plugins/a-z-listing) includes a translation for your site's language as set in `Admin -> Settings -> Site Language` it will use that translation.
+  - The current untranslated default is: `AÁÀÄÂaáàäâ,Bb,Cc,Dd,EÉÈËÊeéèëê,Ff,Gg,Hh,IÍÌÏÎiíìïî,Jj,Kk,Ll,Mm,Nn,OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz`
+  - Accepts a single line of letters/symbols, which need to be separated via the comma character `,`
+  - Including more than one letter/symbol in each group will display posts starting with any of those under the same section
+  - The first letter/symbol in each group is used as the group's heading when displayed on your site
 
 ### Multi Column Output
 
@@ -269,6 +328,30 @@ In your theme's functions.php add the following code:
 
 ## Changelog
 
+### 1.8.0
+* Add extra shortcode attributes:
+  * `numbers`: appends or prepends numerals to the alphabet
+    - Default value: unset
+    - Can be set to either `before` or `after`.
+    - Any value other than unset, `before` or `after` will default to **appending** numerals to the alphabet
+  * `grouping`: tells the plugin if and how to group the alphabet
+    - Default value: unset
+    - Can be set to any positive number higher than `1` or the value `numbers`
+    - Any value other than a positive number or the value `numbers` will default to disabling all grouping functionality
+    - When set to a number higher than `1` the listing will group letters together into ranges
+      - For example, if you chose `3` then a latin alphabet will group together `A`, `B`, and `C` into `A-C`. Likewise for `D-F`, `G-I` and so-on
+      - When using this setting, if numbers are also shown via the `numbers="before"` or `numbers="after"` attribute then they will be shown as a single separate group `0-9`
+    - When set to the value `numbers` it will group numerals into a single group `0-9`
+      - This requires the numbers to be displayed via the `numbers="before"` or `numbers="after"` attributes
+  * `alphabet`: allows you to override the alphabet that the plugin uses
+    - Default value: unset.
+    - When this attribute is unset, the plugin will either use the untranslated default, or if [glotpress](https://translate.wordpress.org/projects/wp-plugins/a-z-listing) includes a translation for your site's language as set in `Admin -> Settings -> Site Language` it will use that translation.
+    - The current untranslated default is: `AÁÀÄÂaáàäâ,Bb,Cc,Dd,EÉÈËÊeéèëê,Ff,Gg,Hh,IÍÌÏÎiíìïî,Jj,Kk,Ll,Mm,Nn,OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz`
+    - Accepts a single line of letters/symbols, which need to be separated via the comma character `,`
+    - Including more than one letter/symbol in each group will display posts starting with any of those under the same section
+    - The first letter/symbol in each group is used as the group's heading when displayed on your site
+* Bugfix: Shortcode to display taxonomy terms wouldn't also display numbers groups. Hat-tip to @sotos for the report.
+
 ### 1.7.2
 * Bugfix: Previous release broke the shortcode
 
@@ -279,31 +362,6 @@ In your theme's functions.php add the following code:
 ### 1.7.0
 * Add support for taxonomy term listings to the shortcode
 * Add support for filtering by taxonomy terms to the shortcode
-
-### 1.6.5
-* Regression fix for widget accessing WP_Post object as array
-
-### 1.6.4
-* Bugfix for accessing array as object PHP Warning. Reported by @babraham76
-
-### 1.6.3
-* Bugfix for multi column example and styling - if you tried using the multi column before but had problems, try using the new example file.
-  To manually patch your a-z-listin.php template, add the following to the top, underneath the php block which sets the number of columns:
-    <style>
-        .letter-section > div {
-            width: calc( 100% / <?php echo esc_html( $a_z_listing_colcount ); ?> );
-        }
-    </style>
-
-### 1.6.2
-* Bugfix for more complex templates - accessing post thumbnails failed.
-
-### 1.6.1
-* Regression fix: Notice was emitted by PHP about invalid variable. This was cosmetic only, and had no impact on functionality.
-
-### 1.6.0
-* Fix bug of case sensitity in listings order
-* Better warning of deprecated functions when called by other plugins or themes
 
 ### Previous
 See the file called `changelog.md` for the full release history.
