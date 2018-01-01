@@ -3,8 +3,17 @@ $_a_z_listing_colcount = 3;
 $_a_z_listing_minpercol = 10;
 ?>
 <style>
-	.letter-section > div {
-		width: calc( 100% / <?php echo esc_html( $a_z_listing_colcount ); ?> );
+	.letter-section div.column {
+		width: calc(100% / <?php echo esc_html( $_a_z_listing_colcount ); ?>);
+		padding-right: 0.6em;
+	}
+	@supports (display: grid) {
+		.letter-section {
+			grid-template-columns: repeat(<?php echo esc_html( $_a_z_listing_colcount ); ?>, 1fr);
+		}
+		.letter-section div.column {
+			width: initial;
+		}
 	}
 </style>
 <div id="letters">
@@ -21,7 +30,7 @@ $_a_z_listing_minpercol = 10;
 		?>
 			<?php if ( $a_z_query->have_items() ) : ?>
 				<div class="letter-section" id="<?php $a_z_query->the_letter_id(); ?>">
-					<h2>
+					<h2 class="letter-title">
 						<span><?php $a_z_query->the_letter_title(); ?></span>
 					</h2>
 					<?php $i = 0; ?>
@@ -32,7 +41,7 @@ $_a_z_listing_minpercol = 10;
 						$a_z_query->the_item();
 					?>
 						<?php if ( 0 === $i++ ) : ?>
-							<div><ul>
+							<div class="column"><ul>
 						<?php endif; ?>
 						<?php $j++; ?>
 						<li>
