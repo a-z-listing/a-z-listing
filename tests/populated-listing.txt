@@ -37,5 +37,6 @@
         <div><ul>
             <li><a href="http://example.org/?page_id=%2$d">%1$s</a></li>
         </ul></div>
+        <div class="back-to-top"><a href="#letters">Back to top</a></div>
     </div></div>
 </div>

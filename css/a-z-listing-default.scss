@@ -39,9 +39,8 @@
 	justify-content: start;
 	@supports (display: grid) {
 		display: grid;
-		grid-gap: 0 1em;
-		&:after,
-		div.clear.empty {
+		grid-gap: 0 0.6em;
+		&:after {
 			display: none;
 		}
 	}
@@ -62,6 +61,23 @@
 		box-sizing: border-box;
 		&:nth-last-child(1) {
 			flex-grow: 1;
+		}
+	}
+	div.back-to-top {
+		width: 100%;
+		text-align: right;
+		a {
+			text-transform: uppercase;
+			font-size: 0.7em;
+			&:before,
+			&:after {
+				font-family: dashicons;
+				content: "\f343";
+				padding: 0.2em;
+			}
+		}
+		@supports (display: grid) {
+			grid-column: 1 / end;
 		}
 	}
 }

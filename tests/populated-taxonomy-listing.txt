@@ -38,12 +38,14 @@
             <div><ul>
                 <li><a href="http://example.org/?cat=%2$d">%1$s</a></li>
             </ul></div>
+            <div class="back-to-top"><a href="#letters">Back to top</a></div>
         </div>
         <div class="letter-section" id="letter-U">
             <h2><span>U</span></h2>
             <div><ul>
                 <li><a href="http://example.org/?cat=1">Uncategorized</a></li>
             </ul></div>
+            <div class="back-to-top"><a href="#letters">Back to top</a></div>
         </div>
     </div>
 </div>

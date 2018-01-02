@@ -13,6 +13,7 @@ $_a_z_listing_minpercol = 10;
 		}
 		.letter-section div.column {
 			width: initial;
+			padding: 0;
 		}
 	}
 </style>
@@ -52,7 +53,7 @@ $_a_z_listing_minpercol = 10;
 							<?php $i = 0; ?>
 						<?php endif; ?>
 					<?php endwhile; ?>
-					<div class="clear empty"></div>
+					<div class="back-to-top"><a href="#letters">Back to top</a></div>
 				</div>
 			<?php endif; ?>
 		<?php endwhile; ?>

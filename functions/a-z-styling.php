@@ -41,7 +41,7 @@ function a_z_listing_force_enable_styles() {
  * @since 0.7
  */
 function a_z_listing_add_styling() {
-	wp_register_style( 'a-z-listing', plugins_url( 'css/a-z-listing-default.css', dirname( __FILE__ ) ) );
+	wp_register_style( 'a-z-listing', plugins_url( 'css/a-z-listing-default.css', dirname( __FILE__ ) ), array( 'dashicons' ) );
 
 	$add_styles = get_option( 'a-z-listing-add-styling', true );
 	/**
