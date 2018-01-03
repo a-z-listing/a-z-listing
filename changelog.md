@@ -1,5 +1,12 @@
 ## Full Changelog
 
+### 1.9.0
+* Fix multi-column example template
+* Update multi-column styles to include display:grid support
+* Add back-to-top link
+* Add server system requirements to readme
+* Add PHP section to readme including link to API Reference
+
 ### 1.8.0
 * Add extra shortcode attributes:
   * `numbers`: appends or prepends numerals to the alphabet
