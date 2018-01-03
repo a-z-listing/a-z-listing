@@ -1,13 +1,13 @@
 <?php
 
 class AZ_UnitTestCase extends WP_UnitTestCase {
-	function assertHTMLEquals( $expected, $actual ) {
-		$expectedDom = new DomDocument( $expected );
-		$actualDom = new DomDocument( $actual );
+	protected function assertHTMLEquals( $expected, $actual ) {
+		$expected_dom = new DomDocument( $expected );
+		$actual_dom   = new DomDocument( $actual );
 
-		$expectedDom->preserveWhiteSpace = false;
-		$actualDom->preserveWhiteSpace = false;
+		$expected_dom->preserveWhiteSpace = false;
+		$actual_dom->preserveWhiteSpace   = false;
 
-		$this->assertEquals( $expectedDom->saveHTML(), $actualDom->saveHTML() );
+		$this->assertEquals( $expected_dom->saveHTML(), $actual_dom->saveHTML() );
 	}
 }

@@ -15,7 +15,7 @@ class A_Z_Widget extends WP_Widget {
 	 *
 	 * @since 0.1
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::__construct(
 			'bh_az_widget', __( 'A-Z Site Map', 'a-z-listing' ), array(
 				'classname'   => 'a-z-listing-widget',
@@ -33,7 +33,7 @@ class A_Z_Widget extends WP_Widget {
 	 *
 	 * @since 0.1
 	 */
-	function A_Z_Widget() {
+	public function A_Z_Widget() {
 		$this->__construct();
 	}
 
@@ -44,7 +44,7 @@ class A_Z_Widget extends WP_Widget {
 	 * @param  Array $instance Widget instance as provided by WordPress core.
 	 * @return void
 	 */
-	function form( $instance ) {
+	public function form( $instance ) {
 		$title      = $instance['title'];
 		$title_id   = $this->get_field_id( 'title' );
 		$title_name = $this->get_field_name( 'title' );
@@ -61,10 +61,10 @@ class A_Z_Widget extends WP_Widget {
 				<?php esc_html_e( 'Widget Title', 'a-z-listing' ); ?>
 			</label></div>
 		<input class="widefat" type="text"
-			   id="<?php echo esc_attr( $title_id ); ?>"
-			   name="<?php echo esc_attr( $title_name ); ?>"
-			   placeholder="<?php esc_attr_e( 'Widget Title', 'a-z-listing' ); ?>"
-			   value="<?php echo esc_attr( $title ); ?>" />
+			id="<?php echo esc_attr( $title_id ); ?>"
+			name="<?php echo esc_attr( $title_name ); ?>"
+			placeholder="<?php esc_attr_e( 'Widget Title', 'a-z-listing' ); ?>"
+			value="<?php echo esc_attr( $title ); ?>" />
 
 		<p style="color: #333;">
 			<?php esc_html_e( 'Leave the title field blank, above, to use the title from the page set in the next field', 'a-z-listing' ); ?>
@@ -92,7 +92,7 @@ class A_Z_Widget extends WP_Widget {
 		?>
 		<select id="<?php echo esc_attr( $post_type_id ); ?>" name="<?php echo esc_attr( $post_type_name ); ?>">
 			<?php foreach ( $post_types as $t ) : ?>
-				<option value="<?php echo esc_attr( $t ); ?>" 
+				<option value="<?php echo esc_attr( $t ); ?>"
 											<?php
 											if ( $post_type === $t ) {
 												echo 'selected'; }
@@ -113,7 +113,7 @@ class A_Z_Widget extends WP_Widget {
 	 * @param  Array $old_instance the previous configuration values.
 	 * @return Array               sanitised version of the new configuration values to be saved
 	 */
-	function update( $new_instance, $old_instance ) {
+	public function update( $new_instance, $old_instance ) {
 		$instance              = $old_instance;
 		$instance['title']     = strip_tags( $new_instance['title'] );
 		$instance['post']      = (int) $new_instance['post'];
@@ -129,7 +129,7 @@ class A_Z_Widget extends WP_Widget {
 	 * @param  Array $args     General widget configuration. Often shared between all widgets on the site.
 	 * @param  Array $instance Configuration of this Widget. Unique to this invocation.
 	 */
-	function widget( $args, $instance ) {
+	public function widget( $args, $instance ) {
 		the_section_az_widget( $args, $instance );
 	}
 }
