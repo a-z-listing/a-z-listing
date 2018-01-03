@@ -51,7 +51,7 @@ if ( ! function_exists( 'bh_get_page_path' ) ) {
 		}
 		if ( ! empty( $p ) && 'page' === $p->post_type ) {
 			$page_id = bh_select_post_id( $p );
-			$path = get_page_uri( $page_id );
+			$path    = get_page_uri( $page_id );
 			if ( defined( 'DEBUG_PATHS' ) && DEBUG_PATHS ) {
 				do_action( 'log', 'get_page_path: Page URI', $path );
 			}
@@ -59,8 +59,8 @@ if ( ! function_exists( 'bh_get_page_path' ) ) {
 		if ( empty( $path ) || is_numeric( $path ) ) {
 			if ( ! empty( $p ) || ! is_search() ) {
 				$permalink = get_permalink( $p );
-				$path = substr( get_permalink( bh_select_post_id( $p ) ), strlen( get_option( 'home' ) ) );
-				$path = trim( $path, '/' );
+				$path      = substr( get_permalink( bh_select_post_id( $p ) ), strlen( get_option( 'home' ) ) );
+				$path      = trim( $path, '/' );
 				if ( defined( 'DEBUG_PATHS' ) && DEBUG_PATHS ) {
 					do_action( 'log', 'get_page_path: Permalink', $path );
 				}

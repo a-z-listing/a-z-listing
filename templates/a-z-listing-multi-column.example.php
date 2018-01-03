@@ -1,5 +1,5 @@
 <?php
-$_a_z_listing_colcount = 3;
+$_a_z_listing_colcount  = 3;
 $_a_z_listing_minpercol = 10;
 ?>
 <style>
@@ -34,8 +34,8 @@ $_a_z_listing_minpercol = 10;
 					<h2 class="letter-title">
 						<span><?php $a_z_query->the_letter_title(); ?></span>
 					</h2>
-					<?php $i = 0; ?>
-					<?php $j = 0; ?>
+					<?php $i         = 0; ?>
+					<?php $j         = 0; ?>
 					<?php $numpercol = ceil( $a_z_query->get_the_letter_count() / $_a_z_listing_colcount ); ?>
 					<?php
 					while ( $a_z_query->have_items() ) :

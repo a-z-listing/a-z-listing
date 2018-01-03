@@ -18,7 +18,7 @@ class A_Z_Widget extends WP_Widget {
 	function __construct() {
 		parent::__construct(
 			'bh_az_widget', __( 'A-Z Site Map', 'a-z-listing' ), array(
-				'classname' => 'a-z-listing-widget',
+				'classname'   => 'a-z-listing-widget',
 				'description' => __( 'Alphabetised links to the A-Z site map', 'a-z-listing' ),
 			)
 		);
@@ -45,16 +45,16 @@ class A_Z_Widget extends WP_Widget {
 	 * @return void
 	 */
 	function form( $instance ) {
-		$title = $instance['title'];
-		$title_id = $this->get_field_id( 'title' );
+		$title      = $instance['title'];
+		$title_id   = $this->get_field_id( 'title' );
 		$title_name = $this->get_field_name( 'title' );
 
-		$post = isset( $instance['post'] ) ? $instance['post'] : ( isset( $instance['page'] ) ? $instance['page'] : 0 );
-		$post_id = $this->get_field_id( 'post' );
+		$post      = isset( $instance['post'] ) ? $instance['post'] : ( isset( $instance['page'] ) ? $instance['page'] : 0 );
+		$post_id   = $this->get_field_id( 'post' );
 		$post_name = $this->get_field_name( 'post' );
 
-		$post_type = isset( $instance['post_type'] ) ? $instance['post_type'] : 'page';
-		$post_type_id = $this->get_field_id( 'post_type' );
+		$post_type      = isset( $instance['post_type'] ) ? $instance['post_type'] : 'page';
+		$post_type_id   = $this->get_field_id( 'post_type' );
 		$post_type_name = $this->get_field_name( 'post_type' );
 		?>
 		<div><label for="<?php echo esc_attr( $title_id ); ?>">
@@ -76,8 +76,8 @@ class A_Z_Widget extends WP_Widget {
 		<?php
 		wp_dropdown_pages(
 			array(
-				'id' => intval( $post_id ),
-				'name' => esc_html( $post_name ),
+				'id'       => intval( $post_id ),
+				'name'     => esc_html( $post_name ),
 				'selected' => intval( $post ),
 			)
 		);
@@ -114,11 +114,11 @@ class A_Z_Widget extends WP_Widget {
 	 * @return Array               sanitised version of the new configuration values to be saved
 	 */
 	function update( $new_instance, $old_instance ) {
-		$instance = $old_instance;
-		$instance['title'] = strip_tags( $new_instance['title'] );
-		$instance['post'] = (int) $new_instance['post'];
+		$instance              = $old_instance;
+		$instance['title']     = strip_tags( $new_instance['title'] );
+		$instance['post']      = (int) $new_instance['post'];
 		$instance['post_type'] = strip_tags( $new_instance['post_type'] );
-		$instance['parent'] = (int) $new_instance['parent'];
+		$instance['parent']    = (int) $new_instance['parent'];
 		return $instance;
 	}
 
@@ -177,11 +177,11 @@ function get_the_section_az_widget( $args, $instance ) {
  * @return  string The complete A-Z Widget HTML ready for echoing to the page.
  */
 function get_the_section_a_z_widget( $args, $instance ) {
-	$classes = array( 'az-letters' );
+	$classes  = array( 'az-letters' );
 	$instance = wp_parse_args(
 		$instance, array(
 			'title' => '',
-			'post' => 0,
+			'post'  => 0,
 		)
 	);
 
@@ -203,7 +203,7 @@ function get_the_section_a_z_widget( $args, $instance ) {
 	}
 
 	$post_type = ( isset( $instance['post_type'] ) ) ? $instance['post_type'] : 'page';
-	$my_query = array(
+	$my_query  = array(
 		'post_type' => $post_type,
 	);
 
@@ -211,7 +211,7 @@ function get_the_section_a_z_widget( $args, $instance ) {
 		if ( ! empty( $instance['taxonomy'] ) && ! empty( $instance['terms'] ) ) {
 			$my_query['tax_query'] = array(
 				'taxonomy' => $instance['taxonomy'],
-				'terms' => $instance['terms'],
+				'terms'    => $instance['terms'],
 			);
 		}
 	}

@@ -30,7 +30,7 @@ function bh_az_listing_activate() {
 	$dir = dirname( __FILE__ ) . '/';
 	foreach ( glob( $dir . 'activate/*.php' ) as $filename ) {
 		/** @noinspection PhpIncludeInspection */
-		require_once( $filename );
+		require_once $filename;
 	}
 	bh_az_listing_init();
 	flush_rewrite_rules();
@@ -48,20 +48,20 @@ function bh_az_listing_init() {
 	// Common functions.
 	foreach ( glob( $dir . 'functions/common/*.php' ) as $filename ) {
 		/** @noinspection PhpIncludeInspection */
-		require_once( $filename );
+		require_once $filename;
 	}
 
 	// Functions: always present.
 	foreach ( glob( $dir . 'functions/*.php' ) as $filename ) {
 		/** @noinspection PhpIncludeInspection */
-		require_once( $filename );
+		require_once $filename;
 	}
 
 	// Partials: only visible outside of admin.
 	if ( ! is_admin() && 'wp-login.php' !== $GLOBALS['pagenow'] ) {
 		foreach ( glob( $dir . 'partials/*.php' ) as $filename ) {
 			/** @noinspection PhpIncludeInspection */
-			require_once( $filename );
+			require_once $filename;
 		}
 	}
 
@@ -78,10 +78,10 @@ function bh_az_listing_init() {
 
 	// Javascripts: autoload.
 	if ( is_admin() ) {
-		$glob = glob( $dir . 'scripts/admin/*.js' );
+		$glob  = glob( $dir . 'scripts/admin/*.js' );
 		$admin = 'admin/';
 	} else {
-		$glob = glob( $dir . 'scripts/*.js' );
+		$glob  = glob( $dir . 'scripts/*.js' );
 		$admin = '';
 	}
 
@@ -89,7 +89,7 @@ function bh_az_listing_init() {
 		$matches = array();
 		preg_match( '!([^/]+).js$!', $filename, $matches );
 		$code = 'bh-' . $matches[1];
-		$url = plugins_url( 'scripts/' . $admin . $matches[1] . '.js', __FILE__ );
+		$url  = plugins_url( 'scripts/' . $admin . $matches[1] . '.js', __FILE__ );
 		wp_enqueue_script( $code, $url, array( 'jquery' ), null, true );
 	}
 
@@ -100,7 +100,7 @@ function bh_az_listing_init() {
 		$matches = array();
 		preg_match( '!([^/]+).css!', $filename, $matches );
 		$code = 'functionality-css-' . $matches[1];
-		$url = plugins_url( $matches[1] . '.css', __FILE__ );
+		$url  = plugins_url( $matches[1] . '.css', __FILE__ );
 
 		if ( 'admin' !== $matches[1] || is_admin() ) {
 			wp_enqueue_style( $code, $url );
@@ -119,7 +119,7 @@ function bh_az_listing_widgets() {
 
 	foreach ( glob( $dir . 'widgets/class-*.php' ) as $filename ) {
 		/** @noinspection PhpIncludeInspection */
-		require_once( $filename );
+		require_once $filename;
 
 		$filename = substr( $filename, 0, strlen( $filename ) - strlen( '.php' ) );
 		$filename = substr( $filename, strrpos( $filename, '/' ) + 1 );
