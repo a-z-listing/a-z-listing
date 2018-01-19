@@ -4,7 +4,7 @@ Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 3.5
 Tested up to: 4.9
-Stable tag: 1.9.0
+Stable tag: 1.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -348,6 +348,18 @@ In your theme's functions.php add the following code:
 
 == Changelog ==
 
+= 1.9.1 =
+Feature Request:
+Add CSS classes to letters indicating presence of posts or not:
+  
+* `has-posts` allows styling of letters that have posts visible in the listing
+* `no-posts` allows styling of letters that do not have any posts visible in the listing
+  
+You can use these classes to hide letters that have no posts by including the following CSS rule:
+`.az-letters ul.az-links li.no-posts {
+    display: none;
+}`
+
 = 1.9.0 =
 * Fix multi-column example template
 * Update multi-column styles to include display:grid support
@@ -380,13 +392,8 @@ In your theme's functions.php add the following code:
 * Bugfix: Shortcode to display taxonomy terms wouldn't also display numbers groups. Hat-tip to @sotos for the report.
 
 = 1.7.2 =
-* Bugfix: Previous release broke the shortcode
-
-= 1.7.1 =
 * Add additional filters allowing for hyphens or underscores to be used when defining. The readme.txt incorrectly used then-unsupported names with hyphens in examples so now we support both.
 * Add numbers="before" and numbers="after" in shortcode
-
-= 1.7.0 =
 * Add support for taxonomy term listings to the shortcode
 * Add support for filtering by taxonomy terms to the shortcode
 
