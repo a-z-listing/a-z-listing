@@ -564,10 +564,26 @@ class A_Z_Listing {
 				$id = '_';
 			}
 
-			$classes  = ( ( 1 === $i ) ? 'first ' : ( ( $count === $i ) ? 'last ' : '' ) );
-			$classes .= ( ( 0 === $i % 2 ) ? 'even' : 'odd' );
+			$classes = array();
+			if ( 1 === $i ) {
+				array_push( $classes, 'first' );
+			} elseif ( $count === $i ) {
+				array_push( $classes, 'last' );
+			}
 
-			$ret .= '<li class="' . esc_attr( $classes ) . '">';
+			if ( 0 === $i % 2 ) {
+				array_push( $classes, 'even' );
+			} else {
+				array_push( $classes, 'odd' );
+			}
+
+			if ( ! empty( $this->matched_item_indices[ $letter ] ) ) {
+				array_push( $classes, 'has-posts' );
+			} else {
+				array_push( $classes, 'no-posts' );
+			}
+
+			$ret .= '<li class="' . esc_attr( implode( ' ', $classes ) ) . '">';
 			if ( ! empty( $this->matched_item_indices[ $letter ] ) ) {
 				$ret .= '<a href="' . esc_url( $target . '#letter-' . $id ) . '">';
 			}
