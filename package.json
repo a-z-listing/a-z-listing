@@ -1,14 +1,17 @@
 {
-	"name": "wp-a-z-listing",
-	"author": "Daniel Llewellyn <daniel@bowlhat.net>",
-	"repository": "https://github.com/bowlhat/wp-a-z-listing.git",
-	"license": "GPL-2.0+",
-	"devDependencies": {
-		"es6-promise": "^3.0.2",
-		"gulp": "^3.9.0",
-		"gulp-postcss": "^6.0.1",
-		"autoprefixer": "^6.1.2",
-		"gulp-sourcemaps": "^1.6.0",
-		"gulp-sass": "^2.1.0"
-	}
+  "name": "a-z-listing",
+  "version": "0.1.0",
+  "main": "Gruntfile.js",
+  "author": "Daniel Llewellyn",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "grunt": "~0.4.5",
+    "grunt-babel": "^7.0.0",
+    "grunt-wp-i18n": "~0.5.0",
+    "grunt-wp-readme-to-markdown": "~1.0.0"
+  },
+  "dependencies": {}
 }

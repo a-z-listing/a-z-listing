@@ -22,6 +22,7 @@ function a_z_shortcode_handler( $attributes ) {
 			'alphabet'           => '',
 			'display'            => 'posts',
 			'grouping'           => '',
+			'group-numbers'      => false,
 			'numbers'            => '',
 			'post-type'          => 'page',
 			'taxonomy'           => '',
@@ -50,9 +51,13 @@ function a_z_shortcode_handler( $attributes ) {
 		}
 	}
 
+	if ( true === $attributes['group-numbers'] ) {
+		$group_numbers = true;
+	}
+
 	if ( 1 < $grouping ) {
-		add_filter(
-			'a-z-listing-alphabet', function( $alphabet ) use ( $grouping ) {
+		add_filter( 'a-z-listing-alphabet',
+			function( $alphabet ) use ( $grouping ) {
 				$headings = array();
 				$letters  = mb_split( ',', $alphabet );
 

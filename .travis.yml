@@ -1,38 +1,65 @@
-language: php
-
-dist: trusty
 sudo: false
+dist: trusty
+
+language: php
 
 notifications:
   email:
     on_success: never
     on_failure: change
 
-php:
-  - 5.4
-  - 5.5
-  - 5.6
-  - 7.0
-  - 7.1
+branches:
+  only:
+    - master
+
+cache:
+  directories:
+    - $HOME/.composer/cache
 
 matrix:
   include:
+    - php: 7.1
+      env: WP_VERSION=latest
+    - php: 7.0
+      env: WP_VERSION=latest
+    - php: 5.6
+      env: WP_VERSION=4.4
+    - php: 5.6
+      env: WP_VERSION=latest
+    - php: 5.6
+      env: WP_VERSION=trunk
+    - php: 5.6
+      env: WP_TRAVISCI=phpcs
     - php: 5.3
+      env: WP_VERSION=latest
       dist: precise
 
-env:
-  - WP_VERSION=latest WP_MULTISITE=0
-  - WP_VERSION=nightly WP_MULTISITE=0
-  - WP_VERSION=latest WP_MULTISITE=1
-  - WP_VERSION=nightly WP_MULTISITE=1
-
-install:
-  - composer global require wp-coding-standards/wpcs:dev-master
-  - ~/.composer/vendor/bin/phpcs --config-set installed_paths ~/.composer/vendor/wp-coding-standards/wpcs/
-
 before_script:
-  - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
+  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  - |
+    if [ -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ]; then
+      phpenv config-rm xdebug.ini
+    else
+      echo "xdebug.ini does not exist"
+    fi
+  - |
+    if [[ ! -z "$WP_VERSION" ]] ; then
+      bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
+      composer global require "phpunit/phpunit=4.8.*|5.7.*"
+    fi
+  - |
+    if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
+      composer global require wp-coding-standards/wpcs
+      phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs
+    fi
 
 script:
-  - phpunit
-  - ~/.composer/vendor/bin/phpcs -p --standard=phpcs-custom-rules.xml --extensions=php --ignore=tests .
+  - |
+    if [[ ! -z "$WP_VERSION" ]] ; then
+      phpunit
+      WP_MULTISITE=1 phpunit
+    fi
+  - |
+    if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
+      phpcs
+    fi

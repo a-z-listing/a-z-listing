@@ -53,7 +53,7 @@ $_a_z_listing_minpercol = 10;
 							<?php $i = 0; ?>
 						<?php endif; ?>
 					<?php endwhile; ?>
-					<div class="back-to-top"><a href="#letters">Back to top</a></div>
+					<div class="back-to-top"><a href="#letters"><?php _e( 'Back to top', 'a-z-listing' ); ?></a></div>
 				</div>
 			<?php endif; ?>
 		<?php endwhile; ?>
