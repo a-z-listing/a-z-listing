@@ -5,7 +5,6 @@
  * @since 0.1
  */
 class A_Z_Listing {
-	private $query;
 	private $taxonomy;
 	private $type = 'posts';
 
@@ -23,7 +22,7 @@ class A_Z_Listing {
 	 * All available characters which may be used as an index.
 	 */
 
-	private $available_indices;
+	private $alphabet_chars;
 	/**
 	 * A Taxonomy which contains terms to apply additional titles to posts.
 	 */
@@ -35,7 +34,7 @@ class A_Z_Listing {
 	private $items;
 
 	/**
-	 * Indices for only the items returned by the query - filtered version of $available_indices.
+	 * Indices for only the items returned by the query - filtered version of $alphabet_chars.
 	 */
 	private $matched_item_indices;
 
@@ -69,7 +68,26 @@ class A_Z_Listing {
 	public function __construct( $query = null ) {
 		global $post;
 		self::get_alphabet();
-		$this->available_indices = array_values( array_unique( array_values( self::$alphabet ) ) );
+		$this->alphabet_chars = array_values( array_unique( array_values( self::$alphabet ) ) );
+
+		$json_query = json_encode( $query );
+		$transient_queries = get_transient('A_Z_Queries');
+
+		if ( $transient_queries ) {
+			$queries = json_decode( $transient_queries );
+			if ( isset( $queries[ $json_query ] ) ) {
+				$this->matched_item_indices = $queries[ $json_query ];
+				return;
+			}
+			if ( AZLISTINGLOG ) {
+				do_action( 'log', 'A-Z Listing: is cached' );
+			}
+		} else {
+			$transient_queries = array();
+			if ( AZLISTINGLOG ) {
+				do_action( 'log', 'A-Z Listing: is NOT cached' );
+			}
+		}
 
 		if ( is_string( $query ) && ! empty( $query ) ) {
 			if ( AZLISTINGLOG ) {
@@ -79,6 +97,17 @@ class A_Z_Listing {
 			$this->cache_key = "a-z-listing:taxonomy:$query";
 			$this->type = 'taxonomy';
 			$this->taxonomy = $query;
+			$this->items    = get_terms(
+				$query, array(
+					'hide_empty' => false,
+				)
+			);
+
+			if ( AZLISTINGLOG ) {
+				do_action( 'log', 'A-Z Listing: Terms', '!slug', $this->items );
+			}
+
+			$this->matched_item_indices = $this->get_all_indices();
 		} else {
 			if ( AZLISTINGLOG ) {
 				do_action( 'log', 'A-Z Listing: Setting posts mode', $query );
@@ -110,7 +139,7 @@ class A_Z_Listing {
 			$section = self::get_section();
 
 			if ( ( isset( $query['post_type'] ) && 'page' !== $query['post_type'] )
-				|| ( isset( $post ) && 'page' !== $post->post_type ) ) {
+			|| ( isset( $post ) && 'page' !== $post->post_type ) ) {
 				$section = null;
 			}
 
@@ -122,9 +151,11 @@ class A_Z_Listing {
 
 			$query = $this->construct_query( $query );
 			$items = $query->get_posts();
-		}
+			$this->matched_item_indices = $this->get_all_indices();
+		} // End if().
 
-		$this->matched_item_indices = $this->get_all_indices();
+		$transient_queries[ $json_query ] = $this->matched_item_indices;
+		set_transient( 'A_Z_Queries', $transient_queries, 7 * 24 * 60 * 60);
 	}
 
 	/**
@@ -387,7 +418,7 @@ class A_Z_Listing {
 			$index               = mb_substr( $item->name, 0, 1, 'UTF-8' );
 			$indices[ $index ][] = array(
 				'title' => $item->name,
-				'item'  => $item,
+				'item'  => "term:{$item->term_id}",
 			);
 			/**
 			 * @deprecated Use a_z_listing_item_indices
@@ -398,7 +429,7 @@ class A_Z_Listing {
 			$index               = mb_substr( $item->post_title, 0, 1, 'UTF-8' );
 			$indices[ $index ][] = array(
 				'title' => $item->post_title,
-				'item'  => $item,
+				'item'  => "post:{$item->ID}",
 			);
 
 			if ( ! empty( $this->index_taxonomy ) ) {
@@ -407,7 +438,7 @@ class A_Z_Listing {
 					$terms, function( $indices, $term ) use ( $item ) {
 						$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array(
 							'title' => $term->name,
-							'item'  => $item,
+							'item'  => "post:{$item->ID}",
 						);
 						return $indices;
 					}
@@ -451,18 +482,18 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Sort the posts into an Array based on their index letters
+	 * Sort the letters to be used as indices and return as an Array
 	 *
-	 * @since 0.8.0
-	 * @return Array The posts array keyed by index letter
+	 * @since 0.1
+	 * @return Array The index letters
 	 */
-	protected function get_indexed_items() {
-		$letters = array();
+	protected function get_all_indices() {
+		$indexed_items = array();
 
 		foreach ( $this->items as $item ) {
-			$indices = $this->get_the_item_indices( $item );
+			$item_indices = $this->get_the_item_indices( $item );
 
-			foreach ( $indices as $index => $index_entries ) {
+			foreach ( $item_indices as $index => $index_entries ) {
 				if ( count( $index_entries ) > 0 ) {
 					if ( in_array( $index, array_keys( self::$alphabet ), true ) ) {
 						$index = self::$alphabet[ $index ];
@@ -470,36 +501,23 @@ class A_Z_Listing {
 						$index = '_';
 					}
 
-					if ( ! isset( $letters[ $index ] ) || ! is_array( $letters[ $index ] ) ) {
-						$letters[ $index ] = array();
+					if ( ! isset( $indexed_items[ $index ] ) || ! is_array( $indexed_items[ $index ] ) ) {
+						$indexed_items[ $index ] = array();
 					}
-
-					$letters[ $index ] = array_merge_recursive( $letters[ $index ], $index_entries );
+					$indexed_items[ $index ] = array_merge_recursive( $indexed_items[ $index ], $index_entries );
 				}
 			}
 		}
 
-		return $letters;
-	}
-
-	/**
-	 * Sort the letters to be used as indices and return as an Array
-	 *
-	 * @since 0.1
-	 * @return Array The index letters
-	 */
-	protected function get_all_indices() {
-		$indexed_items = $this->get_indexed_items();
-
 		if ( ! empty( $index[ self::$unknown_letters ] ) ) {
-			$this->available_indices[] = self::$unknown_letters;
+			$this->alphabet_chars[] = self::$unknown_letters;
 		}
 
-		foreach ( $this->available_indices as $index ) {
-			if ( ! empty( $indexed_items[ $index ] ) ) {
-				usort( $indexed_items[ $index ], function( $a, $b ) {
+		foreach ( $this->alphabet_chars as $character ) {
+			if ( ! empty( $indexed_items[ $character ] ) ) {
+				usort( $indexed_items[ $character ], function( $a, $b ) {
 					return strcasecmp( $a['title'], $b['title'] );
-				});
+				} );
 			}
 		}
 
@@ -546,9 +564,9 @@ class A_Z_Listing {
 		$classes = array_unique( $classes );
 
 		$ret   = '<ul class="' . esc_attr( implode( ' ', $classes ) ) . '">';
-		$count = count( $this->available_indices );
+		$count = count( $this->alphabet_chars );
 		$i     = 0;
-		foreach ( $this->available_indices as $letter ) {
+		foreach ( $this->alphabet_chars as $letter ) {
 			$i++;
 			$id = $letter;
 			if ( self::$unknown_letters === $id ) {
@@ -648,7 +666,7 @@ class A_Z_Listing {
 	 * @return bool True if we have more letters to iterate, otherwise false
 	 */
 	public function have_letters() {
-		return ( count( $this->available_indices ) > $this->current_letter_index );
+		return ( count( $this->alphabet_chars ) > $this->current_letter_index );
 	}
 
 	/**
@@ -682,8 +700,8 @@ class A_Z_Listing {
 	public function the_letter() {
 		$this->current_item_index   = 0;
 		$this->current_letter_items = array();
-		if ( isset( $this->matched_item_indices[ $this->available_indices[ $this->current_letter_index ] ] ) ) {
-			$this->current_letter_items = $this->matched_item_indices[ $this->available_indices[ $this->current_letter_index ] ];
+		if ( isset( $this->matched_item_indices[ $this->alphabet_chars[ $this->current_letter_index ] ] ) ) {
+			$this->current_letter_items = $this->matched_item_indices[ $this->alphabet_chars[ $this->current_letter_index ] ];
 		}
 		$this->current_letter_index += 1;
 	}
@@ -706,13 +724,24 @@ class A_Z_Listing {
 	public function the_item() {
 		global $post;
 		$this->current_item = $this->current_letter_items[ $this->current_item_index ];
-		$item_object        = $this->current_item['item'];
-		if ( $item_object instanceof WP_Post ) {
-			$post = $item_object; // WPCS: Override OK.
-			setup_postdata( $post );
-		}
-
 		$this->current_item_index += 1;
+	}
+
+	/**
+	 * Get the item object for the current post
+	 *
+	 * @since 2.0.0
+	 * @param string $break_cache set to 'I understand the speed issues!' to acknowledge that this function will cause slowness on large sites
+	 */
+	public function get_the_item_object( $is_slow = '' ) {
+		if ( 'I understand the speed issues!' === $break_cache ) {
+			global $post;
+			$item = split( ':', $this->current_item['item'], 1 );
+			if ( isset( $item[1] ) ) {
+				$post = get_post( $item[1] );
+				setup_postdata( $post );
+			}
+		}
 	}
 
 	/**
@@ -722,7 +751,7 @@ class A_Z_Listing {
 	 * @return int The number of letters
 	 */
 	public function num_letters() {
-		return count( $this->available_indices );
+		return count( $this->alphabet_chars );
 	}
 
 	/**
@@ -780,7 +809,7 @@ class A_Z_Listing {
 	 * @return string The letter ID
 	 */
 	public function get_the_letter_id() {
-		return 'letter-' . self::$alphabet[ $this->available_indices[ $this->current_letter_index - 1 ] ];
+		return 'letter-' . self::$alphabet[ $this->alphabet_chars[ $this->current_letter_index - 1 ] ];
 	}
 
 	/**
@@ -803,7 +832,7 @@ class A_Z_Listing {
 		if ( '' !== $index ) {
 			$letter = self::$alphabet[ $index ];
 		} else {
-			$letter = self::$alphabet[ $this->available_indices[ $this->current_letter_index - 1 ] ];
+			$letter = self::$alphabet[ $this->alphabet_chars[ $this->current_letter_index - 1 ] ];
 		}
 
 		/**
