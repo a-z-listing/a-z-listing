@@ -1,7 +1,17 @@
 <div id="letters">
     <div class="az-letters">
         <ul class="az-links">
-            <li class="first odd"><span>A</span></li>
+            <li class="first odd"><span>0</span></li>
+            <li class="even"><span>1</span></li>
+            <li class="odd"><span>2</span></li>
+            <li class="even"><span>3</span></li>
+            <li class="odd"><span>4</span></li>
+            <li class="even"><span>5</span></li>
+            <li class="odd"><span>6</span></li>
+            <li class="even"><span>7</span></li>
+            <li class="odd"><span>8</span></li>
+            <li class="even"><span>9</span></li>
+            <li class="odd"><span>A</span></li>
             <li class="even"><span>B</span></li>
             <li class="odd"><span>C</span></li>
             <li class="even"><span>D</span></li>
@@ -32,10 +42,12 @@
     </div>
 </div>
 <div id="az-slider">
-    <div id="inner-slider"><div class="letter-section" id="letter-T">
-        <h2><span>T</span></h2>
-        <div><ul>
-            <li><a href="http://example.org/?page_id=%d">test page</a></li>
-        </ul></div>
-    </div></div>
+    <div id="inner-slider">
+        <div class="letter-section" id="letter-T">
+            <h2><span>T</span></h2>
+            <div><ul>
+                <li><a href="http://example.org/?page_id=%2$d">%1$s</a></li>
+            </ul></div>
+        </div>
+    </div>
 </div>

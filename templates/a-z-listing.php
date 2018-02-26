@@ -12,26 +12,31 @@
 <?php if ( $a_z_query->have_letters() ) : ?>
 <div id="az-slider">
 	<div id="inner-slider">
-		<?php while ( $a_z_query->have_letters() ) : $a_z_query->the_letter(); ?>
+		<?php
+		while ( $a_z_query->have_letters() ) :
+			$a_z_query->the_letter();
+		?>
 			<?php if ( $a_z_query->have_items() ) : ?>
-				<?php $a_z_query->the_letter_section( function() use ( $a_z_query ) { ?>
-					<div class="letter-section" id="<?php $a_z_query->the_letter_id(); ?>">
-						<h2>
-							<span><?php $a_z_query->the_letter_title(); ?></span>
-						</h2>
-						<div><ul>
-							<?php while ( $a_z_query->have_items() ) : $a_z_query->the_item(); ?>
-								<li>
-									<a href="<?php $a_z_query->the_permalink(); ?>"><?php $a_z_query->the_title(); ?></a>
-								</li>
-							<?php endwhile; ?>
-						</ul></div>
-					</div>
-				<?php } ); ?>
+				<div class="letter-section" id="<?php $a_z_query->the_letter_id(); ?>">
+					<h2>
+						<span><?php $a_z_query->the_letter_title(); ?></span>
+					</h2>
+					<div><ul>
+						<?php
+						while ( $a_z_query->have_items() ) :
+							$a_z_query->the_item();
+						?>
+							<li>
+								<a href="<?php $a_z_query->the_permalink(); ?>"><?php $a_z_query->the_title(); ?></a>
+							</li>
+						<?php endwhile; ?>
+					</ul></div>
+				</div>
 			<?php endif; ?>
 		<?php endwhile; ?>
 	</div>
 </div>
 <?php else : ?>
 	<p><?php esc_html_e( 'There are no posts included in this index.', 'a-z-listing' ); ?></p>
-<?php endif;
+<?php
+endif;

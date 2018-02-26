@@ -1,0 +1,49 @@
+<div id="letters">
+    <div class="az-letters">
+        <ul class="az-links">
+            <li class="first odd"><span>A</span></li>
+            <li class="even"><span>B</span></li>
+            <li class="odd"><span>C</span></li>
+            <li class="even"><span>D</span></li>
+            <li class="odd"><span>E</span></li>
+            <li class="even"><span>F</span></li>
+            <li class="odd"><span>G</span></li>
+            <li class="even"><span>H</span></li>
+            <li class="odd"><span>I</span></li>
+            <li class="even"><span>J</span></li>
+            <li class="odd"><span>K</span></li>
+            <li class="even"><span>L</span></li>
+            <li class="odd"><span>M</span></li>
+            <li class="even"><span>N</span></li>
+            <li class="odd"><span>O</span></li>
+            <li class="even"><span>P</span></li>
+            <li class="odd"><span>Q</span></li>
+            <li class="even"><span>R</span></li>
+            <li class="odd"><span>S</span></li>
+            <li class="even"><a href="#letter-T"><span>T</span></a></li>
+            <li class="odd"><a href="#letter-U"><span>U</span></a></li>
+            <li class="even"><span>V</span></li>
+            <li class="odd"><span>W</span></li>
+            <li class="even"><span>X</span></li>
+            <li class="odd"><span>Y</span></li>
+            <li class="last even"><span>Z</span></li>
+        </ul>
+        <div class="clear empty"></div>
+    </div>
+</div>
+<div id="az-slider">
+    <div id="inner-slider">
+        <div class="letter-section" id="letter-T">
+            <h2><span>T</span></h2>
+            <div><ul>
+                <li><a href="http://example.org/?cat=%2$d">%1$s</a></li>
+            </ul></div>
+        </div>
+        <div class="letter-section" id="letter-U">
+            <h2><span>U</span></h2>
+            <div><ul>
+                <li><a href="http://example.org/?cat=1">Uncategorized</a></li>
+            </ul></div>
+        </div>
+    </div>
+</div>

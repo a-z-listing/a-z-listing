@@ -1,9 +1,9 @@
 <?php
 /**
  * Plugin Name: A-Z Listing
- * Plugin URI: https://www.bowlhat.net/
+ * Plugin URI: https://a-z-listing.com/
  * Description: Display an A to Z listing of posts
- * Version: 1.5.3
+ * Version: 1.8.0
  * Author: Daniel Llewellyn
  * Author URI: https://www.bowlhat.net/
  * License: GPLv2
@@ -117,12 +117,13 @@ add_action( 'plugins_loaded', 'bh_az_listing_init' );
 function bh_az_listing_widgets() {
 	$dir = dirname( __FILE__ ) . '/';
 
-	foreach ( glob( $dir . 'widgets/*.php' ) as $filename ) {
+	foreach ( glob( $dir . 'widgets/class-*.php' ) as $filename ) {
 		/** @noinspection PhpIncludeInspection */
 		require_once( $filename );
 
 		$filename = substr( $filename, 0, strlen( $filename ) - strlen( '.php' ) );
 		$filename = substr( $filename, strrpos( $filename, '/' ) + 1 );
+		$filename = substr( $filename, strlen( 'class-' ), strlen( $filename ) );
 		$filename = str_replace( '-', '_', $filename );
 		register_widget( $filename );
 	}
