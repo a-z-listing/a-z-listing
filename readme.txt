@@ -348,13 +348,23 @@ In your theme's functions.php add the following code:
 
 == Changelog ==
 
+= 2.0.0 =
+* Gutenberg support with User-Interface
+* Caching
+* **POTENTIALLY BREAKING CHANGE:**
+  If you have customised the in-built templates or written your own then you may experience breakage due to the post object not being loaded automatically.
+  If you require the template to access more than the post title then you will need to add an additional call after `the_item()` to load the full `WP_Post` object into memory.
+  To load the post object you need to call `$a_z_query->get_the_item_object('I understand the speed issues!');`.
+  **The argument must read exactly as written here to confirm that you understand.**
+  *This step is purposely omited to save memory and improve performance.*
+
 = 1.9.1 =
 Feature Request:
 Add CSS classes to letters indicating presence of posts or not:
-  
+
 * `has-posts` allows styling of letters that have posts visible in the listing
 * `no-posts` allows styling of letters that do not have any posts visible in the listing
-  
+
 You can use these classes to hide letters that have no posts by including the following CSS rule:
 `.az-letters ul.az-links li.no-posts {
     display: none;
@@ -390,12 +400,6 @@ You can use these classes to hide letters that have no posts by including the fo
     - Including more than one letter/symbol in each group will display posts starting with any of those under the same section
     - The first letter/symbol in each group is used as the group's heading when displayed on your site
 * Bugfix: Shortcode to display taxonomy terms wouldn't also display numbers groups. Hat-tip to @sotos for the report.
-
-= 1.7.2 =
-* Add additional filters allowing for hyphens or underscores to be used when defining. The readme.txt incorrectly used then-unsupported names with hyphens in examples so now we support both.
-* Add numbers="before" and numbers="after" in shortcode
-* Add support for taxonomy term listings to the shortcode
-* Add support for filtering by taxonomy terms to the shortcode
 
 = Previous =
 See the file called `changelog.md` for the full release history.

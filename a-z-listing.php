@@ -20,6 +20,7 @@ require( join( DIRECTORY_SEPARATOR, array( __DIR__, 'functions', 'i18n.php' ) ) 
 require( join( DIRECTORY_SEPARATOR, array( __DIR__, 'functions', 'helpers.php' ) ) );
 require( join( DIRECTORY_SEPARATOR, array( __DIR__, 'functions', 'styling.php' ) ) );
 require( join( DIRECTORY_SEPARATOR, array( __DIR__, 'functions', 'shortcode.php' ) ) );
+require( join( DIRECTORY_SEPARATOR, array( __DIR__, 'functions', 'cache.php' ) ) );
 require( join( DIRECTORY_SEPARATOR, array( __DIR__, 'classes', 'class-a-z-listing.php' ) ) );
 function a_z_listing_register_widget() {
 	require( join( DIRECTORY_SEPARATOR, array( __DIR__, 'widgets', 'class-a-z-widget.php' ) ) );
