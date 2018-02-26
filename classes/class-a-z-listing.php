@@ -60,11 +60,6 @@ class A_Z_Listing {
 	private $current_letter_index = 0;
 
 	/**
-	 * Cache key for current query.
-	 */
-	private $the_letters_output = '';
-
-	/**
 	 * A_Z_Listing constructor.
 	 *
 	 * @since 0.1
@@ -95,10 +90,6 @@ class A_Z_Listing {
 			if ( AZLISTINGLOG ) {
 				do_action( 'log', 'A-Z Listing: Setting posts mode', $query );
 			}
-
-			$encoded_query = wp_json_encode( $query );
-			$this->cache_key = "a-z-listing:query:$encoded_query";
-
 			/**
 			 * @deprecated Use a_z_listing_additional_titles_taxonomy
 			 * @see a_z_listing_additional_titles_taxonomy
@@ -119,31 +110,6 @@ class A_Z_Listing {
 			$index_taxonomy       = apply_filters( 'a-z-listing-additional-titles-taxonomy', $index_taxonomy );
 			$this->index_taxonomy = $index_taxonomy;
 
-			$this->query = $query;
-		} // End if().
-
-		$found = false;
-		$items = wp_cache_get( $this->cache_key, 'a-z-listing', false, $found );
-		if ( false === $items || false === $found ) {
-			$items = $this->get_the_items();
-			wp_cache_set( $this->cache_key, $items, 'a-z-listing', 3600 );
-		}
-
-		$this->matched_item_indices = $this->get_all_indices();
-	}
-
-	/**
-	 * Construct the query and fetch the items.
-	 *
-	 * @since 2.0.0
-	 * @param null|WP_Query|array|string $query
-	 */
-	protected function get_the_items( $query = null ) {
-		if ( is_string( $query ) && ! empty( $query ) ) {
-			$items = get_terms( $query, array(
-				'hide_empty' => false,
-			) );
-		} else {
 			$query = (array) $query;
 
 			$section = self::get_section();
@@ -154,10 +120,8 @@ class A_Z_Listing {
 			}
 
 			if ( $section ) {
-				$query['post_parent'] = $section->ID;
+				$query['child_of'] = $section->ID;
 			}
-
-			$query['fields'] = 'ids';
 
 			if ( isset( $query['child_of'] ) ) {
 				$this->items = get_pages( $query );
@@ -166,11 +130,10 @@ class A_Z_Listing {
 				$this->items = $query->get_posts();
 			}
 
-			$query = $this->construct_query( $query );
-			$items = $query->get_posts();
-		}
+			$this->query = $query;
+		} // End if().
 
-		return $items;
+		$this->matched_item_indices = $this->get_all_indices();
 	}
 
 	/**
@@ -202,7 +165,7 @@ class A_Z_Listing {
 		}
 
 		/* translators: List the aphabet of your language in the order that your language prefers. list as groups of identical meanings but different characters together, e.g. in English we group A with a because they are both the same letter but different character-code. Each character group should be followed by a comma separating it from the next group. Any amount of characters per group are acceptible, and there is no requirement for all the groups to contain the same amount of characters as all the others. Be careful with the character you place first in each group as that will be used as the identifier for the group which gets displayed on the page, e.g. in English a group definition of "Aa" will indicate that we display all the posts in the group, i.e. whose titles begin with either "A" or "a", listed under a heading of "A" (the first character in the definition). */
-		$alphabet = __( 'AÁÀÄÂaáàäâ,Bb,Cc,Dd,EÉÈËÊeéèëê,Ff,Gg,Hh,IÍÌÏÎiíìïî,Jj,Kk,Ll,Mm,Nn,OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz' );
+		$alphabet = __( 'AÁÀÄÂaáàäâ,Bb,Cc,Dd,EÉÈËÊeéèëê,Ff,Gg,Hh,IÍÌÏÎiíìïî,Jj,Kk,Ll,Mm,Nn,OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz', 'a-z-listing' );
 		/* translators: This should be a single character to denote "all entries that didn't fit under one of the alphabet character groups defined". This is used in English to categorise posts whose title begins with a numeric (0 through to 9), or some other character that is not a standard English alphabet letter. */
 		$others = __( '#', 'a-z-listing' );
 
@@ -574,12 +537,12 @@ class A_Z_Listing {
 	/**
 	 * Return the letter links HTML
 	 *
-	 * @since 2.0.0
+	 * @since 1.0.0
 	 * @param string $target The page to point links toward
 	 * @param string $style Optional CSS classes to apply to the output
 	 * @return string The letter links HTML
 	 */
-	protected function render_the_letters( $target = '', $style = null ) {
+	public function get_the_letters( $target = '', $style = null ) {
 		$classes = array( 'az-links' );
 		if ( null !== $style ) {
 			if ( is_array( $style ) ) {
@@ -631,25 +594,6 @@ class A_Z_Listing {
 			$ret .= '</li>';
 		}
 		$ret .= '</ul>';
-	}
-
-	/**
-	 * Return the letter links HTML
-	 *
-	 * @since 1.0.0
-	 * @param string $target The page to point links toward
-	 * @param string $style Optional CSS classes to apply to the output
-	 * @return string The letter links HTML
-	 */
-	public function get_the_letters( $target = '', $style = null ) {
-		$cache_key = wp_json_encode( array( $target, $style ) );
-		if ( isset( $the_letters_output[ $cache_key ] ) ) {
-			return $the_letters_output[ $cache_key ];
-		}
-
-		$ret = $this->render_the_letters( $target, $style );
-
-		wp_cache_set( $cache_key, $ret );
 		return $ret;
 	}
 
@@ -890,33 +834,6 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Build, Cache, and print the letter section, or just print a pre-cached copy if it exists
-	 *
-	 * @since 2.0.0
-	 * @param function A function containing the logic for formatting the posts
-	 */
-	public function the_letter_section( $func ) {
-		$id = $this->get_the_letter_id();
-		$query = md5( $this->query );
-		$transient_name = "a-z-listing:{$id}:{$query}";
-
-		$cache = get_transient( $transient_name );
-		if ( false === $cache && $cache['posts'] !== $this->current_letter_items ) {
-			ob_start();
-			if ( is_callable( $func ) ) {
-				call_user_func( $func );
-			}
-			$content = ob_get_clean();
-
-			$cache['html'] = $content;
-			$cache['posts'] = $this->current_letter_items;
-
-			set_transient( $transient_name, $cache, /* 1 */ DAY_IN_SECONDS );
-		}
-		print $cache['html']; // WPCS: XSS OK.
-	}
-
-	/**
 	 * Print the escaped title of the current post
 	 *
 	 * @since 1.0.0
@@ -964,4 +881,45 @@ class A_Z_Listing {
 		}
 		return get_permalink( $item );
 	}
+}
+
+/**
+ * Get a saved copy of the A_Z_Listing instance if we have one, or make a new one and save it for later
+ *
+ * @param  array|string|WP_Query|A_Z_Listing  $query      a valid WordPress query or an A_Z_Listing instance
+ * @param  bool                               $use_cache  use the plugin's in-built query cache
+ * @return A_Z_Listing                                    a new or previously-saved instance of A_Z_Listing using the provided construct_query
+ */
+function a_z_listing_cache( $query = null, $use_cache = true ) {
+	static $cache = array();
+
+	if ( $query instanceof A_Z_Listing ) {
+		// we received a valid A_Z_Listing instance so we get the query from it for the cache lookup/save key.
+		if ( true === $use_cache ) {
+			$key = wp_json_encode( $query->get_the_query() );
+			if ( array_key_exists( $key, $cache ) ) {
+				return $cache[ $key ];
+			}
+
+			$cache[ $key ] = $query;
+		}
+		return $query;
+	}
+
+	// check the cache and return any pre-existing A_Z_Listing instance we have.
+	$key = wp_json_encode( $query );
+	if ( null !== $query && true === $use_cache && array_key_exists( $key, $cache ) ) {
+		return $cache[ $key ];
+	}
+
+	// if $query is $obj then we did not get an A_Z_Listing instance as our argument, so we will make a new one.
+	$obj = new A_Z_Listing( $query );
+
+	if ( true === $use_cache ) {
+		// save the new A_Z_Listing instance into the cache.
+		$cache[ $key ] = $obj;
+	}
+
+	// return the new A_Z_Listing instance.
+	return $obj;
 }

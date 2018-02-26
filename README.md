@@ -1,16 +1,16 @@
-# A-Z Listing
-- **Contributors:** diddledan
-- **Donate link:** [Donate](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=N7QFVVD4PZVFE)
-- **Tags:** a to z, a-z, archive, listing, widget, index
-- **Requires at least:** 3.5
-- **Tested up to:** 4.9
-- **Stable tag:** 1.9.1
-- **License:** GPLv2 or later
-- **License URI:** http://www.gnu.org/licenses/gpl-2.0.html
+# A-Z Listing #
+**Contributors:** diddledan  
+**Donate Link:** https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=N7QFVVD4PZVFE  
+**Tags:** a to z, a-z, archive, listing, widget, index  
+**Requires at least:** 3.5  
+**Tested up to:** 4.9  
+**Stable tag:** 1.9.1  
+**License:** GPLv2 or later  
+**License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
 Provides an A to Z index page and widget. The widget links to the index page at the appropriate letter.
 
-## Description
+## Description ##
 
 [![Build Status](https://travis-ci.org/bowlhat/wp-a-z-listing.svg?branch=master)](https://travis-ci.org/bowlhat/wp-a-z-listing)
 
@@ -41,28 +41,27 @@ placing the a-z index on a child of section1 will likewise limit the index page 
 
 Likewise for section2, section2a and section2b.
 
-### Your server will need
+### Your server will need ###
 
 1. PHP 5.3 is the minimum version supported. Preferably use the most-recent version of PHP your host offers; PHP 7.0 is ideal.
 1. The plugin requires `mbstring` turned-on in your PHP installation. Without this feature WordPress will issue a WSOD (White Screen of Death).
 
-## Installation
+## Installation ##
 
 This section describes how to install the plugin and get it working.
 
-### Your server will need
+### Your server will need ###
 
 1. PHP 5.3 is the minimum version supported. Preferably use the most-recent version of PHP your host offers; PHP 7.0 is ideal.
 1. The plugin requires `mbstring` turned-on in your PHP installation. Without this feature WordPress will issue a WSOD (White Screen of Death).
 
-### Instructions
-
+### Instructions ###
 1. Upload the `a-z-listing` folder to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Place `<?php the_a_z_listing(); ?>` in your templates for the index page output (see the **php** section of this document for details) or use the `a-z-listing` shortcode (see the **shortcode** section of this document for details).
 1. Add the A-Z Site Map widget to a sidebar or use `<?php the_a_z_widget( null, array( 'post' => get_page( $id ) ) ); ?>` in your templates (see the **php** section of this document for details).
 
-## Shortcode
+## Shortcode ##
 
 The plugin supplies a shortcode for the full A-Z listing allowing use without modifying your theme's templates.
 
@@ -143,23 +142,23 @@ To group the alphabet letters into a range:
   - Including more than one letter/symbol in each group will display posts starting with any of those under the same section
   - The first letter/symbol in each group is used as the group's heading when displayed on your site
 
-## PHP
+## PHP ##
 
-### Synopsis
+### Synopsis ###
 
 `the_a_z_listing( $query );` or `get_the_a_z_listing( $query );`
 
 `$query` is any valid [`WP_Query`](https://codex.wordpress.org/Class_Reference/WP_Query) array definition, a `WP_Query` object formed from `new WP_Query();`, or a single string containing a taxonomy which will switch the listing to display terms from that taxonomy instead of posts.
 
-### Reference
+### Reference ###
 
 Full API documentation is available at [A-Z-Listing Reference](https://a-z-listing.com/reference/)
 
-## Multi Column Output
+## Multi Column Output ##
 
 If you want the multi-column output support, you need to copy the file `a-z-listing-multi-column.example.php` from the plugin inside the `templates` directory to your theme. The file needs to also be renamed to `a-z-listing.php` when copied to your theme. The **Templates and Theming** section of this Document details the functions used within templates and The Loop process this plugin follows.
 
-## Templates and Theming
+## Templates and Theming ##
 
 The plugin allows the site owner, developer, or themer to provide custom templates for the A-Z Listing output.
 
@@ -167,7 +166,7 @@ The plugin allows the site owner, developer, or themer to provide custom templat
 
 To add a template to your theme, you need a file similar to the `templates/a-z-listing.php` file in the plugin folder. Your copy needs to be placed within your theme at the theme root directory and called `a-z-listing.php` or `a-z-listing-section.php` (where `-section` is an optional top-level page slug for the section-targeting feature).
 
-### The Loop
+### The Loop ###
 
 The theme system this plugin implements is *very* similar to [the standard WordPress loop](https://codex.wordpress.org/The_Loop), with a few added bits.
 
@@ -183,7 +182,7 @@ When you are within the Item Loop you can utilise all in-built WordPress Core po
 
 I advise that you start with a copy of the default template or the multi-column template when customizing your own version. The supplied templates show the usage of most of the functions this plugin provides.
 
-### Helper functions
+### Helper functions ###
 
 The plugin supports displaying taxonomy terms as though each term were a post. This means that the WordPress functions related to posts such as `the_title()` and `the_permalink()` are unreliable. We have therefore added helper functions which will return or print the correct output for the item.
 
@@ -196,9 +195,9 @@ These helper functions cope with the dual usage of the plugin supporting both `W
 * `$a_z_query->the_permalink()` prints the current item's Permalink
 * `$a_z_query->get_the_permalink()` returns the current item's Permalink but does not print it directly
 
-## Frequently Asked Questions
+## Frequently Asked Questions ##
 
-### How do I show posts of a different post-type (not pages) or multiple post-types (e.g. posts AND pages)
+### How do I show posts of a different post-type (not pages) or multiple post-types (e.g. posts AND pages) ###
 
 This can be achieved using the shortcode or PHP.
 
@@ -236,7 +235,7 @@ The argument to `the_a_z_listing()` is an [array](http://php.net/manual/en/langu
 
 *The code above needs to be within a php block which is denoted by the `<?php` and `?>` pair. Depending on your theme, you might not need the opening and closing php tags shown in the above snippet; if that is the case, you are free to omit them in your code.*
 
-### How do I show posts from a specific category only
+### How do I show posts from a specific category only ###
 
 This can be achieved using the shortcode or PHP.
 
@@ -270,7 +269,7 @@ The argument to `the_a_z_listing()` is an [array](http://php.net/manual/en/langu
 
 *The code above needs to be within a php block which is denoted by the `<?php` and `?>` pair. Depending on your theme, you might not need the opening and closing php tags shown in the above snippet; if that is the case, you are free to omit them in your code.*
 
-### How do I show terms from a taxonomy instead of posts
+### How do I show terms from a taxonomy instead of posts ###
 
 This can be achieved using the shortcode or PHP.
 
@@ -294,7 +293,7 @@ The argument to `the_a_z_listing()` is a [string](http://php.net/manual/en/langu
 
 *The code above needs to be within a php block which is denoted by the `<?php` and `?>` pair. Depending on your theme, you might not need the opening and closing php tags shown in the above snippet; if that is the case, you are free to omit them in your code.*
 
-### How do I remove section targeting or limit which sections are available?
+### How do I remove section targeting or limit which sections are available? ###
 
 In your theme's functions.php add the following code:
 
@@ -306,7 +305,7 @@ This filter can also be used, by removing entries which are standard $post varia
 
 *If there is code already in your functions.php then add just the lines between `<?php` and `?>` on the line directly after the very first instance of `<?php`.*
 
-### I am not using the short-code so the styles are not working, can I still use the in-built styles without the short-code?
+### I am not using the short-code so the styles are not working, can I still use the in-built styles without the short-code? ###
 
 Yes you can. This needs the following code added to your theme's functions.php. We purposely only display the stylesheet on pages where the short-code is active.
 
@@ -332,7 +331,7 @@ You can add code which detects the page which the user is browsing and only enab
 
 *If there is code already in your functions.php then add just the lines between `<?php` and `?>` on the line directly after the very first instance of `<?php`.*
 
-### How do I disable the in-built styling?
+### How do I disable the in-built styling? ###
 
 In your theme's functions.php add the following code:
 
@@ -342,18 +341,19 @@ In your theme's functions.php add the following code:
 
 *If there is code already in your functions.php then add just the lines between `<?php` and `?>` on the line directly after the very first instance of `<?php`.*
 
-## Screenshots
+## Screenshots ##
 
-### 1. An example of the index listing page.
-![An example of the index listing page.](https://ps.w.org/a-z-listing/assets/screenshot-1.png)
+### 1. An example of the index listing page. ###
+![An example of the index listing page.](http://ps.w.org/a-z-listing/assets/screenshot-1.png)
 
-### 2. The Widget is shown here.
-![The Widget is shown here.](https://ps.w.org/a-z-listing/assets/screenshot-2.png)
+### 2. The Widget is shown here. ###
+![The Widget is shown here.](http://ps.w.org/a-z-listing/assets/screenshot-2.png)
 
-## Changelog
 
-### 1.9.1
-Feature Request
+## Changelog ##
+
+### 1.9.1 ###
+Feature Request:
 Add CSS classes to letters indicating presence of posts or not:
   
 * `has-posts` allows styling of letters that have posts visible in the listing
@@ -364,14 +364,14 @@ You can use these classes to hide letters that have no posts by including the fo
     display: none;
 }`
 
-### 1.9.0
+### 1.9.0 ###
 * Fix multi-column example template
 * Update multi-column styles to include display:grid support
 * Add back-to-top link
 * Add server system requirements to readme
 * Add PHP section to readme including link to API Reference
 
-### 1.8.0
+### 1.8.0 ###
 * Add extra shortcode attributes:
   * `numbers`: appends or prepends numerals to the alphabet
     - Default value: unset
@@ -395,11 +395,11 @@ You can use these classes to hide letters that have no posts by including the fo
     - The first letter/symbol in each group is used as the group's heading when displayed on your site
 * Bugfix: Shortcode to display taxonomy terms wouldn't also display numbers groups. Hat-tip to @sotos for the report.
 
-### 1.7.2
+### 1.7.2 ###
 * Add additional filters allowing for hyphens or underscores to be used when defining. The readme.txt incorrectly used then-unsupported names with hyphens in examples so now we support both.
 * Add numbers="before" and numbers="after" in shortcode
 * Add support for taxonomy term listings to the shortcode
 * Add support for filtering by taxonomy terms to the shortcode
 
-### Previous
+### Previous ###
 See the file called `changelog.md` for the full release history.

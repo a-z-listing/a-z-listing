@@ -31,7 +31,7 @@
 							</li>
 						<?php endwhile; ?>
 					</ul></div>
-					<div class="back-to-top"><a href="#letters">Back to top</a></div>
+					<div class="back-to-top"><a href="#letters"><?php _e( 'Back to top', 'a-z-listing' ); ?></a></div>
 				</div>
 			<?php endif; ?>
 		<?php endwhile; ?>
