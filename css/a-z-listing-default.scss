@@ -36,18 +36,48 @@
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	justify-content: space-between;
-	h2 {
+	justify-content: start;
+	@supports (display: grid) {
+		display: grid;
+		grid-gap: 0 0.6em;
+		&:after {
+			display: none;
+		}
+	}
+	h2.letter-title {
 		border-bottom: 1px solid black;
 		margin-bottom: 0.2em;
 		padding-bottom: 0.2em;
 		width: 100%;
+		@supports (display: grid) {
+			grid-column: 1 / end;
+		}
 	}
 	ul, ul li {
 		list-style: none;
 		margin: 0;
 	}
-	> div:nth-last-child(1) {
-		flex-grow: 1;
+	div.column {
+		box-sizing: border-box;
+		&:nth-last-child(1) {
+			flex-grow: 1;
+		}
+	}
+	div.back-to-top {
+		width: 100%;
+		text-align: right;
+		a {
+			text-transform: uppercase;
+			font-size: 0.7em;
+			&:before,
+			&:after {
+				font-family: dashicons;
+				content: "\f343";
+				padding: 0.2em;
+			}
+		}
+		@supports (display: grid) {
+			grid-column: 1 / end;
+		}
 	}
 }

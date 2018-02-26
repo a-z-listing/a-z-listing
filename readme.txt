@@ -3,8 +3,8 @@ Contributors: diddledan
 Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=N7QFVVD4PZVFE
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 3.5
-Tested up to: 4.8
-Stable tag: 1.8.0
+Tested up to: 4.9
+Stable tag: 1.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,10 +41,21 @@ placing the a-z index on a child of section1 will likewise limit the index page 
 
 Likewise for section2, section2a and section2b.
 
+= Your server will need =
+
+1. PHP 5.3 is the minimum version supported. Preferably use the most-recent version of PHP your host offers; PHP 7.0 is ideal.
+1. The plugin requires `mbstring` turned-on in your PHP installation. Without this feature WordPress will issue a WSOD (White Screen of Death).
+
 == Installation ==
 
 This section describes how to install the plugin and get it working.
 
+= Your server will need =
+
+1. PHP 5.3 is the minimum version supported. Preferably use the most-recent version of PHP your host offers; PHP 7.0 is ideal.
+1. The plugin requires `mbstring` turned-on in your PHP installation. Without this feature WordPress will issue a WSOD (White Screen of Death).
+
+= Instructions =
 1. Upload the `a-z-listing` folder to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Place `<?php the_a_z_listing(); ?>` in your templates for the index page output (see the **php** section of this document for details) or use the `a-z-listing` shortcode (see the **shortcode** section of this document for details).
@@ -131,7 +142,19 @@ To group the alphabet letters into a range:
   - Including more than one letter/symbol in each group will display posts starting with any of those under the same section
   - The first letter/symbol in each group is used as the group's heading when displayed on your site
 
-= Multi Column Output =
+== PHP ==
+
+= Synopsis =
+
+`the_a_z_listing( $query );` or `get_the_a_z_listing( $query );`
+
+`$query` is any valid [`WP_Query`](https://codex.wordpress.org/Class_Reference/WP_Query) array definition, a `WP_Query` object formed from `new WP_Query();`, or a single string containing a taxonomy which will switch the listing to display terms from that taxonomy instead of posts.
+
+= Reference =
+
+Full API documentation is available at [A-Z-Listing Reference](https://a-z-listing.com/reference/)
+
+== Multi Column Output ==
 
 If you want the multi-column output support, you need to copy the file `a-z-listing-multi-column.example.php` from the plugin inside the `templates` directory to your theme. The file needs to also be renamed to `a-z-listing.php` when copied to your theme. The **Templates and Theming** section of this Document details the functions used within templates and The Loop process this plugin follows.
 
@@ -145,7 +168,7 @@ To add a template to your theme, you need a file similar to the `templates/a-z-l
 
 = The Loop =
 
-The theme system this plugin implements is *very* similar to the standard WordPress loop, with a few added bits.
+The theme system this plugin implements is *very* similar to [the standard WordPress loop](https://codex.wordpress.org/The_Loop), with a few added bits.
 
 Important functions to use in your template are as follows:
 
@@ -325,6 +348,25 @@ In your theme's functions.php add the following code:
 
 == Changelog ==
 
+= 1.9.1 =
+Feature Request:
+Add CSS classes to letters indicating presence of posts or not:
+  
+* `has-posts` allows styling of letters that have posts visible in the listing
+* `no-posts` allows styling of letters that do not have any posts visible in the listing
+  
+You can use these classes to hide letters that have no posts by including the following CSS rule:
+`.az-letters ul.az-links li.no-posts {
+    display: none;
+}`
+
+= 1.9.0 =
+* Fix multi-column example template
+* Update multi-column styles to include display:grid support
+* Add back-to-top link
+* Add server system requirements to readme
+* Add PHP section to readme including link to API Reference
+
 = 1.8.0 =
 * Add extra shortcode attributes:
   * `numbers`: appends or prepends numerals to the alphabet
@@ -350,13 +392,8 @@ In your theme's functions.php add the following code:
 * Bugfix: Shortcode to display taxonomy terms wouldn't also display numbers groups. Hat-tip to @sotos for the report.
 
 = 1.7.2 =
-* Bugfix: Previous release broke the shortcode
-
-= 1.7.1 =
 * Add additional filters allowing for hyphens or underscores to be used when defining. The readme.txt incorrectly used then-unsupported names with hyphens in examples so now we support both.
 * Add numbers="before" and numbers="after" in shortcode
-
-= 1.7.0 =
 * Add support for taxonomy term listings to the shortcode
 * Add support for filtering by taxonomy terms to the shortcode
 

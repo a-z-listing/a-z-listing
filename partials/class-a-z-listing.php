@@ -80,9 +80,17 @@ class A_Z_Listing {
 				do_action( 'log', 'A-Z Listing: Setting taxonomy mode', $query );
 			}
 
-			$this->cache_key = "a-z-listing:taxonomy:$query";
-			$this->type = 'taxonomy';
+			$this->type     = 'taxonomy';
 			$this->taxonomy = $query;
+			$this->items    = get_terms(
+				$query, array(
+					'hide_empty' => false,
+				)
+			);
+
+			if ( AZLISTINGLOG ) {
+				do_action( 'log', 'A-Z Listing: Terms', '!slug', $this->items );
+			}
 		} else {
 			if ( AZLISTINGLOG ) {
 				do_action( 'log', 'A-Z Listing: Setting posts mode', $query );
@@ -108,7 +116,7 @@ class A_Z_Listing {
 			 * @since 1.7.1
 			 * @param string $taxonomy The taxonomy mapping alternative titles to posts
 			 */
-			$index_taxonomy = apply_filters( 'a-z-listing-additional-titles-taxonomy', $index_taxonomy );
+			$index_taxonomy       = apply_filters( 'a-z-listing-additional-titles-taxonomy', $index_taxonomy );
 			$this->index_taxonomy = $index_taxonomy;
 
 			$this->query = $query;
@@ -151,6 +159,13 @@ class A_Z_Listing {
 
 			$query['fields'] = 'ids';
 
+			if ( isset( $query['child_of'] ) ) {
+				$this->items = get_pages( $query );
+			} else {
+				$query       = $this->construct_query( $query );
+				$this->items = $query->get_posts();
+			}
+
 			$query = $this->construct_query( $query );
 			$items = $query->get_posts();
 		}
@@ -166,12 +181,12 @@ class A_Z_Listing {
 	 * @return array individual multi-byte characters from the string
 	 */
 	public static function mb_string_to_array( $string ) {
-		$array = array();
+		$array  = array();
 		$length = mb_strlen( $string );
 		while ( $length ) {
 			$array[] = mb_substr( $string, 0, 1, 'UTF-8' );
-			$string = mb_substr( $string, 1, $length, 'UTF-8' );
-			$length = mb_strlen( $string );
+			$string  = mb_substr( $string, 1, $length, 'UTF-8' );
+			$length  = mb_strlen( $string );
 		}
 		return $array;
 	}
@@ -220,11 +235,11 @@ class A_Z_Listing {
 		$others = apply_filters( 'a-z-listing-non-alpha-char', $others );
 
 		$alphabet_groups = mb_split( ',', $alphabet );
-		$letters = array_reduce(
+		$letters         = array_reduce(
 			$alphabet_groups, function( $return, $group ) {
-				$group = A_Z_Listing::mb_string_to_array( $group );
+				$group                 = A_Z_Listing::mb_string_to_array( $group );
 				$group_index_character = $group[0];
-				$group = array_reduce(
+				$group                 = array_reduce(
 					$group, function( $group, $character ) use ( $group_index_character ) {
 						$group[ $character ] = $group_index_character;
 						return $group;
@@ -237,7 +252,7 @@ class A_Z_Listing {
 			}
 		);
 
-		self::$alphabet = $letters;
+		self::$alphabet        = $letters;
 		self::$unknown_letters = $others;
 	}
 
@@ -271,12 +286,16 @@ class A_Z_Listing {
 	protected static function get_section( $page = 0 ) {
 		global $post;
 
-		$pages = get_pages( array(
-			'parent' => 0,
-		) );
-		$sections = array_map( function( $item ) {
-			return $item->post_name;
-		}, $pages );
+		$pages    = get_pages(
+			array(
+				'parent' => 0,
+			)
+		);
+		$sections = array_map(
+			function( $item ) {
+					return $item->post_name;
+			}, $pages
+		);
 		/**
 		 * @deprecated Use a_z_listing_sections
 		 * @see a_z_listing_sections
@@ -304,7 +323,7 @@ class A_Z_Listing {
 		}
 
 		$section_object = self::find_post_parent( $page );
-		$section_name = null;
+		$section_name   = null;
 		if ( $section_object === $page ) {
 			$section_object = null;
 		}
@@ -313,7 +332,7 @@ class A_Z_Listing {
 			if ( isset( $section_object->post_name ) ) {
 				$section_name = $section_object->post_name;
 			} else {
-				$section_name = null;
+				$section_name   = null;
 				$section_object = null;
 			}
 		}
@@ -323,7 +342,7 @@ class A_Z_Listing {
 		}
 
 		if ( null !== $section_name && ! in_array( $section_name, $sections, true ) ) {
-			$section_name = null;
+			$section_name   = null;
 			$section_object = null;
 		}
 
@@ -362,9 +381,9 @@ class A_Z_Listing {
 
 		$q = wp_parse_args(
 			(array) $q, array(
-				'post_type' => 'page',
+				'post_type'   => 'page',
 				'numberposts' => -1,
-				'nopaging' => true,
+				'nopaging'    => true,
 			)
 		);
 		return new WP_Query( $q );
@@ -403,16 +422,16 @@ class A_Z_Listing {
 	 * @return Array The post's index letters (usually matching the first character of the post title)
 	 */
 	protected function get_the_item_indices( $item ) {
-		$terms = array();
-		$indices = array();
+		$terms        = array();
+		$indices      = array();
 		$term_indices = array();
-		$index = '';
+		$index        = '';
 
 		if ( $item instanceof WP_Term ) {
-			$index = mb_substr( $item->name, 0, 1, 'UTF-8' );
+			$index               = mb_substr( $item->name, 0, 1, 'UTF-8' );
 			$indices[ $index ][] = array(
 				'title' => $item->name,
-				'item' => $item,
+				'item'  => $item,
 			);
 			/**
 			 * @deprecated Use a_z_listing_item_indices
@@ -420,21 +439,23 @@ class A_Z_Listing {
 			 */
 			$indices = apply_filters_deprecated( 'a_z_listing_term_indices', array( $indices, $item ), '1.0.0', 'a_z_listing_item_indices' );
 		} else {
-			$index = mb_substr( $item->post_title, 0, 1, 'UTF-8' );
+			$index               = mb_substr( $item->post_title, 0, 1, 'UTF-8' );
 			$indices[ $index ][] = array(
 				'title' => $item->post_title,
-				'item' => $item,
+				'item'  => $item,
 			);
 
 			if ( ! empty( $this->index_taxonomy ) ) {
-				$terms = array_filter( wp_get_object_terms( $item->ID, $this->index_taxonomy ) );
-				$term_indices = array_reduce( $terms, function( $indices, $term ) use ( $item ) {
-					$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array(
-						'title' => $term->name,
-						'item' => $item,
-					);
-					return $indices;
-				} );
+				$terms        = array_filter( wp_get_object_terms( $item->ID, $this->index_taxonomy ) );
+				$term_indices = array_reduce(
+					$terms, function( $indices, $term ) use ( $item ) {
+						$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array(
+							'title' => $term->name,
+							'item'  => $item,
+						);
+						return $indices;
+					}
+				);
 
 				if ( ! empty( $term_indices ) ) {
 					$indices = array_merge( $indices, $term_indices );
@@ -564,15 +585,15 @@ class A_Z_Listing {
 			if ( is_array( $style ) ) {
 				$classes = array_merge( $classes, $style );
 			} elseif ( is_string( $style ) ) {
-				$c = explode( ' ', $style );
+				$c       = explode( ' ', $style );
 				$classes = array_merge( $classes, $c );
 			}
 		}
 		$classes = array_unique( $classes );
 
-		$ret = '<ul class="' . esc_attr( implode( ' ', $classes ) ) . '">';
+		$ret   = '<ul class="' . esc_attr( implode( ' ', $classes ) ) . '">';
 		$count = count( $this->available_indices );
-		$i = 0;
+		$i     = 0;
 		foreach ( $this->available_indices as $letter ) {
 			$i++;
 			$id = $letter;
@@ -580,10 +601,26 @@ class A_Z_Listing {
 				$id = '_';
 			}
 
-			$classes = ( ( 1 === $i ) ? 'first ' : ( ( $count === $i ) ? 'last ' : '' ) );
-			$classes .= ( ( 0 === $i % 2 ) ? 'even' : 'odd' );
+			$classes = array();
+			if ( 1 === $i ) {
+				array_push( $classes, 'first' );
+			} elseif ( $count === $i ) {
+				array_push( $classes, 'last' );
+			}
 
-			$ret .= '<li class="' . esc_attr( $classes ) . '">';
+			if ( 0 === $i % 2 ) {
+				array_push( $classes, 'even' );
+			} else {
+				array_push( $classes, 'odd' );
+			}
+
+			if ( ! empty( $this->matched_item_indices[ $letter ] ) ) {
+				array_push( $classes, 'has-posts' );
+			} else {
+				array_push( $classes, 'no-posts' );
+			}
+
+			$ret .= '<li class="' . esc_attr( implode( ' ', $classes ) ) . '">';
 			if ( ! empty( $this->matched_item_indices[ $letter ] ) ) {
 				$ret .= '<a href="' . esc_url( $target . '#letter-' . $id ) . '">';
 			}
@@ -626,7 +663,7 @@ class A_Z_Listing {
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$a_z_query = $this;
 		/** @noinspection PhpIncludeInspection */
-		include( $template_file );
+		include $template_file;
 	}
 
 	/**
@@ -708,7 +745,7 @@ class A_Z_Listing {
 	 * @since 1.0.0
 	 */
 	public function the_letter() {
-		$this->current_item_index = 0;
+		$this->current_item_index   = 0;
 		$this->current_letter_items = array();
 		if ( isset( $this->matched_item_indices[ $this->available_indices[ $this->current_letter_index ] ] ) ) {
 			$this->current_letter_items = $this->matched_item_indices[ $this->available_indices[ $this->current_letter_index ] ];
@@ -734,7 +771,7 @@ class A_Z_Listing {
 	public function the_item() {
 		global $post;
 		$this->current_item = $this->current_letter_items[ $this->current_item_index ];
-		$item_object = $this->current_item['item'];
+		$item_object        = $this->current_item['item'];
 		if ( $item_object instanceof WP_Post ) {
 			$post = $item_object; // WPCS: Override OK.
 			setup_postdata( $post );
@@ -896,7 +933,7 @@ class A_Z_Listing {
 	 */
 	public function get_the_title() {
 		$title = $this->current_item['title'];
-		$item = $this->current_item['item'];
+		$item  = $this->current_item['item'];
 		if ( $item instanceof WP_Post ) {
 			$title = apply_filters( 'the_title', $title, $item->ID );
 		} elseif ( $item instanceof WP_Term ) {

@@ -7,7 +7,7 @@ var paths = {
 	styles: ['css/*.scss']
 };
 
-gulp.task('styles', function () {
+const styles = () => {
 	var sass = require('gulp-sass');
 	var postcss = require('gulp-postcss');
 
@@ -17,6 +17,9 @@ gulp.task('styles', function () {
 		.pipe(postcss([ require('autoprefixer') ]))
 		.pipe(sourcemaps.write())
 		.pipe(gulp.dest('css/'));
-});
+};
+
+gulp.task('styles', styles);
+gulp.task('watch', () => gulp.watch(paths.styles, styles))
 
 gulp.task('default', ['styles']);

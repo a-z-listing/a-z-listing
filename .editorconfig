@@ -6,18 +6,6 @@ insert_final_newline = true
 charset = utf-8
 trim_trailing_whitespace = true
 
-[*.txt]
-indent_style = spaces
-indent_size = 2
-
-[tests/data/*.txt]
-indent_style = spaces
-indent_size = 4
-
-[*.md]
-indent_style = spaces
-indent_size = 2
-
 [*.php]
 indent_style = tab
 indent_size = 4
