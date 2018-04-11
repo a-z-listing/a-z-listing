@@ -41,7 +41,7 @@ class A_Z_Numbers {
 			$numbers = '0123456789';
 		}
 
-		if ( 'before' === $position ) {
+		if ( 'before' === $this->position ) {
 			return join( ',', array( $numbers, $alphabet ) );
 		}
 		return join( ',', array( $alphabet, $numbers ) );
