@@ -3,7 +3,7 @@
 Contributors: diddledan
 Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=N7QFVVD4PZVFE
 Tags: a to z, a-z, archive, listing, widget, index
-Requires at least: 3.5
+Requires at least: 4.6
 Requires PHP: 5.6
 Tested up to: 4.9
 Stable tag: 1.9.1
