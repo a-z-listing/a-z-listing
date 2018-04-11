@@ -1,17 +1,18 @@
 <?php
 /**
- * Definition for the a-z-listing's main widget.
+ * Definition for the a-z-listing's main widget
+ *
  * @package  a-z-listing
  */
 
 /**
- * Definition for the AZ_Widget which displays alphabetically-ordered list of latin letters linking to the A-Z Listing page.
+ * Definition for the AZ_Widget which displays alphabetically-ordered list of latin letters linking to the A-Z Listing page
  *
  * @since 0.1
  */
 class A_Z_Widget extends WP_Widget {
 	/**
-	 * Register the widget's meta information.
+	 * Register the widget's meta information
 	 *
 	 * @since 0.1
 	 */
@@ -29,7 +30,7 @@ class A_Z_Widget extends WP_Widget {
 	}
 
 	/**
-	 * Deprecated constructor.
+	 * Deprecated constructor
 	 *
 	 * @since 0.1
 	 */
@@ -38,7 +39,7 @@ class A_Z_Widget extends WP_Widget {
 	}
 
 	/**
-	 * Print-out the configuration form for the widget.
+	 * Print-out the configuration form for the widget
 	 *
 	 * @since 0.1
 	 * @param  Array $instance Widget instance as provided by WordPress core.
@@ -106,7 +107,7 @@ class A_Z_Widget extends WP_Widget {
 	}
 
 	/**
-	 * Called by WordPress core. Sanitises changes to the Widget's configuration.
+	 * Called by WordPress core. Sanitises changes to the Widget's configuration
 	 *
 	 * @since 0.1
 	 * @param  Array $new_instance the new configuration values.
@@ -123,7 +124,7 @@ class A_Z_Widget extends WP_Widget {
 	}
 
 	/**
-	 * Print the user-visible widget to the page.
+	 * Print the user-visible widget to the page
 	 *
 	 * @since 0.1
 	 * @param  Array $args     General widget configuration. Often shared between all widgets on the site.
@@ -145,10 +146,13 @@ function a_z_listing_widget() {
 add_action( 'widgets_init', 'a_z_listing_widget' );
 
 /**
- * @see A_Z_Widget::the_section_a_z_widget()
+ * Print the user-visible widget to the page implentation
  *
  * @since 0.1
+ * @see A_Z_Widget::the_section_a_z_widget()
  * @deprecated use the_section_a_z_widget()
+ * @param  Array $args     General widget configuration. Often shared between all widgets on the site.
+ * @param  Array $instance Configuration of this Widget. Unique to this invocation.
  */
 function the_section_az_widget( $args, $instance ) {
 	_deprecated_function( __FUNCTION__, '0.8.0', 'the_section_a_z_widget' );
@@ -156,7 +160,7 @@ function the_section_az_widget( $args, $instance ) {
 }
 
 /**
- * Print the user-visible widget to the page implentation.
+ * Print the user-visible widget to the page implentation
  *
  * @since 0.8.0
  * @param  Array $args     General widget configuration. Often shared between all widgets on the site.
@@ -172,6 +176,8 @@ function the_section_a_z_widget( $args, $instance ) {
  * @since 0.1
  * @see A_Z_Widget::get_the_section_a_z_widget()
  * @deprecated use get_the_section_a_z_widget()
+ * @param  Array $args     General widget configuration. Often shared between all widgets on the site.
+ * @param  Array $instance Configuration of this Widget. Unique to this invocation.
  */
 function get_the_section_az_widget( $args, $instance ) {
 	_deprecated_function( __FUNCTION__, '0.8.0', 'get_the_section_a_z_widget' );
@@ -179,7 +185,7 @@ function get_the_section_az_widget( $args, $instance ) {
 }
 
 /**
- * Get the user-visible widget html.
+ * Get the user-visible widget html
  *
  * @since 0.8.0
  * @param  Array $args     General widget configuration. Often shared between all widgets on the site.
@@ -230,7 +236,7 @@ function get_the_section_a_z_widget( $args, $instance ) {
 			$terms = array_reduce( $terms, function( $carry, $term ) {
 				$term = trim( $term );
 
-				if ( ! empty ( $term ) ) {
+				if ( ! empty( $term ) ) {
 					$carry[] = $term;
 				}
 
@@ -248,7 +254,7 @@ function get_the_section_a_z_widget( $args, $instance ) {
 
 	$a_z_query = a_z_listing_cache( $my_query );
 
-	$ret = '';
+	$ret  = '';
 	$ret .= $args['before_widget'];
 
 	$ret .= $args['before_title'];

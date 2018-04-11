@@ -1,21 +1,24 @@
 <?php
 /**
  * Support functions for the A-Z Index page
+ *
  * @package  a-z-listing
  */
 
 /**
- * Replies whether the query has any letters left
+ * Returns whether the query has any letters left
  *
  * @since 0.7
- * @param  array|string|WP_Query|A_Z_Listing  $query  a valid WordPress query or an A_Z_Listing instance
- * @return bool                                       whether there are letters still to be iterated-over
+ * @param  array|string|WP_Query|A_Z_Listing $query a valid WordPress query or an A_Z_Listing instance.
+ * @return bool                                     whether there are letters still to be iterated-over
  */
 function have_a_z_letters( $query = null ) {
 	return a_z_listing_cache( $query )->have_letters();
 }
 
 /**
+ * Returns whether the query has any posts left for the current letter
+ *
  * @since 0.7
  * @see have_a_z_items()
  * @deprecated use have_a_z_items()
@@ -26,11 +29,11 @@ function have_a_z_posts() {
 }
 
 /**
- * Replies whether the query has any posts left for the current letter
+ * Returns whether the query has any posts left for the current letter
  *
  * @since 0.8.0
- * @param  array|string|WP_Query|A_Z_Listing  $query  a valid WordPress query or an A_Z_Listing instance
- * @return bool                                       whether there are still posts available
+ * @param  array|string|WP_Query|A_Z_Listing $query a valid WordPress query or an A_Z_Listing instance.
+ * @return bool                                     whether there are still posts available
  */
 function have_a_z_items( $query = null ) {
 	return a_z_listing_cache( $query )->have_items();
@@ -40,13 +43,15 @@ function have_a_z_items( $query = null ) {
  * Proceed to the next letter
  *
  * @since 0.7
- * @param array|string|WP_Query|A_Z_Listing  $query  a valid WordPress query or an A_Z_Listing instance
+ * @param array|string|WP_Query|A_Z_Listing $query a valid WordPress query or an A_Z_Listing instance.
  */
 function the_a_z_letter( $query = null ) {
 	a_z_listing_cache( $query )->the_letter();
 }
 
 /**
+ * Proceed to the next letter
+ *
  * @since 0.7
  * @see the_a_z_item()
  * @deprecated use the_a_z_item()
@@ -60,13 +65,15 @@ function the_a_z_post() {
  * Proceed to the next post
  *
  * @since 0.8.0
- * @param array|string|WP_Query|A_Z_Listing  $query  a valid WordPress query or an A_Z_Listing instance
+ * @param array|string|WP_Query|A_Z_Listing $query a valid WordPress query or an A_Z_Listing instance.
  */
 function the_a_z_item( $query = null ) {
 	a_z_listing_cache( $query )->the_item();
 }
 
 /**
+ * Returns the number of posts for the letter
+ *
  * @since 0.7
  * @see get_the_a_z_letter_count()
  * @deprecated use get_the_a_z_letter_count()
@@ -77,6 +84,8 @@ function num_a_z_letters() {
 }
 
 /**
+ * Returns the number of posts for the letter
+ *
  * @since 0.7
  * @see get_the_a_z_letter_count()
  * @deprecated use get_the_a_z_letter_count()
@@ -87,6 +96,8 @@ function num_a_z_posts() {
 }
 
 /**
+ * Returns the number of posts for the letter
+ *
  * @since 0.7
  * @see get_the_a_z_letter_count()
  * @deprecated use get_the_a_z_letter_count()
@@ -100,16 +111,17 @@ function num_a_z_items() {
  * Print the number of letters for the query
  *
  * @since 1.0.0
- * @param array|string|WP_Query|A_Z_Listing  $query  a valid WordPress query or an A_Z_Listing instance
+ * @param array|string|WP_Query|A_Z_Listing $query a valid WordPress query or an A_Z_Listing instance.
  */
 function the_a_z_letter_count( $query = null ) {
 	a_z_listing_cache( $query )->the_letter_count();
 }
+
 /**
  * Get the number of letters for the query
  *
  * @since 1.0.0
- * @param  array|string|WP_Query|A_Z_Listing  $query  a valid WordPress query or an A_Z_Listing instance
+ * @param  array|string|WP_Query|A_Z_Listing $query a valid WordPress query or an A_Z_Listing instance.
  * @return int                                        the number of letters
  */
 function get_the_a_z_letter_count( $query = null ) {
@@ -117,10 +129,10 @@ function get_the_a_z_letter_count( $query = null ) {
 }
 
 /**
- * print the current letter ID
+ * Print the current letter ID
  *
  * @since 0.7
- * @param array|string|WP_Query|A_Z_Listing  $query  either a valid WordPress query or an A_Z_Listing instance
+ * @param array|string|WP_Query|A_Z_Listing $query either a valid WordPress query or an A_Z_Listing instance.
  */
 function the_a_z_letter_id( $query = null ) {
 	a_z_listing_cache( $query )->the_letter_id();
@@ -130,7 +142,7 @@ function the_a_z_letter_id( $query = null ) {
  * Get the current letter ID
  *
  * @since 0.7
- * @param  array|string|WP_Query|A_Z_Listing  $query  either a valid WordPress query or an A_Z_Listing instance
+ * @param  array|string|WP_Query|A_Z_Listing $query either a valid WordPress query or an A_Z_Listing instance.
  * @return String                                     the current letter ID
  */
 function get_the_a_z_letter_id( $query = null ) {
@@ -141,7 +153,7 @@ function get_the_a_z_letter_id( $query = null ) {
  * Print the current letter title
  *
  * @since 0.7
- * @param array|string|WP_Query|A_Z_Listing  $query  either a valid WordPress query or an A_Z_Listing instance
+ * @param array|string|WP_Query|A_Z_Listing $query either a valid WordPress query or an A_Z_Listing instance.
  */
 function the_a_z_letter_title( $query = null ) {
 	a_z_listing_cache( $query )->the_letter_title();
@@ -151,7 +163,7 @@ function the_a_z_letter_title( $query = null ) {
  * Get the current letter title
  *
  * @since 0.7
- * @param  array|string|WP_Query|A_Z_Listing  $query  either a valid WordPress query or an A_Z_Listing instance
+ * @param  array|string|WP_Query|A_Z_Listing $query either a valid WordPress query or an A_Z_Listing instance.
  * @return string                                     the letter title
  */
 function get_the_a_z_letter_title( $query = null ) {
@@ -162,7 +174,7 @@ function get_the_a_z_letter_title( $query = null ) {
  * Print the current item title
  *
  * @since 0.8.0
- * @param array|string|WP_Query|A_Z_Listing  $query  either a valid WordPress query or an A_Z_Listing instance
+ * @param array|string|WP_Query|A_Z_Listing $query either a valid WordPress query or an A_Z_Listing instance.
  */
 function the_a_z_item_title( $query = null ) {
 	a_z_listing_cache( $query )->the_title();
@@ -172,7 +184,7 @@ function the_a_z_item_title( $query = null ) {
  * Get the current item title
  *
  * @since 0.8.0
- * @param  array|string|WP_Query|A_Z_Listing  $query  either a valid WordPress query or an A_Z_Listing instance
+ * @param  array|string|WP_Query|A_Z_Listing $query either a valid WordPress query or an A_Z_Listing instance.
  * @return string                                     the post or taxonomy-term title
  */
 function get_the_a_z_item_title( $query = null ) {
@@ -183,7 +195,7 @@ function get_the_a_z_item_title( $query = null ) {
  * Print the current item permalink
  *
  * @since 0.8.0
- * @param array|string|WP_Query|A_Z_Listing  $query  either a valid WordPress query or an A_Z_Listing instance
+ * @param array|string|WP_Query|A_Z_Listing $query either a valid WordPress query or an A_Z_Listing instance.
  */
 function the_a_z_item_permalink( $query = null ) {
 	a_z_listing_cache( $query )->the_permalink();
@@ -193,7 +205,7 @@ function the_a_z_item_permalink( $query = null ) {
  * Get the current item permalink
  *
  * @since 0.8.0
- * @param  array|string|WP_Query|A_Z_Listing  $query  either a valid WordPress query or an A_Z_Listing instance
+ * @param  array|string|WP_Query|A_Z_Listing $query either a valid WordPress query or an A_Z_Listing instance.
  * @return string                                     the permalink
  */
 function get_the_a_z_item_permalink( $query = null ) {
@@ -201,9 +213,12 @@ function get_the_a_z_item_permalink( $query = null ) {
 }
 
 /**
+ * Print the A-Z Index page content
+ *
  * @since 0.1
  * @see the_a_z_listing()
  * @deprecated use the_a_z_listing()
+ * @param array|string|WP_Query|A_Z_Listing $query either a valid WordPress query or an A_Z_Listing instance.
  */
 function the_az_listing( $query = null ) {
 	_deprecated_function( __FUNCTION__, '0.8.0', 'the_a_z_listing' );
@@ -211,20 +226,23 @@ function the_az_listing( $query = null ) {
 }
 
 /**
- * Print the A-Z Index page content.
+ * Print the A-Z Index page content
  *
  * @since 0.8.0
- * @param array|string|WP_Query|A_Z_Listing  $query      a valid WordPress query or an A_Z_Listing instance
- * @param bool                               $use_cache  use the plugin's in-built query cache
+ * @param array|string|WP_Query|A_Z_Listing $query     a valid WordPress query or an A_Z_Listing instance.
+ * @param bool                              $use_cache use the plugin's in-built query cache.
  */
 function the_a_z_listing( $query = null, $use_cache = true ) {
 	a_z_listing_cache( $query, $use_cache )->the_listing();
 }
 
 /**
+ * Returns the A-Z Index page content
+ *
  * @since 0.1
  * @see get_the_a_z_listing()
  * @deprecated use get_the_a_z_listing()
+ * @param array|string|WP_Query|A_Z_Listing $query either a valid WordPress query or an A_Z_Listing instance.
  */
 function get_the_az_listing( $query = null ) {
 	_deprecated_function( __FUNCTION__, '0.8.0', 'get_the_a_z_listing' );
@@ -232,21 +250,26 @@ function get_the_az_listing( $query = null ) {
 }
 
 /**
- * Return the index of posts ordered and segmented alphabetically.
+ * Returns the index of posts ordered and segmented alphabetically
  *
  * @since 0.8.0
- * @param  array|string|WP_Query|A_Z_Listing  $query      a valid WordPress query or an A_Z_Listing instance
- * @param  bool                               $use_cache  use the plugin's in-built query cache
- * @return string                                         The listing html content ready for echoing to the page.
+ * @param  array|string|WP_Query|A_Z_Listing $query     a valid WordPress query or an A_Z_Listing instance.
+ * @param  bool                              $use_cache use the plugin's in-built query cache.
+ * @return string                                        The listing html content ready for echoing to the page.
  */
 function get_the_a_z_listing( $query = null, $use_cache = true ) {
 	return a_z_listing_cache( $query, $use_cache )->get_the_listing();
 }
 
 /**
+ * Print the A-Z Letter list
+ *
  * @since 0.7
  * @see the_a_z_letters()
  * @deprecated use the_a_z_letters()
+ * @param array|string|WP_Query|A_Z_Listing $query either a valid WordPress query or an A_Z_Listing instance.
+ * @param bool|string                       $target URL of the page to send the browser when a letter is clicked.
+ * @param bool                              $styling unused.
  */
 function the_az_letters( $query = null, $target = false, $styling = false ) {
 	_deprecated_function( __FUNCTION__, '0.8.0', 'the_a_z_letters' );
@@ -254,21 +277,26 @@ function the_az_letters( $query = null, $target = false, $styling = false ) {
 }
 
 /**
- * Prints the A-Z Letter list.
+ * Print the A-Z Letter list
  *
  * @since 0.8.0
- * @param array|string|WP_Query|A_Z_Listing $query a valid WordPress query or an A_Z_Listing instance
- * @param bool|string $target URL of the page to send the browser when a letter is clicked.
- * @param bool $styling
+ * @param array|string|WP_Query|A_Z_Listing $query a valid WordPress query or an A_Z_Listing instance.
+ * @param bool|string                       $target URL of the page to send the browser when a letter is clicked.
+ * @param bool                              $styling unused.
  */
 function the_a_z_letters( $query = null, $target = false, $styling = false ) {
 	echo get_the_a_z_letters( $query, $target, $styling ); // WPCS: XSS OK.
 }
 
 /**
+ * Returns the A-Z Letter list
+ *
  * @since 0.7
  * @see get_the_a_z_letters()
  * @deprecated use get_the_a_z_letters()
+ * @param array|string|WP_Query|A_Z_Listing $query a valid WordPress query or an A_Z_Listing instance.
+ * @param bool|string                       $target URL of the page to send the browser when a letter is clicked.
+ * @param bool                              $styling unused.
  */
 function get_the_az_letters( $query = null, $target = false, $styling = false ) {
 	_deprecated_function( __FUNCTION__, '0.8.0', 'get_the_a_z_letters' );
@@ -276,12 +304,12 @@ function get_the_az_letters( $query = null, $target = false, $styling = false ) 
 }
 
 /**
- * Returns the A-Z Letter list.
+ * Returns the A-Z Letter list
  *
  * @since 0.8.0
- * @param  array|string|WP_Query|A_Z_Listing $query a valid WordPress query or an A_Z_Listing instance
- * @param bool|string $target URL of the page to send the browser when a letter is clicked.
- * @param bool $styling
+ * @param array|string|WP_Query|A_Z_Listing $query a valid WordPress query or an A_Z_Listing instance.
+ * @param bool|string                       $target URL of the page to send the browser when a letter is clicked.
+ * @param bool                              $styling unused.
  * @return string HTML ready for echoing containing the list of A-Z letters with anchor links to the A-Z Index page.
  */
 function get_the_a_z_letters( $query = null, $target = false, $styling = false ) {
@@ -289,12 +317,12 @@ function get_the_a_z_letters( $query = null, $target = false, $styling = false )
 }
 
 /**
- * Returns a function for use in the `a_z_listing_alphabet` filter.
+ * Returns a function for use in the `a_z_listing_alphabet` filter
  *
  * @since 1.7.0
  * @since 1.8.0 Add $group parameter and functionality to group numbers into a single collection.
  * @param string $position set to before to place the numbers first. Any other value will place them last.
- * @param bool   $group    group the numbers in a single collection rather than individually
+ * @param bool   $group    group the numbers in a single collection rather than individually.
  */
 function add_a_z_numbers( $position = 'after', $group = false ) {
 	return new A_Z_Numbers( $position, $group );

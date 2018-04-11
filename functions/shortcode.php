@@ -1,29 +1,30 @@
 <?php
 /**
- * Contains the A-Z Index shortcode functionality.
- * @package  a-z-listing
+ * Contains the A-Z Index shortcode functionality
+ *
+ * @package a-z-listing
  */
 
 /**
- * Handle the a-z-listing shortcode.
+ * Handle the a-z-listing shortcode
  *
  * @since 1.0.0
  * @since 1.7.0 Add numbers attribute to append or prepend numerics to the listing.
  * @since 1.8.0 Fix numbers attribute when selecting to display terms. Add grouping to numbers via attribute. Add alphabet override via new attribute.
  * @param  array $attributes Provided by WordPress core. Contains the shortcode attributes.
- * @return string      The A-Z Listing HTML.
+ * @return string The A-Z Listing HTML.
  */
 function a_z_shortcode_handler( $attributes ) {
 	$attributes = shortcode_atts(
 		array(
-			'alphabet'           => '',
-			'display'            => 'posts',
-			'group-numbers'      => false,
-			'grouping'           => '',
-			'numbers'            => 'hide',
-			'post-type'          => 'page',
-			'taxonomy'           => '',
-			'terms'              => '',
+			'alphabet'      => '',
+			'display'       => 'posts',
+			'group-numbers' => false,
+			'grouping'      => '',
+			'numbers'       => 'hide',
+			'post-type'     => 'page',
+			'taxonomy'      => '',
+			'terms'         => '',
 		), $attributes, 'a-z-listing'
 	);
 
@@ -62,7 +63,7 @@ function a_z_shortcode_handler( $attributes ) {
 	$ret = '';
 	if ( ! empty( $attributes['taxonomy'] ) && 'terms' === $attributes['display'] ) {
 		$a_z_query = new A_Z_Listing( $attributes['taxonomy'] );
-		$ret = $a_z_query->get_the_listing();
+		$ret       = $a_z_query->get_the_listing();
 	} else {
 		$post_types = explode( ',', $attributes['post-type'] );
 		$post_types = array_map( 'trim', $post_types );
@@ -92,11 +93,11 @@ function a_z_shortcode_handler( $attributes ) {
 		}
 
 		$a_z_query = new A_Z_Listing( $query );
-		$ret = $a_z_query->get_the_listing();
+		$ret       = $a_z_query->get_the_listing();
 	}
 
 	$grouping_obj->teardown();
-	if ( $numbers_obj != null) {
+	if ( null != $numbers_obj ) {
 		$numbers_obj->teardown();
 	}
 

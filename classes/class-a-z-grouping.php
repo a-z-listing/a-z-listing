@@ -1,5 +1,11 @@
 <?php
 /**
+ * A-Z Listing Alphabet grouping system
+ *
+ * @package  a-z-listing
+ */
+
+/**
  * Adds and maintains functionality to group the alphabet letters
  *
  * @since 2.0.0
@@ -9,7 +15,7 @@ class A_Z_Grouping {
 	 * Add filters to group the alphabet letters
 	 *
 	 * @since 2.0.0
-	 * @param int $grouping The number of letters in each group
+	 * @param int $grouping The number of letters in each group.
 	 */
 	public function __construct( $grouping ) {
 		$this->grouping = $grouping;
@@ -34,8 +40,8 @@ class A_Z_Grouping {
 	 * Override the alphabet with grouped letters
 	 *
 	 * @since 2.0.0
-	 * @param string $alphabet The alphabet to override
-	 * @return string the new grouped alphabet
+	 * @param string $alphabet The alphabet to override.
+	 * @return string the new grouped alphabet.
 	 */
 	public function alphabet_filter( $alphabet ) {
 		$headings = array();
@@ -81,8 +87,8 @@ class A_Z_Grouping {
 	 * Override the title of each group
 	 *
 	 * @since 2.0.0
-	 * @param string $title The original title of the group
-	 * @return string The new title for the group
+	 * @param string $title The original title of the group.
+	 * @return string The new title for the group.
 	 */
 	public function heading( $title ) {
 		if ( isset( $this->headings[ $title ] ) && is_array( $this->headings[ $title ] ) ) {

@@ -37,16 +37,6 @@ function a_z_listing_block_init() {
 		filemtime( "$dir/$editor_css" )
 	);
 
-	// $style_css = 'a-z-listing/style.css';
-	// wp_register_style(
-	// 	'a-z-listing-block',
-	// 	plugins_url( $style_css, __FILE__ ),
-	// 	array(
-	// 		'wp-blocks',
-	// 	),
-	// 	filemtime( "$dir/$style_css" )
-	// );
-
 	register_block_type( 'a-z-listing/a-z-listing', array(
 		'editor_script'   => 'a-z-listing-block-editor',
 		'editor_style'    => 'a-z-listing-block-editor',
