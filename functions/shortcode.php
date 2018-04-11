@@ -65,7 +65,7 @@ function a_z_shortcode_handler( $attributes ) {
 		$a_z_query = new A_Z_Listing( $attributes['taxonomy'] );
 		$ret       = $a_z_query->get_the_listing();
 	} else {
-		$post_types = explode( ',', $attributes['post-type'] );
+		$post_types = mb_split( ',', $attributes['post-type'] );
 		$post_types = array_map( 'trim', $post_types );
 		$post_types = array_unique( $post_types );
 
@@ -75,7 +75,7 @@ function a_z_shortcode_handler( $attributes ) {
 
 		if ( ! empty( $attributes['terms'] ) ) {
 			$taxonomy = '' !== $attributes['taxonomy'] ? $attributes['taxonomy'] : 'category';
-			$terms    = explode( ',', $attributes['terms'] );
+			$terms    = mb_split( ',', $attributes['terms'] );
 			$terms    = array_map( 'trim', $terms );
 			$terms    = array_unique( $terms );
 
