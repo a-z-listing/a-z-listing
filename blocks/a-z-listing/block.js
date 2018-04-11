@@ -20,7 +20,9 @@
 	var map = Array.map,
 	    keys = Object.keys;
 
-	var withAPIData = wp.components.withAPIData;
+	var withState = wp.components.withState,
+	    withAPIData = wp.components.withAPIData,
+	    SandBox = wp.components.SandBox;
 
 	var InspectorControls = wp.blocks.InspectorControls,
 	    RangeControl = wp.components.RangeControl,
@@ -48,6 +50,50 @@
 		});
 		r.unshift({ value: '', label: '' });
 		return r;
+	}
+
+	function getAppendQueryFactory() {
+		var query = '';
+
+		return function (param) {
+			if (!param) {
+				return query;
+			}
+
+			if ('' !== query) {
+				query = query + '&' + param;
+			} else {
+				query = param;
+			}
+
+			return query;
+		};
+	}
+
+	function getPreview(props) {
+		if (!props.preview.data) {
+			if ('terms' === props.attributes.display && !props.attributes.taxonomy) {
+				return wp.element.createElement(
+					'p',
+					null,
+					__('Your settings are incomplete. Try selecting a taxonomy...')
+				);
+			}
+			return wp.element.createElement(
+				'p',
+				null,
+				__('Loading...')
+			);
+		}
+		if (!props.preview.data.rendered) {
+			return wp.element.createElement(
+				'p',
+				null,
+				__('There was an error generating the preview. Check your settings.')
+			);
+		}
+
+		return wp.element.createElement(SandBox, { html: props.preview.data.rendered });
 	}
 
 	/**
@@ -86,10 +132,60 @@
    * @param {Object} [props] Properties passed from the editor.
    * @return {Element}       Element to render.
    */
-		edit: withAPIData(function () {
+		edit: withState(function () {
+			return {
+				display: 'posts',
+				postType: 'page',
+				taxonomy: 'category',
+				terms: '',
+				grouping: 1,
+				groupNumbers: false
+			};
+		})(withAPIData(function (props) {
+			var display = 'posts';
+			if ('posts' === props.attributes.display || 'terms' === props.attributes.display) {
+				display = props.attributes.display || 'posts';
+			}
+
+			var postType = void 0;
+			if ('terms' === display) {
+				postType = props.attributes.taxonomy || 'category';
+			} else {
+				postType = props.attributes.postType || 'page';
+			}
+
+			var getAppendQuery = getAppendQueryFactory();
+
+			if (!!props.attributes.alphabet) {
+				getAppendQuery('alphabet=' + props.attributes.alphabet);
+			}
+
+			if (!!props.attributes.grouping) {
+				getAppendQuery('grouping=' + props.attributes.grouping);
+			}
+
+			if (!!props.attributes.groupNumbers) {
+				getAppendQuery('group-numbers=' + props.attributes.groupNumbers);
+			}
+
+			if (!!props.attributes.numbers) {
+				getAppendQuery('numbers=' + props.attributes.numbers);
+			}
+
+			if (!!props.attributes.taxonomy) {
+				getAppendQuery('taxonomy=' + props.attributes.taxonomy);
+			}
+
+			if ('posts' === display && !!props.attributes.terms) {
+				getAppendQuery('terms=' + props.attributes.terms);
+			}
+
+			var query = getAppendQuery('include-styles=true');
+
 			return {
 				postTypes: '/wp/v2/types',
-				taxonomies: '/wp/v2/taxonomies'
+				taxonomies: '/wp/v2/taxonomies',
+				preview: '/a-z-listing/v1/' + display + '/' + postType + '?' + query
 			};
 		})(function (props) {
 			if (!props.postTypes.data || !props.taxonomies.data) {
@@ -104,40 +200,7 @@
 				};
 			}
 
-			var postTypeControl = wp.element.createElement(React.Fragment, null),
-			    termsControl = wp.element.createElement(React.Fragment, null);
-
-			if ('posts' === props.attributes.display) {
-				postTypeControl = wp.element.createElement(SelectControl, {
-					label: __('Post Type'),
-					value: props.attributes['post-type'],
-					options: map(keys(props.postTypes.data), function (type, idx) {
-						return {
-							value: type,
-							label: props.postTypes.data[type].name
-						};
-					}),
-					onChange: onChange('post-type')
-				});
-
-				if (!!props.attributes.taxonomy) {
-					termsControl = wp.element.createElement(TextControl, {
-						label: __('Taxonomy terms'),
-						value: props.attributes.terms,
-						onChange: onChange('terms')
-					});
-				}
-			}
-
-			var preview = wp.element.createElement(
-				React.Fragment,
-				null,
-				wp.element.createElement(
-					'p',
-					null,
-					__('The A-Z Listing will appear here when viewed on your website')
-				)
-			);
+			var preview = getPreview(props);
 
 			return wp.element.createElement(
 				React.Fragment,
@@ -151,18 +214,33 @@
 						options: [{ value: 'posts', label: __('Posts') }, { value: 'terms', label: __('Taxonomy terms') }],
 						onChange: onChange('display')
 					}),
-					postTypeControl,
+					'posts' === props.attributes.display ? wp.element.createElement(SelectControl, {
+						label: __('Post Type'),
+						value: props.attributes['post-type'],
+						options: map(keys(props.postTypes.data), function (type, idx) {
+							return {
+								value: type,
+								label: props.postTypes.data[type].name
+							};
+						}),
+						onChange: onChange('post-type')
+					}) : null,
 					wp.element.createElement(SelectControl, {
 						label: __('Taxonomy'),
 						value: props.attributes.taxonomy,
 						options: getFilteredTaxonomies(props),
 						onChange: onChange('taxonomy')
 					}),
-					termsControl,
+					'posts' === props.attributes.display && !!props.attributes.taxonomy ? wp.element.createElement(TextControl, {
+						label: __('Taxonomy terms'),
+						value: props.attributes.terms,
+						onChange: onChange('terms')
+
+					}) : null,
 					wp.element.createElement(SelectControl, {
 						label: __('Numbers'),
 						value: props.attributes.numbers,
-						options: [{ value: '', label: __('Hide numbers') }, { value: 'before', label: __('Prepend before alphabet') }, { value: 'after', label: __('Append after alphabet') }],
+						options: [{ value: 'hide', label: __('Hide numbers') }, { value: 'before', label: __('Prepend before alphabet') }, { value: 'after', label: __('Append after alphabet') }],
 						onChange: onChange('numbers')
 					}),
 					wp.element.createElement(RangeControl, {
@@ -182,7 +260,7 @@
 				),
 				preview
 			);
-		}),
+		})),
 
 		/**
    * The save function defines the way in which the different attributes should be combined

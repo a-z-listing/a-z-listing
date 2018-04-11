@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: A-Z Listing 2.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/a-z-listing\n"
-"POT-Creation-Date: 2018-02-26 21:45:13+00:00\n"
+"POT-Creation-Date: 2018-04-06 02:01:35+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,7 +24,7 @@ msgstr ""
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
 
-#: classes/class-a-z-listing.php:189
+#: classes/class-a-z-listing.php:217
 #. translators: List the aphabet of your language in the order that your
 #. language prefers. list as groups of identical meanings but different
 #. characters together, e.g. in English we group A with a because they are both
@@ -42,7 +42,7 @@ msgid ""
 "OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz"
 msgstr ""
 
-#: classes/class-a-z-listing.php:191
+#: classes/class-a-z-listing.php:219
 #. translators: This should be a single character to denote "all entries that
 #. didn't fit under one of the alphabet character groups defined". This is used
 #. in English to categorise posts whose title begins with a numeric (0 through
@@ -51,13 +51,13 @@ msgstr ""
 msgid "#"
 msgstr ""
 
-#: templates/a-z-listing-multi-column.example.php:56
-#: templates/a-z-listing.php:34
+#: templates/a-z-listing-multi-column.example.php:60
+#: templates/a-z-listing.php:36
 msgid "Back to top"
 msgstr ""
 
-#: templates/a-z-listing-multi-column.example.php:63
-#: templates/a-z-listing.php:41
+#: templates/a-z-listing-multi-column.example.php:69
+#: templates/a-z-listing.php:43
 msgid "There are no posts included in this index."
 msgstr ""
 
@@ -85,6 +85,34 @@ msgstr ""
 
 #: widgets/class-a-z-widget.php:87
 msgid "Post-type to display"
+msgstr ""
+
+#: wp-api/api.php:60
+msgid "Override default alphabet"
+msgstr ""
+
+#: wp-api/api.php:66
+msgid "Size of buckets to group the alphabet"
+msgstr ""
+
+#: wp-api/api.php:72
+msgid "Include numbers as separate group. Implies {numbers:true}"
+msgstr ""
+
+#: wp-api/api.php:77
+msgid "Taxonomy"
+msgstr ""
+
+#: wp-api/api.php:83
+msgid "Include the stylesheet tags in the output"
+msgstr ""
+
+#: wp-api/api.php:94
+msgid "Post type"
+msgstr ""
+
+#: wp-api/api.php:100
+msgid "Terms to filter by"
 msgstr ""
 
 #. Plugin Name of the plugin/theme

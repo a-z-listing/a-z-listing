@@ -130,7 +130,7 @@ class A_Z_Widget extends WP_Widget {
 	 * @param  Array $instance Configuration of this Widget. Unique to this invocation.
 	 */
 	public function widget( $args, $instance ) {
-		the_section_az_widget( $args, $instance );
+		the_section_a_z_widget( $args, $instance );
 	}
 }
 
@@ -187,6 +187,8 @@ function get_the_section_az_widget( $args, $instance ) {
  * @return  string The complete A-Z Widget HTML ready for echoing to the page.
  */
 function get_the_section_a_z_widget( $args, $instance ) {
+	do_action( 'log', 'A-Z Listing: Running widget' );
+
 	$classes  = array( 'az-letters' );
 	$instance = wp_parse_args(
 		$instance, array(
@@ -219,38 +221,45 @@ function get_the_section_a_z_widget( $args, $instance ) {
 
 	if ( isset( $instance['taxonomy'] ) && isset( $instance['terms'] ) ) {
 		if ( ! empty( $instance['taxonomy'] ) && ! empty( $instance['terms'] ) ) {
-			$my_query['tax_query'] = array(
-				'taxonomy' => $instance['taxonomy'],
-				'terms'    => $instance['terms'],
-			);
+			if ( is_array( $instance['terms'] ) ) {
+				$terms = $instance['terms'];
+			} elseif ( is_string( $instance['terms'] ) && ! empty( trim( $instance['terms'] ) ) ) {
+				$terms = mb_split( ',', $instance['terms'] );
+			}
+
+			$terms = array_reduce( $terms, function( $carry, $term ) {
+				$term = trim( $term );
+
+				if ( ! empty ( $term ) ) {
+					$carry[] = $term;
+				}
+
+				return $carry;
+			}, array() );
+
+			if ( ! empty( $terms ) ) {
+				$my_query['tax_query'] = array(
+					'taxonomy' => $instance['taxonomy'],
+					'terms'    => $instance['terms'],
+				);
+			}
 		}
 	}
 
-	if ( 'page' === $my_query['post_type'] ) {
-		$parent = A_Z_Listing::find_post_parent( $target );
-		if ( $parent->ID !== $target->ID ) {
-			$my_query['child_of'] = $parent->ID;
-		}
-	}
-
-	$a_z_query = new A_Z_Listing( $my_query );
+	$a_z_query = a_z_listing_cache( $my_query );
 
 	$ret = '';
+	$ret .= $args['before_widget'];
 
-	ob_start();
+	$ret .= $args['before_title'];
+	$ret .= esc_html( $title );
+	$ret .= $args['after_title'];
 
-	echo $args['before_widget']; // WPCS: XSS OK.
-	echo $args['before_title'];  // WPCS: XSS OK.
-	echo esc_html( $title );
-	echo $args['after_title']; // WPCS: XSS OK.
-	?>
-	<div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
-		<?php $a_z_query->the_letters( get_permalink( $target ), null ); ?>
-		<div class="clear empty"></div>
-	</div>
-	<?php
-	echo $args['after_widget']; // WPCS: XSS OK.
+	$ret .= '<div class="' . esc_attr( implode( ' ', $classes ) ) . '">';
+	$ret .= $a_z_query->get_the_letters( get_permalink( $target ) );
+	$ret .= '</div>';
 
-	$ret = ob_get_clean();
+	$ret .= $args['after_widget'];
+
 	return $ret;
 }
