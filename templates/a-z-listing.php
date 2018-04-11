@@ -1,8 +1,13 @@
 <?php
 /**
- * This template will be provided with the variable $a_z_query which is an A_Z_Listing instance.
+ * Default template for the A-Z Listing plugin
+ *
+ * This template will be handed the variable `$a_z_query` which is an `A_Z_Listing` instance.
  * You can override this template by copying this file into your theme directory.
+ *
+ * @package a-z-listing
  */
+
 ?>
 <div id="letters">
 	<div class="az-letters">

@@ -1,5 +1,11 @@
 <?php
 /**
+ * A-Z Listing numbers functionality
+ *
+ * @package  a-z-listing
+ */
+
+/**
  * Adds and maintains filters providing number functionality to the alphabet
  *
  * @since 2.0.0
@@ -9,10 +15,12 @@ class A_Z_Numbers {
 	 * Add filters to append or prepend numbers to the alphabet with optional grouping
 	 *
 	 * @since 2.0.0
+	 * @param string $position Can be either "before" or "after" indicating where to place the numbers respective to the alphabet.
+	 * @param bool   $group Whether to group the numbers into a single heading or individually.
 	 */
 	public function __construct( $position = 'after', $group = false ) {
 		$this->position = $position;
-		$this->group = $group;
+		$this->group    = $group;
 
 		add_filter( 'a-z-listing-alphabet', array( $this, 'add_to_alphabet' ) );
 		add_filter( 'the-a-z-letter-title', array( $this, 'title' ) );
@@ -32,7 +40,7 @@ class A_Z_Numbers {
 	 * Add numbers to the alphabet
 	 *
 	 * @since 2.0.0
-	 * @param string $alphabet The alphabet to add numbers into
+	 * @param string $alphabet The alphabet to add numbers into.
 	 * @return string The alphabet with numbers either prepended or appended
 	 */
 	public function add_to_alphabet( $alphabet ) {
@@ -51,7 +59,7 @@ class A_Z_Numbers {
 	 * Override the group title for grouped numbers
 	 *
 	 * @since 2.0.0
-	 * @param string $letter The original title of the group
+	 * @param string $letter The original title of the group.
 	 * @return string The new title for the group
 	 */
 	public function title( $letter ) {

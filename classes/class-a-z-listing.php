@@ -1,81 +1,117 @@
 <?php
 /**
+ * A-Z Listing main process
+ *
+ * @package  a-z-listing
+ */
+
+/**
  * The main A-Z Query class
  *
  * @since 0.1
  */
 class A_Z_Listing {
+	/**
+	 * The taxonomy
+	 *
+	 * @var string
+	 */
 	private $taxonomy;
+
+	/**
+	 * Listing type, posts or terms
+	 *
+	 * @var string
+	 */
 	private $type = 'posts';
 
 	/**
-	 * All available characters in a single string for translation support.
+	 * All available characters in a single string for translation support
+	 *
+	 * @var string
 	 */
 	private $alphabet;
 
 	/**
-	 * The index to use for posts which are not matched by any known letter, from the $alphabet, such as numerics.
+	 * The index label to use for posts which are not matched by any known letter, from the $alphabet, such as numerics
+	 *
+	 * @var string
 	 */
 	private $unknown_letters;
 
 	/**
-	 * All available characters which may be used as an index.
+	 * All available characters which may be used as an index
+	 *
+	 * @var array
 	 */
-
 	private $alphabet_chars;
+
 	/**
-	 * A Taxonomy which contains terms to apply additional titles to posts.
+	 * A Taxonomy which contains terms to apply additional titles to posts
+	 *
+	 * @var string
 	 */
 	private $index_taxonomy;
 
 	/**
-	 * All items returned by the query.
+	 * All items returned by the query
+	 *
+	 * @var array
 	 */
 	private $items;
 
 	/**
-	 * Indices for only the items returned by the query - filtered version of $alphabet_chars.
+	 * Indices for only the items returned by the query - filtered version of $alphabet_chars
+	 *
+	 * @var array
 	 */
 	private $matched_item_indices;
 
 	/**
-	 * The current item for use in the a-z items loop. internal use only.
+	 * The current item for use in the a-z items loop. internal use only
+	 *
+	 * @var array
 	 */
 	private $current_item = null;
 
 	/**
-	 * The current item array-index in $items. internal use only.
+	 * The current item array-index in $items. internal use only
+	 *
+	 * @var int
 	 */
 	private $current_item_index = 0;
 
 	/**
-	 * The current letter for use in the a-z letter loop. internal use only.
+	 * The current letter for use in the a-z letter loop. internal use only
+	 *
+	 * @var array
 	 */
 	private $current_letter_items = array();
 
 	/**
-	 * The current letter array-index in $matched_item_indices. internal use only.
+	 * The current letter array-index in $matched_item_indices. internal use only
+	 *
+	 * @var int
 	 */
 	private $current_letter_index = 0;
 
 	/**
-	 * A_Z_Listing constructor.
+	 * A_Z_Listing constructor
 	 *
 	 * @since 0.1
-	 * @param null|WP_Query|array|string $query
+	 * @param null|WP_Query|array|string $query A WP_Query-compatible query definition or a taxonomy name.
 	 */
 	public function __construct( $query = null ) {
 		global $post;
 		$this->get_alphabet();
 		$this->alphabet_chars = array_values( array_unique( array_values( $this->alphabet ) ) );
 
-		$json_query = json_encode( $query );
-		$transient_queries = get_transient('A_Z_Queries');
+		$json_query        = json_encode( $query );
+		$transient_queries = get_transient( 'A_Z_Queries' );
 
 		if ( $transient_queries ) {
-			$queries = json_decode( $transient_queries );
-			if ( isset( $queries[ $json_query ] ) ) {
-				$this->matched_item_indices = $queries[ $json_query ];
+			if ( isset( $transient_queries[ $json_query ] ) ) {
+				$this->matched_item_indices = $transient_queries[ $json_query ];
 				return;
 			}
 			if ( AZLISTINGLOG ) {
@@ -111,6 +147,8 @@ class A_Z_Listing {
 				do_action( 'log', 'A-Z Listing: Setting posts mode', $query );
 			}
 			/**
+			 * Taxonomy containing terms which are used as the title for associated posts
+			 *
 			 * @deprecated Use a_z_listing_additional_titles_taxonomy
 			 * @see a_z_listing_additional_titles_taxonomy
 			 */
@@ -118,14 +156,14 @@ class A_Z_Listing {
 			/**
 			 * Taxonomy containing terms which are used as the title for associated posts
 			 *
-			 * @param string $taxonomy The taxonomy mapping alternative titles to posts
+			 * @param string $taxonomy The taxonomy mapping alternative titles to posts.
 			 */
 			$index_taxonomy = apply_filters( 'a_z_listing_additional_titles_taxonomy', $index_taxonomy );
 			/**
 			 * Taxonomy containing terms which are used as the title for associated posts
 			 *
 			 * @since 1.7.1
-			 * @param string $taxonomy The taxonomy mapping alternative titles to posts
+			 * @param string $taxonomy The taxonomy mapping alternative titles to posts.
 			 */
 			$index_taxonomy       = apply_filters( 'a-z-listing-additional-titles-taxonomy', $index_taxonomy );
 			$this->index_taxonomy = $index_taxonomy;
@@ -153,18 +191,16 @@ class A_Z_Listing {
 				$query = (array) $query;
 			}
 
-			if ( ! $query instanceof WP_Query
-				&& ( ! isset( $query['post_type'] ) || 'page' === $query['post_type'] )
-				&& isset( $post ) && 'page' === $post->post_type
-				&& ! isset( $query['child_of'] ) && ! isset( $query['parent'] ) )
-			{
-				$section = self::get_section();
+			if ( ! $query instanceof WP_Query &&
+				( ! isset( $query['post_type'] ) || 'page' === $query['post_type'] ) &&
+				isset( $post ) && 'page' === $post->post_type &&
+				! ( isset( $query['child_of'] ) || isset( $query['parent'] ) ) ) {
+				$section       = self::get_section();
 				$q['child_of'] = $section->ID;
 			}
 
 			if ( ! $query instanceof WP_Query &&
-				( isset( $query['child_of'] ) || isset( $query['parent'] ) ) )
-			{
+				( isset( $query['child_of'] ) || isset( $query['parent'] ) ) ) {
 				$this->items = get_pages( $query );
 			} else {
 				if ( ! $query instanceof WP_Query ) {
@@ -179,17 +215,17 @@ class A_Z_Listing {
 			}
 
 			$this->matched_item_indices = $this->get_all_indices( $this->items );
-		} // End if().
+		} // End if.
 
 		$transient_queries[ $json_query ] = $this->matched_item_indices;
-		set_transient( 'A_Z_Queries', $transient_queries, 7 * 24 * 60 * 60);
+		set_transient( 'A_Z_Queries', $transient_queries, 7 * 24 * 60 * 60 );
 	}
 
 	/**
 	 * Split a multibyte string into an array. (see http://php.net/manual/en/function.mb-split.php#80046)
 	 *
 	 * @since 1.0.0
-	 * @param string $string multi-byte string
+	 * @param string $string multi-byte string.
 	 * @return array individual multi-byte characters from the string
 	 */
 	public static function mb_string_to_array( $string ) {
@@ -228,21 +264,21 @@ class A_Z_Listing {
 		 * Filters the alphabet. The string should contain groups of similar or identical characters separated by commas. The first character in each group is the one used for the group title.
 		 *
 		 * @since 1.7.1
-		 * @param string $alphabet The $alphabet
+		 * @param string $alphabet The $alphabet.
 		 */
 		$alphabet = apply_filters( 'a-z-listing-alphabet', $alphabet );
 
 		/**
 		 * Specifies the character used for all non-alphabetic titles, such as numeric titles in the default setup for English. Defaults to '#' unless overidden by a language pack.
 		 *
-		 * @param string $non_alpha_char The character for non-alphabetic post titles
+		 * @param string $non_alpha_char The character for non-alphabetic post titles.
 		 */
 		$others = apply_filters( 'a_z_listing_non_alpha_char', $others );
 		/**
 		 * Specifies the character used for all non-alphabetic titles, such as numeric titles in the default setup for English. Defaults to '#' unless overidden by a language pack.
 		 *
 		 * @since 1.7.1
-		 * @param string $non_alpha_char The character for non-alphabetic post titles
+		 * @param string $non_alpha_char The character for non-alphabetic post titles.
 		 */
 		$others = apply_filters( 'a-z-listing-non-alpha-char', $others );
 
@@ -272,7 +308,7 @@ class A_Z_Listing {
 	 * Find a post's parent post. Will return the original post if the post-type is not hierarchical or the post does not have a parent.
 	 *
 	 * @since 1.4.0
-	 * @param WP_Post|int $page The post whose parent we want to find
+	 * @param WP_Post|int $page The post whose parent we want to find.
 	 * @return WP_Post|bool The parent post or the original post if no parents were found. Will be false if the function is called with incorrect arguments.
 	 */
 	public static function find_post_parent( $page ) {
@@ -308,6 +344,8 @@ class A_Z_Listing {
 			}, $pages
 		);
 		/**
+		 * Override the detected top-level sections for the site. Defaults to contain each page with no post-parent.
+		 *
 		 * @deprecated Use a_z_listing_sections
 		 * @see a_z_listing_sections
 		 */
@@ -315,14 +353,14 @@ class A_Z_Listing {
 		/**
 		 * Override the detected top-level sections for the site. Defaults to contain each page with no post-parent.
 		 *
-		 * @param array $sections The sections for the site
+		 * @param array $sections The sections for the site.
 		 */
 		$sections = apply_filters( 'a_z_listing_sections', $sections );
 		/**
 		 * Override the detected top-level sections for the site. Defaults to contain each page with no post-parent.
 		 *
 		 * @since 1.7.1
-		 * @param array $sections The sections for the site
+		 * @param array $sections The sections for the site.
 		 */
 		$sections = apply_filters( 'a-z-listing-sections', $sections );
 
@@ -376,8 +414,8 @@ class A_Z_Listing {
 	/**
 	 * Reducer used by get_the_item_indices() to filter the indices for each post to unique array_values (see: https://secure.php.net/array_reduce)
 	 *
-	 * @param array $carry Holds the return value of the previous iteration
-	 * @param array $value  Holds the value of the current iteration
+	 * @param array $carry Holds the return value of the previous iteration.
+	 * @param array $value  Holds the value of the current iteration.
 	 * @return array The previous iteration return value with the current iteration added after running through array_unique()
 	 */
 	public function index_reduce( $carry, $value ) {
@@ -392,7 +430,7 @@ class A_Z_Listing {
 	 * Find and return the index letter for a post
 	 *
 	 * @since 1.0.0
-	 * @param WP_Post|WP_Term $item The item whose index letters we want to find
+	 * @param WP_Post|WP_Term $item The item whose index letters we want to find.
 	 * @return Array The post's index letters (usually matching the first character of the post title)
 	 */
 	protected function get_the_item_indices( $item ) {
@@ -409,6 +447,8 @@ class A_Z_Listing {
 				'link'  => get_term_link( $item ),
 			);
 			/**
+			 * Modify the indice(s) to group this term under
+			 *
 			 * @deprecated Use a_z_listing_item_indices
 			 * @see a_z_listing_item_indices
 			 */
@@ -442,13 +482,13 @@ class A_Z_Listing {
 			}
 
 			/**
+			 * Modify the indice(s) to group this post under
+			 *
 			 * @deprecated Use a_z_listing_item_indices
 			 * @see a_z_listing_item_indices
 			 */
 			$indices = apply_filters_deprecated( 'a_z_listing_post_indices', array( $indices, $item ), '1.5.0', 'a_z_listing_item_indices' );
-		} // End if().
-
-		//$indices = array_reduce( $indices, array( $this, 'index_reduce' ) );
+		} // End if.
 
 		/**
 		 * Modify the indice(s) to group this post under
@@ -477,6 +517,7 @@ class A_Z_Listing {
 	 * Sort the letters to be used as indices and return as an Array
 	 *
 	 * @since 0.1
+	 * @param array $items The items to index.
 	 * @return Array The index letters
 	 */
 	protected function get_all_indices( $items = null ) {
@@ -528,15 +569,22 @@ class A_Z_Listing {
 	 * Print the letter links HTML
 	 *
 	 * @since 1.0.0
+	 * @param string $target The page to point links toward.
+	 * @param string $style CSS classes to apply to the output.
 	 */
 	public function the_letters( $target = '', $style = null ) {
 		echo $this->get_the_letters( $target, $style ); // WPCS: XSS OK.
 	}
 
 	/**
+	 * Print the letter links HTML
+	 *
 	 * @since 0.1
 	 * @see A_Z_Listing::get_the_letters()
 	 * @deprecated use A_Z_Listing::get_the_letters().
+	 * @param string $target The page to point links toward.
+	 * @param string $style CSS classes to apply to the output.
+	 * @return string The letter links HTML
 	 */
 	public function get_letter_display( $target = '', $style = null ) {
 		_deprecated_function( __METHOD__, '1.0.0', 'A_Z_Listing::get_the_letters' );
@@ -547,8 +595,8 @@ class A_Z_Listing {
 	 * Return the letter links HTML
 	 *
 	 * @since 1.0.0
-	 * @param string $target The page to point links toward
-	 * @param string $style Optional CSS classes to apply to the output
+	 * @param string $target The page to point links toward.
+	 * @param string $style CSS classes to apply to the output.
 	 * @return string The letter links HTML
 	 */
 	public function get_the_letters( $target = '', $style = null ) {
@@ -610,12 +658,10 @@ class A_Z_Listing {
 	 * Load and execute a theme template
 	 *
 	 * @since 1.0.0
-	 * @param string $template_file The path of the template to execute
+	 * @param string $template_file The path of the template to execute.
 	 */
 	protected function do_template( $template_file ) {
-		/** @noinspection PhpUnusedLocalVariableInspection */
 		$a_z_query = $this;
-		/** @noinspection PhpIncludeInspection */
 		include $template_file;
 	}
 
@@ -647,7 +693,7 @@ class A_Z_Listing {
 	 * Return the index list HTML created by a theme template
 	 *
 	 * @since 0.7
-	 * @return string The index list HTML
+	 * @return string The index list HTML.
 	 */
 	public function get_the_listing() {
 		ob_start();
@@ -658,6 +704,8 @@ class A_Z_Listing {
 	}
 
 	/**
+	 * Used by theme templates. Returns true when we still have letters to iterate.
+	 *
 	 * @since 0.7
 	 * @see A_Z_Listing::have_letters()
 	 * @deprecated use A_Z_Listing::have_letters()
@@ -678,6 +726,8 @@ class A_Z_Listing {
 	}
 
 	/**
+	 * Used by theme templates. Returns true when we still have posts to iterate.
+	 *
 	 * @since 0.7
 	 * @see A_Z_Listing::have_items()
 	 * @deprecated use A_Z_Listing::have_items()
@@ -715,6 +765,8 @@ class A_Z_Listing {
 	}
 
 	/**
+	 * Advance the Post loop within the Letter Loop onto the next post
+	 *
 	 * @since 0.7
 	 * @see A_Z_Listing::the_item()
 	 * @deprecated use A_Z_Listing::the_item()
@@ -731,7 +783,7 @@ class A_Z_Listing {
 	 */
 	public function the_item() {
 		global $post;
-		$this->current_item = $this->current_letter_items[ $this->current_item_index ];
+		$this->current_item        = $this->current_letter_items[ $this->current_item_index ];
 		$this->current_item_index += 1;
 	}
 
@@ -739,12 +791,12 @@ class A_Z_Listing {
 	 * Get the item object for the current post
 	 *
 	 * @since 2.0.0
-	 * @param string $break_cache set to 'I understand the speed issues!' to acknowledge that this function will cause slowness on large sites
+	 * @param string $is_slow set to 'I understand the speed issues!' to acknowledge that this function will cause slowness on large sites.
 	 */
 	public function get_the_item_object( $is_slow = '' ) {
 		if ( 'I understand the speed issues!' === $break_cache ) {
 			global $post;
-			$item = split( ':', $this->current_item['item'], 1 );
+			$item = explode( ':', $this->current_item['item'], 1 );
 			if ( isset( $item[1] ) ) {
 				$post = get_post( $item[1] );
 				setup_postdata( $post );
@@ -763,6 +815,8 @@ class A_Z_Listing {
 	}
 
 	/**
+	 * Return the number of posts within the current letter
+	 *
 	 * @since 0.7
 	 * @see A_Z_Listing::get_the_letter_count()
 	 * @deprecated use A_Z_Listing::get_the_letter_count()
@@ -773,6 +827,8 @@ class A_Z_Listing {
 	}
 
 	/**
+	 * Return the number of posts within the current letter
+	 *
 	 * @since 0.7
 	 * @see A_Z_Listing::get_the_letter_count()
 	 * @deprecated use A_Z_Listing::get_the_letter_count()
@@ -824,6 +880,7 @@ class A_Z_Listing {
 	 * Print the escaped title of the current letter. For example, upper-case A or B or C etc.
 	 *
 	 * @since 0.7
+	 * @param string $index The index for which to print the title.
 	 */
 	public function the_letter_title( $index = '' ) {
 		echo esc_html( $this->get_the_letter_title( $index ) );
@@ -834,6 +891,7 @@ class A_Z_Listing {
 	 *
 	 * @since 0.7
 	 * @since 1.8.0 Add filters to modify the title of the letter.
+	 * @param string $index The index for which to return the title.
 	 * @return string The letter title
 	 */
 	public function get_the_letter_title( $index = '' ) {
@@ -847,14 +905,14 @@ class A_Z_Listing {
 		 * Modify the letter title or heading
 		 *
 		 * @since 1.8.0
-		 * @param string $letter The title of the letter
+		 * @param string $letter The title of the letter.
 		 */
 		$letter = apply_filters( 'the_a_z_letter_title', $letter );
 		/**
 		 * Modify the letter title or heading
 		 *
 		 * @since 1.8.0
-		 * @param string $letter The title of the letter
+		 * @param string $letter The title of the letter.
 		 */
 		$letter = apply_filters( 'the-a-z-letter-title', $letter );
 
@@ -867,7 +925,7 @@ class A_Z_Listing {
 	 * @since 1.0.0
 	 */
 	public function the_title() {
-		// to match code we do NOT escape the output!
+		// to match core we do NOT escape the output!
 		echo $this->get_the_title(); // wpcs: XSS OK.
 	}
 
@@ -911,9 +969,9 @@ class A_Z_Listing {
 /**
  * Get a saved copy of the A_Z_Listing instance if we have one, or make a new one and save it for later
  *
- * @param  array|string|WP_Query|A_Z_Listing  $query      a valid WordPress query or an A_Z_Listing instance
- * @param  bool                               $use_cache  use the plugin's in-built query cache
- * @return A_Z_Listing                                    a new or previously-saved instance of A_Z_Listing using the provided construct_query
+ * @param array|string|WP_Query|A_Z_Listing $query     a valid WordPress query or an A_Z_Listing instance.
+ * @param bool                              $use_cache use the plugin's in-built query cache.
+ * @return A_Z_Listing                                 a new or previously-saved instance of A_Z_Listing using the provided construct_query
  */
 function a_z_listing_cache( $query = null, $use_cache = true ) {
 	return new A_Z_Listing( $query );

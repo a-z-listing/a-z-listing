@@ -1,4 +1,10 @@
 <?php
+/**
+ * Multicolumn example template for the A-Z Listing plugin
+ *
+ * @package a-z-listing
+ */
+
 $_a_z_listing_colcount  = 3;
 $_a_z_listing_minpercol = 10;
 ?>
@@ -67,4 +73,5 @@ $_a_z_listing_minpercol = 10;
 </div>
 <?php else : ?>
 	<p><?php esc_html_e( 'There are no posts included in this index.', 'a-z-listing' ); ?></p>
-<?php endif;
+<?php
+endif;
