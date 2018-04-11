@@ -54,6 +54,7 @@ function a_z_shortcode_handler( $attributes ) {
 
 	$grouping_obj = new A_Z_Grouping( $grouping );
 
+	$numbers_obj = null;
 	if ( ! empty( $attributes['numbers'] ) && 'hide' !== $attributes['numbers'] ) {
 		$numbers_obj = add_a_z_numbers( $attributes['numbers'], $group_numbers );
 	}
@@ -95,7 +96,9 @@ function a_z_shortcode_handler( $attributes ) {
 	}
 
 	$grouping_obj->teardown();
-	$numbers_obj->teardown();
+	if ( $numbers_obj != null) {
+		$numbers_obj->teardown();
+	}
 
 	return $ret;
 }
