@@ -94,11 +94,7 @@ class A_Z_Widget extends WP_Widget {
 		<select id="<?php echo esc_attr( $post_type_id ); ?>" name="<?php echo esc_attr( $post_type_name ); ?>">
 			<?php foreach ( $post_types as $t ) : ?>
 				<option value="<?php echo esc_attr( $t ); ?>"
-											<?php
-											if ( $post_type === $t ) {
-												echo 'selected'; }
-?>
->
+					<?php echo ( $post_type === $t ) ? 'selected' : ''; ?>>
 					<?php echo esc_html( $t ); ?>
 				</option>
 			<?php endforeach; ?>
@@ -227,10 +223,15 @@ function get_the_section_a_z_widget( $args, $instance ) {
 
 	if ( isset( $instance['taxonomy'] ) && isset( $instance['terms'] ) ) {
 		if ( ! empty( $instance['taxonomy'] ) && ! empty( $instance['terms'] ) ) {
+			$terms = array();
+
 			if ( is_array( $instance['terms'] ) ) {
 				$terms = $instance['terms'];
-			} elseif ( is_string( $instance['terms'] ) && ! empty( trim( $instance['terms'] ) ) ) {
-				$terms = mb_split( ',', $instance['terms'] );
+			} elseif ( is_string( $instance['terms'] ) ) {
+				$terms_str = trim( $instance['terms'] );
+				if ( ! empty( $terms_str ) ) {
+					$terms = mb_split( ',', $terms_str );
+				}
 			}
 
 			$terms = array_reduce( $terms, function( $carry, $term ) {
