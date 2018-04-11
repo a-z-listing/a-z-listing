@@ -6,7 +6,7 @@
 ?>
 <div id="letters">
 	<div class="az-letters">
-		<?php $a_z_query->the_letters(); ?><div class="clear empty"></div>
+		<?php $a_z_query->the_letters(); ?>
 	</div>
 </div>
 <?php if ( $a_z_query->have_letters() ) : ?>
@@ -18,10 +18,11 @@
 		?>
 			<?php if ( $a_z_query->have_items() ) : ?>
 				<div class="letter-section" id="<?php $a_z_query->the_letter_id(); ?>">
-					<h2>
+					<h2 class="letter-title">
 						<span><?php $a_z_query->the_letter_title(); ?></span>
 					</h2>
-					<div><ul>
+
+					<ul>
 						<?php
 						while ( $a_z_query->have_items() ) :
 							$a_z_query->the_item();
@@ -30,7 +31,8 @@
 								<a href="<?php $a_z_query->the_permalink(); ?>"><?php $a_z_query->the_title(); ?></a>
 							</li>
 						<?php endwhile; ?>
-					</ul></div>
+					</ul>
+
 					<div class="back-to-top"><a href="#letters"><?php _e( 'Back to top', 'a-z-listing' ); ?></a></div>
 				</div>
 			<?php endif; ?>

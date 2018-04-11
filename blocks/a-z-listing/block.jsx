@@ -18,7 +18,9 @@
 	var map = Array.map,
 	    keys = Object.keys;
 
-	var withAPIData = wp.components.withAPIData;
+	var withState   = wp.components.withState,
+		withAPIData = wp.components.withAPIData,
+		SandBox     = wp.components.SandBox;
 
 	var InspectorControls = wp.blocks.InspectorControls,
 	    RangeControl      = wp.components.RangeControl,
@@ -42,6 +44,46 @@
 			} ) );
 		r.unshift( { value: '', label: '' } );
 		return r;
+	}
+
+	function getAppendQueryFactory() {
+		let query = '';
+
+		return function( param ) {
+			if ( ! param ) {
+				return query;
+			}
+
+			if ( '' !== query ) {
+				query = `${query}&${param}`;
+			} else {
+				query = param;
+			}
+
+			return query;
+		}
+	}
+
+	function getPreview( props ) {
+		if ( ! props.preview.data ) {
+			if ( 'terms' === props.attributes.display && ! props.attributes.taxonomy ) {
+				return (
+					<p>{ __( 'Your settings are incomplete. Try selecting a taxonomy...' ) }</p>
+				);
+			}
+			return (
+				<p>{ __( 'Loading...' ) }</p>
+			);
+		}
+		if ( ! props.preview.data.rendered ) {
+			return (
+				<p>{ __( 'There was an error generating the preview. Check your settings.' ) }</p>
+			);
+		}
+
+		return (
+			<SandBox html={ props.preview.data.rendered } />
+		);
 	}
 
 	/**
@@ -80,12 +122,62 @@
 		 * @param {Object} [props] Properties passed from the editor.
 		 * @return {Element}       Element to render.
 		 */
-		edit: withAPIData( function() {
+		edit: withState( function() {
+			return {
+				display: 'posts',
+				postType: 'page',
+				taxonomy: 'category',
+				terms: '',
+				grouping: 1,
+				groupNumbers: false,
+			};
+		} ) ( withAPIData( function( props ) {
+			let display = 'posts';
+			if ( 'posts' === props.attributes.display || 'terms' === props.attributes.display ) {
+				display = props.attributes.display || 'posts';
+			}
+
+			let postType;
+			if ( 'terms' === display ) {
+				postType = props.attributes.taxonomy || 'category';
+			} else {
+				postType = props.attributes.postType || 'page';
+			}
+
+			const getAppendQuery = getAppendQueryFactory();
+
+			if ( !! props.attributes.alphabet ) {
+				getAppendQuery( `alphabet=${props.attributes.alphabet}` );
+			}
+
+			if ( !! props.attributes.grouping ) {
+				getAppendQuery( `grouping=${props.attributes.grouping}` );
+			}
+
+			if ( !! props.attributes.groupNumbers ) {
+				getAppendQuery( `group-numbers=${props.attributes.groupNumbers}` );
+			}
+
+			if ( !! props.attributes.numbers ) {
+				getAppendQuery( `numbers=${props.attributes.numbers}` );
+			}
+
+			if ( !! props.attributes.taxonomy ) {
+				getAppendQuery( `taxonomy=${props.attributes.taxonomy}` );
+			}
+
+			if ( 'posts' === display && !! props.attributes.terms ) {
+				getAppendQuery( `terms=${props.attributes.terms}` );
+			}
+
+			const query = getAppendQuery( 'include-styles=true' );
+
 			return {
 				postTypes: '/wp/v2/types',
-				taxonomies: '/wp/v2/taxonomies'
+				taxonomies: '/wp/v2/taxonomies',
+				preview: `/a-z-listing/v1/${display}/${postType}?${query}`
 			};
-		} )( function( props ) {
+		} ) ( function( props ) {
 			if ( ! props.postTypes.data || ! props.taxonomies.data ) {
 				return __( "Loading..." );
 			}
@@ -98,33 +190,7 @@
 				}
 			}
 
-			var postTypeControl = <React.Fragment></React.Fragment>,
-			    termsControl    = <React.Fragment></React.Fragment>;
-
-			if ( 'posts' === props.attributes.display ) {
-				postTypeControl = <SelectControl
-					label={ __( 'Post Type' ) }
-					value={ props.attributes['post-type'] }
-					options={ map( keys( props.postTypes.data ), ( type, idx ) => ( {
-						value: type,
-						label: props.postTypes.data[type].name,
-					} ) ) }
-					onChange={ onChange( 'post-type' ) }
-				/>
-
-				if ( !! props.attributes.taxonomy ) {
-					termsControl = <TextControl
-						label={ __( 'Taxonomy terms' ) }
-						value={ props.attributes.terms }
-						onChange={ onChange( 'terms' ) }
-					/>
-				}
-			}
-
-			var preview =
-				<React.Fragment>
-					<p>{ __( 'The A-Z Listing will appear here when viewed on your website' ) }</p>
-				</React.Fragment>
+			const preview = getPreview( props );
 
 			return (
 				<React.Fragment>
@@ -139,7 +205,17 @@
 							onChange={ onChange( 'display' ) }
 						/>
 
-						{ postTypeControl }
+						{ ( 'posts' === props.attributes.display ) ? (
+							<SelectControl
+								label={ __( 'Post Type' ) }
+								value={ props.attributes['post-type'] }
+								options={ map( keys( props.postTypes.data ), ( type, idx ) => ( {
+									value: type,
+									label: props.postTypes.data[type].name,
+								} ) ) }
+								onChange={ onChange( 'post-type' ) }
+							/>
+						) : null }
 
 						<SelectControl
 							label={ __( 'Taxonomy' ) }
@@ -148,13 +224,20 @@
 							onChange={ onChange( 'taxonomy' ) }
 						/>
 
-						{ termsControl }
+						{ ( 'posts' === props.attributes.display && !! props.attributes.taxonomy ) ? (
+							<TextControl
+								label={ __( 'Taxonomy terms' ) }
+								value={ props.attributes.terms }
+								onChange={ onChange( 'terms' ) }
+
+							/>
+						) : null }
 
 						<SelectControl
 							label={ __( 'Numbers' ) }
 							value={ props.attributes.numbers }
 							options={ [
-								{ value: '',       label: __( 'Hide numbers' ) },
+								{ value: 'hide',   label: __( 'Hide numbers' ) },
 								{ value: 'before', label: __( 'Prepend before alphabet' ) },
 								{ value: 'after',  label: __( 'Append after alphabet' ) },
 							] }
@@ -182,7 +265,7 @@
 
 				</React.Fragment>
 			)
-		} ),
+		} ) ),
 
 		/**
 		 * The save function defines the way in which the different attributes should be combined

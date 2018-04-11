@@ -218,7 +218,7 @@ function the_az_listing( $query = null ) {
  * @param bool                               $use_cache  use the plugin's in-built query cache
  */
 function the_a_z_listing( $query = null, $use_cache = true ) {
-	echo get_the_a_z_listing( $query, $use_cache ); // WPCS: XSS OK.
+	a_z_listing_cache( $query, $use_cache )->the_listing();
 }
 
 /**
@@ -297,24 +297,5 @@ function get_the_a_z_letters( $query = null, $target = false, $styling = false )
  * @param bool   $group    group the numbers in a single collection rather than individually
  */
 function add_a_z_numbers( $position = 'after', $group = false ) {
-	add_filter(
-		'a-z-listing-alphabet', function( $alphabet ) use ( $position, $group ) {
-			$numbers = '0,1,2,3,4,5,6,7,8,9';
-			if ( true === $group ) {
-				$numbers = '0123456789';
-				add_filter(
-					'the-a-z-letter-title', function( $letter ) {
-						if ( '0' === $letter ) {
-							return '0-9';
-						}
-						return $letter;
-					}
-				);
-			}
-			if ( 'before' === $position ) {
-				return join( ',', array( $numbers, $alphabet ) );
-			}
-			return join( ',', array( $alphabet, $numbers ) );
-		}
-	);
+	return new A_Z_Numbers( $position, $group );
 }

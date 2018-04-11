@@ -11,12 +11,12 @@ class A_Z_Listing {
 	/**
 	 * All available characters in a single string for translation support.
 	 */
-	private static $alphabet;
+	private $alphabet;
 
 	/**
 	 * The index to use for posts which are not matched by any known letter, from the $alphabet, such as numerics.
 	 */
-	private static $unknown_letters;
+	private $unknown_letters;
 
 	/**
 	 * All available characters which may be used as an index.
@@ -66,8 +66,8 @@ class A_Z_Listing {
 	 */
 	public function __construct( $query = null ) {
 		global $post;
-		self::get_alphabet();
-		$this->alphabet_chars = array_values( array_unique( array_values( self::$alphabet ) ) );
+		$this->get_alphabet();
+		$this->alphabet_chars = array_values( array_unique( array_values( $this->alphabet ) ) );
 
 		$json_query = json_encode( $query );
 		$transient_queries = get_transient('A_Z_Queries');
@@ -105,7 +105,7 @@ class A_Z_Listing {
 				do_action( 'log', 'A-Z Listing: Terms', '!slug', $this->items );
 			}
 
-			$this->matched_item_indices = $this->get_all_indices();
+			$this->matched_item_indices = $this->get_all_indices( $this->items );
 		} else {
 			if ( AZLISTINGLOG ) {
 				do_action( 'log', 'A-Z Listing: Setting posts mode', $query );
@@ -130,27 +130,55 @@ class A_Z_Listing {
 			$index_taxonomy       = apply_filters( 'a-z-listing-additional-titles-taxonomy', $index_taxonomy );
 			$this->index_taxonomy = $index_taxonomy;
 
-			$query = (array) $query;
-
-			$section = self::get_section();
-
-			if ( ( isset( $query['post_type'] ) && 'page' !== $query['post_type'] )
-			|| ( isset( $post ) && 'page' !== $post->post_type ) ) {
-				$section = null;
+			if ( ! $query ) {
+				$query = array();
 			}
 
-			if ( $section ) {
-				$query['child_of'] = $section->ID;
+			/**
+			 * Modify or replace the query
+			 *
+			 * @since 1.0.0
+			 * @param Array|Object|WP_Query $query The query object
+			 */
+			$query = apply_filters( 'a_z_listing_query', $query );
+			/**
+			 * Modify or replace the query
+			 *
+			 * @since 1.7.1
+			 * @param Array|Object|WP_Query $query The query object
+			 */
+			$query = apply_filters( 'a-z-listing-query', $query );
+
+			if ( ! $query instanceof WP_Query ) {
+				$query = (array) $query;
 			}
 
-			if ( isset( $query['child_of'] ) ) {
+			if ( ! $query instanceof WP_Query
+				&& ( ! isset( $query['post_type'] ) || 'page' === $query['post_type'] )
+				&& isset( $post ) && 'page' === $post->post_type
+				&& ! isset( $query['child_of'] ) && ! isset( $query['parent'] ) )
+			{
+				$section = self::get_section();
+				$q['child_of'] = $section->ID;
+			}
+
+			if ( ! $query instanceof WP_Query &&
+				( isset( $query['child_of'] ) || isset( $query['parent'] ) ) )
+			{
 				$this->items = get_pages( $query );
 			} else {
-				$query       = $this->construct_query( $query );
+				if ( ! $query instanceof WP_Query ) {
+					$query = wp_parse_args( $query, array(
+						'post_type'   => 'page',
+						'numberposts' => -1,
+						'nopaging'    => true,
+					) );
+					$query = new WP_Query( $query );
+				}
 				$this->items = $query->get_posts();
 			}
 
-			$this->matched_item_indices = $this->get_all_indices();
+			$this->matched_item_indices = $this->get_all_indices( $this->items );
 		} // End if().
 
 		$transient_queries[ $json_query ] = $this->matched_item_indices;
@@ -180,8 +208,8 @@ class A_Z_Listing {
 	 *
 	 * @since 0.1
 	 */
-	protected static function get_alphabet() {
-		if ( ! empty( self::$alphabet ) ) {
+	protected function get_alphabet() {
+		if ( ! empty( $this->alphabet ) ) {
 			return;
 		}
 
@@ -236,8 +264,8 @@ class A_Z_Listing {
 			}
 		);
 
-		self::$alphabet        = $letters;
-		self::$unknown_letters = $others;
+		$this->alphabet        = $letters;
+		$this->unknown_letters = $others;
 	}
 
 	/**
@@ -270,11 +298,10 @@ class A_Z_Listing {
 	protected static function get_section( $page = 0 ) {
 		global $post;
 
-		$pages    = get_pages(
-			array(
-				'parent' => 0,
-			)
-		);
+		$pages = get_pages( array(
+			'parent' => 0,
+		) );
+
 		$sections = array_map(
 			function( $item ) {
 					return $item->post_name;
@@ -337,43 +364,6 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Build a WP_Query object to actually fetch the posts
-	 *
-	 * @since 1.0.0
-	 * @param Array|Object|WP_Query Query params as an array/object or WP_Query object
-	 * @return WP_Query the query
-	 */
-	protected function construct_query( $q ) {
-		/**
-		 * Modify or replace the query
-		 *
-		 * @since 1.0.0
-		 * @param Array|Object|WP_Query $query The query object
-		 */
-		$q = apply_filters( 'a_z_listing_query', $q );
-		/**
-		 * Modify or replace the query
-		 *
-		 * @since 1.7.1
-		 * @param Array|Object|WP_Query $query The query object
-		 */
-		$q = apply_filters( 'a-z-listing-query', $q );
-
-		if ( $q instanceof WP_Query ) {
-			return $q;
-		}
-
-		$q = wp_parse_args(
-			(array) $q, array(
-				'post_type'   => 'page',
-				'numberposts' => -1,
-				'nopaging'    => true,
-			)
-		);
-		return new WP_Query( $q );
-	}
-
-	/**
 	 * Fetch the query we are currently using
 	 *
 	 * @since 1.0.0
@@ -416,6 +406,7 @@ class A_Z_Listing {
 			$indices[ $index ][] = array(
 				'title' => $item->name,
 				'item'  => "term:{$item->term_id}",
+				'link'  => get_term_link( $item ),
 			);
 			/**
 			 * @deprecated Use a_z_listing_item_indices
@@ -423,10 +414,13 @@ class A_Z_Listing {
 			 */
 			$indices = apply_filters_deprecated( 'a_z_listing_term_indices', array( $indices, $item ), '1.0.0', 'a_z_listing_item_indices' );
 		} else {
-			$index               = mb_substr( $item->post_title, 0, 1, 'UTF-8' );
+			$index     = mb_substr( $item->post_title, 0, 1, 'UTF-8' );
+			$permalink = get_the_permalink( $item );
+
 			$indices[ $index ][] = array(
 				'title' => $item->post_title,
 				'item'  => "post:{$item->ID}",
+				'link'  => $permalink,
 			);
 
 			if ( ! empty( $this->index_taxonomy ) ) {
@@ -436,6 +430,7 @@ class A_Z_Listing {
 						$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array(
 							'title' => $term->name,
 							'item'  => "post:{$item->ID}",
+							'link'  => $permalink,
 						);
 						return $indices;
 					}
@@ -472,7 +467,7 @@ class A_Z_Listing {
 		 * @param string          $item_type The type of the item
 		 */
 		$indices = apply_filters( 'a-z-listing-item-indices', $indices, $item, $this->type );
-		if ( AZLISTINGLOG ) {
+		if ( AZLISTINGLOG > 2 ) {
 			do_action( 'log', 'Item indices', $indices );
 		}
 		return $indices;
@@ -484,16 +479,24 @@ class A_Z_Listing {
 	 * @since 0.1
 	 * @return Array The index letters
 	 */
-	protected function get_all_indices() {
+	protected function get_all_indices( $items = null ) {
 		$indexed_items = array();
 
-		foreach ( $this->items as $item ) {
+		if ( ! $items ) {
+			$items = $this->items;
+		}
+
+		foreach ( $items as $item ) {
 			$item_indices = $this->get_the_item_indices( $item );
+
+			if ( count( $item_indices ) < 1 ) {
+				continue;
+			}
 
 			foreach ( $item_indices as $index => $index_entries ) {
 				if ( count( $index_entries ) > 0 ) {
-					if ( in_array( $index, array_keys( self::$alphabet ), true ) ) {
-						$index = self::$alphabet[ $index ];
+					if ( in_array( $index, array_keys( $this->alphabet ), true ) ) {
+						$index = $this->alphabet[ $index ];
 					} else {
 						$index = '_';
 					}
@@ -506,8 +509,8 @@ class A_Z_Listing {
 			}
 		}
 
-		if ( ! empty( $index[ self::$unknown_letters ] ) ) {
-			$this->alphabet_chars[] = self::$unknown_letters;
+		if ( ! empty( $index[ $this->unknown_letters ] ) ) {
+			$this->alphabet_chars[] = $this->unknown_letters;
 		}
 
 		foreach ( $this->alphabet_chars as $character ) {
@@ -566,7 +569,7 @@ class A_Z_Listing {
 		foreach ( $this->alphabet_chars as $letter ) {
 			$i++;
 			$id = $letter;
-			if ( self::$unknown_letters === $id ) {
+			if ( $this->unknown_letters === $id ) {
 				$id = '_';
 			}
 
@@ -617,12 +620,11 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Return the index list HTML created by a theme template
+	 * Print the index list HTML created by a theme template
 	 *
-	 * @since 0.7
-	 * @return string The index list HTML
+	 * @since 2.0.0
 	 */
-	public function get_the_listing() {
+	public function the_listing() {
 		if ( 'taxonomy' === $this->type ) {
 			$section = $this->taxonomy;
 		} else {
@@ -632,16 +634,25 @@ class A_Z_Listing {
 			}
 		}
 
-		ob_start();
 		$template = locate_template( array( 'a-z-listing-' . $section . '.php', 'a-z-listing.php' ) );
 		if ( $template ) {
 			$this->do_template( $template );
 		} else {
 			$this->do_template( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'a-z-listing.php' );
 		}
-		$r = ob_get_clean();
-
 		wp_reset_postdata();
+	}
+
+	/**
+	 * Return the index list HTML created by a theme template
+	 *
+	 * @since 0.7
+	 * @return string The index list HTML
+	 */
+	public function get_the_listing() {
+		ob_start();
+		$this->the_listing();
+		$r = ob_get_clean();
 
 		return $r;
 	}
@@ -806,7 +817,7 @@ class A_Z_Listing {
 	 * @return string The letter ID
 	 */
 	public function get_the_letter_id() {
-		return 'letter-' . self::$alphabet[ $this->alphabet_chars[ $this->current_letter_index - 1 ] ];
+		return 'letter-' . $this->alphabet[ $this->alphabet_chars[ $this->current_letter_index - 1 ] ];
 	}
 
 	/**
@@ -827,9 +838,9 @@ class A_Z_Listing {
 	 */
 	public function get_the_letter_title( $index = '' ) {
 		if ( '' !== $index ) {
-			$letter = self::$alphabet[ $index ];
+			$letter = $this->alphabet[ $index ];
 		} else {
-			$letter = self::$alphabet[ $this->alphabet_chars[ $this->current_letter_index - 1 ] ];
+			$letter = $this->alphabet[ $this->alphabet_chars[ $this->current_letter_index - 1 ] ];
 		}
 
 		/**
@@ -856,7 +867,8 @@ class A_Z_Listing {
 	 * @since 1.0.0
 	 */
 	public function the_title() {
-		echo esc_html( $this->get_the_title() );
+		// to match code we do NOT escape the output!
+		echo $this->get_the_title(); // wpcs: XSS OK.
 	}
 
 	/**
@@ -892,11 +904,7 @@ class A_Z_Listing {
 	 * @return string The permalink
 	 */
 	public function get_the_permalink() {
-		$item = $this->current_item['item'];
-		if ( $item instanceof WP_Term ) {
-			return get_term_link( $this->current_item['item'] );
-		}
-		return get_permalink( $item );
+		return $this->current_item['link'];
 	}
 }
 
@@ -908,35 +916,5 @@ class A_Z_Listing {
  * @return A_Z_Listing                                    a new or previously-saved instance of A_Z_Listing using the provided construct_query
  */
 function a_z_listing_cache( $query = null, $use_cache = true ) {
-	static $cache = array();
-
-	if ( $query instanceof A_Z_Listing ) {
-		// we received a valid A_Z_Listing instance so we get the query from it for the cache lookup/save key.
-		if ( true === $use_cache ) {
-			$key = wp_json_encode( $query->get_the_query() );
-			if ( array_key_exists( $key, $cache ) ) {
-				return $cache[ $key ];
-			}
-
-			$cache[ $key ] = $query;
-		}
-		return $query;
-	}
-
-	// check the cache and return any pre-existing A_Z_Listing instance we have.
-	$key = wp_json_encode( $query );
-	if ( null !== $query && true === $use_cache && array_key_exists( $key, $cache ) ) {
-		return $cache[ $key ];
-	}
-
-	// if $query is $obj then we did not get an A_Z_Listing instance as our argument, so we will make a new one.
-	$obj = new A_Z_Listing( $query );
-
-	if ( true === $use_cache ) {
-		// save the new A_Z_Listing instance into the cache.
-		$cache[ $key ] = $obj;
-	}
-
-	// return the new A_Z_Listing instance.
-	return $obj;
+	return new A_Z_Listing( $query );
 }

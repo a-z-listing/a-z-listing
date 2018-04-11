@@ -1,12 +1,29 @@
 @import "mixins.scss";
 
-.az-letters {
+.az-letters,
+.a-z-listing-widget .az-letters,
+.a-z-listing-widget.widget .az-letters {
 	@include clearfix();
 	display: flex;
 	justify-content: center;
+	@supports(display: grid) {
+		display: block;
+		&:after {
+			display: none;
+		}
+	}
 	ul.az-links {
 		padding: 0;
 		margin: 0;
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		@supports(display: grid) {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(2em, 1fr));
+			grid-gap: 0.3em;
+		}
 		li {
 			list-style: none;
 			float: left;
@@ -20,6 +37,13 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			@supports(display: grid) {
+				display: grid;
+				width: 100%;
+				height: auto;
+				margin: 0;
+				padding: 0;
+			}
 			a {
 				color: #1f7d9a;
 				text-decoration: none;
@@ -33,25 +57,11 @@
 .letter-section {
 	@include clearfix();
 	margin-bottom: 2em;
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: start;
-	@supports (display: grid) {
-		display: grid;
-		grid-gap: 0 0.6em;
-		&:after {
-			display: none;
-		}
-	}
 	h2.letter-title {
 		border-bottom: 1px solid black;
 		margin-bottom: 0.2em;
 		padding-bottom: 0.2em;
 		width: 100%;
-		@supports (display: grid) {
-			grid-column: 1 / end;
-		}
 	}
 	ul, ul li {
 		list-style: none;
@@ -61,6 +71,18 @@
 		box-sizing: border-box;
 		&:nth-last-child(1) {
 			flex-grow: 1;
+		}
+	}
+	div.columns {
+		width: 100%;
+		column-count: 1;
+		column-gap: 0.6em;
+		@supports (display: grid) {
+			display: grid;
+			grid-gap: 0 0.6em;
+			&:after {
+				display: none;
+			}
 		}
 	}
 	div.back-to-top {
@@ -75,9 +97,6 @@
 				content: "\f343";
 				padding: 0.2em;
 			}
-		}
-		@supports (display: grid) {
-			grid-column: 1 / end;
 		}
 	}
 }
