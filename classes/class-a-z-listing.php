@@ -896,7 +896,11 @@ class A_Z_Listing {
 	 */
 	public function get_the_letter_title( $index = '' ) {
 		if ( '' !== $index ) {
-			$letter = $this->alphabet[ $index ];
+			if ( isset( $this->alphabet[ $index ] ) ) {
+				$letter = $this->alphabet[ $index ];
+			} else {
+				$letter = $index;
+			}
 		} else {
 			$letter = $this->alphabet[ $this->alphabet_chars[ $this->current_letter_index - 1 ] ];
 		}
