@@ -63,6 +63,7 @@ class A_Z_Listing {
 	 * A_Z_Listing constructor.
 	 *
 	 * @since 0.1
+	 * @since 1.9.2 Instantiate the WP_Query object here instead of in `A_Z_Listing::construct_query()`
 	 * @param null|WP_Query|array|string $query
 	 */
 	public function __construct( $query = null ) {
@@ -91,6 +92,8 @@ class A_Z_Listing {
 				do_action( 'log', 'A-Z Listing: Setting posts mode', $query );
 			}
 			/**
+			 * Taxonomy containing terms which are used as the title for associated posts
+			 *
 			 * @deprecated Use a_z_listing_additional_titles_taxonomy
 			 * @see a_z_listing_additional_titles_taxonomy
 			 */
@@ -127,7 +130,8 @@ class A_Z_Listing {
 				$this->items = get_pages( $query );
 			} else {
 				$query       = $this->construct_query( $query );
-				$this->items = $query->get_posts();
+				$wp_query    = new WP_Query();
+				$this->items = $wp_query->query( $query );
 			}
 
 			$this->query = $query;
@@ -316,11 +320,13 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Build a WP_Query object to actually fetch the posts
+	 * Build a WP_Query-compatible array, and allow plugins and the theme to modify the parameters,
+	 * ready for passing into `WP_Query->query()`
 	 *
 	 * @since 1.0.0
+	 * @since 1.9.2 Switch the return value from a WP_Query object to an Array
 	 * @param Array|Object|WP_Query Query params as an array/object or WP_Query object
-	 * @return WP_Query the query
+	 * @return Array the query for usage in `WP_Query->query()`
 	 */
 	protected function construct_query( $q ) {
 		/**
@@ -339,7 +345,7 @@ class A_Z_Listing {
 		$q = apply_filters( 'a-z-listing-query', $q );
 
 		if ( $q instanceof WP_Query ) {
-			return $q;
+			$q = (array) $q;
 		}
 
 		$q = wp_parse_args(
@@ -349,7 +355,7 @@ class A_Z_Listing {
 				'nopaging'    => true,
 			)
 		);
-		return new WP_Query( $q );
+		return $q;
 	}
 
 	/**

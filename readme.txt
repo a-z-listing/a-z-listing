@@ -4,7 +4,7 @@ Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 3.5
 Tested up to: 4.9
-Stable tag: 1.9.1
+Stable tag: 1.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -348,13 +348,18 @@ In your theme's functions.php add the following code:
 
 == Changelog ==
 
+= 1.9.2 =
+Bugfix:
+
+* Fix using multiple terms in the shortcode only displays results for the first term
+
 = 1.9.1 =
 Feature Request:
 Add CSS classes to letters indicating presence of posts or not:
-  
+
 * `has-posts` allows styling of letters that have posts visible in the listing
 * `no-posts` allows styling of letters that do not have any posts visible in the listing
-  
+
 You can use these classes to hide letters that have no posts by including the following CSS rule:
 `.az-letters ul.az-links li.no-posts {
     display: none;
