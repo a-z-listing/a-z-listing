@@ -4,7 +4,7 @@
 - **Tags:** a to z, a-z, archive, listing, widget, index
 - **Requires at least:** 3.5
 - **Tested up to:** 4.9
-- **Stable tag:** 1.9.1
+- **Stable tag:** 1.9.2
 - **License:** GPLv2 or later
 - **License URI:** http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -351,6 +351,11 @@ In your theme's functions.php add the following code:
 ![The Widget is shown here.](https://ps.w.org/a-z-listing/assets/screenshot-2.png)
 
 ## Changelog
+
+### 1.9.2
+Bugfix:
+
+* Fix using multiple terms in the shortcode only displays results for the first term
 
 ### 1.9.1
 Feature Request
