@@ -100,9 +100,11 @@ class A_Z_Listing {
 	 *
 	 * @since 0.1
 	 * @since 1.9.2 Instantiate the WP_Query object here instead of in `A_Z_Listing::construct_query()`
-	 * @param null|WP_Query|array|string $query
+	 * @since 2.0.0 add $type parameter
+	 * @param null|WP_Query|array|string $query A WP_Query-compatible query definition or a taxonomy name.
+	 * @param null|string                $type  Specify the listing type; either 'posts' or 'terms'.
 	 */
-	public function __construct( $query = null ) {
+	public function __construct( $query = null, $type = 'posts' ) {
 		global $post;
 		$this->get_alphabet();
 		$this->alphabet_chars = array_values( array_unique( array_values( $this->alphabet ) ) );
@@ -125,19 +127,46 @@ class A_Z_Listing {
 			}
 		}
 
-		if ( is_string( $query ) && ! empty( $query ) ) {
+		if ( 'terms' === $type || ( is_string( $query ) && ! empty( $query ) ) ) {
 			if ( AZLISTINGLOG ) {
 				do_action( 'log', 'A-Z Listing: Setting taxonomy mode', $query );
 			}
 
-			$this->cache_key = "a-z-listing:taxonomy:$query";
-			$this->type = 'taxonomy';
-			$this->taxonomy = $query;
-			$this->items    = get_terms(
-				$query, array(
-					'hide_empty' => false,
-				)
+			$this->type = 'terms';
+
+			$defaults = array(
+				'hide_empty' => false,
 			);
+
+			if ( is_array( $query ) ) {
+				$query = wp_parse_args( $query, $defaults );
+			} elseif ( is_string( $query ) ) {
+				$query = wp_parse_args( array(
+					'taxonomy' => $query,
+				), $defaults );
+			}
+
+			/**
+			 * Modify or replace the query
+			 *
+			 * @since 1.0.0
+			 * @since 2.0.0 apply to taxonomy queries. Add type parameter indicating type of query.
+			 * @param Array|Object|WP_Query  $query  The query object
+			 * @param string  $type  The type of the query. Either 'posts' or 'terms'.
+			 */
+			$query = apply_filters( 'a_z_listing_query', $query, 'terms' );
+			/**
+			 * Modify or replace the query
+			 *
+			 * @since 1.7.1
+			 * @since 2.0.0 apply to taxonomy queries. Add type parameter indicating type of query.
+			 * @param Array|Object|WP_Query  $query  The query object
+			 * @param string  $type  The type of the query. Either 'posts' or 'terms'.
+			 */
+			$query = apply_filters( 'a-z-listing-query', $query, 'terms' );
+
+			$this->taxonomy = $query['taxonomy'];
+			$this->items    = get_terms( $query );
 
 			if ( AZLISTINGLOG ) {
 				do_action( 'log', 'A-Z Listing: Terms', '!slug', $this->items );
@@ -148,6 +177,9 @@ class A_Z_Listing {
 			if ( AZLISTINGLOG ) {
 				do_action( 'log', 'A-Z Listing: Setting posts mode', $query );
 			}
+
+			$this->type = 'posts';
+
 			/**
 			 * Taxonomy containing terms which are used as the title for associated posts
 			 *
@@ -174,20 +206,8 @@ class A_Z_Listing {
 				$query = array();
 			}
 
-			/**
-			 * Modify or replace the query
-			 *
-			 * @since 1.0.0
-			 * @param Array|Object|WP_Query $query The query object
-			 */
-			$query = apply_filters( 'a_z_listing_query', $query );
-			/**
-			 * Modify or replace the query
-			 *
-			 * @since 1.7.1
-			 * @param Array|Object|WP_Query $query The query object
-			 */
-			$query = apply_filters( 'a-z-listing-query', $query );
+			$query = apply_filters( 'a_z_listing_query', $query, 'posts' );
+			$query = apply_filters( 'a-z-listing-query', $query, 'posts' );
 
 			if ( ! $query instanceof WP_Query ) {
 				$query = (array) $query;
@@ -525,7 +545,7 @@ class A_Z_Listing {
 		 *
 		 * @param array           $indices The current indices
 		 * @param WP_Term|WP_Post $item The item
-		 * @param string          $item_type The type of the item
+		 * @param string          $item_type The type of the item. Either 'posts' or 'terms'.
 		 */
 		$indices = apply_filters( 'a_z_listing_item_indices', $indices, $item, $this->type );
 		/**
@@ -534,7 +554,7 @@ class A_Z_Listing {
 		 * @since 1.7.1
 		 * @param array           $indices The current indices
 		 * @param WP_Term|WP_Post $item The item
-		 * @param string          $item_type The type of the item
+		 * @param string          $item_type The type of the item Either 'posts' or 'terms'.
 		 */
 		$indices = apply_filters( 'a-z-listing-item-indices', $indices, $item, $this->type );
 		if ( AZLISTINGLOG > 2 ) {
@@ -701,7 +721,7 @@ class A_Z_Listing {
 	 * @since 2.0.0
 	 */
 	public function the_listing() {
-		if ( 'taxonomy' === $this->type ) {
+		if ( 'terms' === $this->type ) {
 			$section = $this->taxonomy;
 		} else {
 			$section = self::get_section();

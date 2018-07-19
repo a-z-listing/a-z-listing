@@ -3,7 +3,7 @@
 **Contributors:** [diddledan](https://profiles.wordpress.org/diddledan)
 **Donate Link:** https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=N7QFVVD4PZVFE
 **Tags:** a to z, a-z, archive, listing, widget, index
-**Requires at least:** 3.5
+**Requires at least:** 4.6
 **Requires PHP:** 5.6
 **Tested up to:** 4.9
 **Stable tag:** 1.9.2
@@ -377,12 +377,11 @@ If there is code already in your functions.php then add just the lines between `
 ### 2. The Widget is shown here ###
 ![The Widget is shown here](assets/screenshot-2.png)
 
-
 ## Changelog ##
 
 ### 2.0.0 ###
 
-* Vastly improved widget configuration similar to the Gutenberg UI.
+* Vastly improved widget configuration.
 * Caching?
 * Fix the stylesheet to better cope with variances in font-size and text length in the alphabet links list and widget.
 * Caching.

@@ -16,14 +16,15 @@ if ( ! defined( 'AZLISTINGLOG' ) ) {
 	define( 'AZLISTINGLOG', false );
 }
 
-require join( DIRECTORY_SEPARATOR, array( __DIR__, 'functions', 'i18n.php' ) );
-require join( DIRECTORY_SEPARATOR, array( __DIR__, 'functions', 'helpers.php' ) );
-require join( DIRECTORY_SEPARATOR, array( __DIR__, 'functions', 'styling.php' ) );
-require join( DIRECTORY_SEPARATOR, array( __DIR__, 'functions', 'shortcode.php' ) );
-require join( DIRECTORY_SEPARATOR, array( __DIR__, 'functions', 'cache.php' ) );
-require join( DIRECTORY_SEPARATOR, array( __DIR__, 'classes', 'class-a-z-listing.php' ) );
-require join( DIRECTORY_SEPARATOR, array( __DIR__, 'classes', 'class-a-z-grouping.php' ) );
-require join( DIRECTORY_SEPARATOR, array( __DIR__, 'classes', 'class-a-z-numbers.php' ) );
+$dir = __DIR__;
+require "$dir/functions/i18n.php";
+require "$dir/functions/helpers.php";
+require "$dir/functions/styling.php";
+require "$dir/functions/shortcode.php";
+require "$dir/functions/cache.php";
+require "$dir/classes/class-a-z-listing.php";
+require "$dir/classes/class-a-z-grouping.php";
+require "$dir/classes/class-a-z-numbers.php";
 
 /**
  * Register the A-Z Listing Widget
@@ -31,19 +32,8 @@ require join( DIRECTORY_SEPARATOR, array( __DIR__, 'classes', 'class-a-z-numbers
  * @since 2.0.0
  */
 function a_z_listing_register_widget() {
-	require join( DIRECTORY_SEPARATOR, array( __DIR__, 'widgets', 'class-a-z-widget.php' ) );
+	$dir = __DIR__;
+	require "$dir/widgets/class-a-z-widget.php";
 	register_widget( 'A_Z_Widget' );
 }
 add_action( 'widgets_init', 'a_z_listing_register_widget' );
-/**
- * Register the A-Z Listing Gutenberg Block
- */
-function a_z_listing_register_block_import() {
-	if ( function_exists( 'register_block_type' ) ) {
-		require join( DIRECTORY_SEPARATOR, array( __DIR__, 'blocks', 'a-z-listing.php' ) );
-	}
-}
-add_action( 'plugins_loaded', 'a_z_listing_register_block_import' );
-if ( function_exists( 'register_rest_route' ) ) {
-	require join( DIRECTORY_SEPARATOR, array( __DIR__, 'wp-api', 'api.php' ) );
-}

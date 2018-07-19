@@ -378,7 +378,7 @@ If there is code already in your functions.php then add just the lines between `
 
 = 2.0.0 =
 
-* Vastly improved widget configuration similar to the Gutenberg UI.
+* Vastly improved widget configuration.
 * Caching?
 * Fix the stylesheet to better cope with variances in font-size and text length in the alphabet links list and widget.
 * Caching.
