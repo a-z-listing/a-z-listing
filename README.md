@@ -402,7 +402,6 @@ If there is code already in your functions.php then add just the lines between `
 Bugfix:
 
 * Fix using multiple terms in the shortcode only displays results for the first term
-
 ### 1.9.1 ###
 
 Feature Request:
