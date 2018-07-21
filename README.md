@@ -398,9 +398,11 @@ If there is code already in your functions.php then add just the lines between `
   *This step is purposely omited to save memory and try to improve performance.*
 
 ### 1.9.2 ###
+
 Bugfix:
 
 * Fix using multiple terms in the shortcode only displays results for the first term
+
 ### 1.9.1 ###
 
 Feature Request:

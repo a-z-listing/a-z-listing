@@ -177,6 +177,8 @@ class A_Z_Listing {
 			if ( AZLISTINGLOG ) {
 				do_action( 'log', 'A-Z Listing: Terms', '!ID', $items );
 			}
+
+			$this->matched_item_indices = $this->get_all_indices( $this->items );
 		} else {
 			if ( AZLISTINGLOG ) {
 				do_action( 'log', 'A-Z Listing: Setting posts mode', $query );
@@ -210,17 +212,29 @@ class A_Z_Listing {
 				$query = array();
 			}
 
-			$query = apply_filters( 'a_z_listing_query', $query, 'posts' );
-			$query = apply_filters( 'a-z-listing-query', $query, 'posts' );
+			/**
+			 * Modify or replace the query
+			 *
+			 * @since 1.0.0
+			 * @param Array|Object|WP_Query $query The query object
+			 */
+			$query = apply_filters( 'a_z_listing_query', $query );
+			/**
+			 * Modify or replace the query
+			 *
+			 * @since 1.7.1
+			 * @param Array|Object|WP_Query $query The query object
+			 */
+			$query = apply_filters( 'a-z-listing-query', $query );
 
 			if ( ! $query instanceof WP_Query ) {
 				$query = (array) $query;
 			}
 
 			if ( ! $query instanceof WP_Query &&
-			     ( ! isset( $query['post_type'] ) || 'page' === $query['post_type'] ) &&
-			     isset( $post ) && 'page' === $post->post_type &&
-			     ! ( isset( $query['child_of'] ) || isset( $query['parent'] ) ) ) {
+				( ! isset( $query['post_type'] ) || 'page' === $query['post_type'] ) &&
+				isset( $post ) && 'page' === $post->post_type &&
+				! ( isset( $query['child_of'] ) || isset( $query['parent'] ) ) ) {
 				$section       = self::get_section();
 				$q['child_of'] = $section->ID;
 			}
@@ -430,6 +444,7 @@ class A_Z_Listing {
 	}
 
 	/**
+<<<<<<< HEAD:classes/class-a-z-listing.php
 	 * Build a WP_Query-compatible array, and allow plugins and the theme to modify the parameters,
 	 * ready for passing into `WP_Query->query()`
 	 *
@@ -468,6 +483,8 @@ class A_Z_Listing {
 	}
 
 	/**
+=======
+>>>>>>> 71bc3439e931b797fb410b8e44dfcae390be5560:classes/class-a-z-listing.php
 	 * Fetch the query we are currently using
 	 *
 	 * @since 1.0.0
@@ -533,7 +550,7 @@ class A_Z_Listing {
 			if ( ! empty( $this->index_taxonomy ) ) {
 				$terms        = array_filter( wp_get_object_terms( $item->ID, $this->index_taxonomy ) );
 				$term_indices = array_reduce(
-					$terms, function( $indices, $term ) use ( $item ) {
+					$terms, function( $indices, $term ) use ( $item, $permalink ) {
 						$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array(
 							'title' => $term->name,
 							'item'  => "post:{$item}",
@@ -863,7 +880,7 @@ class A_Z_Listing {
 	 * @param string $is_slow set to 'I understand the speed issues!' to acknowledge that this function will cause slowness on large sites.
 	 */
 	public function get_the_item_object( $is_slow = '' ) {
-		if ( 'I understand the speed issues!' === $break_cache ) {
+		if ( 'I understand the speed issues!' === $is_slow ) {
 			global $post;
 			$item = explode( ':', $this->current_item['item'], 1 );
 			if ( isset( $item[1] ) ) {

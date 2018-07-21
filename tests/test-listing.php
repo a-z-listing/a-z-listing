@@ -153,7 +153,7 @@ class AZ_Listing_Tests extends AZ_UnitTestCase {
 			)
 		);
 
-		$expected = sprintf( file_get_contents( 'tests/populated-taxonomy-listing.txt' ), $title, $t );
+		$expected = sprintf( file_get_contents( 'tests/data/populated-taxonomy-listing.txt' ), $title, $t );
 		$actual   = get_the_a_z_listing( 'category', false );
 
 		$this->assertHTMLEquals( $expected, $actual );

@@ -1,4 +1,5 @@
 module.exports = function( grunt ) {
+
 	'use strict';
 
 	const sass = require( 'node-sass' );

@@ -1,7 +1,7 @@
 <?php
 class AZ_Shortcode_Tests extends AZ_UnitTestCase {
 	public function test_empty() {
-		$expected = file_get_contents( 'tests/default-listing.txt' );
+		$expected = file_get_contents( 'tests/data/default-listing.txt' );
 		$actual   = do_shortcode( '[a-z-listing]' );
 
 		$this->assertHTMLEquals( $expected, $actual );
@@ -16,7 +16,7 @@ class AZ_Shortcode_Tests extends AZ_UnitTestCase {
 			)
 		);
 
-		$expected = sprintf( file_get_contents( 'tests/populated-listing.txt' ), $title, $p );
+		$expected = sprintf( file_get_contents( 'tests/data/populated-listing.txt' ), $title, $p );
 		$actual   = do_shortcode( '[a-z-listing]' );
 
 		$this->assertHTMLEquals( $expected, $actual );
@@ -30,7 +30,7 @@ class AZ_Shortcode_Tests extends AZ_UnitTestCase {
 			)
 		);
 
-		$expected = sprintf( file_get_contents( 'tests/populated-listing-lowercase.txt' ), $p );
+		$expected = sprintf( file_get_contents( 'tests/data/populated-listing-lowercase.txt' ), $p );
 		$actual   = do_shortcode( '[a-z-listing]' );
 
 		$this->assertHTMLEquals( $expected, $actual );
@@ -45,7 +45,7 @@ class AZ_Shortcode_Tests extends AZ_UnitTestCase {
 			)
 		);
 
-		$expected = sprintf( file_get_contents( 'tests/populated-taxonomy-listing.txt' ), $title, $t );
+		$expected = sprintf( file_get_contents( 'tests/data/populated-taxonomy-listing.txt' ), $title, $t );
 		$actual   = do_shortcode( '[a-z-listing display="terms" taxonomy="category"]' );
 
 		$this->assertHTMLEquals( $expected, $actual );
@@ -70,7 +70,7 @@ class AZ_Shortcode_Tests extends AZ_UnitTestCase {
 			)
 		);
 
-		$expected = sprintf( file_get_contents( 'tests/populated-listing.txt' ), $title, $p );
+		$expected = sprintf( file_get_contents( 'tests/data/populated-listing.txt' ), $title, $p );
 		$actual   = do_shortcode( '[a-z-listing taxonomy="category" terms="test category"]' );
 
 		$this->assertHTMLEquals( $expected, $actual );

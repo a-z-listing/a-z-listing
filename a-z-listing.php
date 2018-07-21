@@ -13,7 +13,7 @@
  */
 
 if ( ! defined( 'AZLISTINGLOG' ) ) {
-	define( 'AZLISTINGLOG', true );
+	define( 'AZLISTINGLOG', false );
 }
 
 $dir = __DIR__;
