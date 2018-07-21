@@ -1,6 +1,7 @@
 module.exports = function( grunt ) {
-
 	'use strict';
+
+	const sass = require( 'node-sass' );
 
 	// Project configuration
 	grunt.initConfig( {
@@ -86,7 +87,8 @@ module.exports = function( grunt ) {
 
 		sass: {
 			options: {
-				sourceMap: true
+				sourceMap: true,
+				implementation: sass
 			},
 			dist: {
 				files: {

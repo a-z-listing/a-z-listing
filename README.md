@@ -1,14 +1,14 @@
 # A-Z Listing #
 
-**Contributors:** [diddledan](https://profiles.wordpress.org/diddledan)
-**Donate Link:** https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=N7QFVVD4PZVFE
-**Tags:** a to z, a-z, archive, listing, widget, index
-**Requires at least:** 4.6
-**Requires PHP:** 5.6
-**Tested up to:** 4.9
-**Stable tag:** 1.9.2
-**License:** GPLv2 or later
-**License URI:** http://www.gnu.org/licenses/gpl-2.0.html
+**Contributors:** [diddledan](https://profiles.wordpress.org/diddledan)  
+**Donate Link:** https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=N7QFVVD4PZVFE  
+**Tags:** a to z, a-z, archive, listing, widget, index  
+**Requires at least:** 4.6  
+**Requires PHP:** 5.6  
+**Tested up to:** 4.9  
+**Stable tag:** 1.9.2  
+**License:** GPLv2 or later  
+**License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
 Provides an A to Z index page and widget. The widget links to the index page at the appropriate letter.
 
@@ -377,6 +377,7 @@ If there is code already in your functions.php then add just the lines between `
 ### 2. The Widget is shown here ###
 ![The Widget is shown here](assets/screenshot-2.png)
 
+
 ## Changelog ##
 
 ### 2.0.0 ###
@@ -396,6 +397,10 @@ If there is code already in your functions.php then add just the lines between `
   **The argument must read exactly as written here to confirm that you understand.**
   *This step is purposely omited to save memory and try to improve performance.*
 
+### 1.9.2 ###
+Bugfix:
+
+* Fix using multiple terms in the shortcode only displays results for the first term
 ### 1.9.1 ###
 
 Feature Request:

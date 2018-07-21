@@ -1,4 +1,5 @@
 .DS_Store
+composer.phar
 phpcs.xml
 phpunit.xml
 Thumbs.db
@@ -7,3 +8,5 @@ node_modules/
 *.sql
 *.tar.gz
 *.zip
+
+/vendor/

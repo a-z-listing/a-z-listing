@@ -283,9 +283,10 @@ function the_az_letters( $query = null, $target = false, $styling = false ) {
  * @param array|string|WP_Query|A_Z_Listing $query a valid WordPress query or an A_Z_Listing instance.
  * @param bool|string                       $target URL of the page to send the browser when a letter is clicked.
  * @param bool                              $styling unused.
+ * @param bool                              $use_cache use the plugin's in-built query cache.
  */
-function the_a_z_letters( $query = null, $target = false, $styling = false ) {
-	echo get_the_a_z_letters( $query, $target, $styling ); // WPCS: XSS OK.
+function the_a_z_letters( $query = null, $target = false, $styling = false, $use_cache = true ) {
+	echo get_the_a_z_letters( $query, $target, $styling, $use_cache ); // WPCS: XSS OK.
 }
 
 /**
@@ -297,6 +298,7 @@ function the_a_z_letters( $query = null, $target = false, $styling = false ) {
  * @param array|string|WP_Query|A_Z_Listing $query a valid WordPress query or an A_Z_Listing instance.
  * @param bool|string                       $target URL of the page to send the browser when a letter is clicked.
  * @param bool                              $styling unused.
+ * @return string HTML ready for echoing containing the list of A-Z letters with anchor links to the A-Z Index page.
  */
 function get_the_az_letters( $query = null, $target = false, $styling = false ) {
 	_deprecated_function( __FUNCTION__, '0.8.0', 'get_the_a_z_letters' );
@@ -310,10 +312,11 @@ function get_the_az_letters( $query = null, $target = false, $styling = false ) 
  * @param array|string|WP_Query|A_Z_Listing $query a valid WordPress query or an A_Z_Listing instance.
  * @param bool|string                       $target URL of the page to send the browser when a letter is clicked.
  * @param bool                              $styling unused.
+ * @param bool                              $use_cache use the plugin's in-built query cache.
  * @return string HTML ready for echoing containing the list of A-Z letters with anchor links to the A-Z Index page.
  */
-function get_the_a_z_letters( $query = null, $target = false, $styling = false ) {
-	return a_z_listing_cache( $query )->get_the_letters( $target, $styling );
+function get_the_a_z_letters( $query = null, $target = false, $styling = false, $use_cache = true ) {
+	return a_z_listing_cache( $query )->get_the_letters( $target, $styling, $use_cache );
 }
 
 /**

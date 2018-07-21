@@ -1,0 +1,14 @@
+{
+    "name": "dllewellyn/wp-a-z-listing",
+    "require-dev": {
+        "phpunit/phpunit": "^7.2"
+    },
+    "license": "GPL2+",
+    "authors": [
+        {
+            "name": "Daniel Llewellyn",
+            "email": "daniel@bowlhat.net"
+        }
+    ],
+    "require": {}
+}
