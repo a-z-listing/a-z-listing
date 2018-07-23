@@ -25,6 +25,7 @@ function a_z_shortcode_handler( $attributes ) {
 			'post-type'     => 'page',
 			'taxonomy'      => '',
 			'terms'         => '',
+			'parent-term'   => '',
 		), $attributes, 'a-z-listing'
 	);
 
@@ -61,8 +62,32 @@ function a_z_shortcode_handler( $attributes ) {
 	}
 
 	$ret = '';
-	if ( ! empty( $attributes['taxonomy'] ) && 'terms' === $attributes['display'] ) {
-		$a_z_query = new A_Z_Listing( $attributes['taxonomy'] );
+	if ( 'terms' === $attributes['display'] && ! empty( $attributes['taxonomy'] ) ) {
+		$taxonomy = '' !== $attributes['taxonomy'] ? $attributes['taxonomy'] : 'category';
+		$query    = array(
+			'taxonomy' => $taxonomy,
+		);
+
+		if ( ! empty( $attributes['terms'] ) ) {
+			$terms = mb_split( ',', $attributes['terms'] );
+			$terms = array_map( 'trim', $terms );
+			$terms = array_unique( $terms );
+
+			$include = array();
+			$exclude = array();
+
+			$query = wp_parse_args( $query, array(
+				'slug' => $terms,
+			) );
+		}
+
+		if ( ! empty( $attributes['parent-term'] ) ) {
+			$query = wp_parse_args( $query, array(
+				'child_of' => $attributes['parent-term'],
+			) );
+		}
+
+		$a_z_query = new A_Z_Listing( $query, 'terms' );
 		$ret       = $a_z_query->get_the_listing();
 	} else {
 		$post_types = mb_split( ',', $attributes['post-type'] );
@@ -79,20 +104,18 @@ function a_z_shortcode_handler( $attributes ) {
 			$terms    = array_map( 'trim', $terms );
 			$terms    = array_unique( $terms );
 
-			$query = array_merge(
-				$query, array(
-					'tax_query' => array(
-						array(
-							'taxonomy' => $taxonomy,
-							'field'    => 'slug',
-							'terms'    => $terms,
-						),
+			$query = wp_parse_args( $query, array(
+				'tax_query' => array(
+					array(
+						'taxonomy' => $taxonomy,
+						'field'    => 'slug',
+						'terms'    => $terms,
 					),
-				)
-			);
+				),
+			) );
 		}
 
-		$a_z_query = new A_Z_Listing( $query );
+		$a_z_query = new A_Z_Listing( $query, 'posts' );
 		$ret       = $a_z_query->get_the_listing();
 	}
 

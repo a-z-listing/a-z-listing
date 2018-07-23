@@ -100,7 +100,7 @@ class A_Z_Listing {
 	 *
 	 * @since 0.1
 	 * @since 1.9.2 Instantiate the WP_Query object here instead of in `A_Z_Listing::construct_query()`
-	 * @since 2.0.0 add $type and $ignore_cache parameters
+	 * @since 2.0.0 add $type and $use_cache parameters
 	 * @param null|WP_Query|array|string $query     A WP_Query-compatible query definition or a taxonomy name.
 	 * @param null|string                $type      Specify the listing type; either 'posts' or 'terms'.
 	 * @param boolean                    $use_cache Cache the Listing via WordPress transients.
@@ -110,30 +110,27 @@ class A_Z_Listing {
 		$this->get_alphabet();
 		$this->alphabet_chars = array_values( array_unique( array_values( $this->alphabet ) ) );
 
-		$json_query      = json_encode( $query );
-		$transient_name  = "A_Z_Query:$json_query";
-		$transient_query = get_transient( $transient_name );
+		if ( is_string( $query ) && ! empty( $query ) ) {
+			$type = 'terms';
+		}
 
 		if ( $use_cache ) {
-			if ( $transient_query && count( $transient_query ) > 0 ) {
-				if ( AZLISTINGLOG ) {
-					do_action( 'log', 'A-Z Listing: Is cached' );
-				}
-				$this->matched_item_indices = $transient_query;
-
+			/**
+			 * Get the cached data
+			 *
+			 * @since 1.0.0
+			 * @since 2.0.0 apply to taxonomy queries. Add type parameter indicating type of query.
+			 * @param Array|Object|WP_Query  $query  The query object
+			 * @param string  $type  The type of the query. Either 'posts' or 'terms'.
+			 */
+			$cached = apply_filters( 'a_z_listing_get_cached_query', array(), $query, $type );
+			if ( count( $cached ) > 0 ) {
+				$this->matched_item_indices = $cached;
 				return;
-			}
-
-			if ( AZLISTINGLOG ) {
-				do_action( 'log', 'A-Z Listing: Is NOT cached' );
-			}
-		} else {
-			if ( AZLISTINGLOG ) {
-				do_action( 'log', 'A-Z Listing: Caching disabled' );
 			}
 		}
 
-		if ( 'terms' === $type || ( is_string( $query ) && ! empty( $query ) ) ) {
+		if ( 'terms' === $type ) {
 			if ( AZLISTINGLOG ) {
 				do_action( 'log', 'A-Z Listing: Setting taxonomy mode', $query );
 			}
@@ -229,17 +226,22 @@ class A_Z_Listing {
 
 			if ( ! $query instanceof WP_Query ) {
 				$query = (array) $query;
-			}
 
-			if ( ! $query instanceof WP_Query &&
-				( ! isset( $query['post_type'] ) || 'page' === $query['post_type'] ) &&
+				if ( ( ! isset( $query['post_type'] ) || 'page' === $query['post_type'] ) &&
 				isset( $post ) && 'page' === $post->post_type &&
 				! ( isset( $query['child_of'] ) || isset( $query['parent'] ) ) ) {
-				$section       = self::get_section();
-				$q['child_of'] = $section->ID;
+					$section       = self::get_section();
+					$q['child_of'] = $section->ID;
+				}
+
+				$query = wp_parse_args( (array) $query, array(
+					'post_type'   => 'page',
+					'numberposts' => -1,
+					'nopaging'    => true,
+					'fields'      => 'ids',
+				) );
 			}
 
-			$query = $this->construct_query( $query );
 			$wq    = new WP_Query( $query );
 			$items = $wq->get_posts();
 
@@ -253,13 +255,9 @@ class A_Z_Listing {
 		} // End if().
 
 		$this->matched_item_indices = $this->get_all_indices( $items );
-		$transient_query            = $this->matched_item_indices;
-		set_transient( $transient_name, $transient_query,  4 * 60 * 60 );
 
-		$cache_keys = get_option( 'A_Z_Query_Caches', array() );
-		if ( ! isset( $cache_keys ) || empty( $cache_keys ) || ! in_array( $transient_name, $cache_keys ) ) {
-			array_push( $cache_keys, $transient_name );
-			update_option( 'A_Z_Query_Caches', $cache_keys );
+		if ( $use_cache ) {
+			do_action( 'a_z_listing_save_cache', $query, $type, $this->matched_item_indices );
 		}
 	}
 
@@ -444,47 +442,6 @@ class A_Z_Listing {
 	}
 
 	/**
-<<<<<<< HEAD:classes/class-a-z-listing.php
-	 * Build a WP_Query-compatible array, and allow plugins and the theme to modify the parameters,
-	 * ready for passing into `WP_Query->query()`
-	 *
-	 * @since 1.0.0
-	 * @since 1.9.2 Switch the return value from a WP_Query object to an Array
-	 * @param Array|Object|WP_Query $q Query params as an array/object or WP_Query object.
-	 * @return Array the query for usage in `WP_Query->query()`
-	 */
-	protected function construct_query( $q ) {
-		/**
-		 * Modify or replace the query
-		 *
-		 * @since 1.0.0
-		 * @param Array|Object|WP_Query $query The query object
-		 */
-		$q = apply_filters( 'a_z_listing_query', $q );
-		/**
-		 * Modify or replace the query
-		 *
-		 * @since 1.7.1
-		 * @param Array|Object|WP_Query $query The query object
-		 */
-		$q = apply_filters( 'a-z-listing-query', $q );
-
-		if ( $q instanceof WP_Query ) {
-			$q = (array) $q;
-		}
-
-		$q = wp_parse_args( (array) $q, array(
-			'post_type'   => 'page',
-			'numberposts' => -1,
-			'nopaging'    => true,
-			'fields'      => 'ids',
-		) );
-		return $q;
-	}
-
-	/**
-=======
->>>>>>> 71bc3439e931b797fb410b8e44dfcae390be5560:classes/class-a-z-listing.php
 	 * Fetch the query we are currently using
 	 *
 	 * @since 1.0.0
@@ -1060,7 +1017,7 @@ class A_Z_Listing {
  * Get a saved copy of the A_Z_Listing instance if we have one, or make a new one and save it for later
  *
  * @param array|string|WP_Query|A_Z_Listing $query     a valid WordPress query or an A_Z_Listing instance.
- * @param string                            $type      the type of items displayed in the listing: 'terms' or 'posts'
+ * @param string                            $type      the type of items displayed in the listing: 'terms' or 'posts'.
  * @param bool                              $use_cache use the plugin's in-built query cache.
  * @return A_Z_Listing                                 a new or previously-saved instance of A_Z_Listing using the provided construct_query
  */
