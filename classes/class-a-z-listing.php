@@ -252,7 +252,7 @@ class A_Z_Listing {
 					do_action( 'log', 'A-Z Listing: Posts', '!ID', $items );
 				}
 			}
-		} // End if().
+		} // End if ( type is terms ).
 
 		$this->matched_item_indices = $this->get_all_indices( $items );
 
