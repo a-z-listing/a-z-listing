@@ -21,7 +21,6 @@ require "$dir/functions/i18n.php";
 require "$dir/functions/helpers.php";
 require "$dir/functions/styling.php";
 require "$dir/functions/shortcode.php";
-require "$dir/functions/cache.php";
 require "$dir/classes/class-a-z-listing.php";
 require "$dir/classes/class-a-z-grouping.php";
 require "$dir/classes/class-a-z-numbers.php";
