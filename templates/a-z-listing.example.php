@@ -1,9 +1,12 @@
 <?php
 /**
- * Default template for the A-Z Listing plugin
+ * Example template for the A-Z Listing plugin
  *
- * This template will be handed the variable `$a_z_query` which is an `A_Z_Listing` instance.
- * You can override this template by copying this file into your theme directory.
+ * This template will be given the variable `$a_z_query` which is an instance of
+ * `A_Z_Listing`.
+ *
+ * You can override the default template by copying this file into your theme
+ * directory and renaming it to `a-z-listing.php`.
  *
  * @package a-z-listing
  */
