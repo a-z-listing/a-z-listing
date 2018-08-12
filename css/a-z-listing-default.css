@@ -87,11 +87,12 @@
   .letter-section div.columns {
     width: 100%;
     column-count: 1;
-    column-gap: 0.6em; }
+    column-gap: 0.6rem; }
     @supports (display: grid) {
       .letter-section div.columns {
         display: grid;
-        grid-gap: 0 0.6em; }
+        grid-gap: 0 0.6rem;
+        grid-template-columns: repeat(auto-fill, minmax(10em, 1fr)); }
         .letter-section div.columns:after {
           display: none; } }
   .letter-section div.back-to-top {

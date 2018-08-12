@@ -18,11 +18,6 @@ $_a_z_listing_minpercol = 10;
 	.letter-section div.columns {
 		column-count: <?php echo $_a_z_listing_colcount; ?>;
 	}
-	@supports (display: grid) {
-		.letter-section div.columns {
-			grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
-		}
-	}
 </style>
 <div id="letters">
 	<div class="az-letters">
