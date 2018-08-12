@@ -1,6 +1,12 @@
 <?php
 /**
- * Multicolumn example template for the A-Z Listing plugin
+ * Default multicolumn template for the A-Z Listing plugin
+ *
+ * This template will be given the variable `$a_z_query` which is an instance of
+ * `A_Z_Listing`.
+ *
+ * You can override this template by copying this file into your theme
+ * directory.
  *
  * @package a-z-listing
  */
