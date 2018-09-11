@@ -44,6 +44,7 @@
 	ul, ul li {
 		list-style: none;
 		margin: 0;
+		padding: 0;
 	}
 	ul.columns {
 		width: 100%;
@@ -51,6 +52,14 @@
 		column-gap: 0.6em;
 		column-width: 10em;
 		line-height: 1.6em;
+		li {
+			display: inline-block;
+		}
+		&.max-0-columns,
+		&.max-1-columns {
+			column-count: 1;
+			max-width: 10.6em;
+		}
 		@for $column from 2 to 16 {
 			&.max-#{$column}-columns {
 				column-count: $column;

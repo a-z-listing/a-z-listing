@@ -27,6 +27,7 @@ function a_z_shortcode_handler( $attributes ) {
 			'grouping'         => '',
 			'numbers'          => 'hide',
 			'post-type'        => 'page',
+			'exclude-posts'    => '',
 			'taxonomy'         => '',
 			'terms'            => '',
 			'exclude-terms'    => '',
