@@ -12,27 +12,31 @@
  * @package         A_Z_Listing
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 if ( ! defined( 'AZLISTINGLOG' ) ) {
 	define( 'AZLISTINGLOG', false );
 }
 
-$dir = __DIR__;
-require "$dir/functions/i18n.php";
-require "$dir/functions/helpers.php";
-require "$dir/functions/styling.php";
-require "$dir/functions/shortcode.php";
-require "$dir/classes/class-a-z-listing.php";
-require "$dir/classes/class-a-z-grouping.php";
-require "$dir/classes/class-a-z-numbers.php";
+add_action( 'plugins_loaded', function() {
+	require "functions/i18n.php";
+	require "functions/helpers.php";
+	require "functions/styles.php";
+	require "functions/scripts.php";
+	require "functions/shortcode.php";
 
-/**
- * Register the A-Z Listing Widget
- *
- * @since 2.0.0
- */
-function a_z_listing_register_widget() {
-	$dir = __DIR__;
-	require "$dir/widgets/class-a-z-widget.php";
-	register_widget( 'A_Z_Widget' );
-}
-add_action( 'widgets_init', 'a_z_listing_register_widget' );
+	require "interfaces/interface-a-z-listing-extension.php";
+
+	require "classes/class-a-z-listing.php";
+	require "classes/class-a-z-listing-singleton.php";
+	require "classes/class-a-z-listing-grouping.php";
+	require "classes/class-a-z-listing-numbers.php";
+	require "classes/class-a-z-listing-indices.php";
+	require "widgets/class-a-z-listing-widget.php";
+
+	add_action( 'init', function() {
+		A_Z_Listing_Indices::instance()->activate( __FILE__ )->initialize();
+	}, 5 );
+}, 5 );

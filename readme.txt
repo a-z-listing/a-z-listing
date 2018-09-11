@@ -6,7 +6,7 @@ Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 4.6
 Requires PHP: 5.6
 Tested up to: 4.9
-Stable tag: 1.9.2
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,27 +101,42 @@ To group the alphabet letters into a range:
 
 ** The arguments are all optional **
 
-* `post-type`: sets the listing to show a specific post-type.
+* `post-type`: sets the listing to show a specific post-type
   * Default value: `page`
   * You may specify multiple post-types by separating with commas (`,`) e.g. `post-type="page,post"`
 * `taxonomy`: does nothing by itself, see the combinations below
   * Default value: unset
   * Uses the `slug` of the taxonomy
   * When combined with:
-    * `terms`, will filter your posts by the terms you set there, which appear in the taxonomy set here
+    * `terms=""`, will filter your posts by the terms you set there, which appear in the taxonomy set here
     * `display="terms"`, will switch from displaying post titles to displaying the names of terms from the taxonomy specified
 * `terms`: sets the taxonomy terms for filtering posts
   * Default value: unset
   * The taxonomy must also be specified in `taxonomy`
-  * Uses the `slug` of the term(s)
+  * Uses the `slug` of the term(s) when `display="posts"` and the `ID` of the term(s) when `display="terms"`
   * Multiple terms can be specified by separating with commas: `,`
+* `exclude-terms`: sets the terms to exclude from display
+  * Default value: unset
+  * The taxonomy must also be specified in `taxonomy`
+  * Uses the `ID` of the term(s)
+  * Multiple terms can be specified by separating with commas: `,`
+  * Only affects `display="terms"`
+* `parent-term`: set the parent that all displayed terms must be organised under
+  * Default value: unset
+  * Uses the `slug` of the parent term
+  * Single value only
+  * Only affects `display="terms"`
+* `hide-empty-terms`: hide terms that have no posts associated
+  * Default value: false
+  * Can be set to `true` or `1` to hide the empty terms
+  * Only affects `display="terms"`
 * `display`: specifies whether to display posts or terms from a taxonomy
   * Default value: unset
-  * Can be set to either `posts` or `terms`.
+  * Can be set to either `posts` or `terms`
   * Any value other than unset, `posts` or `terms` will default to displaying posts
 * `numbers`: appends or prepends numerals to the alphabet
   * Default value: unset
-  * Can be set to either `before` or `after`.
+  * Can be set to either `before` or `after`
   * Any value other than unset, `before` or `after` will default to **appending** numerals to the alphabet
 * `grouping`: tells the plugin if and how to group the alphabet
   * Default value: unset
@@ -133,8 +148,8 @@ To group the alphabet letters into a range:
   * When set to the value `numbers` it will group numerals into a single group `0-9`
     * This requires the numbers to be displayed via the `numbers="before"` or `numbers="after"` attributes
 * `alphabet`: allows you to override the alphabet that the plugin uses
-  * Default value: unset.
-  * When this attribute is unset, the plugin will either use the untranslated default, or if [glotpress](https://translate.wordpress.org/projects/wp-plugins/a-z-listing) includes a translation for your site's language as set in `Admin -> Settings -> Site Language` it will use that translation.
+  * Default value: unset
+  * When this attribute is unset, the plugin will either use the untranslated default, or if [glotpress](https://translate.wordpress.org/projects/wp-plugins/a-z-listing) includes a translation for your site's language as set in `Admin -> Settings -> Site Language` it will use that translation
   * The current untranslated default is: `AÁÀÄÂaáàäâ,Bb,Cc,Dd,EÉÈËÊeéèëê,Ff,Gg,Hh,IÍÌÏÎiíìïî,Jj,Kk,Ll,Mm,Nn,OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz`
   * Accepts a single line of letters/symbols, which need to be separated via the comma character `,`
   * Including more than one letter/symbol in each group will display posts starting with any of those under the same section
@@ -369,6 +384,18 @@ add_filter( 'a-z-listing-add-styling', '__return_false' );
 
 If there is code already in your functions.php then add just the lines between `<?php` and `?>` on the line directly after the very first instance of `<?php`.
 
+= How do I display the listing as a tabbed panel? =
+
+In your theme's functions.php add the following code:
+
+`
+<?php
+add_filter( 'a-z-listing-add-tabs', '__return_true' );
+?>
+`
+
+If there is code already in your functions.php then add just the lines between `<?php` and `?>` on the line directly after the very first instance of `<?php`.
+
 == Screenshots ==
 
 1. An example of the index listing page
@@ -378,20 +405,24 @@ If there is code already in your functions.php then add just the lines between `
 
 = 2.0.0 =
 
-* Vastly improved widget configuration.
-* Caching?
+* Improved widget configuration.
+* New attributes added to the shortcode when `display="terms"`:
+  * `exclude-terms`: sets the terms to exclude from display
+  * `parent-term`: set the parent that all displayed terms must be organised under
+  * `hide-empty-terms`: hide terms that have no posts associated
 * Fix the stylesheet to better cope with variances in font-size and text length in the alphabet links list and widget.
-* Caching.
 * Introduce PHP classes for adding numbers and grouping to the alphabet. Allows unhooking from the filters to undo the changes, where previously you could not unhook these modifications once they'd been applied.
-* Caching!
-* Only fetch the post ID and title by default which saves memory on your server.
-* CACHING to speed things up where things were as slow as wading through molasses!
-* **POTENTIALLY BREAKING CHANGE:**
-  If you have customised the in-built templates or written your own then you may experience breakage due to the post object not being loaded automatically.
-  If you require the template to access more than the post title and URL then you will need to add an additional call after `the_item()` to load the full `WP_Post` object into memory.
-  To load the post object you need to call `$a_z_query->get_the_item_object('I understand the speed issues!');`.
-  **The argument must read exactly as written here to confirm that you understand.**
-  *This step is purposely omited to save memory and try to improve performance.*
+* **BREAKING CHANGES:**
+  * Multi column example:
+    If you have copied the multi-column example in previous releases to your theme folder then you will need to perform some manual steps.
+    If you have not edited the file, just delete it and the new template from the plugin will take control and perform the same functionality.
+    If you have modified the example template then you will need to compare with the file in the plugin at `templates/a-z-listing.php` and merge any changes into your template.
+  * Template customisations:
+    If you have customised the in-built templates or written your own then you may experience breakage due to the post object not being loaded automatically.
+    If you require the template to access more than the post title and URL then you will need to add an additional call after `the_item()` to load the full `WP_Post` object into memory.
+    To load the post object you need to call `$a_z_query->get_the_item_object( 'I understand the issues!' );`.
+    **The argument must read exactly as written here to confirm that you understand that this might cause slowness or memory usage problems.**
+    *This step is purposely omitted to save memory and try to improve performance.*
 
 = 1.9.2 =
 

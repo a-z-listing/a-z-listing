@@ -3,6 +3,9 @@
   "version": "2.0.0",
   "main": "Gruntfile.js",
   "author": "Daniel Llewellyn",
+  "scripts": {
+    "build": "grunt"
+  },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",

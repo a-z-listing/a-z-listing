@@ -5,6 +5,10 @@
  * @package  a-z-listing
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Returns whether the query has any letters left
  *
@@ -242,7 +246,10 @@ function the_a_z_listing( $query = null, $use_cache = true ) {
  * @since 0.1
  * @see get_the_a_z_listing()
  * @deprecated use get_the_a_z_listing()
+ *
  * @param array|string|WP_Query|A_Z_Listing $query either a valid WordPress query or an A_Z_Listing instance.
+ *
+ * @return string
  */
 function get_the_az_listing( $query = null ) {
 	_deprecated_function( __FUNCTION__, '0.8.0', 'get_the_a_z_listing' );
@@ -258,7 +265,7 @@ function get_the_az_listing( $query = null ) {
  * @return string                                        The listing html content ready for echoing to the page.
  */
 function get_the_a_z_listing( $query = null, $use_cache = true ) {
-	return a_z_listing_cache( $query, $use_cache )->get_the_listing();
+	return a_z_listing_cache( $query, '', $use_cache )->get_the_listing();
 }
 
 /**
@@ -316,17 +323,5 @@ function get_the_az_letters( $query = null, $target = false, $styling = false ) 
  * @return string HTML ready for echoing containing the list of A-Z letters with anchor links to the A-Z Index page.
  */
 function get_the_a_z_letters( $query = null, $target = false, $styling = false, $use_cache = true ) {
-	return a_z_listing_cache( $query )->get_the_letters( $target, $styling, $use_cache );
-}
-
-/**
- * Returns a function for use in the `a_z_listing_alphabet` filter
- *
- * @since 1.7.0
- * @since 1.8.0 Add $group parameter and functionality to group numbers into a single collection.
- * @param string $position set to before to place the numbers first. Any other value will place them last.
- * @param bool   $group    group the numbers in a single collection rather than individually.
- */
-function add_a_z_numbers( $position = 'after', $group = false ) {
-	return new A_Z_Numbers( $position, $group );
+	return a_z_listing_cache( $query, '', $use_cache )->get_the_letters( $target, $styling );
 }

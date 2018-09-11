@@ -5,6 +5,10 @@
  * @package a-z-listing
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Handle the a-z-listing shortcode
  *
@@ -17,15 +21,19 @@
 function a_z_shortcode_handler( $attributes ) {
 	$attributes = shortcode_atts(
 		array(
-			'alphabet'      => '',
-			'display'       => 'posts',
-			'group-numbers' => false,
-			'grouping'      => '',
-			'numbers'       => 'hide',
-			'post-type'     => 'page',
-			'taxonomy'      => '',
-			'terms'         => '',
-			'parent-term'   => '',
+			'alphabet'         => '',
+			'display'          => 'posts',
+			'group-numbers'    => false,
+			'grouping'         => '',
+			'numbers'          => 'hide',
+			'post-type'        => 'page',
+			'taxonomy'         => '',
+			'terms'            => '',
+			'exclude-terms'    => '',
+			'hide-empty-terms' => false,
+			'parent-term'      => '',
+			'return'           => 'listing',
+			'target'           => '',
 		), $attributes, 'a-z-listing'
 	);
 
@@ -54,30 +62,36 @@ function a_z_shortcode_handler( $attributes ) {
 		$group_numbers = true;
 	}
 
-	$grouping_obj = new A_Z_Grouping( $grouping );
+	$grouping_obj = new A_Z_Listing_Grouping( $grouping );
 
 	$numbers_obj = null;
 	if ( ! empty( $attributes['numbers'] ) && 'hide' !== $attributes['numbers'] ) {
 		$numbers_obj = add_a_z_numbers( $attributes['numbers'], $group_numbers );
 	}
 
-	$ret = '';
 	if ( 'terms' === $attributes['display'] && ! empty( $attributes['taxonomy'] ) ) {
 		$taxonomy = '' !== $attributes['taxonomy'] ? $attributes['taxonomy'] : 'category';
 		$query    = array(
 			'taxonomy' => $taxonomy,
 		);
 
+		$terms_string  = '';
+		$terms_process = 'include';
+
 		if ( ! empty( $attributes['terms'] ) ) {
-			$terms = mb_split( ',', $attributes['terms'] );
+			$terms_string = $attributes['terms'];
+		} elseif ( ! empty( $attributes['exclude-terms'] ) ) {
+			$terms_string = $attributes['exclude-terms'];
+			$terms_process = 'exclude';
+		}
+
+		if ( ! empty( $terms_string ) ) {
+			$terms = mb_split( ',', $terms_string );
 			$terms = array_map( 'trim', $terms );
 			$terms = array_unique( $terms );
 
-			$include = array();
-			$exclude = array();
-
 			$query = wp_parse_args( $query, array(
-				'slug' => $terms,
+				$terms_process => $terms,
 			) );
 		}
 
@@ -87,8 +101,17 @@ function a_z_shortcode_handler( $attributes ) {
 			) );
 		}
 
+		if ( ! empty( $attributes['hide-empty-terms'] ) ) {
+			$hide_empty = false;
+			if ( $attributes['hide-empty-terms'] === 'true' || $attributes['hide-empty-terms'] === '1' ) {
+				$hide_empty = true;
+			}
+			$query = wp_parse_args( $query, array(
+				'hide_empty' => $hide_empty,
+			) );
+		}
+
 		$a_z_query = new A_Z_Listing( $query, 'terms' );
-		$ret       = $a_z_query->get_the_listing();
 	} else {
 		$post_types = mb_split( ',', $attributes['post-type'] );
 		$post_types = array_map( 'trim', $post_types );
@@ -116,7 +139,21 @@ function a_z_shortcode_handler( $attributes ) {
 		}
 
 		$a_z_query = new A_Z_Listing( $query, 'posts' );
-		$ret       = $a_z_query->get_the_listing();
+	}
+
+	$target = '';
+	if ( ! empty( $attributes['target'] ) ) {
+		if ( intval( $attributes['target'] ) > 0 ) {
+			$target = get_permalink( $attributes['target'] );
+		} else {
+			$target = $attributes['target'];
+		}
+	}
+
+	if ( 'letters' === $attributes['return'] ) {
+		$ret = '<div class="az-letters">' . $a_z_query->get_the_letters( $target ) . '</div>';
+	} else {
+		$ret = $a_z_query->get_the_listing();
 	}
 
 	$grouping_obj->teardown();

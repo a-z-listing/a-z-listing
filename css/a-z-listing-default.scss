@@ -3,15 +3,6 @@
 .az-letters,
 .a-z-listing-widget .az-letters,
 .a-z-listing-widget.widget .az-letters {
-	@include clearfix();
-	display: flex;
-	justify-content: center;
-	@supports(display: grid) {
-		display: block;
-		&:after {
-			display: none;
-		}
-	}
 	ul.az-links {
 		padding: 0;
 		margin: 0;
@@ -19,14 +10,9 @@
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;
-		@supports(display: grid) {
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(2em, 1fr));
-			grid-gap: 0.3em;
-		}
+		justify-content: center;
 		li {
 			list-style: none;
-			float: left;
 			width: 2em;
 			height: 2em;
 			box-sizing: border-box;
@@ -37,13 +23,6 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			@supports(display: grid) {
-				display: grid;
-				width: 100%;
-				height: auto;
-				margin: 0;
-				padding: 0;
-			}
 			a {
 				color: #1f7d9a;
 				text-decoration: none;
@@ -55,7 +34,6 @@
 }
 
 .letter-section {
-	@include clearfix();
 	margin-bottom: 2em;
 	h2.letter-title {
 		border-bottom: 1px solid black;
@@ -67,22 +45,16 @@
 		list-style: none;
 		margin: 0;
 	}
-	div.column {
-		box-sizing: border-box;
-		&:nth-last-child(1) {
-			flex-grow: 1;
-		}
-	}
-	div.columns {
+	ul.columns {
 		width: 100%;
-		column-count: 1;
-		column-gap: 0.6rem;
-		@supports (display: grid) {
-			display: grid;
-			grid-gap: 0 0.6rem;
-			grid-template-columns: repeat(auto-fill, minmax(10em, 1fr));
-			&:after {
-				display: none;
+		box-sizing: border-box;
+		column-gap: 0.6em;
+		column-width: 10em;
+		line-height: 1.6em;
+		@for $column from 2 to 16 {
+			&.max-#{$column}-columns {
+				column-count: $column;
+				max-width: ($column * 10em) + (($column - 1) * 0.6em);
 			}
 		}
 	}

@@ -14,11 +14,7 @@
 $_a_z_listing_colcount  = 3;
 $_a_z_listing_minpercol = 10;
 ?>
-<style>
-	.letter-section div.columns {
-		column-count: <?php echo $_a_z_listing_colcount; ?>;
-	}
-</style>
+<div id="az-tabs">
 <div id="letters">
 	<div class="az-letters">
 		<?php $a_z_query->the_letters(); ?>
@@ -32,38 +28,27 @@ $_a_z_listing_minpercol = 10;
 			$a_z_query->the_letter();
 		?>
 			<?php if ( $a_z_query->have_items() ) : ?>
+				<?php
+				$item_count   = $a_z_query->get_the_letter_count();
+				$column_limit = round( $item_count / $_a_z_listing_minpercol );
+				if ( $column_limit > $_a_z_listing_colcount ) {
+					$column_limit = $_a_z_listing_colcount;
+				}
+				?>
 				<div class="letter-section" id="<?php $a_z_query->the_letter_id(); ?>">
 					<h2 class="letter-title">
 						<span><?php $a_z_query->the_letter_title(); ?></span>
 					</h2>
-					<div class="columns">
+					<ul class="columns max-<?php echo $column_limit; ?>-columns">
 						<?php
-						$i = 0;
-						$j = 0;
-
-						$numpercol = ceil( $a_z_query->get_the_letter_count() / $_a_z_listing_colcount );
-
 						while ( $a_z_query->have_items() ) :
 							$a_z_query->the_item();
 						?>
-							<?php if ( 0 === $i++ ) : ?>
-								<div class="column"><ul>
-							<?php
-							endif;
-
-							$j++;
-							?>
 							<li>
 								<a href="<?php $a_z_query->the_permalink(); ?>"><?php $a_z_query->the_title(); ?></a>
 							</li>
-							<?php if ( ( $_a_z_listing_minpercol - $i <= 0 && $numpercol - $i <= 0 ) || $a_z_query->get_the_letter_count() <= $j ) : ?>
-								</ul></div>
-								<?php
-								$i = 0;
-							endif;
-						endwhile;
-						?>
-					</div>
+						<?php endwhile; ?>
+					</ul>
 					<div class="back-to-top"><a href="#letters"><?php _e( 'Back to top', 'a-z-listing' ); ?></a></div>
 				</div>
 			<?php
@@ -71,6 +56,7 @@ $_a_z_listing_minpercol = 10;
 		endwhile;
 		?>
 	</div>
+</div>
 </div>
 <?php else : ?>
 	<p><?php esc_html_e( 'There are no posts included in this index.', 'a-z-listing' ); ?></p>

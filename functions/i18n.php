@@ -5,6 +5,10 @@
  * @package a-z-listing
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Initialize the translations for the plugin
  *

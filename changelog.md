@@ -1,15 +1,25 @@
 # Full Changelog #
 
-## 2.0.0 ##
+### 2.0.0 ###
 
-* Gutenberg support with User-Interface
-* Caching
-* **POTENTIALLY BREAKING CHANGE:**
-  If you have customised the in-built templates or written your own then you may experience breakage due to the post object not being loaded automatically.
-  If you require the template to access more than the post title then you will need to add an additional call after `the_item()` to load the full `WP_Post` object into memory.
-  To load the post object you need to call `$a_z_query->get_the_item_object('I understand the speed issues!');`.
-  **The argument must read exactly as written here to confirm that you understand.**
-  *This step is purposely omited to save memory and improve performance.*
+* Improved widget configuration.
+* New attributes added to the shortcode when `display="terms"`:
+  * `exclude-terms`: sets the terms to exclude from display
+  * `parent-term`: set the parent that all displayed terms must be organised under
+  * `hide-empty-terms`: hide terms that have no posts associated
+* Fix the stylesheet to better cope with variances in font-size and text length in the alphabet links list and widget.
+* Introduce PHP classes for adding numbers and grouping to the alphabet. Allows unhooking from the filters to undo the changes, where previously you could not unhook these modifications once they'd been applied.
+* **BREAKING CHANGES:**
+  * Multi column example:
+    If you have copied the multi-column example in previous releases to your theme folder then you will need to perform some manual steps.
+    If you have not edited the file, just delete it and the new template from the plugin will take control and perform the same functionality.
+    If you have modified the example template then you will need to compare with the file in the plugin at `templates/a-z-listing.php` and merge any changes into your template.
+  * Template customisations:
+    If you have customised the in-built templates or written your own then you may experience breakage due to the post object not being loaded automatically.
+    If you require the template to access more than the post title and URL then you will need to add an additional call after `the_item()` to load the full `WP_Post` object into memory.
+    To load the post object you need to call `$a_z_query->get_the_item_object( 'I understand the issues!' );`.
+    **The argument must read exactly as written here to confirm that you understand that this might cause slowness or memory usage problems.**
+    *This step is purposely omitted to save memory and try to improve performance.*
 
 ## 1.9.1 ##
 

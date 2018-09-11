@@ -5,12 +5,16 @@
  * @package  a-z-listing
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Adds and maintains filters providing number functionality to the alphabet
  *
  * @since 2.0.0
  */
-class A_Z_Numbers {
+class A_Z_Listing_Numbers {
 	/**
 	 * Add filters to append or prepend numbers to the alphabet with optional grouping
 	 *
@@ -68,4 +72,19 @@ class A_Z_Numbers {
 		}
 		return $letter;
 	}
+}
+
+/**
+ * Returns a function for use in the `a_z_listing_alphabet` filter
+ *
+ * @since 1.7.0
+ * @since 1.8.0 Add $group parameter and functionality to group numbers into a single collection.
+ *
+ * @param string $position set to before to place the numbers first. Any other value will place them last.
+ * @param bool $group group the numbers in a single collection rather than individually.
+ *
+ * @return A_Z_Listing_Numbers
+ */
+function add_a_z_numbers( $position = 'after', $group = false ) {
+	return new A_Z_Listing_Numbers( $position, $group );
 }

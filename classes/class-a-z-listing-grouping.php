@@ -5,12 +5,28 @@
  * @package  a-z-listing
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Adds and maintains functionality to group the alphabet letters
  *
  * @since 2.0.0
  */
-class A_Z_Grouping {
+class A_Z_Listing_Grouping {
+	/**
+	 * @since 2.0.0
+	 * @var int
+	 */
+	private $grouping;
+
+	/**
+	 * @since 2.0.0
+	 * @var array
+	 */
+	private $headings;
+
 	/**
 	 * Add filters to group the alphabet letters
 	 *

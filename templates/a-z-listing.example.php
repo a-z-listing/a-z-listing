@@ -12,6 +12,7 @@
  */
 
 ?>
+<div id="az-tabs">
 <div id="letters">
 	<div class="az-letters">
 		<?php $a_z_query->the_letters(); ?>
@@ -46,6 +47,7 @@
 			<?php endif; ?>
 		<?php endwhile; ?>
 	</div>
+</div>
 </div>
 <?php else : ?>
 	<p><?php esc_html_e( 'There are no posts included in this index.', 'a-z-listing' ); ?></p>
