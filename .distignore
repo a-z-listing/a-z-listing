@@ -8,6 +8,7 @@
 .idea
 .jshintrc
 .travis.yml
+.vs
 .vscode
 *.sql
 *.tar.gz
