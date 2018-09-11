@@ -91,6 +91,13 @@ function a_z_shortcode_handler( $attributes ) {
 		if ( ! empty( $terms_string ) ) {
 			$terms = mb_split( ',', $terms_string );
 			$terms = array_map( 'trim', $terms );
+			$terms = array_map( 'intval', $terms );
+			$terms = array_filter(
+				$terms,
+				function( $value ) {
+					return 0 < $value;
+				}
+			);
 			$terms = array_unique( $terms );
 
 			$query = wp_parse_args(
@@ -137,7 +144,12 @@ function a_z_shortcode_handler( $attributes ) {
 			$exclude_posts = mb_split( ',', $attributes['exclude-posts'] );
 			$exclude_posts = array_map( 'trim', $exclude_posts );
 			$exclude_posts = array_map( 'intval', $exclude_posts );
-			$exclude_posts = array_filter( $exclude_posts, function( $value ) { return $value > 0; } );
+			$exclude_posts = array_filter(
+				$exclude_posts,
+				function( $value ) {
+					return 0 < $value;
+				}
+			);
 			$exclude_posts = array_unique( $exclude_posts );
 
 			if ( ! empty( $exclude_posts ) ) {
@@ -154,6 +166,12 @@ function a_z_shortcode_handler( $attributes ) {
 			$taxonomy = '' !== $attributes['taxonomy'] ? $attributes['taxonomy'] : 'category';
 			$terms    = mb_split( ',', $attributes['terms'] );
 			$terms    = array_map( 'trim', $terms );
+			$terms    = array_filter(
+				$terms,
+				function( $value ) {
+					return ! empty( $value );
+				}
+			);
 			$terms    = array_unique( $terms );
 
 			$query = wp_parse_args(

@@ -101,6 +101,10 @@ To group the alphabet letters into a range:
 
 ** The arguments are all optional **
 
+* `display`: specifies whether to display posts or terms from a taxonomy
+  * Default value: `posts`
+  * May be set to either `posts` or `terms`
+  * Any value other than unset, `posts` or `terms` will default to displaying posts
 * `post-type`: sets the listing to show a specific post-type
   * Default value: `page`
   * You may specify multiple post-types by separating with commas (`,`) e.g. `post-type="page,post"`
@@ -120,11 +124,13 @@ To group the alphabet letters into a range:
   * The taxonomy must also be specified in `taxonomy`
   * Uses the `slug` of the term(s) when `display="posts"` and the `ID` of the term(s) when `display="terms"`
   * Multiple terms may be specified by separating with commas: `,`
+  * May not be used with `exclude-terms=""`
 * `exclude-terms`: sets the terms to exclude from display
   * Default value: unset
   * The taxonomy must also be specified in `taxonomy`
   * Uses the `ID` of the term(s)
   * Multiple terms may be specified by separating with commas: `,`
+  * May not be used with `terms=""`
   * Only affects `display="terms"`
 * `parent-term`: set the parent that all displayed terms must be organised under
   * Default value: unset
@@ -133,19 +139,15 @@ To group the alphabet letters into a range:
   * Only affects `display="terms"`
 * `hide-empty-terms`: hide terms that have no posts associated
   * Default value: `false`
-  * Can be set to `true` or `1` to hide the empty terms
+  * May be set to `true` or `1` to hide the empty terms
   * Only affects `display="terms"`
-* `display`: specifies whether to display posts or terms from a taxonomy
-  * Default value: unset
-  * Can be set to either `posts` or `terms`
-  * Any value other than unset, `posts` or `terms` will default to displaying posts
 * `numbers`: appends or prepends numerals to the alphabet
   * Default value: unset
-  * Can be set to either `before` or `after`
+  * May be set to either `before` or `after`
   * Any value other than unset, `before` or `after` will default to **appending** numerals to the alphabet
 * `grouping`: tells the plugin if and how to group the alphabet
   * Default value: unset
-  * Can be set to any positive number higher than `1` or the value `numbers`
+  * May be set to any positive number greater than `1` or the value `numbers`
   * Any value other than a positive number or the value `numbers` will default to disabling all grouping functionality
   * When set to a number higher than `1` the listing will group letters together into ranges
     * For example, if you chose `3` then a latin alphabet will group together `A`, `B`, and `C` into `A-C`. Likewise for `D-F`, `G-I` and so-on
@@ -206,7 +208,7 @@ Important functions to use in your template are as follows:
 * `$a_z_query->the_letter()` similar to Core's `the_post()`, this will set-up the next iteration of the A-Z Listing's Letter Loop. This needs to wrap-around the Item Loop.
 * `$a_z_query->the_item()` similar to Core's `the_post()`, this will set-up the next iteration of the A-Z Listing's Item Loop, the same way the normal WordPress Loop works. This needs to be _within_ the Letter Loop.
 
-When you are within the Item Loop you can utilise all in-built WordPress Core post-related functions such as `the_content()`. Note that titles and permalinks have helper functions to cope with the A-Z Listing showing taxonomy terms (see the next section).
+When you are within the Item Loop you may utilise all in-built WordPress Core post-related functions such as `the_content()`. Note that titles and permalinks have helper functions to cope with the A-Z Listing showing taxonomy terms (see the next section).
 
 I advise that you start with a copy of the default template or the multi-column template when customizing your own version. The supplied templates show the usage of most of the functions this plugin provides.
 
@@ -301,7 +303,7 @@ the_a_z_listing( array(
 ?>
 ```
 
-Any number of terms can be added to the `terms` [array](http://php.net/manual/en/language.types.array.php), including one or none.
+Any number of terms may be added to the `terms` [array](http://php.net/manual/en/language.types.array.php), including one or none.
 
 The argument to `the_a_z_listing()` is an [array](http://php.net/manual/en/language.types.array.php) and takes the same parameters as [WP_Query](https://codex.wordpress.org/Class_Reference/WP_Query)
 
@@ -343,7 +345,7 @@ add_filter( 'a-z-listing-sections', '__return_empty_array' );
 ?>
 ```
 
-This filter can also be used, by removing entries which are standard $post variables, to limit which top-level pages are used as section identifiers.
+This filter may also be used, by removing entries which are standard $post variables, to limit which top-level pages are used as section identifiers.
 
 If there is code already in your functions.php then add just the lines between `<?php` and `?>` on the line directly after the very first instance of `<?php`.
 
