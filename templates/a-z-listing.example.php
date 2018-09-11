@@ -24,7 +24,7 @@
 		<?php
 		while ( $a_z_query->have_letters() ) :
 			$a_z_query->the_letter();
-		?>
+			?>
 			<?php if ( $a_z_query->have_items() ) : ?>
 				<div class="letter-section" id="<?php $a_z_query->the_letter_id(); ?>">
 					<h2 class="letter-title">
@@ -35,7 +35,7 @@
 						<?php
 						while ( $a_z_query->have_items() ) :
 							$a_z_query->the_item();
-						?>
+							?>
 							<li>
 								<a href="<?php $a_z_query->the_permalink(); ?>"><?php $a_z_query->the_title(); ?></a>
 							</li>
@@ -51,5 +51,5 @@
 </div>
 <?php else : ?>
 	<p><?php esc_html_e( 'There are no posts included in this index.', 'a-z-listing' ); ?></p>
-<?php
+	<?php
 endif;

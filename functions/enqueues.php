@@ -24,7 +24,7 @@ function a_z_listing_do_enqueue() {
 	 * Determine whether to add default listing styling
 	 *
 	 * @param bool True to add default styling, False to disable.
-     * @since 1.7.1
+	 * @since 1.7.1
 	 */
 	$add_styles = apply_filters( 'a_z_listing_add_styling', $add_styles );
 	/**

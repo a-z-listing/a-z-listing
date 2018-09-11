@@ -1,7 +1,7 @@
 <?php
 /**
  * Javascripts enqueueing functions.
- * 
+ *
  * @package a-z-listing
  */
 

@@ -26,7 +26,7 @@ $_a_z_listing_minpercol = 10;
 		<?php
 		while ( $a_z_query->have_letters() ) :
 			$a_z_query->the_letter();
-		?>
+			?>
 			<?php if ( $a_z_query->have_items() ) : ?>
 				<?php
 				$item_count   = $a_z_query->get_the_letter_count();
@@ -43,7 +43,7 @@ $_a_z_listing_minpercol = 10;
 						<?php
 						while ( $a_z_query->have_items() ) :
 							$a_z_query->the_item();
-						?>
+							?>
 							<li>
 								<a href="<?php $a_z_query->the_permalink(); ?>"><?php $a_z_query->the_title(); ?></a>
 							</li>
@@ -51,7 +51,7 @@ $_a_z_listing_minpercol = 10;
 					</ul>
 					<div class="back-to-top"><a href="#letters"><?php _e( 'Back to top', 'a-z-listing' ); ?></a></div>
 				</div>
-			<?php
+				<?php
 			endif;
 		endwhile;
 		?>
@@ -60,5 +60,5 @@ $_a_z_listing_minpercol = 10;
 </div>
 <?php else : ?>
 	<p><?php esc_html_e( 'There are no posts included in this index.', 'a-z-listing' ); ?></p>
-<?php
+	<?php
 endif;

@@ -34,13 +34,16 @@ function a_z_shortcode_handler( $attributes ) {
 			'parent-term'      => '',
 			'return'           => 'listing',
 			'target'           => '',
-		), $attributes, 'a-z-listing'
+		),
+		$attributes,
+		'a-z-listing'
 	);
 
 	if ( ! empty( $attributes['alphabet'] ) ) {
 		$override = $attributes['alphabet'];
 		add_filter(
-			'a-z-listing-alphabet', function( $alphabet ) use ( $override ) {
+			'a-z-listing-alphabet',
+			function( $alphabet ) use ( $override ) {
 				return $override;
 			}
 		);
@@ -81,7 +84,7 @@ function a_z_shortcode_handler( $attributes ) {
 		if ( ! empty( $attributes['terms'] ) ) {
 			$terms_string = $attributes['terms'];
 		} elseif ( ! empty( $attributes['exclude-terms'] ) ) {
-			$terms_string = $attributes['exclude-terms'];
+			$terms_string  = $attributes['exclude-terms'];
 			$terms_process = 'exclude';
 		}
 
@@ -90,25 +93,34 @@ function a_z_shortcode_handler( $attributes ) {
 			$terms = array_map( 'trim', $terms );
 			$terms = array_unique( $terms );
 
-			$query = wp_parse_args( $query, array(
-				$terms_process => $terms,
-			) );
+			$query = wp_parse_args(
+				$query,
+				array(
+					$terms_process => $terms,
+				)
+			);
 		}
 
 		if ( ! empty( $attributes['parent-term'] ) ) {
-			$query = wp_parse_args( $query, array(
-				'child_of' => $attributes['parent-term'],
-			) );
+			$query = wp_parse_args(
+				$query,
+				array(
+					'child_of' => $attributes['parent-term'],
+				)
+			);
 		}
 
 		if ( ! empty( $attributes['hide-empty-terms'] ) ) {
 			$hide_empty = false;
-			if ( $attributes['hide-empty-terms'] === 'true' || $attributes['hide-empty-terms'] === '1' ) {
+			if ( 'true' === $attributes['hide-empty-terms'] || '1' === $attributes['hide-empty-terms'] ) {
 				$hide_empty = true;
 			}
-			$query = wp_parse_args( $query, array(
-				'hide_empty' => $hide_empty,
-			) );
+			$query = wp_parse_args(
+				$query,
+				array(
+					'hide_empty' => $hide_empty,
+				)
+			);
 		}
 
 		$a_z_query = new A_Z_Listing( $query, 'terms' );
@@ -127,15 +139,18 @@ function a_z_shortcode_handler( $attributes ) {
 			$terms    = array_map( 'trim', $terms );
 			$terms    = array_unique( $terms );
 
-			$query = wp_parse_args( $query, array(
-				'tax_query' => array(
-					array(
-						'taxonomy' => $taxonomy,
-						'field'    => 'slug',
-						'terms'    => $terms,
+			$query = wp_parse_args(
+				$query,
+				array(
+					'tax_query' => array(
+						array(
+							'taxonomy' => $taxonomy,
+							'field'    => 'slug',
+							'terms'    => $terms,
+						),
 					),
-				),
-			) );
+				)
+			);
 		}
 
 		$a_z_query = new A_Z_Listing( $query, 'posts' );

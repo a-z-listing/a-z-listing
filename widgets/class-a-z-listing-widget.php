@@ -22,7 +22,9 @@ class A_Z_Listing_Widget extends WP_Widget {
 	 */
 	public function __construct() {
 		parent::__construct(
-			'bh_az_widget', __( 'A-Z Site Map', 'a-z-listing' ), array(
+			'bh_az_widget',
+			__( 'A-Z Site Map', 'a-z-listing' ),
+			array(
 				'classname'   => 'a-z-listing-widget',
 				'description' => __( 'Alphabetised links to the A-Z site map', 'a-z-listing' ),
 			)
@@ -201,9 +203,9 @@ class A_Z_Listing_Widget extends WP_Widget {
 					<?php esc_html_e( 'Parent term to display children of', 'a-z-listing' ); ?>
 				</label>
 				<input class="widefat" type="text"
-				       id="<?php echo esc_attr( $listing_parent_term_id ); ?>"
-				       name="<?php echo esc_attr( $listing_parent_term_name ); ?>"
-				       value="<?php echo esc_attr( $listing_parent_term ); ?>" />
+					id="<?php echo esc_attr( $listing_parent_term_id ); ?>"
+					name="<?php echo esc_attr( $listing_parent_term_name ); ?>"
+					value="<?php echo esc_attr( $listing_parent_term ); ?>" />
 			</p>
 		</div>
 
@@ -213,9 +215,9 @@ class A_Z_Listing_Widget extends WP_Widget {
 					<?php esc_html_e( 'Terms to include (IDs)', 'a-z-listing' ); ?>
 				</label>
 				<input class="widefat" type="text"
-				       id="<?php echo esc_attr( $listing_terms_include_id ); ?>"
-				       name="<?php echo esc_attr( $listing_terms_include_name ); ?>"
-				       value="<?php echo esc_attr( $listing_terms_include ); ?>" />
+					id="<?php echo esc_attr( $listing_terms_include_id ); ?>"
+					name="<?php echo esc_attr( $listing_terms_include_name ); ?>"
+					value="<?php echo esc_attr( $listing_terms_include ); ?>" />
 			</p>
 		</div>
 
@@ -226,9 +228,9 @@ class A_Z_Listing_Widget extends WP_Widget {
 					<?php esc_html_e( 'Terms to exclude (IDs)', 'a-z-listing' ); ?>
 				</label>
 				<input class="widefat" type="text"
-				       id="<?php echo esc_attr( $listing_terms_exclude_id ); ?>"
-				       name="<?php echo esc_attr( $listing_terms_exclude_name ); ?>"
-				       value="<?php echo esc_attr( $listing_terms_exclude ); ?>" />
+					id="<?php echo esc_attr( $listing_terms_exclude_id ); ?>"
+					name="<?php echo esc_attr( $listing_terms_exclude_name ); ?>"
+					value="<?php echo esc_attr( $listing_terms_exclude ); ?>" />
 			</p>
 		</div>
 
@@ -239,9 +241,9 @@ class A_Z_Listing_Widget extends WP_Widget {
 					<?php esc_html_e( 'Hide empty terms', 'a-z-listing' ); ?>
 				</label>
 				<input type="checkbox"
-				       id="<?php echo esc_attr( $listing_hide_empty_terms_id ); ?>"
-				       name="<?php echo esc_attr( $listing_hide_empty_terms_name ); ?>"
-				       <?php echo ( isset( $listing_hide_empty_terms ) && $listing_hide_empty_terms === true ) ? 'checked' : ''; ?> />
+					id="<?php echo esc_attr( $listing_hide_empty_terms_id ); ?>"
+					name="<?php echo esc_attr( $listing_hide_empty_terms_name ); ?>"
+					<?php echo ( isset( $listing_hide_empty_terms ) && true === $listing_hide_empty_terms ) ? 'checked' : ''; ?> />
 			</p>
 		</div>
 		<script type="text/javascript">
@@ -332,7 +334,7 @@ class A_Z_Listing_Widget extends WP_Widget {
 		$instance['parent_term']       = strip_tags( $new_instance['parent_term'] );
 		$instance['terms']             = strip_tags( $new_instance['terms'] );
 		$instance['exclude_terms']     = strip_tags( $new_instance['exclude_terms'] );
-		$instance['hide_empty_terms']  = $new_instance['hide_empty_terms'] === 'checked' ? 'true' : 'false';
+		$instance['hide_empty_terms']  = 'checked' === $new_instance['hide_empty_terms'] ? 'true' : 'false';
 
 		if ( empty( $instance['target_post_title'] ) ) {
 			$instance['post'] = 0;
@@ -407,9 +409,10 @@ function get_the_section_a_z_widget( $args, $instance ) {
 	do_action( 'log', 'A-Z Listing: Running widget' );
 
 	$instance = wp_parse_args(
-		$instance, array(
+		$instance,
+		array(
 			'title'            => '',
-			'post'             =>  0,
+			'post'             => 0,
 			'target'           => -1,
 			'type'             => 'posts',
 			'taxonomy'         => '',
@@ -432,7 +435,7 @@ function get_the_section_a_z_widget( $args, $instance ) {
 		}
 	}
 
-	$hide_empty = $instance['hide_empty_terms'] === true ? 'true' : 'false';
+	$hide_empty = true === $instance['hide_empty_terms'] ? 'true' : 'false';
 
 	$ret  = '';
 	$ret .= $args['before_widget'];
@@ -471,13 +474,15 @@ function get_the_section_a_z_widget( $args, $instance ) {
 function a_z_listing_autocomplete_post_titles() {
 	global $wpdb;
 
-	$post_title = $wpdb->esc_like( stripslashes( $_POST['post_title']['term'] ) ) . '%';
+	$post_title = '%' . $wpdb->esc_like( stripslashes( $_POST['post_title']['term'] ) ) . '%';
 
-	$results = $wpdb->get_results( $wpdb->prepare(
-		"SELECT `ID`, `post_title` FROM `$wpdb->posts`
-		WHERE `post_title` LIKE %s AND `post_status` = 'publish'",
-		$post_title
-	) );
+	$results = $wpdb->get_results(
+		$wpdb->prepare(
+			"SELECT `ID`, `post_title` FROM `$wpdb->posts`
+			WHERE `post_title` LIKE %s AND `post_status` = 'publish'",
+			$post_title
+		)
+	);
 
 	$titles = array();
 	foreach ( $results as $result ) {

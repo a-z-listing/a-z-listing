@@ -81,7 +81,7 @@ class A_Z_Listing_Numbers {
  * @since 1.8.0 Add $group parameter and functionality to group numbers into a single collection.
  *
  * @param string $position set to before to place the numbers first. Any other value will place them last.
- * @param bool $group group the numbers in a single collection rather than individually.
+ * @param bool   $group    group the numbers in a single collection rather than individually.
  *
  * @return A_Z_Listing_Numbers
  */

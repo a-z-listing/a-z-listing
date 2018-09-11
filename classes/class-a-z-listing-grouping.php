@@ -16,12 +16,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class A_Z_Listing_Grouping {
 	/**
+	 * The configured grouping count
+	 *
 	 * @since 2.0.0
 	 * @var int
 	 */
 	private $grouping;
 
 	/**
+	 * The populated headings for the listing
+	 *
 	 * @since 2.0.0
 	 * @var array
 	 */
@@ -70,7 +74,8 @@ class A_Z_Listing_Grouping {
 		$grouping = $this->grouping;
 
 		$groups = array_reduce(
-			$letters, function( $carry, $letter ) use ( $grouping, &$headings, &$i, &$j ) {
+			$letters,
+			function( $carry, $letter ) use ( $grouping, &$headings, &$i, &$j ) {
 				if ( ! isset( $carry[ $j ] ) ) {
 					$carry[ $j ] = $letter;
 				} else {
@@ -90,7 +95,8 @@ class A_Z_Listing_Grouping {
 		);
 
 		$this->headings = array_reduce(
-			$headings, function( $carry, $heading ) {
+			$headings,
+			function( $carry, $heading ) {
 				$carry[ mb_substr( $heading[0], 0, 1 ) ] = $heading;
 				return $carry;
 			}

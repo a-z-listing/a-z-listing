@@ -36,7 +36,6 @@ class A_Z_Listing_Indices extends A_Z_Listing_Singleton {
 			$permalink = get_term_link( $item );
 		} else {
 			$title     = get_the_title( $item );
-			/** @noinspection PhpUndefinedFieldInspection */
 			$item_id   = $item->ID;
 			$permalink = get_the_permalink( $item );
 		}

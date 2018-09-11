@@ -93,6 +93,8 @@ class A_Z_Listing {
 	private $current_letter_index = 0;
 
 	/**
+	 * The query for this instance of the A-Z Listing
+	 *
 	 * @var WP_Query|array
 	 */
 	private $query;
@@ -130,9 +132,12 @@ class A_Z_Listing {
 			if ( is_array( $query ) ) {
 				$query = wp_parse_args( $query, $defaults );
 			} elseif ( is_string( $query ) ) {
-				$query = wp_parse_args( array(
-					'taxonomy' => $query,
-				), $defaults );
+				$query = wp_parse_args(
+					array(
+						'taxonomy' => $query,
+					),
+					$defaults
+				);
 			}
 
 			/**
@@ -161,8 +166,8 @@ class A_Z_Listing {
 				return $this;
 			}
 
-			$items          = get_terms( $query );
-			$this->query    = $query;
+			$items       = get_terms( $query );
+			$this->query = $query;
 
 			if ( AZLISTINGLOG ) {
 				do_action( 'log', 'A-Z Listing: Terms', '!ID', $items );
@@ -204,11 +209,14 @@ class A_Z_Listing {
 					$q['child_of'] = $section->ID;
 				}
 
-				$query = wp_parse_args( (array) $query, array(
-					'post_type'   => 'page',
-					'numberposts' => -1,
-					'nopaging'    => true,
-				) );
+				$query = wp_parse_args(
+					(array) $query,
+					array(
+						'post_type'   => 'page',
+						'numberposts' => -1,
+						'nopaging'    => true,
+					)
+				);
 			}
 
 			if ( $this->check_cache( (array) $query, $type, $use_cache ) ) {
@@ -255,9 +263,9 @@ class A_Z_Listing {
 	 * Check for cached queries
 	 *
 	 * @since 2.0.0
-	 * @param $query     array   the query
-	 * @param $type      string  the type of query
-	 * @param $use_cache boolean whether to check the cache
+	 * @param array   $query     the query.
+	 * @param string  $type      the type of query.
+	 * @param boolean $use_cache whether to check the cache.
 	 * @return bool whether we found a cached query
 	 */
 	private function check_cache( $query, $type, $use_cache ) {
@@ -267,10 +275,11 @@ class A_Z_Listing {
 			 *
 			 * @since 1.0.0
 			 * @since 2.0.0 apply to taxonomy queries. Add type parameter indicating type of query.
-			 * @param array|Object|WP_Query  $query  The query object
+			 * @param array  $items  The items from previous cache modules.
+			 * @param array  $query  The query.
 			 * @param string  $type  The type of the query. Either 'posts' or 'terms'.
 			 */
-			$cached = apply_filters( 'a_z_listing_get_cached_query', array(), $query, $type );
+			$cached = apply_filters( 'a_z_listing_get_cached_query', array(), (array) $query, $type );
 			if ( count( $cached ) > 0 ) {
 				$this->matched_item_indices = $cached;
 				return true;
@@ -287,9 +296,12 @@ class A_Z_Listing {
 	 * @return array individual multi-byte characters from the string
 	 */
 	public static function mb_string_to_array( $string ) {
-		return array_map( function ( $i ) use ( $string ) {
-			return mb_substr( $string, $i, 1 );
-		}, range( 0, mb_strlen( $string ) -1 ) );
+		return array_map(
+			function ( $i ) use ( $string ) {
+				return mb_substr( $string, $i, 1 );
+			},
+			range( 0, mb_strlen( $string ) - 1 )
+		);
 	}
 
 	/**
@@ -337,11 +349,13 @@ class A_Z_Listing {
 
 		$alphabet_groups = mb_split( ',', $alphabet );
 		$letters         = array_reduce(
-			$alphabet_groups, function( $return, $group ) {
+			$alphabet_groups,
+			function( $return, $group ) {
 				$group                 = A_Z_Listing::mb_string_to_array( $group );
 				$group_index_character = $group[0];
 				$group                 = array_reduce(
-					$group, function( $group, $character ) use ( $group_index_character ) {
+					$group,
+					function( $group, $character ) use ( $group_index_character ) {
 						$group[ $character ] = $group_index_character;
 						return $group;
 					}
@@ -387,14 +401,17 @@ class A_Z_Listing {
 	protected static function get_section( $page = 0 ) {
 		global $post;
 
-		$pages = get_pages( array(
-			'parent' => 0,
-		) );
+		$pages = get_pages(
+			array(
+				'parent' => 0,
+			)
+		);
 
 		$sections = array_map(
 			function( $item ) {
 					return $item->post_name;
-			}, $pages
+			},
+			$pages
 		);
 		/**
 		 * Override the detected top-level sections for the site. Defaults to contain each page with no post-parent.
@@ -523,9 +540,12 @@ class A_Z_Listing {
 
 			foreach ( $this->alphabet_chars as $character ) {
 				if ( ! empty( $indexed_items[ $character ] ) ) {
-					usort( $indexed_items[ $character ], function ( $a, $b ) {
-						return strcasecmp( $a['title'], $b['title'] );
-					} );
+					usort(
+						$indexed_items[ $character ],
+						function ( $a, $b ) {
+							return strcasecmp( $a['title'], $b['title'] );
+						}
+					);
 				}
 			}
 		}
@@ -629,10 +649,8 @@ class A_Z_Listing {
 	 * @param string $template_file The path of the template to execute.
 	 */
 	protected function do_template( $template_file ) {
-		/** @noinspection PhpUnusedLocalVariableInspection */
 		$a_z_query = $this;
 		if ( ! empty( $template_file ) ) {
-			/** @noinspection PhpIncludeInspection */
 			include $template_file;
 		}
 	}
@@ -763,8 +781,7 @@ class A_Z_Listing {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param string $force set to 'I understand the issues!' to acknowledge that this function will cause slowness on large sites.
-	 * @param WP_Post The object for the current item.
+	 * @param string $force Set this to 'I understand the issues!' to acknowledge that this function will cause slowness on large sites.
 	 *
 	 * @return array|null|WP_Error|WP_Post|WP_Term
 	 */
