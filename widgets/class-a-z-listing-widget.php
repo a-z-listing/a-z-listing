@@ -454,6 +454,7 @@ function get_the_section_a_z_widget( $args, $instance ) {
 			grouping=''
 			numbers='hide'
 			post-type='{$instance['post_type']}'
+			exclude-posts=''
 			terms='{$instance['terms']}'
 			exclude-terms='{$instance['exclude_terms']}'
 			parent-term='{$instance['parent_term']}'
