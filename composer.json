@@ -1,11 +1,7 @@
 {
-    "name": "bowlhat/wp-a-z-listing",
-    "description": "A-Z Index page and widget for WordPress",
-    "type": "project",
+    "name": "dllewellyn/wp-a-z-listing",
     "require-dev": {
-        "wpreadme2markdown/wpreadme2markdown": "^2.0",
-        "squizlabs/php_codesniffer": "^2.8",
-        "wp-coding-standards/wpcs": "^0.10.0"
+        "phpunit/phpunit": "^7.2"
     },
     "license": "GPL2+",
     "authors": [
@@ -14,9 +10,5 @@
             "email": "daniel@bowlhat.net"
         }
     ],
-    "require": {},
-    "scripts": {
-        "post-install-cmd": "[ -x \"vendor/bin/phpcs\" -a -d \"vendor/wp-coding-standards/wpcs\" ] && \"vendor/bin/phpcs\" --config-set installed_paths ../../../wp-coding-standards/wpcs",
-		"post-update-cmd" : "[ -x \"vendor/bin/phpcs\" -a -d \"vendor/wp-coding-standards/wpcs\" ] && \"vendor/bin/phpcs\" --config-set installed_paths ../../../wp-coding-standards/wpcs"
-    }
+    "require": {}
 }

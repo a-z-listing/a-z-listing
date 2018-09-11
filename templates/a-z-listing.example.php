@@ -1,18 +1,16 @@
 <?php
 /**
- * Default multicolumn template for the A-Z Listing plugin
+ * Example template for the A-Z Listing plugin
  *
  * This template will be given the variable `$a_z_query` which is an instance of
  * `A_Z_Listing`.
  *
- * You can override this template by copying this file into your theme
- * directory.
+ * You can override the default template by copying this file into your theme
+ * directory and renaming it to `a-z-listing.php`.
  *
  * @package a-z-listing
  */
 
-$_a_z_listing_colcount  = 3;
-$_a_z_listing_minpercol = 10;
 ?>
 <div id="az-tabs">
 <div id="letters">
@@ -28,18 +26,12 @@ $_a_z_listing_minpercol = 10;
 			$a_z_query->the_letter();
 			?>
 			<?php if ( $a_z_query->have_items() ) : ?>
-				<?php
-				$item_count   = $a_z_query->get_the_letter_count();
-				$column_limit = round( $item_count / $_a_z_listing_minpercol );
-				if ( $column_limit > $_a_z_listing_colcount ) {
-					$column_limit = $_a_z_listing_colcount;
-				}
-				?>
 				<div class="letter-section" id="<?php $a_z_query->the_letter_id(); ?>">
 					<h2 class="letter-title">
 						<span><?php $a_z_query->the_letter_title(); ?></span>
 					</h2>
-					<ul class="columns max-<?php echo $column_limit; ?>-columns">
+
+					<ul>
 						<?php
 						while ( $a_z_query->have_items() ) :
 							$a_z_query->the_item();
@@ -49,12 +41,11 @@ $_a_z_listing_minpercol = 10;
 							</li>
 						<?php endwhile; ?>
 					</ul>
+
 					<div class="back-to-top"><a href="#letters"><?php _e( 'Back to top', 'a-z-listing' ); ?></a></div>
 				</div>
-				<?php
-			endif;
-		endwhile;
-		?>
+			<?php endif; ?>
+		<?php endwhile; ?>
 	</div>
 </div>
 </div>

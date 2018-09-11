@@ -1,14 +1,14 @@
 <?php
 class AZ_Listing_Tests extends AZ_UnitTestCase {
 	public function test_empty_letters() {
-		$expected = file_get_contents( 'tests/default-letters.txt' );
-		$actual   = get_the_a_z_letters();
+		$expected = file_get_contents( 'tests/data/default-letters.txt' );
+		$actual   = get_the_a_z_letters( null, false, false, false );
 
 		$this->assertHTMLEquals( $expected, $actual );
 	}
 	public function test_empty_listing() {
-		$expected = file_get_contents( 'tests/default-listing.txt' );
-		$actual   = get_the_a_z_listing();
+		$expected = file_get_contents( 'tests/data/default-listing.txt' );
+		$actual   = get_the_a_z_listing( null, false );
 
 		$this->assertHTMLEquals( $expected, $actual );
 	}
@@ -26,8 +26,8 @@ class AZ_Listing_Tests extends AZ_UnitTestCase {
 			)
 		);
 
-		$expected = file_get_contents( 'tests/populated-letters.txt' );
-		$actual   = get_the_a_z_letters( $q );
+		$expected = file_get_contents( 'tests/data/populated-letters.txt' );
+		$actual   = get_the_a_z_letters( $q, false, false, false );
 
 		$this->assertHTMLEquals( $expected, $actual );
 	}
@@ -45,8 +45,8 @@ class AZ_Listing_Tests extends AZ_UnitTestCase {
 			)
 		);
 
-		$expected = file_get_contents( 'tests/populated-letters-linked.txt' );
-		$actual   = get_the_a_z_letters( $q, '/test-path' );
+		$expected = file_get_contents( 'tests/data/populated-letters-linked.txt' );
+		$actual   = get_the_a_z_letters( $q, '/test-path', false, false );
 
 		$this->assertHTMLEquals( $expected, $actual );
 	}
@@ -65,8 +65,8 @@ class AZ_Listing_Tests extends AZ_UnitTestCase {
 			)
 		);
 
-		$expected = sprintf( file_get_contents( 'tests/populated-listing.txt' ), $title, $p );
-		$actual   = get_the_a_z_listing( $q );
+		$expected = sprintf( file_get_contents( 'tests/data/populated-listing.txt' ), $title, $p );
+		$actual   = get_the_a_z_listing( $q, false );
 
 		$this->assertHTMLEquals( $expected, $actual );
 	}
@@ -80,8 +80,8 @@ class AZ_Listing_Tests extends AZ_UnitTestCase {
 			)
 		);
 
-		$expected = sprintf( file_get_contents( 'tests/populated-taxonomy-listing.txt' ), $title, $t );
-		$actual   = get_the_a_z_listing( 'category' );
+		$expected = sprintf( file_get_contents( 'tests/data/populated-taxonomy-listing.txt' ), $title, $t );
+		$actual   = get_the_a_z_listing( 'category', false );
 
 		$this->assertHTMLEquals( $expected, $actual );
 	}
@@ -99,8 +99,8 @@ class AZ_Listing_Tests extends AZ_UnitTestCase {
 			)
 		);
 
-		$expected = file_get_contents( 'tests/populated-letters.txt' );
-		$actual   = get_the_a_z_letters( $q );
+		$expected = file_get_contents( 'tests/data/populated-letters.txt' );
+		$actual   = get_the_a_z_letters( $q, false );
 
 		$this->assertHTMLEquals( $expected, $actual );
 	}
@@ -118,8 +118,8 @@ class AZ_Listing_Tests extends AZ_UnitTestCase {
 			)
 		);
 
-		$expected = file_get_contents( 'tests/populated-letters-linked.txt' );
-		$actual   = get_the_a_z_letters( $q, '/test-path' );
+		$expected = file_get_contents( 'tests/data/populated-letters-linked.txt' );
+		$actual   = get_the_a_z_letters( $q, '/test-path', false, false );
 
 		$this->assertHTMLEquals( $expected, $actual );
 	}
@@ -138,8 +138,8 @@ class AZ_Listing_Tests extends AZ_UnitTestCase {
 			)
 		);
 
-		$expected = sprintf( file_get_contents( 'tests/populated-listing.txt' ), $title, $p );
-		$actual   = get_the_a_z_listing( $q );
+		$expected = sprintf( file_get_contents( 'tests/data/populated-listing.txt' ), $title, $p );
+		$actual   = get_the_a_z_listing( $q, false );
 
 		$this->assertHTMLEquals( $expected, $actual );
 	}
@@ -153,7 +153,7 @@ class AZ_Listing_Tests extends AZ_UnitTestCase {
 			)
 		);
 
-		$expected = sprintf( file_get_contents( 'tests/populated-taxonomy-listing.txt' ), $title, $t );
+		$expected = sprintf( file_get_contents( 'tests/data/populated-taxonomy-listing.txt' ), $title, $t );
 		$actual   = get_the_a_z_listing( 'category', false );
 
 		$this->assertHTMLEquals( $expected, $actual );

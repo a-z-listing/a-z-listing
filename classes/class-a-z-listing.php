@@ -1,161 +1,307 @@
 <?php
 /**
+ * A-Z Listing main process
+ *
+ * @package  a-z-listing
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
  * The main A-Z Query class
  *
  * @since 0.1
  */
 class A_Z_Listing {
-	private $query;
+	/**
+	 * The taxonomy
+	 *
+	 * @var string
+	 */
 	private $taxonomy;
+
+	/**
+	 * Listing type, posts or terms
+	 *
+	 * @var string
+	 */
 	private $type = 'posts';
 
 	/**
-	 * All available characters in a single string for translation support.
+	 * All available characters in a single string for translation support
+	 *
+	 * @var array
 	 */
-	private static $alphabet;
+	private $alphabet;
 
 	/**
-	 * The index to use for posts which are not matched by any known letter, from the $alphabet, such as numerics.
+	 * The index label to use for posts which are not matched by any known letter, from the $alphabet, such as numerics
+	 *
+	 * @var string
 	 */
-	private static $unknown_letters;
+	private $unknown_letters;
 
 	/**
-	 * All available characters which may be used as an index.
+	 * All available characters which may be used as an index
+	 *
+	 * @var array
 	 */
-
-	private $available_indices;
-	/**
-	 * A Taxonomy which contains terms to apply additional titles to posts.
-	 */
-	private $index_taxonomy;
+	private $alphabet_chars;
 
 	/**
-	 * All items returned by the query.
+	 * All items returned by the query
+	 *
+	 * @var array
 	 */
 	private $items;
 
 	/**
-	 * Indices for only the items returned by the query - filtered version of $available_indices.
+	 * Indices for only the items returned by the query - filtered version of $alphabet_chars
+	 *
+	 * @var array
 	 */
 	private $matched_item_indices;
 
 	/**
-	 * The current item for use in the a-z items loop. internal use only.
+	 * The current item for use in the a-z items loop. internal use only
+	 *
+	 * @var array
 	 */
 	private $current_item = null;
 
 	/**
-	 * The current item array-index in $items. internal use only.
+	 * The current item array-index in $items. internal use only
+	 *
+	 * @var int
 	 */
 	private $current_item_index = 0;
 
 	/**
-	 * The current letter for use in the a-z letter loop. internal use only.
+	 * The current letter for use in the a-z letter loop. internal use only
+	 *
+	 * @var array
 	 */
 	private $current_letter_items = array();
 
 	/**
-	 * The current letter array-index in $matched_item_indices. internal use only.
+	 * The current letter array-index in $matched_item_indices. internal use only
+	 *
+	 * @var int
 	 */
 	private $current_letter_index = 0;
 
 	/**
-	 * A_Z_Listing constructor.
+	 * The query for this instance of the A-Z Listing
+	 *
+	 * @var WP_Query|array
+	 */
+	private $query;
+
+	/**
+	 * A_Z_Listing constructor
 	 *
 	 * @since 0.1
 	 * @since 1.9.2 Instantiate the WP_Query object here instead of in `A_Z_Listing::construct_query()`
-	 * @param null|WP_Query|array|string $query
+	 * @since 2.0.0 add $type and $use_cache parameters
+	 * @param null|WP_Query|array|string $query     A WP_Query-compatible query definition or a taxonomy name.
+	 * @param null|string                $type      Specify the listing type; either 'posts' or 'terms'.
+	 * @param boolean                    $use_cache Cache the Listing via WordPress transients.
 	 */
-	public function __construct( $query = null ) {
+	public function __construct( $query = null, $type = 'posts', $use_cache = true ) {
 		global $post;
-		self::get_alphabet();
-		$this->available_indices = array_values( array_unique( array_values( self::$alphabet ) ) );
+		$this->get_alphabet();
+		$this->alphabet_chars = array_values( array_unique( $this->alphabet ) );
 
 		if ( is_string( $query ) && ! empty( $query ) ) {
+			$type = 'terms';
+		}
+
+		if ( 'terms' === $type ) {
 			if ( AZLISTINGLOG ) {
 				do_action( 'log', 'A-Z Listing: Setting taxonomy mode', $query );
 			}
 
-			$this->type     = 'taxonomy';
-			$this->taxonomy = $query;
-			$this->items    = get_terms(
-				$query, array(
-					'hide_empty' => false,
-				)
+			$this->type = 'terms';
+
+			$defaults = array(
+				'hide_empty' => false,
 			);
 
+			if ( is_array( $query ) ) {
+				$query = wp_parse_args( $query, $defaults );
+			} elseif ( is_string( $query ) ) {
+				$query = wp_parse_args(
+					array(
+						'taxonomy' => $query,
+					),
+					$defaults
+				);
+			}
+
+			/**
+			 * Modify or replace the query
+			 *
+			 * @since 1.0.0
+			 * @since 2.0.0 apply to taxonomy queries. Add type parameter indicating type of query.
+			 * @param array|Object|WP_Query  $query  The query object
+			 * @param string  $type  The type of the query. Either 'posts' or 'terms'.
+			 */
+			$query = apply_filters( 'a_z_listing_query', $query, 'terms' );
+
+			/**
+			 * Modify or replace the query
+			 *
+			 * @since 1.7.1
+			 * @since 2.0.0 apply to taxonomy queries. Add type parameter indicating type of query.
+			 * @param array|Object|WP_Query  $query  The query object
+			 * @param string  $type  The type of the query. Either 'posts' or 'terms'.
+			 */
+			$query = apply_filters( 'a-z-listing-query', $query, 'terms' );
+
+			$this->taxonomy = $query['taxonomy'];
+
+			if ( $this->check_cache( $query, $type, $use_cache ) ) {
+				return $this;
+			}
+
+			$items       = get_terms( $query );
+			$this->query = $query;
+
 			if ( AZLISTINGLOG ) {
-				do_action( 'log', 'A-Z Listing: Terms', '!slug', $this->items );
+				do_action( 'log', 'A-Z Listing: Terms', '!ID', $items );
 			}
 		} else {
 			if ( AZLISTINGLOG ) {
 				do_action( 'log', 'A-Z Listing: Setting posts mode', $query );
 			}
+
+			$this->type = 'posts';
+
+			if ( ! $query ) {
+				$query = array();
+			}
+
 			/**
-			 * Taxonomy containing terms which are used as the title for associated posts
+			 * Modify or replace the query
 			 *
-			 * @deprecated Use a_z_listing_additional_titles_taxonomy
-			 * @see a_z_listing_additional_titles_taxonomy
+			 * @since 1.0.0
+			 * @param array|Object|WP_Query $query The query object
 			 */
-			$index_taxonomy = apply_filters_deprecated( 'az_additional_titles_taxonomy', array( '' ), '1.0.0', 'a_z_listing_additional_titles_taxonomy' );
+			$query = apply_filters( 'a_z_listing_query', $query );
+
 			/**
-			 * Taxonomy containing terms which are used as the title for associated posts
-			 *
-			 * @param string $taxonomy The taxonomy mapping alternative titles to posts
-			 */
-			$index_taxonomy = apply_filters( 'a_z_listing_additional_titles_taxonomy', $index_taxonomy );
-			/**
-			 * Taxonomy containing terms which are used as the title for associated posts
+			 * Modify or replace the query
 			 *
 			 * @since 1.7.1
-			 * @param string $taxonomy The taxonomy mapping alternative titles to posts
+			 * @param array|Object|WP_Query $query The query object
 			 */
-			$index_taxonomy       = apply_filters( 'a-z-listing-additional-titles-taxonomy', $index_taxonomy );
-			$this->index_taxonomy = $index_taxonomy;
+			$query = apply_filters( 'a-z-listing-query', $query );
 
-			$query = (array) $query;
+			if ( ! $query instanceof WP_Query ) {
+				$query = (array) $query;
 
-			$section = self::get_section();
+				if ( ( ! isset( $query['post_type'] ) || 'page' === $query['post_type'] ) &&
+				isset( $post ) && 'page' === $post->post_type &&
+				! ( isset( $query['child_of'] ) || isset( $query['parent'] ) ) ) {
+					$section       = self::get_section();
+					$q['child_of'] = $section->ID;
+				}
 
-			if ( ( isset( $query['post_type'] ) && 'page' !== $query['post_type'] )
-				|| ( isset( $post ) && 'page' !== $post->post_type ) ) {
-				$section = null;
+				$query = wp_parse_args(
+					(array) $query,
+					array(
+						'post_type'   => 'page',
+						'numberposts' => -1,
+						'nopaging'    => true,
+					)
+				);
 			}
 
-			if ( $section ) {
-				$query['child_of'] = $section->ID;
+			if ( $this->check_cache( (array) $query, $type, $use_cache ) ) {
+				return $this;
 			}
 
-			if ( isset( $query['child_of'] ) ) {
-				$this->items = get_pages( $query );
+			if ( $query instanceof WP_Query ) {
+				$post_type = $query->post_type;
 			} else {
-				$query       = $this->construct_query( $query );
-				$wp_query    = new WP_Query();
-				$this->items = $wp_query->query( $query );
+				$post_type = $query['post_type'];
 			}
 
-			$this->query = $query;
-		} // End if().
+			if ( 'page' === $post_type ) {
+				$items       = get_pages( $query );
+				$this->query = $query;
+			} else {
+				$wq          = new WP_Query( $query );
+				$items       = $wq->get_posts();
+				$this->query = $wq;
+			}
 
-		$this->matched_item_indices = $this->get_all_indices();
+			if ( AZLISTINGLOG ) {
+				do_action( 'log', 'A-Z Listing: Posts', '!ID', $items );
+			}
+		} // End if ( type is terms ).
+
+		/**
+		 * Filter items from the query results
+		 *
+		 * @param array  $items The query results.
+		 * @param string $type  The query type - terms or posts.
+		 * @param array  $query The query as an array.
+		 */
+		$items = apply_filters( 'a-z-listing-filter-items', $items, $type, (array) $query );
+
+		$this->matched_item_indices = $this->get_all_indices( $items );
+
+		if ( $use_cache ) {
+			do_action( 'a_z_listing_save_cache', $query, $type, $this->matched_item_indices );
+		}
 	}
 
 	/**
-	 * Split a multibyte string into an array. (see http://php.net/manual/en/function.mb-split.php#80046)
+	 * Check for cached queries
+	 *
+	 * @since 2.0.0
+	 * @param array   $query     the query.
+	 * @param string  $type      the type of query.
+	 * @param boolean $use_cache whether to check the cache.
+	 * @return bool whether we found a cached query
+	 */
+	private function check_cache( $query, $type, $use_cache ) {
+		if ( $use_cache ) {
+			/**
+			 * Get the cached data
+			 *
+			 * @since 1.0.0
+			 * @since 2.0.0 apply to taxonomy queries. Add type parameter indicating type of query.
+			 * @param array  $items  The items from previous cache modules.
+			 * @param array  $query  The query.
+			 * @param string  $type  The type of the query. Either 'posts' or 'terms'.
+			 */
+			$cached = apply_filters( 'a_z_listing_get_cached_query', array(), (array) $query, $type );
+			if ( count( $cached ) > 0 ) {
+				$this->matched_item_indices = $cached;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Split a multibyte string into an array. (see https://php.net/manual/en/function.mb-split.php#121330)
 	 *
 	 * @since 1.0.0
-	 * @param string $string multi-byte string
+	 * @param string $string multi-byte string.
 	 * @return array individual multi-byte characters from the string
 	 */
 	public static function mb_string_to_array( $string ) {
-		$array  = array();
-		$length = mb_strlen( $string );
-		while ( $length ) {
-			$array[] = mb_substr( $string, 0, 1, 'UTF-8' );
-			$string  = mb_substr( $string, 1, $length, 'UTF-8' );
-			$length  = mb_strlen( $string );
-		}
-		return $array;
+		return array_map(
+			function ( $i ) use ( $string ) {
+				return mb_substr( $string, $i, 1 );
+			},
+			range( 0, mb_strlen( $string ) - 1 )
+		);
 	}
 
 	/**
@@ -163,13 +309,13 @@ class A_Z_Listing {
 	 *
 	 * @since 0.1
 	 */
-	protected static function get_alphabet() {
-		if ( ! empty( self::$alphabet ) ) {
+	protected function get_alphabet() {
+		if ( ! empty( $this->alphabet ) ) {
 			return;
 		}
 
 		/* translators: List the aphabet of your language in the order that your language prefers. list as groups of identical meanings but different characters together, e.g. in English we group A with a because they are both the same letter but different character-code. Each character group should be followed by a comma separating it from the next group. Any amount of characters per group are acceptible, and there is no requirement for all the groups to contain the same amount of characters as all the others. Be careful with the character you place first in each group as that will be used as the identifier for the group which gets displayed on the page, e.g. in English a group definition of "Aa" will indicate that we display all the posts in the group, i.e. whose titles begin with either "A" or "a", listed under a heading of "A" (the first character in the definition). */
-		$alphabet = __( 'AÁÀÄÂaáàäâ,Bb,Cc,Dd,EÉÈËÊeéèëê,Ff,Gg,Hh,IÍÌÏÎiíìïî,Jj,Kk,Ll,Mm,Nn,OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz' );
+		$alphabet = __( 'AÁÀÄÂaáàäâ,Bb,Cc,Dd,EÉÈËÊeéèëê,Ff,Gg,Hh,IÍÌÏÎiíìïî,Jj,Kk,Ll,Mm,Nn,OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz', 'a-z-listing' );
 		/* translators: This should be a single character to denote "all entries that didn't fit under one of the alphabet character groups defined". This is used in English to categorise posts whose title begins with a numeric (0 through to 9), or some other character that is not a standard English alphabet letter. */
 		$others = __( '#', 'a-z-listing' );
 
@@ -183,31 +329,33 @@ class A_Z_Listing {
 		 * Filters the alphabet. The string should contain groups of similar or identical characters separated by commas. The first character in each group is the one used for the group title.
 		 *
 		 * @since 1.7.1
-		 * @param string $alphabet The $alphabet
+		 * @param string $alphabet The $alphabet.
 		 */
 		$alphabet = apply_filters( 'a-z-listing-alphabet', $alphabet );
 
 		/**
-		 * Specifies the character used for all non-alphabetic titles, such as numeric titles in the default setup for English. Defaults to '#' unless overidden by a language pack.
+		 * Specifies the character used for all non-alphabetic titles, such as numeric titles in the default setup for English. Defaults to '#' unless overridden by a language pack.
 		 *
-		 * @param string $non_alpha_char The character for non-alphabetic post titles
+		 * @param string $non_alpha_char The character for non-alphabetic post titles.
 		 */
 		$others = apply_filters( 'a_z_listing_non_alpha_char', $others );
 		/**
-		 * Specifies the character used for all non-alphabetic titles, such as numeric titles in the default setup for English. Defaults to '#' unless overidden by a language pack.
+		 * Specifies the character used for all non-alphabetic titles, such as numeric titles in the default setup for English. Defaults to '#' unless overridden by a language pack.
 		 *
 		 * @since 1.7.1
-		 * @param string $non_alpha_char The character for non-alphabetic post titles
+		 * @param string $non_alpha_char The character for non-alphabetic post titles.
 		 */
 		$others = apply_filters( 'a-z-listing-non-alpha-char', $others );
 
 		$alphabet_groups = mb_split( ',', $alphabet );
 		$letters         = array_reduce(
-			$alphabet_groups, function( $return, $group ) {
+			$alphabet_groups,
+			function( $return, $group ) {
 				$group                 = A_Z_Listing::mb_string_to_array( $group );
 				$group_index_character = $group[0];
 				$group                 = array_reduce(
-					$group, function( $group, $character ) use ( $group_index_character ) {
+					$group,
+					function( $group, $character ) use ( $group_index_character ) {
 						$group[ $character ] = $group_index_character;
 						return $group;
 					}
@@ -219,15 +367,15 @@ class A_Z_Listing {
 			}
 		);
 
-		self::$alphabet        = $letters;
-		self::$unknown_letters = $others;
+		$this->alphabet        = $letters;
+		$this->unknown_letters = $others;
 	}
 
 	/**
 	 * Find a post's parent post. Will return the original post if the post-type is not hierarchical or the post does not have a parent.
 	 *
 	 * @since 1.4.0
-	 * @param WP_Post|int $page The post whose parent we want to find
+	 * @param WP_Post|int $page The post whose parent we want to find.
 	 * @return WP_Post|bool The parent post or the original post if no parents were found. Will be false if the function is called with incorrect arguments.
 	 */
 	public static function find_post_parent( $page ) {
@@ -253,17 +401,21 @@ class A_Z_Listing {
 	protected static function get_section( $page = 0 ) {
 		global $post;
 
-		$pages    = get_pages(
+		$pages = get_pages(
 			array(
 				'parent' => 0,
 			)
 		);
+
 		$sections = array_map(
 			function( $item ) {
 					return $item->post_name;
-			}, $pages
+			},
+			$pages
 		);
 		/**
+		 * Override the detected top-level sections for the site. Defaults to contain each page with no post-parent.
+		 *
 		 * @deprecated Use a_z_listing_sections
 		 * @see a_z_listing_sections
 		 */
@@ -271,14 +423,14 @@ class A_Z_Listing {
 		/**
 		 * Override the detected top-level sections for the site. Defaults to contain each page with no post-parent.
 		 *
-		 * @param array $sections The sections for the site
+		 * @param array $sections The sections for the site.
 		 */
 		$sections = apply_filters( 'a_z_listing_sections', $sections );
 		/**
 		 * Override the detected top-level sections for the site. Defaults to contain each page with no post-parent.
 		 *
 		 * @since 1.7.1
-		 * @param array $sections The sections for the site
+		 * @param array $sections The sections for the site.
 		 */
 		$sections = apply_filters( 'a-z-listing-sections', $sections );
 
@@ -320,45 +472,6 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Build a WP_Query-compatible array, and allow plugins and the theme to modify the parameters,
-	 * ready for passing into `WP_Query->query()`
-	 *
-	 * @since 1.0.0
-	 * @since 1.9.2 Switch the return value from a WP_Query object to an Array
-	 * @param Array|Object|WP_Query Query params as an array/object or WP_Query object
-	 * @return Array the query for usage in `WP_Query->query()`
-	 */
-	protected function construct_query( $q ) {
-		/**
-		 * Modify or replace the query
-		 *
-		 * @since 1.0.0
-		 * @param Array|Object|WP_Query $query The query object
-		 */
-		$q = apply_filters( 'a_z_listing_query', $q );
-		/**
-		 * Modify or replace the query
-		 *
-		 * @since 1.7.1
-		 * @param Array|Object|WP_Query $query The query object
-		 */
-		$q = apply_filters( 'a-z-listing-query', $q );
-
-		if ( $q instanceof WP_Query ) {
-			$q = (array) $q;
-		}
-
-		$q = wp_parse_args(
-			(array) $q, array(
-				'post_type'   => 'page',
-				'numberposts' => -1,
-				'nopaging'    => true,
-			)
-		);
-		return $q;
-	}
-
-	/**
 	 * Fetch the query we are currently using
 	 *
 	 * @since 1.0.0
@@ -371,8 +484,8 @@ class A_Z_Listing {
 	/**
 	 * Reducer used by get_the_item_indices() to filter the indices for each post to unique array_values (see: https://secure.php.net/array_reduce)
 	 *
-	 * @param array $carry Holds the return value of the previous iteration
-	 * @param array $value  Holds the value of the current iteration
+	 * @param array $carry Holds the return value of the previous iteration.
+	 * @param array $value  Holds the value of the current iteration.
 	 * @return array The previous iteration return value with the current iteration added after running through array_unique()
 	 */
 	public function index_reduce( $carry, $value ) {
@@ -384,137 +497,56 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Find and return the index letter for a post
-	 *
-	 * @since 1.0.0
-	 * @param WP_Post|WP_Term $item The item whose index letters we want to find
-	 * @return Array The post's index letters (usually matching the first character of the post title)
-	 */
-	protected function get_the_item_indices( $item ) {
-		$terms        = array();
-		$indices      = array();
-		$term_indices = array();
-		$index        = '';
-
-		if ( $item instanceof WP_Term ) {
-			$index               = mb_substr( $item->name, 0, 1, 'UTF-8' );
-			$indices[ $index ][] = array(
-				'title' => $item->name,
-				'item'  => $item,
-			);
-			/**
-			 * @deprecated Use a_z_listing_item_indices
-			 * @see a_z_listing_item_indices
-			 */
-			$indices = apply_filters_deprecated( 'a_z_listing_term_indices', array( $indices, $item ), '1.0.0', 'a_z_listing_item_indices' );
-		} else {
-			$index               = mb_substr( $item->post_title, 0, 1, 'UTF-8' );
-			$indices[ $index ][] = array(
-				'title' => $item->post_title,
-				'item'  => $item,
-			);
-
-			if ( ! empty( $this->index_taxonomy ) ) {
-				$terms        = array_filter( wp_get_object_terms( $item->ID, $this->index_taxonomy ) );
-				$term_indices = array_reduce(
-					$terms, function( $indices, $term ) use ( $item ) {
-						$indices[ mb_substr( $term->name, 0, 1, 'UTF-8' ) ][] = array(
-							'title' => $term->name,
-							'item'  => $item,
-						);
-						return $indices;
-					}
-				);
-
-				if ( ! empty( $term_indices ) ) {
-					$indices = array_merge( $indices, $term_indices );
-				}
-			}
-
-			/**
-			 * @deprecated Use a_z_listing_item_indices
-			 * @see a_z_listing_item_indices
-			 */
-			$indices = apply_filters_deprecated( 'a_z_listing_post_indices', array( $indices, $item ), '1.5.0', 'a_z_listing_item_indices' );
-		} // End if().
-
-		//$indices = array_reduce( $indices, array( $this, 'index_reduce' ) );
-
-		/**
-		 * Modify the indice(s) to group this post under
-		 *
-		 * @param array           $indices The current indices
-		 * @param WP_Term|WP_Post $item The item
-		 * @param string          $item_type The type of the item
-		 */
-		$indices = apply_filters( 'a_z_listing_item_indices', $indices, $item, $this->type );
-		/**
-		 * Modify the indice(s) to group this post under
-		 *
-		 * @since 1.7.1
-		 * @param array           $indices The current indices
-		 * @param WP_Term|WP_Post $item The item
-		 * @param string          $item_type The type of the item
-		 */
-		$indices = apply_filters( 'a-z-listing-item-indices', $indices, $item, $this->type );
-		if ( AZLISTINGLOG ) {
-			do_action( 'log', 'Item indices', $indices );
-		}
-		return $indices;
-	}
-
-	/**
-	 * Sort the posts into an Array based on their index letters
-	 *
-	 * @since 0.8.0
-	 * @return Array The posts array keyed by index letter
-	 */
-	protected function get_indexed_items() {
-		$letters = array();
-
-		foreach ( $this->items as $item ) {
-			$indices = $this->get_the_item_indices( $item );
-
-			foreach ( $indices as $index => $index_entries ) {
-				if ( count( $index_entries ) > 0 ) {
-					if ( in_array( $index, array_keys( self::$alphabet ), true ) ) {
-						$index = self::$alphabet[ $index ];
-					} else {
-						$index = '_';
-					}
-
-					if ( ! isset( $letters[ $index ] ) || ! is_array( $letters[ $index ] ) ) {
-						$letters[ $index ] = array();
-					}
-
-					$letters[ $index ] = array_merge_recursive( $letters[ $index ], $index_entries );
-				}
-			}
-		}
-
-		return $letters;
-	}
-
-	/**
 	 * Sort the letters to be used as indices and return as an Array
 	 *
 	 * @since 0.1
-	 * @return Array The index letters
+	 * @param array $items The items to index.
+	 * @return array The index letters
 	 */
-	protected function get_all_indices() {
-		$indexed_items = $this->get_indexed_items();
+	protected function get_all_indices( $items = null ) {
+		$indexed_items = array();
 
-		if ( ! empty( $index[ self::$unknown_letters ] ) ) {
-			$this->available_indices[] = self::$unknown_letters;
+		if ( ! $items ) {
+			$items = $this->items;
 		}
 
-		foreach ( $this->available_indices as $index ) {
-			if ( ! empty( $indexed_items[ $index ] ) ) {
-				usort(
-					$indexed_items[ $index ], function( $a, $b ) {
-						return strcasecmp( $a['title'], $b['title'] );
+		if ( is_array( $items ) && count( $items ) > 0 ) {
+			foreach ( $items as $item ) {
+				$item_indices = apply_filters( '_a-z-listing-extract-item-indices', array(), $item, $this->type );
+
+				if ( count( $item_indices ) < 1 ) {
+					continue;
+				}
+
+				foreach ( $item_indices as $index => $index_entries ) {
+					if ( count( $index_entries ) > 0 ) {
+						if ( in_array( $index, array_keys( $this->alphabet ), true ) ) {
+							$index = $this->alphabet[ $index ];
+						} else {
+							$index = '_';
+						}
+
+						if ( ! isset( $indexed_items[ $index ] ) || ! is_array( $indexed_items[ $index ] ) ) {
+							$indexed_items[ $index ] = array();
+						}
+						$indexed_items[ $index ] = array_merge_recursive( $indexed_items[ $index ], $index_entries );
 					}
-				);
+				}
+			}
+
+			if ( ! empty( $index[ $this->unknown_letters ] ) ) {
+				$this->alphabet_chars[] = $this->unknown_letters;
+			}
+
+			foreach ( $this->alphabet_chars as $character ) {
+				if ( ! empty( $indexed_items[ $character ] ) ) {
+					usort(
+						$indexed_items[ $character ],
+						function ( $a, $b ) {
+							return strcasecmp( $a['title'], $b['title'] );
+						}
+					);
+				}
 			}
 		}
 
@@ -525,15 +557,22 @@ class A_Z_Listing {
 	 * Print the letter links HTML
 	 *
 	 * @since 1.0.0
+	 * @param string $target The page to point links toward.
+	 * @param string $style CSS classes to apply to the output.
 	 */
 	public function the_letters( $target = '', $style = null ) {
 		echo $this->get_the_letters( $target, $style ); // WPCS: XSS OK.
 	}
 
 	/**
+	 * Print the letter links HTML
+	 *
 	 * @since 0.1
 	 * @see A_Z_Listing::get_the_letters()
 	 * @deprecated use A_Z_Listing::get_the_letters().
+	 * @param string $target The page to point links toward.
+	 * @param string $style CSS classes to apply to the output.
+	 * @return string The letter links HTML
 	 */
 	public function get_letter_display( $target = '', $style = null ) {
 		_deprecated_function( __METHOD__, '1.0.0', 'A_Z_Listing::get_the_letters' );
@@ -544,8 +583,8 @@ class A_Z_Listing {
 	 * Return the letter links HTML
 	 *
 	 * @since 1.0.0
-	 * @param string $target The page to point links toward
-	 * @param string $style Optional CSS classes to apply to the output
+	 * @param string $target The page to point links toward.
+	 * @param string $style CSS classes to apply to the output.
 	 * @return string The letter links HTML
 	 */
 	public function get_the_letters( $target = '', $style = null ) {
@@ -561,12 +600,12 @@ class A_Z_Listing {
 		$classes = array_unique( $classes );
 
 		$ret   = '<ul class="' . esc_attr( implode( ' ', $classes ) ) . '">';
-		$count = count( $this->available_indices );
+		$count = count( $this->alphabet_chars );
 		$i     = 0;
-		foreach ( $this->available_indices as $letter ) {
+		foreach ( $this->alphabet_chars as $letter ) {
 			$i++;
 			$id = $letter;
-			if ( self::$unknown_letters === $id ) {
+			if ( $this->unknown_letters === $id ) {
 				$id = '_';
 			}
 
@@ -607,23 +646,22 @@ class A_Z_Listing {
 	 * Load and execute a theme template
 	 *
 	 * @since 1.0.0
-	 * @param string $template_file The path of the template to execute
+	 * @param string $template_file The path of the template to execute.
 	 */
 	protected function do_template( $template_file ) {
-		/** @noinspection PhpUnusedLocalVariableInspection */
 		$a_z_query = $this;
-		/** @noinspection PhpIncludeInspection */
-		include $template_file;
+		if ( ! empty( $template_file ) ) {
+			include $template_file;
+		}
 	}
 
 	/**
-	 * Return the index list HTML created by a theme template
+	 * Print the index list HTML created by a theme template
 	 *
-	 * @since 0.7
-	 * @return string The index list HTML
+	 * @since 2.0.0
 	 */
-	public function get_the_listing() {
-		if ( 'taxonomy' === $this->type ) {
+	public function the_listing() {
+		if ( 'terms' === $this->type ) {
 			$section = $this->taxonomy;
 		} else {
 			$section = self::get_section();
@@ -632,21 +670,32 @@ class A_Z_Listing {
 			}
 		}
 
-		ob_start();
 		$template = locate_template( array( 'a-z-listing-' . $section . '.php', 'a-z-listing.php' ) );
 		if ( $template ) {
 			$this->do_template( $template );
 		} else {
 			$this->do_template( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'a-z-listing.php' );
 		}
-		$r = ob_get_clean();
-
 		wp_reset_postdata();
+	}
+
+	/**
+	 * Return the index list HTML created by a theme template
+	 *
+	 * @since 0.7
+	 * @return string The index list HTML.
+	 */
+	public function get_the_listing() {
+		ob_start();
+		$this->the_listing();
+		$r = ob_get_clean();
 
 		return $r;
 	}
 
 	/**
+	 * Used by theme templates. Returns true when we still have letters to iterate.
+	 *
 	 * @since 0.7
 	 * @see A_Z_Listing::have_letters()
 	 * @deprecated use A_Z_Listing::have_letters()
@@ -663,10 +712,12 @@ class A_Z_Listing {
 	 * @return bool True if we have more letters to iterate, otherwise false
 	 */
 	public function have_letters() {
-		return ( count( $this->available_indices ) > $this->current_letter_index );
+		return ( count( $this->alphabet_chars ) > $this->current_letter_index );
 	}
 
 	/**
+	 * Used by theme templates. Returns true when we still have posts to iterate.
+	 *
 	 * @since 0.7
 	 * @see A_Z_Listing::have_items()
 	 * @deprecated use A_Z_Listing::have_items()
@@ -697,13 +748,15 @@ class A_Z_Listing {
 	public function the_letter() {
 		$this->current_item_index   = 0;
 		$this->current_letter_items = array();
-		if ( isset( $this->matched_item_indices[ $this->available_indices[ $this->current_letter_index ] ] ) ) {
-			$this->current_letter_items = $this->matched_item_indices[ $this->available_indices[ $this->current_letter_index ] ];
+		if ( isset( $this->matched_item_indices[ $this->alphabet_chars[ $this->current_letter_index ] ] ) ) {
+			$this->current_letter_items = $this->matched_item_indices[ $this->alphabet_chars[ $this->current_letter_index ] ];
 		}
 		$this->current_letter_index += 1;
 	}
 
 	/**
+	 * Advance the Post loop within the Letter Loop onto the next post
+	 *
 	 * @since 0.7
 	 * @see A_Z_Listing::the_item()
 	 * @deprecated use A_Z_Listing::the_item()
@@ -719,15 +772,37 @@ class A_Z_Listing {
 	 * @since 1.0.0
 	 */
 	public function the_item() {
-		global $post;
-		$this->current_item = $this->current_letter_items[ $this->current_item_index ];
-		$item_object        = $this->current_item['item'];
-		if ( $item_object instanceof WP_Post ) {
-			$post = $item_object; // WPCS: Override OK.
-			setup_postdata( $post );
+		$this->current_item        = $this->current_letter_items[ $this->current_item_index ];
+		$this->current_item_index += 1;
+	}
+
+	/**
+	 * Get the item object for the current post
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $force Set this to 'I understand the issues!' to acknowledge that this function will cause slowness on large sites.
+	 *
+	 * @return array|null|WP_Error|WP_Post|WP_Term
+	 */
+	public function get_the_item_object( $force = '' ) {
+		if ( 'I understand the issues!' === $force ) {
+			$item = explode( ':', $this->current_item['item'], 1 );
+
+			if ( isset( $item[1] ) ) {
+				if ( 'terms' === $this->type ) {
+					return get_term( $item[1] );
+				}
+
+				global $post;
+				$post = get_post( $item[1] );
+				setup_postdata( $post );
+
+				return $post;
+			}
 		}
 
-		$this->current_item_index += 1;
+		return null;
 	}
 
 	/**
@@ -737,10 +812,12 @@ class A_Z_Listing {
 	 * @return int The number of letters
 	 */
 	public function num_letters() {
-		return count( $this->available_indices );
+		return count( $this->alphabet_chars );
 	}
 
 	/**
+	 * Return the number of posts within the current letter
+	 *
 	 * @since 0.7
 	 * @see A_Z_Listing::get_the_letter_count()
 	 * @deprecated use A_Z_Listing::get_the_letter_count()
@@ -751,6 +828,8 @@ class A_Z_Listing {
 	}
 
 	/**
+	 * Return the number of posts within the current letter
+	 *
 	 * @since 0.7
 	 * @see A_Z_Listing::get_the_letter_count()
 	 * @deprecated use A_Z_Listing::get_the_letter_count()
@@ -795,13 +874,14 @@ class A_Z_Listing {
 	 * @return string The letter ID
 	 */
 	public function get_the_letter_id() {
-		return 'letter-' . self::$alphabet[ $this->available_indices[ $this->current_letter_index - 1 ] ];
+		return 'letter-' . $this->alphabet[ $this->alphabet_chars[ $this->current_letter_index - 1 ] ];
 	}
 
 	/**
 	 * Print the escaped title of the current letter. For example, upper-case A or B or C etc.
 	 *
 	 * @since 0.7
+	 * @param string $index The index for which to print the title.
 	 */
 	public function the_letter_title( $index = '' ) {
 		echo esc_html( $this->get_the_letter_title( $index ) );
@@ -812,27 +892,32 @@ class A_Z_Listing {
 	 *
 	 * @since 0.7
 	 * @since 1.8.0 Add filters to modify the title of the letter.
+	 * @param string $index The index for which to return the title.
 	 * @return string The letter title
 	 */
 	public function get_the_letter_title( $index = '' ) {
 		if ( '' !== $index ) {
-			$letter = self::$alphabet[ $index ];
+			if ( isset( $this->alphabet[ $index ] ) ) {
+				$letter = $this->alphabet[ $index ];
+			} else {
+				$letter = $index;
+			}
 		} else {
-			$letter = self::$alphabet[ $this->available_indices[ $this->current_letter_index - 1 ] ];
+			$letter = $this->alphabet[ $this->alphabet_chars[ $this->current_letter_index - 1 ] ];
 		}
 
 		/**
 		 * Modify the letter title or heading
 		 *
 		 * @since 1.8.0
-		 * @param string $letter The title of the letter
+		 * @param string $letter The title of the letter.
 		 */
 		$letter = apply_filters( 'the_a_z_letter_title', $letter );
 		/**
 		 * Modify the letter title or heading
 		 *
 		 * @since 1.8.0
-		 * @param string $letter The title of the letter
+		 * @param string $letter The title of the letter.
 		 */
 		$letter = apply_filters( 'the-a-z-letter-title', $letter );
 
@@ -845,7 +930,8 @@ class A_Z_Listing {
 	 * @since 1.0.0
 	 */
 	public function the_title() {
-		echo esc_html( $this->get_the_title() );
+		// to match core we do NOT escape the output!
+		echo $this->get_the_title(); // wpcs: XSS OK.
 	}
 
 	/**
@@ -881,51 +967,18 @@ class A_Z_Listing {
 	 * @return string The permalink
 	 */
 	public function get_the_permalink() {
-		$item = $this->current_item['item'];
-		if ( $item instanceof WP_Term ) {
-			return get_term_link( $this->current_item['item'] );
-		}
-		return get_permalink( $item );
+		return $this->current_item['link'];
 	}
 }
 
 /**
  * Get a saved copy of the A_Z_Listing instance if we have one, or make a new one and save it for later
  *
- * @param  array|string|WP_Query|A_Z_Listing  $query      a valid WordPress query or an A_Z_Listing instance
- * @param  bool                               $use_cache  use the plugin's in-built query cache
- * @return A_Z_Listing                                    a new or previously-saved instance of A_Z_Listing using the provided construct_query
+ * @param array|string|WP_Query|A_Z_Listing $query     A valid WordPress query or an A_Z_Listing instance.
+ * @param string                            $type      The type of items displayed in the listing: 'terms' or 'posts'.
+ * @param bool                              $use_cache Try to use a caching plugin. See https://a-z-listing.com/ for the caching plugin we created to work with this feature.
+ * @return A_Z_Listing                                 A new or previously-saved instance of A_Z_Listing using the provided construct_query
  */
-function a_z_listing_cache( $query = null, $use_cache = true ) {
-	static $cache = array();
-
-	if ( $query instanceof A_Z_Listing ) {
-		// we received a valid A_Z_Listing instance so we get the query from it for the cache lookup/save key.
-		if ( true === $use_cache ) {
-			$key = wp_json_encode( $query->get_the_query() );
-			if ( array_key_exists( $key, $cache ) ) {
-				return $cache[ $key ];
-			}
-
-			$cache[ $key ] = $query;
-		}
-		return $query;
-	}
-
-	// check the cache and return any pre-existing A_Z_Listing instance we have.
-	$key = wp_json_encode( $query );
-	if ( null !== $query && true === $use_cache && array_key_exists( $key, $cache ) ) {
-		return $cache[ $key ];
-	}
-
-	// if $query is $obj then we did not get an A_Z_Listing instance as our argument, so we will make a new one.
-	$obj = new A_Z_Listing( $query );
-
-	if ( true === $use_cache ) {
-		// save the new A_Z_Listing instance into the cache.
-		$cache[ $key ] = $obj;
-	}
-
-	// return the new A_Z_Listing instance.
-	return $obj;
+function a_z_listing_cache( $query = null, $type = '', $use_cache = true ) {
+	return new A_Z_Listing( $query, $type, $use_cache );
 }

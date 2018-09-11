@@ -1,15 +1,18 @@
 @import "mixins.scss";
 
-.az-letters {
-	@include clearfix();
-	display: flex;
-	justify-content: center;
+.az-letters,
+.a-z-listing-widget .az-letters,
+.a-z-listing-widget.widget .az-letters {
 	ul.az-links {
 		padding: 0;
 		margin: 0;
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
 		li {
 			list-style: none;
-			float: left;
 			width: 2em;
 			height: 2em;
 			box-sizing: border-box;
@@ -31,36 +34,28 @@
 }
 
 .letter-section {
-	@include clearfix();
 	margin-bottom: 2em;
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: start;
-	@supports (display: grid) {
-		display: grid;
-		grid-gap: 0 0.6em;
-		&:after {
-			display: none;
-		}
-	}
 	h2.letter-title {
 		border-bottom: 1px solid black;
 		margin-bottom: 0.2em;
 		padding-bottom: 0.2em;
 		width: 100%;
-		@supports (display: grid) {
-			grid-column: 1 / end;
-		}
 	}
 	ul, ul li {
 		list-style: none;
 		margin: 0;
 	}
-	div.column {
+	ul.columns {
+		width: 100%;
 		box-sizing: border-box;
-		&:nth-last-child(1) {
-			flex-grow: 1;
+		column-gap: 0.6em;
+		column-width: 10em;
+		line-height: 1.6em;
+		@for $column from 2 to 16 {
+			&.max-#{$column}-columns {
+				column-count: $column;
+				max-width: ($column * 10em) + (($column - 1) * 0.6em);
+			}
 		}
 	}
 	div.back-to-top {
@@ -75,9 +70,6 @@
 				content: "\f343";
 				padding: 0.2em;
 			}
-		}
-		@supports (display: grid) {
-			grid-column: 1 / end;
 		}
 	}
 }
