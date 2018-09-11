@@ -412,7 +412,6 @@ function get_the_section_a_z_widget( $args, $instance ) {
 		$instance,
 		array(
 			'title'            => '',
-			'post'             => 0,
 			'target'           => -1,
 			'type'             => 'posts',
 			'taxonomy'         => '',
@@ -447,7 +446,7 @@ function get_the_section_a_z_widget( $args, $instance ) {
 	$ret .= do_shortcode(
 		"[a-z-listing
 			return='letters'
-			target='{$instance['post']}'
+			target='{$target}'
 			display='{$instance['type']}'
 			taxonomy='{$instance['taxonomy']}'
 			alphabet=''
@@ -459,7 +458,6 @@ function get_the_section_a_z_widget( $args, $instance ) {
 			exclude-terms='{$instance['exclude_terms']}'
 			parent-term='{$instance['parent_term']}'
 			hide-empty-terms='{$hide_empty}'
-			target='{$target}'
 		]"
 	);
 

@@ -3,6 +3,8 @@
 ### 2.0.0 ###
 
 * Improved widget configuration.
+* New attribute added to the shortcode when `display="posts"`:
+  * `exclude-posts`: remove specific posts from the list
 * New attributes added to the shortcode when `display="terms"`:
   * `exclude-terms`: sets the terms to exclude from display
   * `parent-term`: set the parent that all displayed terms must be organised under

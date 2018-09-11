@@ -104,6 +104,11 @@ To group the alphabet letters into a range:
 * `post-type`: sets the listing to show a specific post-type
   * Default value: `page`
   * You may specify multiple post-types by separating with commas (`,`) e.g. `post-type="page,post"`
+* `exclude-posts`: remove specific posts from the list
+  * Default value: unset
+  * Uses the `ID` of the post(s)
+  * Multiple posts may be specified by separating by commas: `,`
+  * Only affects `display="posts"`
 * `taxonomy`: does nothing by itself, see the combinations below
   * Default value: unset
   * Uses the `slug` of the taxonomy
@@ -114,12 +119,12 @@ To group the alphabet letters into a range:
   * Default value: unset
   * The taxonomy must also be specified in `taxonomy`
   * Uses the `slug` of the term(s) when `display="posts"` and the `ID` of the term(s) when `display="terms"`
-  * Multiple terms can be specified by separating with commas: `,`
+  * Multiple terms may be specified by separating with commas: `,`
 * `exclude-terms`: sets the terms to exclude from display
   * Default value: unset
   * The taxonomy must also be specified in `taxonomy`
   * Uses the `ID` of the term(s)
-  * Multiple terms can be specified by separating with commas: `,`
+  * Multiple terms may be specified by separating with commas: `,`
   * Only affects `display="terms"`
 * `parent-term`: set the parent that all displayed terms must be organised under
   * Default value: unset
@@ -127,7 +132,7 @@ To group the alphabet letters into a range:
   * Single value only
   * Only affects `display="terms"`
 * `hide-empty-terms`: hide terms that have no posts associated
-  * Default value: false
+  * Default value: `false`
   * Can be set to `true` or `1` to hide the empty terms
   * Only affects `display="terms"`
 * `display`: specifies whether to display posts or terms from a taxonomy
@@ -406,6 +411,8 @@ If there is code already in your functions.php then add just the lines between `
 = 2.0.0 =
 
 * Improved widget configuration.
+* New attribute added to the shortcode when `display="posts"`:
+  * `exclude-posts`: remove specific posts from the list
 * New attributes added to the shortcode when `display="terms"`:
   * `exclude-terms`: sets the terms to exclude from display
   * `parent-term`: set the parent that all displayed terms must be organised under

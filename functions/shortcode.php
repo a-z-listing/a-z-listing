@@ -133,6 +133,23 @@ function a_z_shortcode_handler( $attributes ) {
 			'post_type' => $post_types,
 		);
 
+		if ( ! empty( $attributes['exclude-posts'] ) ) {
+			$exclude_posts = mb_split( ',', $attributes['exclude-posts'] );
+			$exclude_posts = array_map( 'trim', $exclude_posts );
+			$exclude_posts = array_map( 'intval', $exclude_posts );
+			$exclude_posts = array_filter( $exclude_posts, function( $value ) { return $value > 0; } );
+			$exclude_posts = array_unique( $exclude_posts );
+
+			if ( ! empty( $exclude_posts ) ) {
+				$query = wp_parse_args(
+					$query,
+					array(
+						'post__not_in' => $exclude_posts,
+					)
+				);
+			}
+		}
+
 		if ( ! empty( $attributes['terms'] ) ) {
 			$taxonomy = '' !== $attributes['taxonomy'] ? $attributes['taxonomy'] : 'category';
 			$terms    = mb_split( ',', $attributes['terms'] );
