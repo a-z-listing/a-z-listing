@@ -6,7 +6,7 @@ Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 4.6
 Requires PHP: 5.6
 Tested up to: 4.9
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -409,6 +409,10 @@ If there is code already in your functions.php then add just the lines between `
 2. The Widget is shown here
 
 == Changelog ==
+
+= 2.0.2 =
+
+* Minor style tweak to fix short listings, and long titles
 
 = 2.0.1 =
 

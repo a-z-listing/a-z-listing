@@ -39,13 +39,19 @@
     width: 100%; }
   .letter-section ul, .letter-section ul li {
     list-style: none;
-    margin: 0; }
+    margin: 0;
+    padding: 0; }
   .letter-section ul.columns {
     width: 100%;
     box-sizing: border-box;
     column-gap: 0.6em;
     column-width: 10em;
     line-height: 1.6em; }
+    .letter-section ul.columns li {
+      display: inline-block; }
+    .letter-section ul.columns.max-0-columns, .letter-section ul.columns.max-1-columns {
+      column-count: 1;
+      max-width: 10.6em; }
     .letter-section ul.columns.max-2-columns {
       column-count: 2;
       max-width: 20.6em; }
