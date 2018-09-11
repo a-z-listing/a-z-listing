@@ -258,7 +258,7 @@ class A_Z_Listing_Widget extends WP_Widget {
 				const listing_parent_term              = document.getElementById( '<?php echo esc_html( $listing_parent_term_id ); ?>' );
 				const listing_parent_term_wrapper      = document.getElementById( '<?php echo esc_html( $listing_parent_term_wrapper_id ); ?>' );
 				const listing_hide_empty_terms         = document.getElementById( '<?php echo esc_html( $listing_hide_empty_terms ); ?>' );
-				const listing_hide_empty_terms_wrapper = document.getElementById( '<?php echo esc_html( $listing_hide_empty_terms_wrapper ); ?>' );
+				const listing_hide_empty_terms_wrapper = document.getElementById( '<?php echo esc_html( $listing_hide_empty_terms_wrapper_id ); ?>' );
 
 				function switch_taxonomy_or_posts() {
 					if ( 'terms' === display_type.value ) {
