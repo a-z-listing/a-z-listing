@@ -1,5 +1,21 @@
 # Full Changelog #
 
+### 2.0.4 ###
+
+* Fix styling error causing two or more posts to sometimes appear on the same line
+
+### 2.0.3 ###
+
+* Minor style tweak to fix short listings, and long titles
+
+### 2.0.2 ###
+
+* Fix broken styling in 2.0.0
+
+### 2.0.1 ###
+
+* Fix javascript error on widgets screen
+
 ### 2.0.0 ###
 
 * Improved widget configuration.
