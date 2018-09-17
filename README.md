@@ -414,9 +414,10 @@ If there is code already in your functions.php then add just the lines between `
 
 ## Changelog ##
 
-### 2.0.5 ###
+### 2.0.6 ###
 
-* *Personal Note:* Sorry to everyone who upgraded to 2.0.0 thru to 2.0.4 about yet another update. I have failed you all by shipping faulty versions to you, and I'm sorry, especially so that you've had to endure so many updates the past two days.
+* *Personal Note:* Sorry to everyone who upgraded to 2.0.0 thru to 2.0.5 about yet another update. I have failed you all by shipping faulty versions to you, and I'm sorry, especially so that you've had to endure so many updates the past few days.
+* Fix widget target post support
 * Fix filtering posts by multiple taxonomy terms
 * Fix styling error causing two or more posts to sometimes appear on the same line
 * Minor style tweak to fix short listings, and long titles
