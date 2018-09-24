@@ -40,50 +40,99 @@ class A_Z_Listing_Indices extends A_Z_Listing_Singleton {
 			$permalink = get_the_permalink( $item );
 		}
 
+		/**
+		 * Modify the title for this item before indexing
+		 *
+		 * @since 2.1.0
+		 * @param string          $title The current title
+		 * @param WP_Term|WP_Post $item The item
+		 * @param string          $item_type The type of the item. Either 'posts' or 'terms'.
+		 */
+		$title = apply_filters( 'a-z-listing-pre-index-item-title', $title, $item, $type );
+
+		/**
+		 * Modify the title for this item before indexing
+		 *
+		 * @since 2.1.0
+		 * @param string          $title The current title
+		 * @param WP_Term|WP_Post $item The item
+		 * @param string          $item_type The type of the item. Either 'posts' or 'terms'.
+		 */
+		$title = apply_filters( 'a_z_listing_pre_index_item_title', $title, $item, $type );
+
 		$index = mb_substr( $title, 0, 1, 'UTF-8' );
 
-		$indices[ $index ][] = array(
-			'title' => $title,
-			'item'  => ( 'terms' === $type ) ? "term:{$item_id}" : "post:{$item_id}",
-			'link'  => $permalink,
-		);
+		/**
+		 * Modify the indice(s) to group this item under
+		 *
+		 * @since 2.1.0
+		 * @param array           $indices The current indices
+		 * @param WP_Term|WP_Post $item The item
+		 * @param string          $item_type The type of the item. Either 'posts' or 'terms'.
+		 */
+		$index_letters = apply_filters( 'a-z-listing-item-index-letter', array( $index ), $item, $type );
+
+		/**
+		 * Modify the indice(s) to group this item under
+		 *
+		 * @since 2.1.0
+		 * @param array           $indices The current indices
+		 * @param WP_Term|WP_Post $item The item
+		 * @param string          $item_type The type of the item. Either 'posts' or 'terms'.
+		 */
+		$index_letters = apply_filters( 'a_z_listing_item_index_letter', $index_letters, $item, $type );
+
+		foreach( $index_letters as $letter ) {
+			$indices[ $letter ][] = array(
+				'title' => $title,
+				'item'  => ( 'terms' === $type ) ? "term:{$item_id}" : "post:{$item_id}",
+				'link'  => $permalink,
+			);
+		}
 
 		if ( 'terms' === $type ) {
 			/**
 			 * Modify the indice(s) to group this term under
 			 *
-			 * @deprecated Use a_z_listing_item_indices
-			 * @see a_z_listing_item_indices
+			 * @deprecated Use a_z_listing_item_index_letter and/or a_z_listing_item_title
+		 	 * @see a_z_listing_item_index_letter, a_z_listing_item_title
 			 */
-			$indices = apply_filters_deprecated( 'a_z_listing_term_indices', array( $indices, $item ), '1.0.0', 'a_z_listing_item_indices' );
+			$indices = apply_filters_deprecated( 'a_z_listing_term_indices', array( $indices, $item ), '1.0.0', 'a_z_listing_item_index_letter' );
 		} else {
 			/**
 			 * Modify the indice(s) to group this post under
 			 *
-			 * @deprecated Use a_z_listing_item_indices
-			 * @see a_z_listing_item_indices
+			 * @deprecated Use a_z_listing_item_index_letter and/or a_z_listing_item_title
+		 	 * @see a_z_listing_item_index_letter, a_z_listing_item_title
 			 */
-			$indices = apply_filters_deprecated( 'a_z_listing_post_indices', array( $indices, $item ), '1.5.0', 'a_z_listing_item_indices' );
+			$indices = apply_filters_deprecated( 'a_z_listing_post_indices', array( $indices, $item ), '1.5.0', 'a_z_listing_item_index_letter' );
 		} // End if.
 
 		/**
 		 * Modify the indice(s) to group this item under
 		 *
+		 * @since 1.7.0
+		 * @since 2.1.0 Deprecated
+		 * @deprecated Use a_z_listing_item_index_letter and/or a_z_listing_item_title
+		 * @see a_z_listing_item_index_letter, a_z_listing_item_title
 		 * @param array           $indices The current indices
 		 * @param WP_Term|WP_Post $item The item
 		 * @param string          $item_type The type of the item. Either 'posts' or 'terms'.
 		 */
-		$indices = apply_filters( 'a_z_listing_item_indices', $indices, $item, $type );
+		$indices = apply_filters_deprecated( 'a_z_listing_item_indices', array( $indices, $item, $type ), '2.1.0', 'a_z_listing_item_index_letter' );
 
 		/**
 		 * Modify the indice(s) to group this item under
 		 *
 		 * @since 1.7.1
+		 * @since 2.1.0 Deprecated
+		 * @deprecated Use a_z_listing_item_index_letter and/or a_z_listing_item_title
+		 * @see a_z_listing_item_index_letter, a_z_listing_item_title
 		 * @param array           $indices The current indices
 		 * @param WP_Term|WP_Post $item The item
 		 * @param string          $item_type The type of the item. Either 'posts' or 'terms'.
 		 */
-		$indices = apply_filters( 'a-z-listing-item-indices', $indices, $item, $type );
+		$indices = apply_filters_deprecated( 'a-z-listing-item-indices', array( $indices, $item, $type ), '2.1.0', 'a_z_listing_item_index_letter' );
 
 		if ( AZLISTINGLOG > 2 ) {
 			do_action( 'log', 'Item indices', $indices );

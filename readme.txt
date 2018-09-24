@@ -6,7 +6,7 @@ Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 4.6
 Requires PHP: 5.6
 Tested up to: 4.9
-Stable tag: 2.0.5
+Stable tag: 2.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -410,15 +410,14 @@ If there is code already in your functions.php then add just the lines between `
 
 == Changelog ==
 
-= 2.0.6 =
+= 2.1.0 =
 
-* *Personal Note:* Sorry to everyone who upgraded to 2.0.0 thru to 2.0.5 about yet another update. I have failed you all by shipping faulty versions to you, and I'm sorry, especially so that you've had to endure so many updates the past few days.
-* Fix widget target post support
-* Fix filtering posts by multiple taxonomy terms
-* Fix styling error causing two or more posts to sometimes appear on the same line
-* Minor style tweak to fix short listings, and long titles
-* Fix broken styling in 2.0.0
-* Fix javascript error on widgets screen
+* Add parent-page attribute to the shortcode
+* Add simpler and safer filter for overriding the index letter for an item
+* Add simpler and safer filter for overriding the title for an item
+* Allow exclude-terms to be used with display="posts"
+* Fix `get_the_item_object()` to work with old-style overridden indices
+* Fix `get_the_item_object()` to correctly extract the item ID and load the correct item
 
 *2.0.0 also introduced the following changes:*
 
@@ -429,7 +428,6 @@ If there is code already in your functions.php then add just the lines between `
   * `exclude-terms`: sets the terms to exclude from display
   * `parent-term`: set the parent that all displayed terms must be organised under
   * `hide-empty-terms`: hide terms that have no posts associated
-* Fix the stylesheet to better cope with variances in font-size and text length in the alphabet links list and widget.
 * Introduce PHP classes for adding numbers and grouping to the alphabet. Allows unhooking from the filters to undo the changes, where previously you could not unhook these modifications once they'd been applied.
 * **BREAKING CHANGES:**
   * Multi column example:
@@ -442,6 +440,16 @@ If there is code already in your functions.php then add just the lines between `
     To load the post object you need to call `$a_z_query->get_the_item_object( 'I understand the issues!' );`.
     **The argument must read exactly as written here to confirm that you understand that this might cause slowness or memory usage problems.**
     *This step is purposely omitted to save memory and try to improve performance.*
+
+= 2.0.6 =
+
+* *Personal Note:* Sorry to everyone who upgraded to 2.0.0 thru to 2.0.4 about yet another update. I have failed you all by shipping faulty versions to you, and I'm sorry, especially so that you've had to endure so many updates the past two days.
+* Fix widget target post support
+* Fix filtering posts by multiple taxonomy terms
+* Fix styling error causing two or more posts to sometimes appear on the same line
+* Minor style tweak to fix short listings, and long titles
+* Fix broken styling in 2.0.0
+* Fix javascript error on widgets screen
 
 = 2.0.0 =
 
@@ -465,32 +473,6 @@ If there is code already in your functions.php then add just the lines between `
     To load the post object you need to call `$a_z_query->get_the_item_object( 'I understand the issues!' );`.
     **The argument must read exactly as written here to confirm that you understand that this might cause slowness or memory usage problems.**
     *This step is purposely omitted to save memory and try to improve performance.*
-
-= 1.9.2 =
-
-Bugfix:
-
-* Fix using multiple terms in the shortcode only displays results for the first term
-= 1.9.1 =
-
-Feature Request:
-Add CSS classes to letters indicating presence of posts or not:
-
-* `has-posts` allows styling of letters that have posts visible in the listing
-* `no-posts` allows styling of letters that do not have any posts visible in the listing
-
-You can use these classes to hide letters that have no posts by including the following CSS rule:
-`.az-letters ul.az-links li.no-posts {
-    display: none;
-}`
-
-= 1.9.0 =
-
-* Fix multi-column example template
-* Update multi-column styles to include display:grid support
-* Add back-to-top link
-* Add server system requirements to readme
-* Add PHP section to readme including link to API Reference
 
 = Previous =
 

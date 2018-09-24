@@ -23,18 +23,20 @@ function a_z_shortcode_handler( $attributes ) {
 		array(
 			'alphabet'         => '',
 			'display'          => 'posts',
-			'group-numbers'    => false,
-			'grouping'         => '',
-			'numbers'          => 'hide',
-			'post-type'        => 'page',
 			'exclude-posts'    => '',
-			'taxonomy'         => '',
-			'terms'            => '',
 			'exclude-terms'    => '',
-			'hide-empty-terms' => false,
+			'get-all-children' => 'false',
+			'group-numbers'    => 'false',
+			'grouping'         => '',
+			'hide-empty-terms' => 'false',
+			'numbers'          => 'hide',
+			'parent-post'      => '',
 			'parent-term'      => '',
+			'post-type'        => 'page',
 			'return'           => 'listing',
 			'target'           => '',
+			'taxonomy'         => '',
+			'terms'            => '',
 		),
 		$attributes,
 		'a-z-listing'
@@ -51,7 +53,7 @@ function a_z_shortcode_handler( $attributes ) {
 	}
 
 	$grouping      = $attributes['grouping'];
-	$group_numbers = false;
+	$group_numbers = a_z_listing_is_truthy( $attributes['group-numbers'] );
 	if ( 'numbers' === $grouping ) {
 		$group_numbers = true;
 		$grouping      = 0;
@@ -60,10 +62,6 @@ function a_z_shortcode_handler( $attributes ) {
 		if ( 1 < $grouping ) {
 			$group_numbers = true;
 		}
-	}
-
-	if ( true === $attributes['group-numbers'] ) {
-		$group_numbers = true;
 	}
 
 	$grouping_obj = new A_Z_Listing_Grouping( $grouping );
@@ -119,10 +117,7 @@ function a_z_shortcode_handler( $attributes ) {
 		}
 
 		if ( ! empty( $attributes['hide-empty-terms'] ) ) {
-			$hide_empty = false;
-			if ( 'true' === $attributes['hide-empty-terms'] || '1' === $attributes['hide-empty-terms'] ) {
-				$hide_empty = true;
-			}
+			$hide_empty = a_z_listing_is_truthy( $attributes['hide-empty-terms'] );
 			$query = wp_parse_args(
 				$query,
 				array(
@@ -150,39 +145,60 @@ function a_z_shortcode_handler( $attributes ) {
 			$exclude_posts = array_unique( $exclude_posts );
 
 			if ( ! empty( $exclude_posts ) ) {
-				$query = wp_parse_args(
-					$query,
-					array(
-						'post__not_in' => $exclude_posts,
-					)
-				);
+				$query = wp_parse_args( $query, array( 'post__not_in' => $exclude_posts ) );
 			}
 		}
 
+		if ( ! empty( $attributes['parent-post'] ) ) {
+			if ( a_z_listing_is_truthy( $attributes['get-all-children'] ) ) {
+				$child_query = array( 'child_of' => $attributes['parent-post'] );
+			} else {
+				$child_query = array( 'post_parent' => $attributes['parent-post'] );
+			}
+			$query = wp_parse_args( $query, $child_query );
+		}
+
+		$taxonomy = '' !== $attributes['taxonomy'] ? $attributes['taxonomy'] : 'category';
+		$tax_query = array();
 		if ( ! empty( $attributes['terms'] ) ) {
-			$taxonomy = '' !== $attributes['taxonomy'] ? $attributes['taxonomy'] : 'category';
-			$terms    = mb_split( ',', $attributes['terms'] );
-			$terms    = array_map( 'trim', $terms );
-			$terms    = array_filter(
+			$terms = mb_split( ',', $attributes['terms'] );
+			$terms = array_map( 'trim', $terms );
+			$terms = array_filter(
 				$terms,
 				function( $value ) {
 					return ! empty( $value );
 				}
 			);
-			$terms    = array_unique( $terms );
+			$terms = array_unique( $terms );
 
-			$query = wp_parse_args(
-				$query,
-				array(
-					'tax_query' => array(
-						array(
-							'taxonomy' => $taxonomy,
-							'field'    => 'slug',
-							'terms'    => $terms,
-						),
-					),
-				)
+			$tax_query[] = array(
+				'taxonomy' => $taxonomy,
+				'field'    => 'slug',
+				'terms'    => $terms,
+				'operator' => 'IN',
 			);
+		}
+		if ! empty( $attributes['exclude-terms'] ) ) {
+			$ex_terms = mb_split( ',', $attributes['exclude-termsterms'] );
+			$ex_terms = array_map( 'trim', $terms );
+			$ex_terms = array_filter(
+				$ex_terms,
+				function( $value ) {
+					return ! empty( $value );
+				}
+			);
+			$ex_terms = array_unique( $ex_terms );
+
+			$tax_query[] = array(
+				'taxonomy' => $taxonomy,
+				'field'    => 'slug',
+				'terms'    => $ex_terms,
+				'operator' => 'NOT IN',
+			);
+		}
+
+		if ( ! empty( $tax_query ) ) {
+			$query['tax_query'] = wp_parse_args( $query['tax_query'], $tax_query );
 		}
 
 		$a_z_query = new A_Z_Listing( $query, 'posts' );

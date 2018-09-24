@@ -2,7 +2,7 @@
 
 ### 2.0.6 ###
 
-* *Personal Note:* Sorry to everyone who upgraded to 2.0.0 thru to 2.0.4 about yet another update. I have failed you all by shipping faulty versions to you, and I'm sorry, especially so that you've had to endure so many updates the past few days.
+* *Personal Note:* Sorry to everyone who upgraded to 2.0.0 thru to 2.0.5 about yet another update. I have failed you all by shipping faulty versions to you, and I'm sorry, especially so that you've had to endure so many updates the past few days.
 * Fix widget target post support
 
 ### 2.0.5 ###

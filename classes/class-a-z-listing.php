@@ -199,14 +199,18 @@ class A_Z_Listing {
 			 */
 			$query = apply_filters( 'a-z-listing-query', $query );
 
+			if ( ! isset( $query['post_type'] ) ) {
+				$query['post_type'] = 'page';
+			}
+
 			if ( ! $query instanceof WP_Query ) {
 				$query = (array) $query;
 
-				if ( ( ! isset( $query['post_type'] ) || 'page' === $query['post_type'] ) &&
-				isset( $post ) && 'page' === $post->post_type &&
-				! ( isset( $query['child_of'] ) || isset( $query['parent'] ) ) ) {
-					$section       = self::get_section();
-					$q['child_of'] = $section->ID;
+				if ( ! isset( $query['post_parent'] ) && ! isset( $query['child_of'] ) ) {
+					if ( 'page' === $query['post_type'] && isset( $post ) && 'page' === $post->post_type ) {
+						$section       = self::get_section();
+						$query['child_of'] = $section->ID;
+					}
 				}
 
 				$query = wp_parse_args(
@@ -224,18 +228,20 @@ class A_Z_Listing {
 			}
 
 			if ( $query instanceof WP_Query ) {
-				$post_type = $query->post_type;
+				$post_type   = $query->post_type;
+				$items       = $query->posts;
+				$this->query = $query;	
 			} else {
 				$post_type = $query['post_type'];
-			}
-
-			if ( 'page' === $post_type ) {
-				$items       = get_pages( $query );
-				$this->query = $query;
-			} else {
-				$wq          = new WP_Query( $query );
-				$items       = $wq->posts;
-				$this->query = $wq;
+			
+				if ( $query['child_of'] ) {
+					$items       = get_pages( $query );
+					$this->query = $query;
+				} else {
+					$wq          = new WP_Query( $query );
+					$items       = $wq->posts;
+					$this->query = $wq;
+				}
 			}
 
 			if ( AZLISTINGLOG ) {
@@ -786,20 +792,36 @@ class A_Z_Listing {
 	 * @return array|null|WP_Error|WP_Post|WP_Term
 	 */
 	public function get_the_item_object( $force = '' ) {
+		global $post;
 		if ( 'I understand the issues!' === $force ) {
-			$item = explode( ':', $this->current_item['item'], 1 );
+			$item_id = 0;
+			if ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
+				return $this->current_item['item'];
+			}
 
-			if ( isset( $item[1] ) ) {
+			if ( is_a( $this->current_item['item'], 'WP_Post' ) ) {
+				$post = $this->current_item['item'];
+				setup_postdata( $post );
+				return $post;
+			}
+
+			if ( is_numeric( $this->current_item['item'] ) {
+				$item_id = $this->current_item['item'];
+			} else {
+				$item = explode( ':', $this->current_item['item'], 2 );
+				$item_id = $item[1];
+			}
+
+			if ( 0 < $item_id ) {
 				if ( 'terms' === $this->type ) {
 					return get_term( $item[1] );
 				}
 
-				global $post;
 				$post = get_post( $item[1] );
-				setup_postdata( $post );
-
-				return $post;
 			}
+
+			setup_postdata( $post );
+			return $post;
 		}
 
 		return null;

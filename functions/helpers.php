@@ -325,3 +325,23 @@ function get_the_az_letters( $query = null, $target = false, $styling = false ) 
 function get_the_a_z_letters( $query = null, $target = false, $styling = false, $use_cache = true ) {
 	return a_z_listing_cache( $query, '', $use_cache )->get_the_letters( $target, $styling );
 }
+
+/**
+ * Check value for truthiness
+ * 
+ * @since 2.1.0
+ * @param string|int|bool $value The value to check for thruthiness
+ * @return bool The truthiness of the value
+ */
+function a_z_listing_is_truthy( $value ) {
+	switch ( $value ) {
+		case 'yes':
+		case 'true':
+		case '1':
+		case true:
+		case 1:
+			return true;
+		default:
+			return false;
+	}
+}
