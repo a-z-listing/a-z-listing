@@ -30,6 +30,8 @@ class A_Z_Listing_Widget extends WP_Widget {
 			)
 		);
 
+		add_action( 'admin_enqueue_scripts', 'a_z_listing_enqueue_widget_admin_script' );
+
 		if ( is_active_widget( false, false, $this->id_base, true ) ) {
 			a_z_listing_do_enqueue();
 		}
@@ -77,7 +79,6 @@ class A_Z_Listing_Widget extends WP_Widget {
 		$listing_post_type            = isset( $instance['post_type'] ) ? $instance['post_type'] : 'page';
 		$listing_post_type_id         = $this->get_field_id( 'post_type' );
 		$listing_post_type_name       = $this->get_field_name( 'post_type' );
-		$listing_post_type_wrapper_id = $this->get_field_id( 'post_type_wrapper' );
 
 		$listing_parent_post            = isset( $instance['parent_post'] ) ? $instance['parent_post'] : '';
 		$listing_parent_post_id         = $this->get_field_id( 'parent_post' );
@@ -85,7 +86,6 @@ class A_Z_Listing_Widget extends WP_Widget {
 		$listing_parent_post_title      = ( 0 < $listing_parent_post ) ? get_the_title( $listing_parent_post ) : '';
 		$listing_parent_post_title_id   = $this->get_field_id( 'parent_post_title' );
 		$listing_parent_post_title_name = $this->get_field_name( 'parent_post_title' );
-		$listing_parent_post_wrapper_id = $this->get_field_id( 'parent_post_wrapper' );
 
 		$listing_all_children      = isset( $instance['all_children'] ) ? $instance['all_children'] : 'true';
 		$listing_all_children_id   = $this->get_field_id( 'all_children' );
@@ -94,12 +94,10 @@ class A_Z_Listing_Widget extends WP_Widget {
 		$listing_taxonomy            = isset( $instance['taxonomy'] ) ? $instance['taxonomy'] : 'page';
 		$listing_taxonomy_id         = $this->get_field_id( 'taxonomy' );
 		$listing_taxonomy_name       = $this->get_field_name( 'taxonomy' );
-		$listing_taxonomy_wrapper_id = $this->get_field_id( 'taxonomy_wrapper' );
 
 		$listing_parent_term            = isset( $instance['parent_term'] ) ? $instance['parent_term'] : '';
 		$listing_parent_term_id         = $this->get_field_id( 'parent_term' );
 		$listing_parent_term_name       = $this->get_field_name( 'parent_term' );
-		$listing_parent_term_wrapper_id = $this->get_field_id( 'parent_term_wrapper' );
 
 		$listing_terms_include      = isset( $instance['terms'] ) ? $instance['terms'] : '';
 		$listing_terms_include_id   = $this->get_field_id( 'terms' );
@@ -108,288 +106,185 @@ class A_Z_Listing_Widget extends WP_Widget {
 		$listing_terms_exclude            = isset( $instance['terms_exclude'] ) ? $instance['terms_exclude'] : '';
 		$listing_terms_exclude_id         = $this->get_field_id( 'terms_exclude' );
 		$listing_terms_exclude_name       = $this->get_field_name( 'terms_exclude' );
-		$listing_terms_exclude_wrapper_id = $this->get_field_id( 'terms_exclude_wrapper' );
 
 		$listing_hide_empty_terms            = isset( $instance['hide_empty_terms'] ) ? $instance['hide_empty_terms'] : '';
 		$listing_hide_empty_terms_id         = $this->get_field_id( 'hide_empty_terms' );
 		$listing_hide_empty_terms_name       = $this->get_field_name( 'hide_empty_terms' );
-		$listing_hide_empty_terms_wrapper_id = $this->get_field_id( 'hide_empty_terms_wrapper' );
 		?>
 
-		<div>
-			<p>
-				<label for="<?php echo esc_attr( $widget_title_id ); ?>">
-					<?php esc_html_e( 'Widget Title', 'a-z-listing' ); ?>
-				</label>
-				<input class="widefat" type="text"
-					id="<?php echo esc_attr( $widget_title_id ); ?>"
-					name="<?php echo esc_attr( $widget_title_name ); ?>"
-					placeholder="<?php esc_attr_e( 'Widget Title', 'a-z-listing' ); ?>"
-					value="<?php echo esc_attr( $widget_title ); ?>" />
-			</p>
-			<p style="color: #333;">
-				<?php esc_html_e( 'Leave the title field blank, above, to use the title from the page set in the next field', 'a-z-listing' ); ?>
-			</p>
-		</div>
+		<div class="a-z-listing-widget">
+			<div class="a-z-listing-widget-title-wrapper">
+				<p>
+					<label for="<?php echo esc_attr( $widget_title_id ); ?>">
+						<?php esc_html_e( 'Widget Title', 'a-z-listing' ); ?>
+					</label>
+					<input type="text" class="widefat a-z-listing-title"
+						id="<?php echo esc_attr( $widget_title_id ); ?>"
+						name="<?php echo esc_attr( $widget_title_name ); ?>"
+						placeholder="<?php esc_attr_e( 'Widget Title', 'a-z-listing' ); ?>"
+						value="<?php echo esc_attr( $widget_title ); ?>" />
+				</p>
+				<p style="color: #333;">
+					<?php esc_html_e( 'Leave the title field blank, above, to use the title from the page set in the next field', 'a-z-listing' ); ?>
+				</p>
+			</div>
 
-		<div>
-			<p>
-				<label for="<?php echo esc_attr( $target_post_id ); ?>">
-					<?php esc_html_e( 'Site map A-Z page', 'a-z-listing' ); ?>
-				</label>
-				<input class="widefat" type="text"
-					id="<?php echo esc_attr( $target_post_title_id ); ?>"
-					name="<?php echo esc_attr( $target_post_title_name ); ?>"
-					value="<?php echo esc_attr( $target_post_title ); ?>" />
-				<input type="hidden"
-					id="<?php echo esc_attr( $target_post_id ); ?>"
-					name="<?php echo esc_attr( $target_post_name ); ?>"
-					value="<?php echo esc_attr( $target_post ); ?>" />
-			</p>
-		</div>
+			<div class="a-z-listing-target-post-wrapper">
+				<p>
+					<label for="<?php echo esc_attr( $target_post_id ); ?>">
+						<?php esc_html_e( 'Site map A-Z page', 'a-z-listing' ); ?>
+					</label>
+					<input type="text" class="widefat a-z-listing-target-post-title"
+						id="<?php echo esc_attr( $target_post_title_id ); ?>"
+						name="<?php echo esc_attr( $target_post_title_name ); ?>"
+						value="<?php echo esc_attr( $target_post_title ); ?>" />
+					<input type="hidden"
+						id="<?php echo esc_attr( $target_post_id ); ?>"
+						name="<?php echo esc_attr( $target_post_name ); ?>"
+						value="<?php echo esc_attr( $target_post ); ?>" />
+				</p>
+				<p>
+					<?php esc_html_e( 'Type some or all of the title of the page you want links to point at.' ); ?>
+					<?php esc_html_e( 'Matching posts will be shown as you type. Click on the correct post from the matches to update the setting.' ); ?>
+				</p>
+			</div>
 
-		<div>
-			<p>
-				<label for="<?php echo esc_attr( $display_type_id ); ?>">
-					<?php esc_html_e( 'Display posts or terms?', 'a-z-listing' ); ?>
-				</label>
-				<select class="widefat"
-					id="<?php echo esc_attr( $display_type_id ); ?>"
-					name="<?php echo esc_attr( $display_type_name ); ?>">
-					<option value="posts"
-						<?php echo ( 'terms' !== $display_type ) ? 'selected' : ''; ?>>
-						<?php esc_html_e( 'Posts', 'a-z-listing' ); ?>
-					</option>
-					<option value="terms"
-						<?php echo ( 'terms' === $display_type ) ? 'selected' : ''; ?>>
-						<?php esc_html_e( 'Taxonomy terms', 'a-z-listing' ); ?>
-					</option>
-				</select>
-			</p>
-		</div>
-
-		<div <?php echo ( 'terms' !== $display_type ) ? '' : 'style="display: none;"'; ?>
-			id="<?php echo esc_attr( $listing_post_type_wrapper_id ); ?>">
-			<p>
-				<label for="<?php echo esc_attr( $listing_post_type_id ); ?>">
-					<?php esc_html_e( 'Post-type to display', 'a-z-listing' ); ?>
-				</label>
-				<select class="widefat"
-					id="<?php echo esc_attr( $listing_post_type_id ); ?>"
-					name="<?php echo esc_attr( $listing_post_type_name ); ?>"
-					<?php echo ( 'terms' !== $display_type ) ? '' : 'disabled'; ?>>
-					<?php foreach ( $public_post_types as $k => $t ) : ?>
-						<option value="<?php echo esc_attr( $k ); ?>"
-							<?php echo ( $k === $listing_post_type ) ? 'selected' : ''; ?>>
-							<?php echo esc_html( $t->labels->name ); ?>
+			<div class="a-z-listing-display-type-wrapper">
+				<p>
+					<label for="<?php echo esc_attr( $display_type_id ); ?>">
+						<?php esc_html_e( 'Display posts or terms?', 'a-z-listing' ); ?>
+					</label>
+					<select class="widefat a-z-listing-display-type"
+						id="<?php echo esc_attr( $display_type_id ); ?>"
+						name="<?php echo esc_attr( $display_type_name ); ?>">
+						<option value="posts"
+							<?php echo ( 'terms' !== $display_type ) ? 'selected' : ''; ?>>
+							<?php esc_html_e( 'Posts', 'a-z-listing' ); ?>
 						</option>
-					<?php endforeach; ?>
-				</select>
-			</p>
-		</div>
-
-		<div <?php echo ( 'terms' !== $display_type ) ? '' : 'style="display: none"'; ?>
-			id="<?php echo esc_attr( $listing_parent_post_wrapper_id ); ?>">
-			<p>
-				<label for="<?php echo esc_attr( $listing_parent_post_id ); ?>">
-					<?php esc_html_e( 'Show only children of this post (ID)', 'a-z-listing' ); ?>
-				</label>
-				<input class="widefat" type="text"
-					id="<?php echo esc_attr( $listing_parent_post_title_id ); ?>"
-					name="<?php echo esc_attr( $listing_parent_post_title_name ); ?>"
-					<?php echo ( 'terms' !== $display_type ) ? '' : 'disabled'; ?>
-					value="<?php echo esc_attr( $listing_parent_post_title ); ?>" />
-				<input type="hidden"
-					id="<?php echo esc_attr( $listing_parent_post_id ); ?>"
-					name="<?php echo esc_attr( $listing_parent_post_name ); ?>"
-					value="<?php echo esc_attr( $listing_parent_post ); ?>" />
-			</p>
-			<p>
-				<label for="<?php echo esc_attr( $listing_all_children_id ); ?>">
-					<?php esc_html_e( 'Include grand-children?', 'a-z-listing' ); ?>
-				</label>
-				<input type="checkbox"
-					id="<?php echo esc_attr( $listing_all_children_id ); ?>"
-					name="<?php echo esc_attr( $listing_all_children_name ); ?>"
-					<?php echo ( isset( $listing_all_children ) && 'true' === $listing_all_children ) ? 'checked' : ''; ?> />
-			</p>
-		</div>
-
-		<div <?php echo ( 'terms' === $display_type ) ? '' : 'style="display: none;"'; ?>
-			id="<?php echo esc_attr( $listing_taxonomy_wrapper_id ); ?>">
-			<p>
-				<label for="<?php echo esc_attr( $listing_taxonomy_id ); ?>">
-					<?php esc_html_e( 'Taxonomy to display', 'a-z-listing' ); ?>
-				</label>
-				<select class="widefat"
-					id="<?php echo esc_attr( $listing_taxonomy_id ); ?>"
-					name="<?php echo esc_attr( $listing_taxonomy_name ); ?>"
-					<?php echo ( 'terms' === $display_type ) ? '' : 'disabled'; ?>>
-					<?php foreach ( $public_taxonomies as $k => $t ) : ?>
-						<option value="<?php echo esc_attr( $k ); ?>"
-							<?php echo ( $k === $listing_taxonomy ) ? 'selected' : ''; ?>>
-							<?php echo esc_html( $t->labels->name ); ?>
+						<option value="terms"
+							<?php echo ( 'terms' === $display_type ) ? 'selected' : ''; ?>>
+							<?php esc_html_e( 'Taxonomy terms', 'a-z-listing' ); ?>
 						</option>
-					<?php endforeach; ?>
-				</select>
-			</p>
+					</select>
+				</p>
+			</div>
+
+			<div class="a-z-listing-post-type-wrapper" <?php echo ( 'terms' !== $display_type ) ? '' : 'style="display: none;"'; ?>>
+				<p>
+					<label for="<?php echo esc_attr( $listing_post_type_id ); ?>">
+						<?php esc_html_e( 'Post-type to display', 'a-z-listing' ); ?>
+					</label>
+					<select class="widefat a-z-listing-post-type"
+						id="<?php echo esc_attr( $listing_post_type_id ); ?>"
+						name="<?php echo esc_attr( $listing_post_type_name ); ?>"
+						<?php echo ( 'terms' !== $display_type ) ? '' : 'disabled'; ?>>
+						<?php foreach ( $public_post_types as $k => $t ) : ?>
+							<option value="<?php echo esc_attr( $k ); ?>"
+								<?php echo ( $k === $listing_post_type ) ? 'selected' : ''; ?>>
+								<?php echo esc_html( $t->labels->name ); ?>
+							</option>
+						<?php endforeach; ?>
+					</select>
+				</p>
+			</div>
+
+			<div class="a-z-listing-parent-post-wrapper" <?php echo ( 'terms' !== $display_type ) ? '' : 'style="display: none"'; ?>>
+				<p>
+					<label for="<?php echo esc_attr( $listing_parent_post_id ); ?>">
+						<?php esc_html_e( 'Show only children of this post (ID)', 'a-z-listing' ); ?>
+					</label>
+					<input type="text" class="widefat a-z-listing-parent-post-title"
+						id="<?php echo esc_attr( $listing_parent_post_title_id ); ?>"
+						name="<?php echo esc_attr( $listing_parent_post_title_name ); ?>"
+						<?php echo ( 'terms' !== $display_type ) ? '' : 'disabled'; ?>
+						value="<?php echo esc_attr( $listing_parent_post_title ); ?>" />
+					<input type="hidden"
+						id="<?php echo esc_attr( $listing_parent_post_id ); ?>"
+						name="<?php echo esc_attr( $listing_parent_post_name ); ?>"
+						value="<?php echo esc_attr( $listing_parent_post ); ?>" />
+				</p>
+				<p>
+					<?php esc_html_e( 'Type some or all of the title of the post to limit the listing to only the children of that post.' ); ?>
+					<?php esc_html_e( 'Matching posts will be shown as you type. Click on the correct post from the matches to update the setting.' ); ?>
+				</p>
+				<p>
+					<label for="<?php echo esc_attr( $listing_all_children_id ); ?>">
+						<?php esc_html_e( 'Include grand-children?', 'a-z-listing' ); ?>
+					</label>
+					<input type="checkbox" class="a-z-listing-all-children"
+						id="<?php echo esc_attr( $listing_all_children_id ); ?>"
+						name="<?php echo esc_attr( $listing_all_children_name ); ?>"
+						<?php echo ( isset( $listing_all_children ) && 'true' === $listing_all_children ) ? 'checked' : ''; ?> />
+				</p>
+			</div>
+
+			<div class="a-z-listing-taxonomy-wrapper" <?php echo ( 'terms' === $display_type ) ? '' : 'style="display: none;"'; ?>>
+				<p>
+					<label for="<?php echo esc_attr( $listing_taxonomy_id ); ?>">
+						<?php esc_html_e( 'Taxonomy to display', 'a-z-listing' ); ?>
+					</label>
+					<select class="widefat a-z-listing-taxonomy"
+						id="<?php echo esc_attr( $listing_taxonomy_id ); ?>"
+						name="<?php echo esc_attr( $listing_taxonomy_name ); ?>"
+						<?php echo ( 'terms' === $display_type ) ? '' : 'disabled'; ?>>
+						<?php foreach ( $public_taxonomies as $k => $t ) : ?>
+							<option value="<?php echo esc_attr( $k ); ?>"
+								<?php echo ( $k === $listing_taxonomy ) ? 'selected' : ''; ?>>
+								<?php echo esc_html( $t->labels->name ); ?>
+							</option>
+						<?php endforeach; ?>
+					</select>
+				</p>
+			</div>
+
+			<div class="a-z-listing-parent-term-wrapper" <?php echo ( 'terms' === $display_type ) ? '' : 'style="display: none;"'; ?>>
+				<p>
+					<label for="<?php echo esc_attr( $listing_parent_term_id ); ?>">
+						<?php esc_html_e( 'Parent term to display children of', 'a-z-listing' ); ?>
+					</label>
+					<input type="text" class="widefat a-z-listing-parent-term"
+						id="<?php echo esc_attr( $listing_parent_term_id ); ?>"
+						name="<?php echo esc_attr( $listing_parent_term_name ); ?>"
+						value="<?php echo esc_attr( $listing_parent_term ); ?>" />
+				</p>
+			</div>
+
+			<div class="a-z-listing-include-terms-wrapper">
+				<p>
+					<label for="<?php echo esc_attr( $listing_terms_include_id ); ?>">
+						<?php esc_html_e( 'Terms to include (IDs)', 'a-z-listing' ); ?>
+					</label>
+					<input type="text" class="widefat a-z-listing-include-terms"
+						id="<?php echo esc_attr( $listing_terms_include_id ); ?>"
+						name="<?php echo esc_attr( $listing_terms_include_name ); ?>"
+						value="<?php echo esc_attr( $listing_terms_include ); ?>" />
+				</p>
+			</div>
+
+			<div class="a-z-listing-exclude-terms-wrapper" <?php echo ( 'terms' === $display_type ) ? '' : 'style="display: none;"'; ?>>
+				<p>
+					<label for="<?php echo esc_attr( $listing_terms_exclude_id ); ?>">
+						<?php esc_html_e( 'Terms to exclude (IDs)', 'a-z-listing' ); ?>
+					</label>
+					<input type="text" class="widefat a-z-listing-exclude-terms"
+						id="<?php echo esc_attr( $listing_terms_exclude_id ); ?>"
+						name="<?php echo esc_attr( $listing_terms_exclude_name ); ?>"
+						value="<?php echo esc_attr( $listing_terms_exclude ); ?>" />
+				</p>
+			</div>
+
+			<div class="a-z-listing-hide-empty-terms-wrapper" <?php echo ( 'terms' === $display_type ) ? '' : 'style="display: none;"'; ?>>
+				<p>
+					<label for="<?php echo esc_attr( $listing_hide_empty_terms_id ); ?>">
+						<?php esc_html_e( 'Hide empty terms', 'a-z-listing' ); ?>
+					</label>
+					<input type="checkbox" class="a-z-listing-hide-empty-terms"
+						id="<?php echo esc_attr( $listing_hide_empty_terms_id ); ?>"
+						name="<?php echo esc_attr( $listing_hide_empty_terms_name ); ?>"
+						<?php echo ( isset( $listing_hide_empty_terms ) && 'true' === $listing_hide_empty_terms ) ? 'checked' : ''; ?> />
+				</p>
+			</div>
 		</div>
-
-		<div <?php echo ( 'terms' === $display_type ) ? '' : 'style="display: none;"'; ?>
-			id="<?php echo esc_attr( $listing_parent_term_wrapper_id ); ?>">
-			<p>
-				<label for="<?php echo esc_attr( $listing_parent_term_id ); ?>">
-					<?php esc_html_e( 'Parent term to display children of', 'a-z-listing' ); ?>
-				</label>
-				<input class="widefat" type="text"
-					id="<?php echo esc_attr( $listing_parent_term_id ); ?>"
-					name="<?php echo esc_attr( $listing_parent_term_name ); ?>"
-					value="<?php echo esc_attr( $listing_parent_term ); ?>" />
-			</p>
-		</div>
-
-		<div>
-			<p>
-				<label for="<?php echo esc_attr( $listing_terms_include_id ); ?>">
-					<?php esc_html_e( 'Terms to include (IDs)', 'a-z-listing' ); ?>
-				</label>
-				<input class="widefat" type="text"
-					id="<?php echo esc_attr( $listing_terms_include_id ); ?>"
-					name="<?php echo esc_attr( $listing_terms_include_name ); ?>"
-					value="<?php echo esc_attr( $listing_terms_include ); ?>" />
-			</p>
-		</div>
-
-		<div <?php echo ( 'terms' === $display_type ) ? '' : 'style="display: none;"'; ?>
-			id="<?php echo esc_attr( $listing_terms_exclude_wrapper_id ); ?>">
-			<p>
-				<label for="<?php echo esc_attr( $listing_terms_exclude_id ); ?>">
-					<?php esc_html_e( 'Terms to exclude (IDs)', 'a-z-listing' ); ?>
-				</label>
-				<input class="widefat" type="text"
-					id="<?php echo esc_attr( $listing_terms_exclude_id ); ?>"
-					name="<?php echo esc_attr( $listing_terms_exclude_name ); ?>"
-					value="<?php echo esc_attr( $listing_terms_exclude ); ?>" />
-			</p>
-		</div>
-
-		<div <?php echo ( 'terms' === $display_type ) ? '' : 'style="display: none;"'; ?>
-			id="<?php echo esc_attr( $listing_hide_empty_terms_wrapper_id ); ?>">
-			<p>
-				<label for="<?php echo esc_attr( $listing_hide_empty_terms_id ); ?>">
-					<?php esc_html_e( 'Hide empty terms', 'a-z-listing' ); ?>
-				</label>
-				<input type="checkbox"
-					id="<?php echo esc_attr( $listing_hide_empty_terms_id ); ?>"
-					name="<?php echo esc_attr( $listing_hide_empty_terms_name ); ?>"
-					<?php echo ( isset( $listing_hide_empty_terms ) && 'true' === $listing_hide_empty_terms ) ? 'checked' : ''; ?> />
-			</p>
-		</div>
-
-		<script type="text/javascript">
-			jQuery(document).ready(function($) {
-				const target_post                      = document.getElementById( '<?php echo esc_html( $target_post_id ); ?>' );
-				const target_post_title                = document.getElementById( '<?php echo esc_html( $target_post_title_id ); ?>' );
-				const display_type                     = document.getElementById( '<?php echo esc_html( $display_type_id ); ?>' );
-				const listing_post_type                = document.getElementById( '<?php echo esc_html( $listing_post_type_id ); ?>' );
-				const listing_post_type_wrapper        = document.getElementById( '<?php echo esc_html( $listing_post_type_wrapper_id ); ?>' );
-				const listing_parent_post              = document.getElementById( '<?php echo esc_html( $listing_parent_post_id ); ?>' );
-				const listing_parent_post_title        = document.getElementById( '<?php echo esc_html( $listing_parent_post_title_id ); ?>');
-				const listing_parent_post_wrapper      = document.getElementById( '<?php echo esc_html( $listing_parent_post_wrapper_id ); ?>' );
-				const listing_taxonomy                 = document.getElementById( '<?php echo esc_html( $listing_taxonomy_id ); ?>' );
-				const listing_taxonomy_wrapper         = document.getElementById( '<?php echo esc_html( $listing_taxonomy_wrapper_id ); ?>' );
-				const listing_parent_term              = document.getElementById( '<?php echo esc_html( $listing_parent_term_id ); ?>' );
-				const listing_parent_term_wrapper      = document.getElementById( '<?php echo esc_html( $listing_parent_term_wrapper_id ); ?>' );
-				const listing_hide_empty_terms         = document.getElementById( '<?php echo esc_html( $listing_hide_empty_terms_id ); ?>' );
-				const listing_hide_empty_terms_wrapper = document.getElementById( '<?php echo esc_html( $listing_hide_empty_terms_wrapper_id ); ?>' );
-				const listing_terms_exclude            = document.getElementById( '<?php echo esc_html( $listing_terms_exclude_id ); ?>' );
-				const listing_terms_exclude_wrapper    = document.getElementById( '<?php echo esc_html( $listing_terms_exclude_wrapper_id ); ?>' );
-
-				function switch_taxonomy_or_posts() {
-					if ( 'terms' === display_type.value ) {
-						listing_post_type.setAttribute( 'disabled', 'disabled' );
-						listing_post_type_wrapper.style.display = 'none';
-						listing_parent_post_title.setAttribute( 'disabled', 'disabled' );
-						listing_parent_post_wrapper.style.display = 'none';
-						listing_taxonomy.removeAttribute( 'disabled' );
-						listing_taxonomy_wrapper.style.display = 'unset';
-						listing_parent_term.removeAttribute( 'disabled' );
-						listing_parent_term_wrapper.style.display = 'unset';
-						listing_hide_empty_terms.removeAttribute( 'disabled' );
-						listing_hide_empty_terms_wrapper.style.display = 'unset';
-						listing_terms_exclude.removeAttribute( 'disabled' );
-						listing_terms_exclude_wrapper.style.display = 'unset';
-					} else {
-						listing_post_type.removeAttribute( 'disabled' );
-						listing_post_type_wrapper.style.display = 'unset';
-						listing_parent_post_title.removeAttribute( 'disabled' );
-						listing_parent_post_wrapper.style.display = 'unset';
-						listing_taxonomy.setAttribute( 'disabled', 'disabled' );
-						listing_taxonomy_wrapper.style.display = 'none';
-						listing_parent_term.setAttribute( 'disabled', 'disabled' );
-						listing_parent_term_wrapper.style.display = 'none';
-						listing_hide_empty_terms.setAttribute( 'disabled', 'disabled' );
-						listing_hide_empty_terms_wrapper.style.display = 'none';
-						listing_terms_exclude.setAttribute( 'disabled', 'disabled' );
-						listing_terms_exclude_wrapper.style.display = 'none';
-					}
-				}
-				switch_taxonomy_or_posts();
-				display_type.addEventListener( 'change', switch_taxonomy_or_posts );
-
-				$( target_post_title ).autocomplete( {
-					source: function( post_title, response ) {
-						$.ajax( {
-							url:      '/wp-admin/admin-ajax.php',
-							type:     'POST',
-							dataType: 'json',
-							data: {
-								action:    'get_a_z_listing_autocomplete_post_titles',
-								post_type: '',
-								post_title,
-							},
-							success: function( data ) {
-								response( data );
-							},
-							error: function() {
-								response();
-							},
-						} );
-					},
-					select: function( event, ui ) {
-						event.preventDefault();
-						target_post.value       = ui.item.value;
-						target_post_title.value = ui.item.label;
-					},
-				} );
-
-				$( listing_parent_post_title.autocomplete( {
-					source: function( post_title, response ) {
-						$.ajax( {
-							url:      '/wp-admin/admin-ajax.php',
-							type:     'POST',
-							dataType: 'json',
-							data: {
-								action:    'get_a_z_listing_autocomplete_post_titles',
-								post_type: listing_post_type.value(),
-								post_title,
-							},
-							success: function( data ) {
-								response( data );
-							},
-							error: function() {
-								response();
-							},
-						} );
-					},
-					select: function( event, ui ) {
-						event.preventDefault();
-						listing_parent_post.value       = ui.item.value;
-						listing_parent_post_title.value = ui.item.label;
-					}
-				}) )
-			} );
-		</script>
 		<?php
 	}
 
@@ -410,7 +305,7 @@ class A_Z_Listing_Widget extends WP_Widget {
 		$instance['target_post_title'] = strip_tags( $new_instance['target_post_title'] );
 		$instance['post_type']         = strip_tags( $new_instance['post_type'] );
 		$instance['taxonomy']          = strip_tags( $new_instance['taxonomy'] );
-		$instance['parent_post']       = (int) $new_instance['parent'];
+		$instance['parent_post']       = (int) $new_instance['parent_post'];
 		$instance['all_children']      = 'on' === $new_instance['all_children'] ? 'true' : 'false';
 		$instance['parent_term']       = strip_tags( $new_instance['parent_term'] );
 		$instance['terms']             = strip_tags( $new_instance['terms'] );

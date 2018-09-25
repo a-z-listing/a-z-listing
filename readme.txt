@@ -416,6 +416,7 @@ If there is code already in your functions.php then add just the lines between `
 * Add simpler and safer filter for overriding the index letter for an item
 * Add simpler and safer filter for overriding the title for an item
 * Allow exclude-terms to be used with display="posts"
+* Improve javascript on the widget configuration
 * Fix `get_the_item_object()` to work with old-style overridden indices
 * Fix `get_the_item_object()` to correctly extract the item ID and load the correct item
 

@@ -805,7 +805,7 @@ class A_Z_Listing {
 				return $post;
 			}
 
-			if ( is_numeric( $this->current_item['item'] ) {
+			if ( is_numeric( $this->current_item['item'] ) ) {
 				$item_id = $this->current_item['item'];
 			} else {
 				$item = explode( ':', $this->current_item['item'], 2 );

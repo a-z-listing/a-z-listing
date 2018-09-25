@@ -178,7 +178,7 @@ function a_z_shortcode_handler( $attributes ) {
 				'operator' => 'IN',
 			);
 		}
-		if ! empty( $attributes['exclude-terms'] ) ) {
+		if ( ! empty( $attributes['exclude-terms'] ) ) {
 			$ex_terms = mb_split( ',', $attributes['exclude-termsterms'] );
 			$ex_terms = array_map( 'trim', $terms );
 			$ex_terms = array_filter(

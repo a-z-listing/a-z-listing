@@ -16,8 +16,33 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 2.0.0 Renamed from a_z_listing_add_styling. Added jQuery-UI Tabs support.
  */
 function a_z_listing_do_enqueue() {
-	wp_register_style( 'a-z-listing', plugins_url( 'css/a-z-listing-default.css', dirname( __FILE__ ) ), array( 'dashicons' ) );
-	wp_register_script( 'a-z-listing-tabs', plugins_url( 'js/a-z-listing-tabs.js', dirname( __FILE__ ) ), array( 'jquery', 'jquery-ui-tabs' ) );
+	wp_register_style(
+		'a-z-listing',
+		plugins_url( 'css/a-z-listing-default.css', dirname( __FILE__ ) ),
+		array( 'dashicons' )
+	);
+
+	wp_register_script(
+		'a-z-listing-tabs',
+		plugins_url( 'scripts/a-z-listing-tabs.js', dirname( __FILE__ ) ),
+		array(
+			'jquery',
+			'jquery-ui-tabs',
+		),
+		false,
+		true
+	);
+
+	wp_register_script(
+		'a-z-listing-widget-admin',
+		plugins_url( 'scripts/a-z-listing-widget-admin.js', dirname( __FILE__ ) ),
+		array(
+			'jquery',
+			'jquery-ui-autocomplete',
+		),
+		false,
+		true
+	);
 
 	$add_styles = get_option( 'a-z-listing-add-styling', true );
 	/**

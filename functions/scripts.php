@@ -42,3 +42,7 @@ function a_z_listing_force_enable_tabs() {
 	}
 	add_action( 'wp_enqueue_scripts', 'a_z_listing_force_enqueue_tabs' );
 }
+
+function a_z_listing_enqueue_widget_admin_script() {
+	wp_enqueue_script( 'a-z-listing-widget-admin' );
+}
