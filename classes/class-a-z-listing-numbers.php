@@ -16,18 +16,33 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class A_Z_Listing_Numbers {
 	/**
+	 * Where to place the numbers.
+	 *
+	 * @var string
+	 */
+	protected $position = 'hide';
+
+	/**
+	 * Whether to group the numbers in a single entry.
+	 *
+	 * @var boolean
+	 */
+	protected $group = false;
+
+	/**
 	 * Add filters to append or prepend numbers to the alphabet with optional grouping
 	 *
 	 * @since 2.0.0
 	 * @param string $position Can be either "before" or "after" indicating where to place the numbers respective to the alphabet.
 	 * @param bool   $group Whether to group the numbers into a single heading or individually.
 	 */
-	public function __construct( $position = 'after', $group = false ) {
-		$this->position = $position;
-		$this->group    = $group;
-
-		add_filter( 'a-z-listing-alphabet', array( $this, 'add_to_alphabet' ) );
-		add_filter( 'the-a-z-letter-title', array( $this, 'title' ) );
+	public function __construct( $position = 'hide', $group = false ) {
+		if ( 'before' === $position || 'after' === $position ) {
+			$this->position = $position;
+			$this->group    = $group;
+			add_filter( 'a-z-listing-alphabet', array( $this, 'add_to_alphabet' ) );
+			add_filter( 'the-a-z-letter-title', array( $this, 'title' ) );
+		}
 	}
 
 	/**
@@ -48,9 +63,14 @@ class A_Z_Listing_Numbers {
 	 * @return string The alphabet with numbers either prepended or appended
 	 */
 	public function add_to_alphabet( $alphabet ) {
-		$numbers = '0,1,2,3,4,5,6,7,8,9';
+		if ( 'hide' === $this->position ) {
+			return $alphabet;
+		}
+
 		if ( true === $this->group ) {
 			$numbers = '0123456789';
+		} else {
+			$numbers = '0,1,2,3,4,5,6,7,8,9';
 		}
 
 		if ( 'before' === $this->position ) {

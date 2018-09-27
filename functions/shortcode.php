@@ -15,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.0
  * @since 1.7.0 Add numbers attribute to append or prepend numerics to the listing.
  * @since 1.8.0 Fix numbers attribute when selecting to display terms. Add grouping to numbers via attribute. Add alphabet override via new attribute.
+ * @since 2.0.0 Add parent-term and hide-empty parameters.
  * @param  array $attributes Provided by WordPress core. Contains the shortcode attributes.
  * @return string The A-Z Listing HTML.
  */
@@ -65,16 +66,13 @@ function a_z_shortcode_handler( $attributes ) {
 	}
 
 	$grouping_obj = new A_Z_Listing_Grouping( $grouping );
-
-	$numbers_obj = null;
-	if ( ! empty( $attributes['numbers'] ) && 'hide' !== $attributes['numbers'] ) {
-		$numbers_obj = add_a_z_numbers( $attributes['numbers'], $group_numbers );
-	}
+	$numbers_obj  = new A_Z_Listing_Numbers( $attributes['numbers'], $group_numbers );
 
 	if ( 'terms' === $attributes['display'] && ! empty( $attributes['taxonomy'] ) ) {
 		$taxonomy = '' !== $attributes['taxonomy'] ? $attributes['taxonomy'] : 'category';
 		$query    = array(
-			'taxonomy' => $taxonomy,
+			'taxonomy'   => $taxonomy,
+			'hide_empty' => a_z_listing_is_truthy( $attributes['hide-empty'] ),
 		);
 
 		$terms_string  = '';
@@ -118,6 +116,7 @@ function a_z_shortcode_handler( $attributes ) {
 
 		if ( ! empty( $attributes['hide-empty-terms'] ) ) {
 			$hide_empty = a_z_listing_is_truthy( $attributes['hide-empty-terms'] );
+
 			$query = wp_parse_args(
 				$query,
 				array(
@@ -158,7 +157,7 @@ function a_z_shortcode_handler( $attributes ) {
 			$query = wp_parse_args( $query, $child_query );
 		}
 
-		$taxonomy = '' !== $attributes['taxonomy'] ? $attributes['taxonomy'] : 'category';
+		$taxonomy  = '' !== $attributes['taxonomy'] ? $attributes['taxonomy'] : 'category';
 		$tax_query = array();
 		if ( ! empty( $attributes['terms'] ) ) {
 			$terms = mb_split( ',', $attributes['terms'] );
@@ -220,9 +219,7 @@ function a_z_shortcode_handler( $attributes ) {
 	}
 
 	$grouping_obj->teardown();
-	if ( null != $numbers_obj ) {
-		$numbers_obj->teardown();
-	}
+	$numbers_obj->teardown();
 
 	return $ret;
 }
