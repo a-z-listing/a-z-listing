@@ -72,7 +72,7 @@ function a_z_shortcode_handler( $attributes ) {
 		$taxonomy = '' !== $attributes['taxonomy'] ? $attributes['taxonomy'] : 'category';
 		$query    = array(
 			'taxonomy'   => $taxonomy,
-			'hide_empty' => a_z_listing_is_truthy( $attributes['hide-empty'] ),
+			'hide_empty' => isset( $attributes['hide_empty'] ) && a_z_listing_is_truthy( $attributes['hide-empty'] ),
 		);
 
 		$terms_string  = '';
@@ -197,7 +197,7 @@ function a_z_shortcode_handler( $attributes ) {
 		}
 
 		if ( ! empty( $tax_query ) ) {
-			$query['tax_query'] = wp_parse_args( $query['tax_query'], $tax_query );
+			$query['tax_query'] = $tax_query;
 		}
 
 		$a_z_query = new A_Z_Listing( $query, 'posts' );

@@ -199,18 +199,14 @@ class A_Z_Listing {
 			 */
 			$query = apply_filters( 'a-z-listing-query', $query );
 
-			if ( ! isset( $query['post_type'] ) ) {
-				$query['post_type'] = 'page';
-			}
-
 			if ( ! $query instanceof WP_Query ) {
 				$query = (array) $query;
 
-				if ( ! isset( $query['post_parent'] ) && ! isset( $query['child_of'] ) ) {
-					if ( 'page' === $query['post_type'] && isset( $post ) && 'page' === $post->post_type ) {
-						$section       = self::get_section();
-						$query['child_of'] = $section->ID;
-					}
+				if ( ! isset( $query['post_parent'] ) && ! isset( $query['child_of'] ) &&
+				isset( $query['post_type'] ) && isset( $post ) &&
+				'page' === $query['post_type'] && 'page' === $post->post_type ) {
+					$section           = self::get_section();
+					$query['child_of'] = $section->ID;
 				}
 
 				$query = wp_parse_args(
@@ -230,11 +226,11 @@ class A_Z_Listing {
 			if ( $query instanceof WP_Query ) {
 				$post_type   = $query->post_type;
 				$items       = $query->posts;
-				$this->query = $query;	
+				$this->query = $query;
 			} else {
 				$post_type = $query['post_type'];
-			
-				if ( $query['child_of'] ) {
+
+				if ( isset( $query['child_of'] ) ) {
 					$items       = get_pages( $query );
 					$this->query = $query;
 				} else {
@@ -808,7 +804,7 @@ class A_Z_Listing {
 			if ( is_numeric( $this->current_item['item'] ) ) {
 				$item_id = $this->current_item['item'];
 			} else {
-				$item = explode( ':', $this->current_item['item'], 2 );
+				$item    = explode( ':', $this->current_item['item'], 2 );
 				$item_id = $item[1];
 			}
 

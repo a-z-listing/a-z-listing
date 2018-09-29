@@ -76,9 +76,9 @@ class A_Z_Listing_Widget extends WP_Widget {
 		$target_post_title_id   = $this->get_field_id( 'target_post_title' );
 		$target_post_title_name = $this->get_field_name( 'target_post_title' );
 
-		$listing_post_type            = isset( $instance['post_type'] ) ? $instance['post_type'] : 'page';
-		$listing_post_type_id         = $this->get_field_id( 'post_type' );
-		$listing_post_type_name       = $this->get_field_name( 'post_type' );
+		$listing_post_type      = isset( $instance['post_type'] ) ? $instance['post_type'] : 'page';
+		$listing_post_type_id   = $this->get_field_id( 'post_type' );
+		$listing_post_type_name = $this->get_field_name( 'post_type' );
 
 		$listing_parent_post            = isset( $instance['parent_post'] ) ? $instance['parent_post'] : '';
 		$listing_parent_post_id         = $this->get_field_id( 'parent_post' );
@@ -91,25 +91,25 @@ class A_Z_Listing_Widget extends WP_Widget {
 		$listing_all_children_id   = $this->get_field_id( 'all_children' );
 		$listing_all_children_name = $this->get_field_name( 'all_children' );
 
-		$listing_taxonomy            = isset( $instance['taxonomy'] ) ? $instance['taxonomy'] : 'page';
-		$listing_taxonomy_id         = $this->get_field_id( 'taxonomy' );
-		$listing_taxonomy_name       = $this->get_field_name( 'taxonomy' );
+		$listing_taxonomy      = isset( $instance['taxonomy'] ) ? $instance['taxonomy'] : 'page';
+		$listing_taxonomy_id   = $this->get_field_id( 'taxonomy' );
+		$listing_taxonomy_name = $this->get_field_name( 'taxonomy' );
 
-		$listing_parent_term            = isset( $instance['parent_term'] ) ? $instance['parent_term'] : '';
-		$listing_parent_term_id         = $this->get_field_id( 'parent_term' );
-		$listing_parent_term_name       = $this->get_field_name( 'parent_term' );
+		$listing_parent_term      = isset( $instance['parent_term'] ) ? $instance['parent_term'] : '';
+		$listing_parent_term_id   = $this->get_field_id( 'parent_term' );
+		$listing_parent_term_name = $this->get_field_name( 'parent_term' );
 
 		$listing_terms_include      = isset( $instance['terms'] ) ? $instance['terms'] : '';
 		$listing_terms_include_id   = $this->get_field_id( 'terms' );
 		$listing_terms_include_name = $this->get_field_name( 'terms' );
 
-		$listing_terms_exclude            = isset( $instance['terms_exclude'] ) ? $instance['terms_exclude'] : '';
-		$listing_terms_exclude_id         = $this->get_field_id( 'terms_exclude' );
-		$listing_terms_exclude_name       = $this->get_field_name( 'terms_exclude' );
+		$listing_terms_exclude      = isset( $instance['terms_exclude'] ) ? $instance['terms_exclude'] : '';
+		$listing_terms_exclude_id   = $this->get_field_id( 'terms_exclude' );
+		$listing_terms_exclude_name = $this->get_field_name( 'terms_exclude' );
 
-		$listing_hide_empty_terms            = isset( $instance['hide_empty_terms'] ) ? $instance['hide_empty_terms'] : '';
-		$listing_hide_empty_terms_id         = $this->get_field_id( 'hide_empty_terms' );
-		$listing_hide_empty_terms_name       = $this->get_field_name( 'hide_empty_terms' );
+		$listing_hide_empty_terms      = isset( $instance['hide_empty_terms'] ) ? $instance['hide_empty_terms'] : '';
+		$listing_hide_empty_terms_id   = $this->get_field_id( 'hide_empty_terms' );
+		$listing_hide_empty_terms_name = $this->get_field_name( 'hide_empty_terms' );
 		?>
 
 		<div class="a-z-listing-widget">
@@ -460,21 +460,23 @@ function a_z_listing_autocomplete_post_titles() {
 	$post_type  = stripslashes( $_POST['post_type'] );
 
 	if ( ! empty( $post_type ) ) {
-		$query = $wpdb->prepare(
-			"SELECT `ID`, `post_title` FROM `$wpdb->posts`
-			WHERE `post_type` = %s AND `post_title` LIKE %s AND `post_status` = 'publish'",
-			$post_type,
-			$post_title
+		$results = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT `ID`, `post_title` FROM `$wpdb->posts`
+				WHERE `post_type` = %s AND `post_title` LIKE %s AND `post_status` = 'publish'",
+				$post_type,
+				$post_title
+			)
 		);
 	} else {
-		$query = $wpdb->prepare(
-			"SELECT `ID`, `post_title` FROM `$wpdb->posts`
-			WHERE `post_title` LIKE %s AND `post_status` = 'publish'",
-			$post_title
+		$results = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT `ID`, `post_title` FROM `$wpdb->posts`
+				WHERE `post_title` LIKE %s AND `post_status` = 'publish'",
+				$post_title
+			)
 		);
 	}
-
-	$results = $wpdb->get_results( $query );
 
 	$titles = array();
 	foreach ( $results as $result ) {

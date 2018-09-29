@@ -82,7 +82,7 @@ class A_Z_Listing_Indices extends A_Z_Listing_Singleton {
 		 */
 		$index_letters = apply_filters( 'a_z_listing_item_index_letter', $index_letters, $item, $type );
 
-		foreach( $index_letters as $letter ) {
+		foreach ( $index_letters as $letter ) {
 			$indices[ $letter ][] = array(
 				'title' => $title,
 				'item'  => ( 'terms' === $type ) ? "term:{$item_id}" : "post:{$item_id}",
@@ -95,7 +95,7 @@ class A_Z_Listing_Indices extends A_Z_Listing_Singleton {
 			 * Modify the indice(s) to group this term under
 			 *
 			 * @deprecated Use a_z_listing_item_index_letter and/or a_z_listing_item_title
-		 	 * @see a_z_listing_item_index_letter, a_z_listing_item_title
+			 * @see a_z_listing_item_index_letter, a_z_listing_item_title
 			 */
 			$indices = apply_filters_deprecated( 'a_z_listing_term_indices', array( $indices, $item ), '1.0.0', 'a_z_listing_item_index_letter' );
 		} else {
@@ -103,7 +103,7 @@ class A_Z_Listing_Indices extends A_Z_Listing_Singleton {
 			 * Modify the indice(s) to group this post under
 			 *
 			 * @deprecated Use a_z_listing_item_index_letter and/or a_z_listing_item_title
-		 	 * @see a_z_listing_item_index_letter, a_z_listing_item_title
+			 * @see a_z_listing_item_index_letter, a_z_listing_item_title
 			 */
 			$indices = apply_filters_deprecated( 'a_z_listing_post_indices', array( $indices, $item ), '1.5.0', 'a_z_listing_item_index_letter' );
 		} // End if.

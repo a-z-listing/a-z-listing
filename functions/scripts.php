@@ -43,6 +43,11 @@ function a_z_listing_force_enable_tabs() {
 	add_action( 'wp_enqueue_scripts', 'a_z_listing_force_enqueue_tabs' );
 }
 
+/**
+ * Enqueue the widget configuration support script
+ *
+ * @since 2.1.0
+ */
 function a_z_listing_enqueue_widget_admin_script() {
 	wp_enqueue_script( 'a-z-listing-widget-admin' );
 }
