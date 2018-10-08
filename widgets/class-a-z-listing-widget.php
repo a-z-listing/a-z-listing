@@ -406,13 +406,13 @@ function get_the_section_a_z_widget( $args, $instance ) {
 
 	$title  = esc_html( $instance['title'] );
 	$target = '';
-	if ( empty( $title ) ) {
-		if ( $instance['post'] > 0 ) { // target.
-			$title  = get_the_title( $instance['post'] );
-			$target = get_the_permalink( $instance['post'] );
-		} else {
-			$title = esc_html__( 'A-Z Listing', 'a-z-listing' );
+	if ( $instance['post'] > 0 ) { // target.
+		$target = get_the_permalink( $instance['post'] );
+		if ( empty( $title ) ) {
+			$title = get_the_title( $instance['post'] );
 		}
+	} elseif ( empty( $title ) ) {
+		$title = esc_html__( 'A-Z Listing', 'a-z-listing' );
 	}
 
 	$hide_empty = true === $instance['hide_empty_terms'] ? 'true' : 'false';

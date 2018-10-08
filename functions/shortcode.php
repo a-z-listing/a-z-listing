@@ -27,7 +27,7 @@ function a_z_shortcode_handler( $attributes ) {
 			'exclude-posts'    => '',
 			'exclude-terms'    => '',
 			'get-all-children' => 'false',
-			'group-numbers'    => 'false',
+			'group-numbers'    => '',
 			'grouping'         => '',
 			'hide-empty-terms' => 'false',
 			'numbers'          => 'hide',
@@ -54,13 +54,17 @@ function a_z_shortcode_handler( $attributes ) {
 	}
 
 	$grouping      = $attributes['grouping'];
-	$group_numbers = a_z_listing_is_truthy( $attributes['group-numbers'] );
+	$group_numbers = false;
+	if ( ! empty( $attributes['group-numbers'] ) && a_z_listing_is_truthy( $attributes['group-numbers'] ) ) {
+		$group_numbers = true;
+	}
+
 	if ( 'numbers' === $grouping ) {
 		$group_numbers = true;
 		$grouping      = 0;
 	} else {
 		$grouping = intval( $grouping );
-		if ( 1 < $grouping ) {
+		if ( 1 < $grouping && empty( $attributes['group-numbers'] ) ) {
 			$group_numbers = true;
 		}
 	}

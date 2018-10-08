@@ -10,8 +10,7 @@ class AZ_Widget_Tests extends AZ_UnitTestCase {
 
 		$expected = sprintf( file_get_contents( 'tests/data/default-widget.txt' ), $p );
 
-		ob_start();
-		the_section_a_z_widget(
+		$actual = get_the_section_a_z_widget(
 			array(
 				'before_widget' => '<div>',
 				'after_widget'  => '</div>',
@@ -23,7 +22,6 @@ class AZ_Widget_Tests extends AZ_UnitTestCase {
 				'post'  => $p,
 			)
 		);
-		$actual = ob_get_clean();
 
 		$this->assertHTMLEquals( $expected, $actual );
 	}
@@ -43,8 +41,7 @@ class AZ_Widget_Tests extends AZ_UnitTestCase {
 
 		$expected = sprintf( file_get_contents( 'tests/data/populated-widget.txt' ), $p );
 
-		ob_start();
-		the_section_a_z_widget(
+		$actual = get_the_section_a_z_widget(
 			array(
 				'before_widget' => '<div>',
 				'after_widget'  => '</div>',
@@ -56,7 +53,6 @@ class AZ_Widget_Tests extends AZ_UnitTestCase {
 				'post'  => $p,
 			)
 		);
-		$actual = ob_get_clean();
 
 		$this->assertHTMLEquals( $expected, $actual );
 	}
@@ -77,8 +73,7 @@ class AZ_Widget_Tests extends AZ_UnitTestCase {
 
 		$expected = sprintf( file_get_contents( 'tests/data/populated-widget.txt' ), $p );
 
-		ob_start();
-		the_section_a_z_widget(
+		$actual = get_the_section_a_z_widget(
 			array(
 				'before_widget' => '<div>',
 				'after_widget'  => '</div>',
@@ -90,7 +85,6 @@ class AZ_Widget_Tests extends AZ_UnitTestCase {
 				'post'  => $p,
 			)
 		);
-		$actual = ob_get_clean();
 
 		$this->assertHTMLEquals( $expected, $actual );
 	}

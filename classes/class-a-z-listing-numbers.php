@@ -39,7 +39,7 @@ class A_Z_Listing_Numbers {
 	public function __construct( $position = 'hide', $group = false ) {
 		if ( 'before' === $position || 'after' === $position ) {
 			$this->position = $position;
-			$this->group    = $group;
+			$this->group    = a_z_listing_is_truthy( $group );
 			add_filter( 'a-z-listing-alphabet', array( $this, 'add_to_alphabet' ) );
 			add_filter( 'the-a-z-letter-title', array( $this, 'title' ) );
 		}
