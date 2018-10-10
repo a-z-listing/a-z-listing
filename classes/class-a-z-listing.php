@@ -349,7 +349,7 @@ class A_Z_Listing {
 		 */
 		$others = apply_filters( 'a-z-listing-non-alpha-char', $others );
 
-		$alphabet_groups = mb_split( ',', $alphabet );
+		$alphabet_groups = explode( ',', $alphabet );
 		$letters         = array_reduce(
 			$alphabet_groups,
 			function( $return, $group ) {
@@ -525,7 +525,7 @@ class A_Z_Listing {
 						if ( in_array( $index, array_keys( $this->alphabet ), true ) ) {
 							$index = $this->alphabet[ $index ];
 						} else {
-							$index = '_';
+							$index = $this->unknown_letters;
 						}
 
 						if ( ! isset( $indexed_items[ $index ] ) || ! is_array( $indexed_items[ $index ] ) ) {

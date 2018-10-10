@@ -65,7 +65,7 @@ class A_Z_Listing_Grouping {
 	 */
 	public function alphabet_filter( $alphabet ) {
 		$headings = array();
-		$letters  = mb_split( ',', $alphabet );
+		$letters  = explode( ',', $alphabet );
 		$letters  = array_map( 'trim', $letters );
 
 		$i = 0;

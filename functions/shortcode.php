@@ -90,7 +90,7 @@ function a_z_shortcode_handler( $attributes ) {
 		}
 
 		if ( ! empty( $terms_string ) ) {
-			$terms = mb_split( ',', $terms_string );
+			$terms = explode( ',', $terms_string );
 			$terms = array_map( 'trim', $terms );
 			$terms = array_map( 'intval', $terms );
 			$terms = array_filter(
@@ -136,7 +136,7 @@ function a_z_shortcode_handler( $attributes ) {
 		);
 
 		if ( ! empty( $attributes['exclude-posts'] ) ) {
-			$exclude_posts = mb_split( ',', $attributes['exclude-posts'] );
+			$exclude_posts = explode( ',', $attributes['exclude-posts'] );
 			$exclude_posts = array_map( 'trim', $exclude_posts );
 			$exclude_posts = array_map( 'intval', $exclude_posts );
 			$exclude_posts = array_filter(
@@ -164,7 +164,7 @@ function a_z_shortcode_handler( $attributes ) {
 		$taxonomy  = '' !== $attributes['taxonomy'] ? $attributes['taxonomy'] : 'category';
 		$tax_query = array();
 		if ( ! empty( $attributes['terms'] ) ) {
-			$terms = mb_split( ',', $attributes['terms'] );
+			$terms = explode( ',', $attributes['terms'] );
 			$terms = array_map( 'trim', $terms );
 			$terms = array_filter(
 				$terms,
@@ -182,7 +182,7 @@ function a_z_shortcode_handler( $attributes ) {
 			);
 		}
 		if ( ! empty( $attributes['exclude-terms'] ) ) {
-			$ex_terms = mb_split( ',', $attributes['exclude-termsterms'] );
+			$ex_terms = explode( ',', $attributes['exclude-termsterms'] );
 			$ex_terms = array_map( 'trim', $terms );
 			$ex_terms = array_filter(
 				$ex_terms,
