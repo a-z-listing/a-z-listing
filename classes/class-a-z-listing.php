@@ -202,15 +202,23 @@ class A_Z_Listing {
 			if ( ! $query instanceof WP_Query ) {
 				$query = (array) $query;
 
-				if ( ! isset( $query['post_parent'] ) && ! isset( $query['child_of'] ) &&
-				isset( $query['post_type'] ) && isset( $post ) &&
-				'page' === $query['post_type'] && 'page' === $post->post_type ) {
-					$section           = self::get_section();
-					$query['child_of'] = $section->ID;
+				if ( isset( $query['post_type'] ) ) {
+					if ( is_array( $query['post_type'] ) && count( $query['post_type'] ) === 1 ) {
+						$query['post_type'] = array_shift( $query['post_type'] );
+					}
+				}
+
+				if ( ! isset( $query['post_parent'] ) && ! isset( $query['child_of'] ) ) {
+					if ( isset( $query['post_type'] ) && isset( $post ) ) {
+						if ( 'page' === $query['post_type'] && 'page' === $post->post_type ) {
+							$section           = self::get_section();
+							$query['child_of'] = $section->ID;
+						}
+					}
 				}
 
 				$query = wp_parse_args(
-					(array) $query,
+					$query,
 					array(
 						'post_type'   => 'page',
 						'numberposts' => -1,
@@ -224,12 +232,9 @@ class A_Z_Listing {
 			}
 
 			if ( $query instanceof WP_Query ) {
-				$post_type   = $query->post_type;
 				$items       = $query->posts;
 				$this->query = $query;
 			} else {
-				$post_type = $query['post_type'];
-
 				if ( isset( $query['child_of'] ) ) {
 					$items       = get_pages( $query );
 					$this->query = $query;

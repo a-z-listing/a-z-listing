@@ -131,8 +131,11 @@ function a_z_shortcode_handler( $attributes ) {
 
 		$a_z_query = new A_Z_Listing( $query, 'terms' );
 	} else {
+		$post_type = explode( ',', $attributes['post-type'] );
+		$post_type = array_map( 'trim', $post_type );
+
 		$query = array(
-			'post_type' => $attributes['post-type'],
+			'post_type' => $post_type,
 		);
 
 		if ( ! empty( $attributes['exclude-posts'] ) ) {
