@@ -229,7 +229,7 @@ These helper functions cope with the dual usage of the plugin supporting both `W
 
 = How do I show posts of a different post-type (not pages) or multiple post-types (e.g. posts AND pages) =
 
-This can be achieved using the shortcode or PHP.
+This can be achieved using the shortcode or PHP. In these examples the generic phrase `post-type-slug` is used to describe the concept. The default post types provided by WordPress are called "Posts" and "Pages". Their slugs are `post` and `page` respectively. You need to use these names in place of the examples (i.e. `your-post-type-slug`, `type1-slug`, and `type1-slug`).
 
 **Shortcode method**
 
@@ -273,7 +273,7 @@ The code above needs to be within a php block which is denoted by the `<?php` an
 
 = How do I show posts from a specific category only =
 
-This can be achieved using the shortcode or PHP.
+This can be achieved using the shortcode or PHP. In these examples the generic phrase `taxonomy` and `term` are used to describe the concept. The default taxonomies provided by WordPress are called "Categories" and "Tags". Their slugs are `category` and `post_tag` respectively. Each Category and Tag are then known as "terms". You need to use the slug for each individual category or tag in place of the example slugs (i.e. `term-slug`, `term1-slug`, and `term1-slug`).
 
 **Shortcode method**
 
@@ -311,7 +311,7 @@ The code above needs to be within a php block which is denoted by the `<?php` an
 
 = How do I show terms from a taxonomy instead of posts =
 
-This can be achieved using the shortcode or PHP.
+This can be achieved using the shortcode or PHP. In these examples the generic phrase `taxonomy` and `term` are used to describe the concept. The default taxonomies provided by WordPress are called "Categories" and "Tags". Their slugs are `category` and `post_tag` respectively. You need to use the slug for the taxonomy in place of the example slugs (i.e. `taxonomy-slug`).
 
 **Shortcode method**
 
@@ -355,7 +355,7 @@ Yes you can. This needs the following code added to your theme's functions.php. 
 
 `
 <?php
-add_action( 'wp', 'a_z_listing_force_enable_styles', 99 );
+add_action( 'init', 'a_z_listing_force_enable_styles', 99 );
 ?>
 `
 
@@ -367,7 +367,7 @@ You can add code which detects the page which the user is browsing and only enab
 
 `
 <?php
-add_action( 'wp', 'your_override_wrapper_function', 99 );
+add_action( 'init', 'your_override_wrapper_function', 99 );
 function your_override_wrapper_function() {
     if ( ! is_page( 'your-a-z-listing-page-slug-or-ID' ) ) { // ID is numeric, slug is a string.
         return; // we don't want to run for anything except the page we're interested in.
@@ -412,39 +412,23 @@ If there is code already in your functions.php then add just the lines between `
 
 = 2.1.0 =
 
+**Bug Fixes:**
+
+* Fix taxonomy-term-filtered listings displaying all posts (e.g. shortcodes of the form `[a-z-listing taxonomy="category" terms="term"])
+* Fix `get_the_item_object()` to work with old-style overridden indices
+* Fix `get_the_item_object()` to correctly extract the item ID and load the correct item
+* Improve javascript on the widget configuration
+* Clarified the examples with explanations about "post types", "taxonomies", and "terms" to explain what each of these mean.
+
+**New Features:**
+
 * Add parent-page attribute to the shortcode
 * Add simpler and safer filter for overriding the index letter for an item
 * Add simpler and safer filter for overriding the title for an item
 * Allow exclude-terms to be used with display="posts"
-* Improve javascript on the widget configuration
-* Fix `get_the_item_object()` to work with old-style overridden indices
-* Fix `get_the_item_object()` to correctly extract the item ID and load the correct item
-
-*2.0.0 also introduced the following changes:*
-
-* Improved widget configuration.
-* New attribute added to the shortcode when `display="posts"`:
-  * `exclude-posts`: remove specific posts from the list
-* New attributes added to the shortcode when `display="terms"`:
-  * `exclude-terms`: sets the terms to exclude from display
-  * `parent-term`: set the parent that all displayed terms must be organised under
-  * `hide-empty-terms`: hide terms that have no posts associated
-* Introduce PHP classes for adding numbers and grouping to the alphabet. Allows unhooking from the filters to undo the changes, where previously you could not unhook these modifications once they'd been applied.
-* **BREAKING CHANGES:**
-  * Multi column example:
-    If you have copied the multi-column example in previous releases to your theme folder then you will need to perform some manual steps.
-    If you have not edited the file, just delete it and the new template from the plugin will take control and perform the same functionality.
-    If you have modified the example template then you will need to compare with the file in the plugin at `templates/a-z-listing.php` and merge any changes into your template.
-  * Template customisations:
-    If you have customised the in-built templates or written your own then you may experience breakage due to the post object not being loaded automatically.
-    If you require the template to access more than the post title and URL then you will need to add an additional call after `the_item()` to load the full `WP_Post` object into memory.
-    To load the post object you need to call `$a_z_query->get_the_item_object( 'I understand the issues!' );`.
-    **The argument must read exactly as written here to confirm that you understand that this might cause slowness or memory usage problems.**
-    *This step is purposely omitted to save memory and try to improve performance.*
 
 = 2.0.6 =
 
-* *Personal Note:* Sorry to everyone who upgraded to 2.0.0 thru to 2.0.4 about yet another update. I have failed you all by shipping faulty versions to you, and I'm sorry, especially so that you've had to endure so many updates the past two days.
 * Fix widget target post support
 * Fix filtering posts by multiple taxonomy terms
 * Fix styling error causing two or more posts to sometimes appear on the same line
@@ -463,17 +447,22 @@ If there is code already in your functions.php then add just the lines between `
   * `hide-empty-terms`: hide terms that have no posts associated
 * Fix the stylesheet to better cope with variances in font-size and text length in the alphabet links list and widget.
 * Introduce PHP classes for adding numbers and grouping to the alphabet. Allows unhooking from the filters to undo the changes, where previously you could not unhook these modifications once they'd been applied.
-* **BREAKING CHANGES:**
-  * Multi column example:
-    If you have copied the multi-column example in previous releases to your theme folder then you will need to perform some manual steps.
-    If you have not edited the file, just delete it and the new template from the plugin will take control and perform the same functionality.
-    If you have modified the example template then you will need to compare with the file in the plugin at `templates/a-z-listing.php` and merge any changes into your template.
-  * Template customisations:
-    If you have customised the in-built templates or written your own then you may experience breakage due to the post object not being loaded automatically.
-    If you require the template to access more than the post title and URL then you will need to add an additional call after `the_item()` to load the full `WP_Post` object into memory.
-    To load the post object you need to call `$a_z_query->get_the_item_object( 'I understand the issues!' );`.
-    **The argument must read exactly as written here to confirm that you understand that this might cause slowness or memory usage problems.**
-    *This step is purposely omitted to save memory and try to improve performance.*
+
+**BREAKING CHANGES:**
+
+*Multi column example:*
+
+* If you have copied the multi-column example in previous releases to your theme folder then you will need to perform some manual steps.
+* If you have not edited the file, just delete it and the new template from the plugin will take control and perform the same functionality.
+* If you have modified the example template then you will need to compare with the file in the plugin at `templates/a-z-listing.php` and merge any changes into your template.
+
+*Template customisations:*
+
+* If you have customised the in-built templates or written your own then you may experience breakage due to the post object not being loaded automatically.
+* If you require the template to access more than the post title and URL then you will need to add an additional call after `the_item()` to load the full `WP_Post` object into memory.
+* To load the post object you need to call `$a_z_query->get_the_item_object( 'I understand the issues!' );`.
+  __The argument must read exactly as written here to confirm that you understand that this might cause slowness or memory usage problems.__
+  _This step is purposely omitted to save memory and try to improve performance._
 
 = Previous =
 

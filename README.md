@@ -6,7 +6,7 @@
 **Requires at least:** 4.6  
 **Requires PHP:** 5.6  
 **Tested up to:** 4.9  
-**Stable tag:** 2.0.5  
+**Stable tag:** 2.1.0  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -414,38 +414,30 @@ If there is code already in your functions.php then add just the lines between `
 
 ## Changelog ##
 
+### 2.1.0 ###
+
+#### Bug Fixes: ####
+
+* Fix taxonomy-term-filtered listings displaying all posts (e.g. shortcodes of the form `[a-z-listing taxonomy="category" terms="term"])
+* Fix `get_the_item_object()` to work with old-style overridden indices
+* Fix `get_the_item_object()` to correctly extract the item ID and load the correct item
+* Improve javascript on the widget configuration
+
+#### New Features: ####
+
+* Add parent-page attribute to the shortcode
+* Add simpler and safer filter for overriding the index letter for an item
+* Add simpler and safer filter for overriding the title for an item
+* Allow exclude-terms to be used with display="posts"
+
 ### 2.0.6 ###
 
-* *Personal Note:* Sorry to everyone who upgraded to 2.0.0 thru to 2.0.5 about yet another update. I have failed you all by shipping faulty versions to you, and I'm sorry, especially so that you've had to endure so many updates the past few days.
 * Fix widget target post support
 * Fix filtering posts by multiple taxonomy terms
 * Fix styling error causing two or more posts to sometimes appear on the same line
 * Minor style tweak to fix short listings, and long titles
 * Fix broken styling in 2.0.0
 * Fix javascript error on widgets screen
-
-##### 2.0.0 also introduced the following changes: #####
-
-* Improved widget configuration.
-* New attribute added to the shortcode when `display="posts"`:
-  * `exclude-posts`: remove specific posts from the list
-* New attributes added to the shortcode when `display="terms"`:
-  * `exclude-terms`: sets the terms to exclude from display
-  * `parent-term`: set the parent that all displayed terms must be organised under
-  * `hide-empty-terms`: hide terms that have no posts associated
-* Fix the stylesheet to better cope with variances in font-size and text length in the alphabet links list and widget.
-* Introduce PHP classes for adding numbers and grouping to the alphabet. Allows unhooking from the filters to undo the changes, where previously you could not unhook these modifications once they'd been applied.
-* **BREAKING CHANGES:**
-  * Multi column example:
-    If you have copied the multi-column example in previous releases to your theme folder then you will need to perform some manual steps.
-    If you have not edited the file, just delete it and the new template from the plugin will take control and perform the same functionality.
-    If you have modified the example template then you will need to compare with the file in the plugin at `templates/a-z-listing.php` and merge any changes into your template.
-  * Template customisations:
-    If you have customised the in-built templates or written your own then you may experience breakage due to the post object not being loaded automatically.
-    If you require the template to access more than the post title and URL then you will need to add an additional call after `the_item()` to load the full `WP_Post` object into memory.
-    To load the post object you need to call `$a_z_query->get_the_item_object( 'I understand the issues!' );`.
-    **The argument must read exactly as written here to confirm that you understand that this might cause slowness or memory usage problems.**
-    *This step is purposely omitted to save memory and try to improve performance.*
 
 ### 2.0.0 ###
 
@@ -458,43 +450,22 @@ If there is code already in your functions.php then add just the lines between `
   * `hide-empty-terms`: hide terms that have no posts associated
 * Fix the stylesheet to better cope with variances in font-size and text length in the alphabet links list and widget.
 * Introduce PHP classes for adding numbers and grouping to the alphabet. Allows unhooking from the filters to undo the changes, where previously you could not unhook these modifications once they'd been applied.
-* **BREAKING CHANGES:**
-  * Multi column example:
-    If you have copied the multi-column example in previous releases to your theme folder then you will need to perform some manual steps.
-    If you have not edited the file, just delete it and the new template from the plugin will take control and perform the same functionality.
-    If you have modified the example template then you will need to compare with the file in the plugin at `templates/a-z-listing.php` and merge any changes into your template.
-  * Template customisations:
-    If you have customised the in-built templates or written your own then you may experience breakage due to the post object not being loaded automatically.
-    If you require the template to access more than the post title and URL then you will need to add an additional call after `the_item()` to load the full `WP_Post` object into memory.
-    To load the post object you need to call `$a_z_query->get_the_item_object( 'I understand the issues!' );`.
-    **The argument must read exactly as written here to confirm that you understand that this might cause slowness or memory usage problems.**
-    *This step is purposely omitted to save memory and try to improve performance.*
 
-### 1.9.2 ###
+#### BREAKING CHANGES: ####
 
-Bugfix:
+##### Multi column example: #####
 
-* Fix using multiple terms in the shortcode only displays results for the first term
-### 1.9.1 ###
+* If you have copied the multi-column example in previous releases to your theme folder then you will need to perform some manual steps.
+* If you have not edited the file, just delete it and the new template from the plugin will take control and perform the same functionality.
+* If you have modified the example template then you will need to compare with the file in the plugin at `templates/a-z-listing.php` and merge any changes into your template.
 
-Feature Request:
-Add CSS classes to letters indicating presence of posts or not:
+##### Template customisations: #####
 
-* `has-posts` allows styling of letters that have posts visible in the listing
-* `no-posts` allows styling of letters that do not have any posts visible in the listing
-
-You can use these classes to hide letters that have no posts by including the following CSS rule:
-`.az-letters ul.az-links li.no-posts {
-    display: none;
-}`
-
-### 1.9.0 ###
-
-* Fix multi-column example template
-* Update multi-column styles to include display:grid support
-* Add back-to-top link
-* Add server system requirements to readme
-* Add PHP section to readme including link to API Reference
+* If you have customised the in-built templates or written your own then you may experience breakage due to the post object not being loaded automatically.
+* If you require the template to access more than the post title and URL then you will need to add an additional call after `the_item()` to load the full `WP_Post` object into memory.
+* To load the post object you need to call `$a_z_query->get_the_item_object( 'I understand the issues!' );`.
+  __The argument must read exactly as written here to confirm that you understand that this might cause slowness or memory usage problems.__
+  _This step is purposely omitted to save memory and try to improve performance._
 
 ### Previous ###
 

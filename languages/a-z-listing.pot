@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the A-Z Listing package.
 msgid ""
 msgstr ""
-"Project-Id-Version: A-Z Listing 2.0.6\n"
+"Project-Id-Version: A-Z Listing 2.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/a-z-listing\n"
-"POT-Creation-Date: 2018-09-17 00:28:41+00:00\n"
+"POT-Creation-Date: 2018-10-22 17:29:49+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,7 +24,7 @@ msgstr ""
 "X-Textdomain-Support: yes\n"
 "X-Generator: grunt-wp-i18n1.0.2\n"
 
-#: classes/class-a-z-listing.php:318
+#: classes/class-a-z-listing.php:320
 #. translators: List the aphabet of your language in the order that your
 #. language prefers. list as groups of identical meanings but different
 #. characters together, e.g. in English we group A with a because they are both
@@ -42,7 +42,7 @@ msgid ""
 "OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz"
 msgstr ""
 
-#: classes/class-a-z-listing.php:320
+#: classes/class-a-z-listing.php:322
 #. translators: This should be a single character to denote "all entries that
 #. didn't fit under one of the alphabet character groups defined". This is used
 #. in English to categorise posts whose title begins with a numeric (0 through
@@ -67,54 +67,79 @@ msgstr ""
 msgid "Alphabetised links to the A-Z site map"
 msgstr ""
 
-#: widgets/class-a-z-listing-widget.php:110
-#: widgets/class-a-z-listing-widget.php:115
+#: widgets/class-a-z-listing-widget.php:119
+#: widgets/class-a-z-listing-widget.php:124
 msgid "Widget Title"
 msgstr ""
 
-#: widgets/class-a-z-listing-widget.php:119
+#: widgets/class-a-z-listing-widget.php:128
 msgid ""
 "Leave the title field blank, above, to use the title from the page set in "
 "the next field"
 msgstr ""
 
-#: widgets/class-a-z-listing-widget.php:126
+#: widgets/class-a-z-listing-widget.php:135
 msgid "Site map A-Z page"
 msgstr ""
 
-#: widgets/class-a-z-listing-widget.php:142
+#: widgets/class-a-z-listing-widget.php:147
+msgid "Type some or all of the title of the page you want links to point at."
+msgstr ""
+
+#: widgets/class-a-z-listing-widget.php:148
+#: widgets/class-a-z-listing-widget.php:208
+msgid ""
+"Matching posts will be shown as you type. Click on the correct post from "
+"the matches to update the setting."
+msgstr ""
+
+#: widgets/class-a-z-listing-widget.php:155
 msgid "Display posts or terms?"
 msgstr ""
 
-#: widgets/class-a-z-listing-widget.php:149
+#: widgets/class-a-z-listing-widget.php:162
 msgid "Posts"
 msgstr ""
 
-#: widgets/class-a-z-listing-widget.php:153
+#: widgets/class-a-z-listing-widget.php:166
 msgid "Taxonomy terms"
 msgstr ""
 
-#: widgets/class-a-z-listing-widget.php:163
+#: widgets/class-a-z-listing-widget.php:175
 msgid "Post-type to display"
 msgstr ""
 
-#: widgets/class-a-z-listing-widget.php:183
+#: widgets/class-a-z-listing-widget.php:194
+msgid "Show only children of this post (ID)"
+msgstr ""
+
+#: widgets/class-a-z-listing-widget.php:207
+msgid ""
+"Type some or all of the title of the post to limit the listing to only the "
+"children of that post."
+msgstr ""
+
+#: widgets/class-a-z-listing-widget.php:212
+msgid "Include grand-children?"
+msgstr ""
+
+#: widgets/class-a-z-listing-widget.php:224
 msgid "Taxonomy to display"
 msgstr ""
 
-#: widgets/class-a-z-listing-widget.php:203
+#: widgets/class-a-z-listing-widget.php:243
 msgid "Parent term to display children of"
 msgstr ""
 
-#: widgets/class-a-z-listing-widget.php:215
+#: widgets/class-a-z-listing-widget.php:255
 msgid "Terms to include (IDs)"
 msgstr ""
 
-#: widgets/class-a-z-listing-widget.php:228
+#: widgets/class-a-z-listing-widget.php:267
 msgid "Terms to exclude (IDs)"
 msgstr ""
 
-#: widgets/class-a-z-listing-widget.php:241
+#: widgets/class-a-z-listing-widget.php:279
 msgid "Hide empty terms"
 msgstr ""
 
