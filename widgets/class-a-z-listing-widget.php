@@ -144,8 +144,8 @@ class A_Z_Listing_Widget extends WP_Widget {
 						value="<?php echo esc_attr( $target_post ); ?>" />
 				</p>
 				<p>
-					<?php esc_html_e( 'Type some or all of the title of the page you want links to point at.' ); ?>
-					<?php esc_html_e( 'Matching posts will be shown as you type. Click on the correct post from the matches to update the setting.' ); ?>
+					<?php esc_html_e( 'Type some or all of the title of the page you want links to point at.', 'a-z-listing' ); ?>
+					<?php esc_html_e( 'Matching posts will be shown as you type. Click on the correct post from the matches to update the setting.', 'a-z-listing' ); ?>
 				</p>
 			</div>
 
@@ -204,8 +204,8 @@ class A_Z_Listing_Widget extends WP_Widget {
 						value="<?php echo esc_attr( $listing_parent_post ); ?>" />
 				</p>
 				<p>
-					<?php esc_html_e( 'Type some or all of the title of the post to limit the listing to only the children of that post.' ); ?>
-					<?php esc_html_e( 'Matching posts will be shown as you type. Click on the correct post from the matches to update the setting.' ); ?>
+					<?php esc_html_e( 'Type some or all of the title of the post to limit the listing to only the children of that post.', 'a-z-listing' ); ?>
+					<?php esc_html_e( 'Matching posts will be shown as you type. Click on the correct post from the matches to update the setting.', 'a-z-listing' ); ?>
 				</p>
 				<p>
 					<label for="<?php echo esc_attr( $listing_all_children_id ); ?>">
