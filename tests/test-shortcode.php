@@ -138,4 +138,27 @@ class AZ_Shortcode_Tests extends AZ_UnitTestCase {
 
 		$this->assertHTMLEquals( $expected, $actual );
 	}
+
+	public function test_multiple_post_type_listing() {
+		$title1 = 'Test title 1';
+		$post1  = $this->factory->post->create(
+			array(
+				'post_title' => $title1,
+				'post_type'  => 'post',
+			)
+		);
+
+		$title2 = 'Test title 2';
+		$post2  = $this->factory->post->create(
+			array(
+				'post_title' => $title2,
+				'post_type'  => 'page',
+			)
+			);
+
+		$expected = sprintf( file_get_contents( 'tests/data/populated-listing-multiple-post-types.txt' ), $title1, $post1, $title2, $post2 );
+		$actual   = do_shortcode( '[a-z-listing post-type="post,page"]' );
+
+		$this->assertHTMLEquals( $expected, $actual );
+	}
 }
