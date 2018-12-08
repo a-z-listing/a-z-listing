@@ -21,6 +21,19 @@ class A_Z_Listing_Indices extends A_Z_Listing_Singleton {
 	}
 
 	/**
+	 * Get the first letter of a title for use as the Index letter
+	 * 
+	 * @since 2.1.0
+	 * @param string $title The title of the item to extract the index letter from.
+	 */
+	public static function get_index_letter( $title ) {
+		if ( extension_loaded( 'mbstring' ) ) {
+			return mb_substr( $title, 0, 1, 'UTF-8' );
+		}
+		return substr( $title, 0, 1 );
+	}
+
+	/**
 	 * Find and return the index letter for a post
 	 *
 	 * @since 2.0.0
@@ -60,7 +73,7 @@ class A_Z_Listing_Indices extends A_Z_Listing_Singleton {
 		 */
 		$title = apply_filters( 'a_z_listing_pre_index_item_title', $title, $item, $type );
 
-		$index = mb_substr( $title, 0, 1, 'UTF-8' );
+		$index = self::get_index_letter( $title );
 
 		/**
 		 * Modify the indice(s) to group this item under

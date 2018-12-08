@@ -303,12 +303,15 @@ class A_Z_Listing {
 	 * @return array individual multi-byte characters from the string
 	 */
 	public static function mb_string_to_array( $string ) {
-		return array_map(
-			function ( $i ) use ( $string ) {
-				return mb_substr( $string, $i, 1 );
-			},
-			range( 0, mb_strlen( $string ) - 1 )
-		);
+		if ( extension_loaded( 'mbstring' ) ) {
+			return array_map(
+				function ( $i ) use ( $string ) {
+					return mb_substr( $string, $i, 1 );
+				},
+				range( 0, mb_strlen( $string ) - 1 )
+			);
+		}
+		return explode( '', $string );
 	}
 
 	/**
