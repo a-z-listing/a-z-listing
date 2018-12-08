@@ -17,6 +17,7 @@ cache:
     - $HOME/.composer/cache
 
 php:
+  - 7.3
   - 7.2
   - 7.1
   - 7.0
@@ -26,6 +27,7 @@ env:
   - WP_VERSION=4.7
   - WP_VERSION=4.8
   - WP_VERSION=4.9
+  - WP_VERSION=5.0
   - WP_VERSION=latest
   - WP_VERSION=trunk
 
@@ -40,7 +42,7 @@ matrix:
     - php: 5.3
       env: WP_VERSION=latest
       dist: precise
-    - php: 7.0
+    - php: 7.3
       env: WP_TRAVISCI=phpcs
 
 before_script:
