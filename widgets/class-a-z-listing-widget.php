@@ -61,11 +61,11 @@ class A_Z_Listing_Widget extends WP_Widget {
 		$public_post_types = get_post_types( $args, 'objects' );
 		$public_taxonomies = get_taxonomies( $args, 'objects' );
 
-		$widget_title      = $instance['title'];
+		$widget_title      = isset( $instance['title'] ) ? $instance['title'] : '';
 		$widget_title_id   = $this->get_field_id( 'title' );
 		$widget_title_name = $this->get_field_name( 'title' );
 
-		$display_type      = $instance['type'];
+		$display_type      = ( 'terms' === $instance['type'] ) ? 'terms' : 'posts';
 		$display_type_id   = $this->get_field_id( 'type' );
 		$display_type_name = $this->get_field_name( 'type' );
 
@@ -396,6 +396,7 @@ function get_the_section_a_z_widget( $args, $instance ) {
 			'parent_post'      => '',
 			'parent_term'      => '',
 			'post'             => -1, // target.
+			'page'             => -1, // obsolete target.
 			'post_type'        => 'page',
 			'taxonomy'         => '',
 			'terms'            => '',
@@ -406,16 +407,21 @@ function get_the_section_a_z_widget( $args, $instance ) {
 
 	$title  = esc_html( $instance['title'] );
 	$target = '';
-	if ( $instance['post'] > 0 ) { // target.
-		$target = get_the_permalink( $instance['post'] );
+	if ( 0 < $instance['post'] || 0 < $instance['page'] ) { // target.
+		$target_id = (int) $instance['post']; // target.
+		if ( ! ( 0 < $instance['post'] ) ) {
+			$target_id = (int) $instance['page']; // obsolete target.
+		}
+
+		$target_url = get_the_permalink( $target_id );
 		if ( empty( $title ) ) {
-			$title = get_the_title( $instance['post'] );
+			$title = get_the_title( $target_id );
 		}
 	} elseif ( empty( $title ) ) {
 		$title = esc_html__( 'A-Z Listing', 'a-z-listing' );
 	}
 
-	$hide_empty = true === $instance['hide_empty_terms'] ? 'true' : 'false';
+	$hide_empty_terms = true === $instance['hide_empty_terms'] ? 'true' : 'false';
 
 	$ret  = '';
 	$ret .= $args['before_widget'];
@@ -433,13 +439,13 @@ function get_the_section_a_z_widget( $args, $instance ) {
 			get-all-children='{$instance['all_children']}'
 			group-numbers=''
 			grouping=''
-			hide-empty-terms='{$hide_empty}'
+			hide-empty-terms='{$hide_empty_terms}'
 			numbers='hide'
 			parent-post='{$instance['parent_post']}'
 			parent-term='{$instance['parent_term']}'
 			post-type='{$instance['post_type']}'
 			return='letters'
-			target='{$target}'
+			target='{$target_url}'
 			taxonomy='{$instance['taxonomy']}'
 			terms='{$instance['terms']}'
 		]"
