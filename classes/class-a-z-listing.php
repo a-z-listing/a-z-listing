@@ -590,7 +590,7 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Return the letter links HTML
+	 * Retrieve the letter links HTML
 	 *
 	 * @since 1.0.0
 	 * @param string $target The page to point links toward.
@@ -690,7 +690,7 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Return the index list HTML created by a theme template
+	 * Retrieve the index list HTML created by a theme template
 	 *
 	 * @since 0.7
 	 * @return string The index list HTML.
@@ -787,7 +787,7 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Get the item object for the current post
+	 * Retrieve the item object for the current post
 	 *
 	 * @since 2.0.0
 	 *
@@ -798,41 +798,63 @@ class A_Z_Listing {
 	public function get_the_item_object( $force = '' ) {
 		global $post;
 		if ( 'I understand the issues!' === $force ) {
-			$item_id = 0;
-			if ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
-				return $this->current_item['item'];
+            $current_item = $this->current_item['item'];
+            if ( is_string( $current_item ) ) {
+                $item = explode( ':', $current_item, 2 );
+
+                if ( isset( $item[1] ) ) {
+                    if ( 'terms' === $this->type ) {
+                        return get_term( $item[1] );
 			}
 
-			if ( is_a( $this->current_item['item'], 'WP_Post' ) ) {
-				$post = $this->current_item['item'];
+                    $post = get_post( $item[1] );
 				setup_postdata( $post );
+
+				return $post;
+			}
+			}
+
+            if ( is_a( $current_item, 'WP_Post' ) ) {
+                $post = $current_item;
+				setup_postdata( $post );
+
 				return $post;
 			}
 
-			if ( is_numeric( $this->current_item['item'] ) ) {
-				$item_id = $this->current_item['item'];
-			} else {
-				$item    = explode( ':', $this->current_item['item'], 2 );
-				$item_id = $item[1];
-			}
-
-			if ( 0 < $item_id ) {
-				if ( 'terms' === $this->type ) {
-					return get_term( $item[1] );
-				}
-
-				$post = get_post( $item[1] );
-			}
-
-			setup_postdata( $post );
-			return $post;
+            return $current_item;
 		}
 
 		return null;
+			}
+
+    /**
+     * Retrieve meta field for an item.
+     *
+     * @since 2.1.0
+     * @param string $key The meta key to retrieve. By default returns data for all keys.
+     * @param bool   $single Whether to return a single value.
+     * @return mixed Will be an array if $single is false. Will be value of meta data field if $single is true.
+     */
+    function get_item_meta( $key = '', $single = false ) {
+        if ( is_string( $this->current_item['item'] ) ) {
+            $item = explode( ':', $this->current_item['item'], 2 );
+
+            if ( 'term' === $type[0] ) {
+                return get_term_meta( $item[1], $key, $single );
+				}
+
+            return get_post_meta( $item[1], $key, $single );
+			}
+
+        if ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
+            return get_term_meta( $this->current_item['item']->term_id, $key, $single );
+		}
+
+        return get_post_meta( $this->current_item['item']->ID, $key, $single );
 	}
 
 	/**
-	 * Returns the number of letters in the loaded alphabet
+	 * Retrieve the number of letters in the loaded alphabet
 	 *
 	 * @since 1.0.0
 	 * @return int The number of letters
@@ -842,7 +864,7 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Return the number of posts within the current letter
+	 * Retrieve the number of posts within the current letter
 	 *
 	 * @since 0.7
 	 * @see A_Z_Listing::get_the_letter_count()
@@ -854,7 +876,7 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Return the number of posts within the current letter
+	 * Retrieve the number of posts within the current letter
 	 *
 	 * @since 0.7
 	 * @see A_Z_Listing::get_the_letter_count()
@@ -875,7 +897,7 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Return the number of posts within the current letter
+	 * Retrieve the number of posts within the current letter
 	 *
 	 * @since 1.0.0
 	 * @return int The number of posts
@@ -894,7 +916,7 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Return the ID of the current letter. This is not escaped!
+	 * Retrieve the ID of the current letter. This is not escaped!
 	 *
 	 * @since 0.7
 	 * @return string The letter ID
@@ -914,7 +936,7 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Return the title of the current letter. For example, upper-case A or B or C etc. This is not escaped!
+	 * Retrieve the title of the current letter. For example, upper-case A or B or C etc. This is not escaped!
 	 *
 	 * @since 0.7
 	 * @since 1.8.0 Add filters to modify the title of the letter.
@@ -961,18 +983,24 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Return the title of the current post. This is not escaped!
+	 * Retrieve the title of the current post. This is not escaped!
 	 *
 	 * @since 1.0.0
 	 * @return string The post title
 	 */
 	public function get_the_title() {
 		$title = $this->current_item['title'];
-		$item  = $this->current_item['item'];
-		if ( $item instanceof WP_Post ) {
-			$title = apply_filters( 'the_title', $title, $item->ID );
-		} elseif ( $item instanceof WP_Term ) {
-			$title = apply_filters( 'term_name', $title, $item );
+        if ( is_string( $this->current_item['item'] ) ) {
+    		$item  = explode( ':', $this->current_item['item'], 2 );
+        } else {
+            $item = $this->current_item['item'];
+        }
+        
+		if ( 'post' === $item[0] || is_a( $item, 'WP_Post' ) ) {
+			return apply_filters( 'the_title', $title, $item->ID );
+		}
+		if ( 'term' === $item[0] || is_a( $item, 'WP_Term' ) ) {
+			return apply_filters( 'term_name', $title, $item );
 		}
 		return $title;
 	}
@@ -987,7 +1015,7 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Return the permalink of the current post. This is not escaped!
+	 * Retrieve the permalink of the current post. This is not escaped!
 	 *
 	 * @since 1.0.0
 	 * @return string The permalink
