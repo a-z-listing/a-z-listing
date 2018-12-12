@@ -653,19 +653,6 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Load and execute a theme template
-	 *
-	 * @since 1.0.0
-	 * @param string $template_file The path of the template to execute.
-	 */
-	protected function do_template( $template_file ) {
-		$a_z_query = $this;
-		if ( ! empty( $template_file ) ) {
-			include $template_file;
-		}
-	}
-
-	/**
 	 * Print the index list HTML created by a theme template
 	 *
 	 * @since 2.0.0
@@ -682,9 +669,9 @@ class A_Z_Listing {
 
 		$template = locate_template( array( 'a-z-listing-' . $section . '.php', 'a-z-listing.php' ) );
 		if ( $template ) {
-			$this->do_template( $template );
+			a_z_listing_do_template( $this, $template );
 		} else {
-			$this->do_template( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'a-z-listing.php' );
+			a_z_listing_do_template( $this, dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'a-z-listing.php' );
 		}
 		wp_reset_postdata();
 	}
@@ -995,13 +982,23 @@ class A_Z_Listing {
         } else {
             $item = $this->current_item['item'];
         }
-        
-		if ( 'post' === $item[0] || is_a( $item, 'WP_Post' ) ) {
-			return apply_filters( 'the_title', $title, $item->ID );
+		
+		if ( is_array( $item ) ) {
+			if ( 'post' === $item[0] ) {
+				return apply_filters( 'the_title', $title, $item[1] );
+			}
+			if ( 'term' === $item[0] ) {
+				return apply_filters( 'term_name', $title, $item[1] );
+			}
+		} else {
+			if ( is_a( $item, 'WP_Post' ) ) {
+				return apply_filters( 'the_title', $title, $item->ID );
+			}
+			if ( is_a( $item, 'WP_Term' ) ) {
+				return apply_filters( 'term_name', $title, $item->term_id );
+			}
 		}
-		if ( 'term' === $item[0] || is_a( $item, 'WP_Term' ) ) {
-			return apply_filters( 'term_name', $title, $item );
-		}
+		
 		return $title;
 	}
 
@@ -1023,6 +1020,17 @@ class A_Z_Listing {
 	public function get_the_permalink() {
 		return $this->current_item['link'];
 	}
+}
+
+/**
+ * Load and execute a theme template
+ *
+ * @since 2.1.0
+ * @param A_Z_Query $a_z_query The Query object.
+ * @param string    $template_file The path of the template to execute.
+ */
+function a_z_listing_do_template( $a_z_query, $template_file ) {
+	require $template_file;
 }
 
 /**
