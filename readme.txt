@@ -5,7 +5,7 @@ Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 4.6
 Requires PHP: 5.6
-Tested up to: 4.9
+Tested up to: 5.0
 Stable tag: 2.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -425,6 +425,7 @@ If there is code already in your functions.php then add just the lines between `
 * Add parent-page attribute to the shortcode
 * Add simpler and safer filter for overriding the index letter for an item
 * Add simpler and safer filter for overriding the title for an item
+* Add new function for fetching meta data in a template: `$a_z_listing->get_item_meta()`
 * Allow exclude-terms to be used with display="posts"
 
 = 2.0.6 =
