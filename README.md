@@ -5,7 +5,7 @@
 **Tags:** a to z, a-z, archive, listing, widget, index  
 **Requires at least:** 4.6  
 **Requires PHP:** 5.6  
-**Tested up to:** 4.9  
+**Tested up to:** 5.0  
 **Stable tag:** 2.1.0  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -229,7 +229,7 @@ These helper functions cope with the dual usage of the plugin supporting both `W
 
 ### How do I show posts of a different post-type (not pages) or multiple post-types (e.g. posts AND pages) ###
 
-This can be achieved using the shortcode or PHP.
+This can be achieved using the shortcode or PHP. In these examples the generic phrase `post-type-slug` is used to describe the concept. The default post types provided by WordPress are called "Posts" and "Pages". Their slugs are `post` and `page` respectively. You need to use these names in place of the examples (i.e. `your-post-type-slug`, `type1-slug`, and `type1-slug`).
 
 #### Shortcode method ####
 
@@ -273,7 +273,7 @@ The code above needs to be within a php block which is denoted by the `<?php` an
 
 ### How do I show posts from a specific category only ###
 
-This can be achieved using the shortcode or PHP.
+This can be achieved using the shortcode or PHP. In these examples the generic phrase `taxonomy` and `term` are used to describe the concept. The default taxonomies provided by WordPress are called "Categories" and "Tags". Their slugs are `category` and `post_tag` respectively. Each Category and Tag are then known as "terms". You need to use the slug for each individual category or tag in place of the example slugs (i.e. `term-slug`, `term1-slug`, and `term1-slug`).
 
 #### Shortcode method ####
 
@@ -311,7 +311,7 @@ The code above needs to be within a php block which is denoted by the `<?php` an
 
 ### How do I show terms from a taxonomy instead of posts ###
 
-This can be achieved using the shortcode or PHP.
+This can be achieved using the shortcode or PHP. In these examples the generic phrase `taxonomy` and `term` are used to describe the concept. The default taxonomies provided by WordPress are called "Categories" and "Tags". Their slugs are `category` and `post_tag` respectively. You need to use the slug for the taxonomy in place of the example slugs (i.e. `taxonomy-slug`).
 
 #### Shortcode method ####
 
@@ -355,7 +355,7 @@ Yes you can. This needs the following code added to your theme's functions.php. 
 
 ```php
 <?php
-add_action( 'wp', 'a_z_listing_force_enable_styles', 99 );
+add_action( 'init', 'a_z_listing_force_enable_styles', 99 );
 ?>
 ```
 
@@ -367,7 +367,7 @@ You can add code which detects the page which the user is browsing and only enab
 
 ```php
 <?php
-add_action( 'wp', 'your_override_wrapper_function', 99 );
+add_action( 'init', 'your_override_wrapper_function', 99 );
 function your_override_wrapper_function() {
     if ( ! is_page( 'your-a-z-listing-page-slug-or-ID' ) ) { // ID is numeric, slug is a string.
         return; // we don't want to run for anything except the page we're interested in.
@@ -422,13 +422,16 @@ If there is code already in your functions.php then add just the lines between `
 * Fix `get_the_item_object()` to work with old-style overridden indices
 * Fix `get_the_item_object()` to correctly extract the item ID and load the correct item
 * Improve javascript on the widget configuration
+* Clarified the examples with explanations about "post types", "taxonomies", and "terms" to explain what each of these mean.
 
 #### New Features: ####
 
 * Add parent-page attribute to the shortcode
 * Add simpler and safer filter for overriding the index letter for an item
 * Add simpler and safer filter for overriding the title for an item
+* Add new function for fetching meta data in a template: `$a_z_listing->get_item_meta()`
 * Allow exclude-terms to be used with display="posts"
+* Moved template loading function outside of the `A_Z_Query` class to prevent accidental access to the plugin internal structure
 
 ### 2.0.6 ###
 

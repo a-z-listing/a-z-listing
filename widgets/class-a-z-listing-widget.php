@@ -132,7 +132,7 @@ class A_Z_Listing_Widget extends WP_Widget {
 			<div class="a-z-listing-target-post-wrapper">
 				<p>
 					<label for="<?php echo esc_attr( $target_post_id ); ?>">
-						<?php esc_html_e( 'Site map A-Z page', 'a-z-listing' ); ?>
+						<?php esc_html_e( 'Sitemap A-Z page', 'a-z-listing' ); ?>
 					</label>
 					<input type="text" class="widefat a-z-listing-target-post-title"
 						id="<?php echo esc_attr( $target_post_title_id ); ?>"

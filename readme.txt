@@ -427,6 +427,7 @@ If there is code already in your functions.php then add just the lines between `
 * Add simpler and safer filter for overriding the title for an item
 * Add new function for fetching meta data in a template: `$a_z_listing->get_item_meta()`
 * Allow exclude-terms to be used with display="posts"
+* Moved template loading function outside of the `A_Z_Query` class to prevent accidental access to the plugin internal structure
 
 = 2.0.6 =
 
