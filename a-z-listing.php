@@ -7,7 +7,7 @@
  * Author URI:      https://bowlhat.net/
  * Text Domain:     a-z-listing
  * Domain Path:     /languages
- * Version:         2.0.0
+ * Version:         2.0.2
  *
  * @package         A_Z_Listing
  */
@@ -35,6 +35,7 @@ function a_z_listing_plugins_loaded() {
 	require 'functions/helpers.php';
 	require 'functions/styles.php';
 	require 'functions/scripts.php';
+	require 'functions/enqueues.php';
 	require 'functions/shortcode.php';
 
 	require 'interfaces/interface-a-z-listing-extension.php';
