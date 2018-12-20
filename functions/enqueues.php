@@ -65,4 +65,4 @@ function a_z_listing_do_enqueue() {
 		add_action( 'wp_enqueue_scripts', 'a_z_listing_enqueue_tabs' );
 	}
 }
-add_action( 'init', 'a_z_listing_do_enqueue' );
+add_action( 'init', 'a_z_listing_enqueues' );

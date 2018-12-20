@@ -243,10 +243,9 @@ class A_Z_Listing_Widget extends WP_Widget {
 				<input type="checkbox"
 					id="<?php echo esc_attr( $listing_hide_empty_terms_id ); ?>"
 					name="<?php echo esc_attr( $listing_hide_empty_terms_name ); ?>"
-					<?php echo ( isset( $listing_hide_empty_terms ) && 'true' === $listing_hide_empty_terms ) ? 'checked' : ''; ?> />
+					<?php echo ( isset( $listing_hide_empty_terms ) && true === $listing_hide_empty_terms ) ? 'checked' : ''; ?> />
 			</p>
 		</div>
-
 		<script type="text/javascript">
 			jQuery(document).ready(function($) {
 				const target_post                      = document.getElementById( '<?php echo esc_html( $target_post_id ); ?>' );
@@ -258,10 +257,8 @@ class A_Z_Listing_Widget extends WP_Widget {
 				const listing_taxonomy_wrapper         = document.getElementById( '<?php echo esc_html( $listing_taxonomy_wrapper_id ); ?>' );
 				const listing_parent_term              = document.getElementById( '<?php echo esc_html( $listing_parent_term_id ); ?>' );
 				const listing_parent_term_wrapper      = document.getElementById( '<?php echo esc_html( $listing_parent_term_wrapper_id ); ?>' );
-				const listing_hide_empty_terms         = document.getElementById( '<?php echo esc_html( $listing_hide_empty_terms_id ); ?>' );
+				const listing_hide_empty_terms         = document.getElementById( '<?php echo esc_html( $listing_hide_empty_terms ); ?>' );
 				const listing_hide_empty_terms_wrapper = document.getElementById( '<?php echo esc_html( $listing_hide_empty_terms_wrapper_id ); ?>' );
-				const listing_terms_exclude            = document.getElementById( '<?php echo esc_html( $listing_terms_exclude_id ); ?>' );
-				const listing_terms_exclude_wrapper    = document.getElementById( '<?php echo esc_html( $listing_terms_exclude_wrapper_id ); ?>' );
 
 				function switch_taxonomy_or_posts() {
 					if ( 'terms' === display_type.value ) {
@@ -272,9 +269,7 @@ class A_Z_Listing_Widget extends WP_Widget {
 						listing_parent_term.removeAttribute( 'disabled' );
 						listing_parent_term_wrapper.style.display = 'unset';
 						listing_hide_empty_terms.removeAttribute( 'disabled' );
-						listing_hide_empty_terms_wrapper.style.display = 'unset';
-						listing_terms_exclude.removeAttribute( 'disabled' );
-						listing_terms_exclude_wrapper.style.display = 'unset';
+						listing_hide_empty_terms.style.display = 'unset';
 					} else {
 						listing_post_type.removeAttribute( 'disabled' );
 						listing_post_type_wrapper.style.display = 'unset';
@@ -284,8 +279,6 @@ class A_Z_Listing_Widget extends WP_Widget {
 						listing_parent_term_wrapper.style.display = 'none';
 						listing_hide_empty_terms.setAttribute( 'disabled', 'disabled' );
 						listing_hide_empty_terms_wrapper.style.display = 'none';
-						listing_terms_exclude.setAttribute( 'disabled', 'disabled' );
-						listing_terms_exclude_wrapper.style.display = 'none';
 					}
 				}
 				switch_taxonomy_or_posts();
@@ -333,7 +326,7 @@ class A_Z_Listing_Widget extends WP_Widget {
 
 		$instance['title']             = strip_tags( $new_instance['title'] );
 		$instance['type']              = strip_tags( $new_instance['type'] );
-		$instance['post']              = (int) $new_instance['post']; // target.
+		$instance['post']              = (int) $new_instance['post'];
 		$instance['target_post_title'] = strip_tags( $new_instance['target_post_title'] );
 		$instance['post_type']         = strip_tags( $new_instance['post_type'] );
 		$instance['parent']            = (int) $new_instance['parent'];
@@ -341,7 +334,7 @@ class A_Z_Listing_Widget extends WP_Widget {
 		$instance['parent_term']       = strip_tags( $new_instance['parent_term'] );
 		$instance['terms']             = strip_tags( $new_instance['terms'] );
 		$instance['exclude_terms']     = strip_tags( $new_instance['exclude_terms'] );
-		$instance['hide_empty_terms']  = 'on' === $new_instance['hide_empty_terms'] ? 'true' : 'false';
+		$instance['hide_empty_terms']  = 'checked' === $new_instance['hide_empty_terms'] ? 'true' : 'false';
 
 		if ( empty( $instance['target_post_title'] ) ) {
 			$instance['post'] = 0;
@@ -419,7 +412,7 @@ function get_the_section_a_z_widget( $args, $instance ) {
 		$instance,
 		array(
 			'title'            => '',
-			'post'             => -1, // target.
+			'target'           => -1,
 			'type'             => 'posts',
 			'taxonomy'         => '',
 			'post_type'        => 'page',
@@ -433,9 +426,9 @@ function get_the_section_a_z_widget( $args, $instance ) {
 	$title  = esc_html( $instance['title'] );
 	$target = '';
 	if ( empty( $title ) ) {
-		if ( $instance['post'] > 0 ) { // target.
-			$title  = get_the_title( $instance['post'] );
-			$target = get_the_permalink( $instance['post'] );
+		if ( $instance['target'] > 0 ) {
+			$title  = get_the_title( $instance['target'] );
+			$target = get_the_permalink( $instance['target'] );
 		} else {
 			$title = esc_html__( 'A-Z Listing', 'a-z-listing' );
 		}
@@ -461,7 +454,6 @@ function get_the_section_a_z_widget( $args, $instance ) {
 			grouping=''
 			numbers='hide'
 			post-type='{$instance['post_type']}'
-			exclude-posts=''
 			terms='{$instance['terms']}'
 			exclude-terms='{$instance['exclude_terms']}'
 			parent-term='{$instance['parent_term']}'

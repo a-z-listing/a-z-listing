@@ -234,7 +234,7 @@ class A_Z_Listing {
 				$this->query = $query;
 			} else {
 				$wq          = new WP_Query( $query );
-				$items       = $wq->posts;
+				$items       = $wq->get_posts();
 				$this->query = $wq;
 			}
 

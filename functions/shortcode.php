@@ -27,7 +27,6 @@ function a_z_shortcode_handler( $attributes ) {
 			'grouping'         => '',
 			'numbers'          => 'hide',
 			'post-type'        => 'page',
-			'exclude-posts'    => '',
 			'taxonomy'         => '',
 			'terms'            => '',
 			'exclude-terms'    => '',
@@ -133,8 +132,12 @@ function a_z_shortcode_handler( $attributes ) {
 
 		$a_z_query = new A_Z_Listing( $query, 'terms' );
 	} else {
+		$post_types = mb_split( ',', $attributes['post-type'] );
+		$post_types = array_map( 'trim', $post_types );
+		$post_types = array_unique( $post_types );
+
 		$query = array(
-			'post_type' => $attributes['post-type'],
+			'post_type' => $post_types,
 		);
 
 		if ( ! empty( $attributes['exclude-posts'] ) ) {
