@@ -6,7 +6,7 @@ Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 4.6
 Requires PHP: 5.6
 Tested up to: 4.9
-Stable tag: 2.0.4
+Stable tag: 2.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -410,8 +410,10 @@ If there is code already in your functions.php then add just the lines between `
 
 == Changelog ==
 
-= 2.0.4 =
+= 2.0.5 =
 
+* *Personal Note:* Sorry to everyone who upgraded to 2.0.0 thru to 2.0.4 about yet another update. I have failed you all by shipping faulty versions to you, and I'm sorry, especially so that you've had to endure so many updates the past two days.
+* Fix filtering posts by multiple taxonomy terms
 * Fix styling error causing two or more posts to sometimes appear on the same line
 * Minor style tweak to fix short listings, and long titles
 * Fix broken styling in 2.0.0
