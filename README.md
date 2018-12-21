@@ -267,7 +267,7 @@ the_a_z_listing( array(
 ?>
 ```
 
-The argument to `the_a_z_listing()` is an [array](http://php.net/manual/en/language.types.array.php) and takes the same parameters as [WP_Query](https://codex.wordpress.org/Class_Reference/WP_Query)
+The argument to `the_a_z_listing()` is an [array](https://secure.php.net/manual/en/language.types.array.php) and takes the same parameters as [WP_Query](https://codex.wordpress.org/Class_Reference/WP_Query)
 
 The code above needs to be within a php block which is denoted by the `<?php` and `?>` pair. Depending on your theme, you might not need the opening and closing php tags shown in the above snippet; if that is the case, you are free to omit them in your code.
 
@@ -303,9 +303,9 @@ the_a_z_listing( array(
 ?>
 ```
 
-Any number of terms may be added to the `terms` [array](http://php.net/manual/en/language.types.array.php), including one or none.
+Any number of terms may be added to the `terms` [array](https://secure.php.net/manual/en/language.types.array.php), including one or none.
 
-The argument to `the_a_z_listing()` is an [array](http://php.net/manual/en/language.types.array.php) and takes the same parameters as [WP_Query](https://codex.wordpress.org/Class_Reference/WP_Query)
+The argument to `the_a_z_listing()` is an [array](https://secure.php.net/manual/en/language.types.array.php) and takes the same parameters as [WP_Query](https://codex.wordpress.org/Class_Reference/WP_Query)
 
 The code above needs to be within a php block which is denoted by the `<?php` and `?>` pair. Depending on your theme, you might not need the opening and closing php tags shown in the above snippet; if that is the case, you are free to omit them in your code.
 
@@ -331,7 +331,7 @@ the_a_z_listing( 'taxonomy-slug' );
 ?>
 ```
 
-The argument to `the_a_z_listing()` is a [string](http://php.net/manual/en/language.types.string.php) and contains the slug of a single taxonomy, e.g. `category` or `post_tag`.
+The argument to `the_a_z_listing()` is a [string](https://secure.php.net/manual/en/language.types.string.php) and contains the slug of a single taxonomy, e.g. `category` or `post_tag`.
 
 The code above needs to be within a php block which is denoted by the `<?php` and `?>` pair. Depending on your theme, you might not need the opening and closing php tags shown in the above snippet; if that is the case, you are free to omit them in your code.
 
