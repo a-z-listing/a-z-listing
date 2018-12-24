@@ -785,59 +785,59 @@ class A_Z_Listing {
 	public function get_the_item_object( $force = '' ) {
 		global $post;
 		if ( 'I understand the issues!' === $force ) {
-            $current_item = $this->current_item['item'];
-            if ( is_string( $current_item ) ) {
-                $item = explode( ':', $current_item, 2 );
+			$current_item = $this->current_item['item'];
+			if ( is_string( $current_item ) ) {
+				$item = explode( ':', $current_item, 2 );
 
-                if ( isset( $item[1] ) ) {
-                    if ( 'terms' === $this->type ) {
-                        return get_term( $item[1] );
+				if ( isset( $item[1] ) ) {
+					if ( 'terms' === $this->type ) {
+						return get_term( $item[1] );
+					}
+
+					$post = get_post( $item[1] );
+					setup_postdata( $post );
+
+					return $post;
+				}
 			}
 
-                    $post = get_post( $item[1] );
+			if ( is_a( $current_item, 'WP_Post' ) ) {
+				$post = $current_item;
 				setup_postdata( $post );
 
 				return $post;
 			}
-			}
 
-            if ( is_a( $current_item, 'WP_Post' ) ) {
-                $post = $current_item;
-				setup_postdata( $post );
-
-				return $post;
-			}
-
-            return $current_item;
+			return $current_item;
 		}
 
 		return null;
+	}
+
+	/**
+	 * Retrieve meta field for an item.
+	 *
+	 * @since 2.1.0
+	 * @param string $key The meta key to retrieve. By default returns data for all keys.
+	 * @param bool   $single Whether to return a single value.
+	 * @return mixed Will be an array if $single is false. Will be value of meta data field if $single is true.
+	 */
+	function get_item_meta( $key = '', $single = false ) {
+		if ( is_string( $this->current_item['item'] ) ) {
+			$item = explode( ':', $this->current_item['item'], 2 );
+
+			if ( 'term' === $type[0] ) {
+				return get_term_meta( $item[1], $key, $single );
 			}
 
-    /**
-     * Retrieve meta field for an item.
-     *
-     * @since 2.1.0
-     * @param string $key The meta key to retrieve. By default returns data for all keys.
-     * @param bool   $single Whether to return a single value.
-     * @return mixed Will be an array if $single is false. Will be value of meta data field if $single is true.
-     */
-    function get_item_meta( $key = '', $single = false ) {
-        if ( is_string( $this->current_item['item'] ) ) {
-            $item = explode( ':', $this->current_item['item'], 2 );
-
-            if ( 'term' === $type[0] ) {
-                return get_term_meta( $item[1], $key, $single );
-				}
-
-            return get_post_meta( $item[1], $key, $single );
-			}
-
-        if ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
-            return get_term_meta( $this->current_item['item']->term_id, $key, $single );
+			return get_post_meta( $item[1], $key, $single );
 		}
 
-        return get_post_meta( $this->current_item['item']->ID, $key, $single );
+		if ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
+			return get_term_meta( $this->current_item['item']->term_id, $key, $single );
+		}
+
+		return get_post_meta( $this->current_item['item']->ID, $key, $single );
 	}
 
 	/**
@@ -977,12 +977,12 @@ class A_Z_Listing {
 	 */
 	public function get_the_title() {
 		$title = $this->current_item['title'];
-        if ( is_string( $this->current_item['item'] ) ) {
-    		$item  = explode( ':', $this->current_item['item'], 2 );
-        } else {
-            $item = $this->current_item['item'];
-        }
-		
+		if ( is_string( $this->current_item['item'] ) ) {
+			$item = explode( ':', $this->current_item['item'], 2 );
+		} else {
+			$item = $this->current_item['item'];
+		}
+
 		if ( is_array( $item ) ) {
 			if ( 'post' === $item[0] ) {
 				return apply_filters( 'the_title', $title, $item[1] );
@@ -998,7 +998,7 @@ class A_Z_Listing {
 				return apply_filters( 'term_name', $title, $item->term_id );
 			}
 		}
-		
+
 		return $title;
 	}
 

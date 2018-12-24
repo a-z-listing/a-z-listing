@@ -22,7 +22,7 @@ class A_Z_Listing_Indices extends A_Z_Listing_Singleton {
 
 	/**
 	 * Get the first letter of a title for use as the Index letter
-	 * 
+	 *
 	 * @since 2.1.0
 	 * @param string $title The title of the item to extract the index letter from.
 	 */
