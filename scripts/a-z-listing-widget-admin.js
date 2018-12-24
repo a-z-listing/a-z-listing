@@ -17,7 +17,7 @@ jQuery( function( $ ) {
             const listing_hide_empty_terms         = el.find('.a-z-listing-hide-empty-terms');
             const listing_hide_empty_terms_wrapper = el.find('.a-z-listing-hide-empty-terms-wrapper');
             const listing_exclude_terms            = el.find('.a-z-listing-exclude-terms');
-            const listing_exclude_terms_wrapper    = el.find('.a-z-listing-exclude-terms');
+            const listing_exclude_terms_wrapper    = el.find('.a-z-listing-exclude-terms-wrapper');
 
             const switch_taxonomy_or_posts = function() {
                 if ( 'terms' === display_type.val() ) {
