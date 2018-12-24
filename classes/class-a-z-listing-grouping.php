@@ -96,7 +96,7 @@ class A_Z_Listing_Grouping {
 				} else {
 					$carry[ $j ] = $carry[ $j ] . $letter;
 				}
-				$headings[ $j ][] = self::maybe_mb_substr( $letter, 0, 1 );
+				$headings[ $j ][] = A_Z_Listing_Grouping::maybe_mb_substr( $letter, 0, 1 );
 
 				if ( $i + 1 === $grouping ) {
 					$i = 0;
