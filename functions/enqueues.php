@@ -22,6 +22,12 @@ function a_z_listing_do_enqueue() {
 		array( 'dashicons' )
 	);
 
+	wp_register_style(
+		'a-z-listing-admin',
+		plugins_url( 'css/a-z-listing-customize.css', dirname( __FILE__ ) ),
+		array()
+	);
+
 	wp_register_script(
 		'a-z-listing-tabs',
 		plugins_url( 'scripts/a-z-listing-tabs.js', dirname( __FILE__ ) ),
@@ -66,6 +72,8 @@ function a_z_listing_do_enqueue() {
 	if ( true === $add_styles && ! has_action( 'wp_enqueue_scripts', 'a_z_listing_enqueue_styles' ) ) {
 		add_action( 'wp_enqueue_scripts', 'a_z_listing_enqueue_styles' );
 	}
+
+	add_action( 'customize_controls_enqueue_scripts', 'a_z_listing_customize_enqueue_styles' );
 
 	$tabify = get_option( 'a-z-listing-add-tabs', false );
 	/**

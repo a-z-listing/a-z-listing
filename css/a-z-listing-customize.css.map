@@ -1,0 +1,9 @@
+{
+	"version": 3,
+	"file": "a-z-listing-customize.css",
+	"sources": [
+		"a-z-listing-customize.scss"
+	],
+	"names": [],
+	"mappings": "AAAA,AAAA,gBAAgB,CAAC;EAChB,OAAO,EAAE,OAAO,GAChB"
+}

@@ -69,10 +69,10 @@ class A_Z_Listing_Widget extends WP_Widget {
 		$display_type_id   = $this->get_field_id( 'type' );
 		$display_type_name = $this->get_field_name( 'type' );
 
-		$target_post            = isset( $instance['post'] ) ? $instance['post'] : ( isset( $instance['page'] ) ? $instance['page'] : 0 );
+		$target_post            = isset( $instance['post'] ) ? intval( $instance['post'] ) : ( isset( $instance['page'] ) ? intval( $instance['page'] ) : 0 );
 		$target_post_id         = $this->get_field_id( 'post' );
 		$target_post_name       = $this->get_field_name( 'post' );
-		$target_post_title      = ( 0 < $target_post ) ? get_the_title( $target_post ) : '';
+		$target_post_title      = isset( $instance['target_post'] ) ? $instance['target_post'] : ( 0 < $target_post ) ? get_the_title( $target_post ) : '';
 		$target_post_title_id   = $this->get_field_id( 'target_post_title' );
 		$target_post_title_name = $this->get_field_name( 'target_post_title' );
 
@@ -83,7 +83,7 @@ class A_Z_Listing_Widget extends WP_Widget {
 		$listing_parent_post            = isset( $instance['parent_post'] ) ? $instance['parent_post'] : '';
 		$listing_parent_post_id         = $this->get_field_id( 'parent_post' );
 		$listing_parent_post_name       = $this->get_field_name( 'parent_post' );
-		$listing_parent_post_title      = ( 0 < $listing_parent_post ) ? get_the_title( $listing_parent_post ) : '';
+		$listing_parent_post_title      = isset( $instance['parent_post_title'] ) ? $instance['parent_post_title'] : ( 0 < $listing_parent_post ) ? get_the_title( $listing_parent_post ) : '';
 		$listing_parent_post_title_id   = $this->get_field_id( 'parent_post_title' );
 		$listing_parent_post_title_name = $this->get_field_name( 'parent_post_title' );
 
@@ -144,7 +144,7 @@ class A_Z_Listing_Widget extends WP_Widget {
 						value="<?php echo esc_attr( $target_post ); ?>" />
 				</p>
 				<p>
-					<?php esc_html_e( 'Type some or all of the title of the page you want links to point at.', 'a-z-listing' ); ?>
+					<?php esc_html_e( 'Type some or all of the title of the page you want links to point at. Ensure this input field is not selected when you save the settings.', 'a-z-listing' ); ?>
 					<?php esc_html_e( 'Matching posts will be shown as you type. Click on the correct post from the matches to update the setting.', 'a-z-listing' ); ?>
 				</p>
 			</div>
@@ -204,7 +204,7 @@ class A_Z_Listing_Widget extends WP_Widget {
 						value="<?php echo esc_attr( $listing_parent_post ); ?>" />
 				</p>
 				<p>
-					<?php esc_html_e( 'Type some or all of the title of the post to limit the listing to only the children of that post.', 'a-z-listing' ); ?>
+					<?php esc_html_e( 'Type some or all of the title of the post to limit the listing to only the children of that post. Ensure this input field is not selected when you save the settings.', 'a-z-listing' ); ?>
 					<?php esc_html_e( 'Matching posts will be shown as you type. Click on the correct post from the matches to update the setting.', 'a-z-listing' ); ?>
 				</p>
 				<p>
@@ -457,25 +457,29 @@ function get_the_section_a_z_widget( $args, $instance ) {
 }
 
 /**
- * Ajax responder for A_Z_Listing_Widget configuration
+ * Retrive posts by title.
+ *
+ * @since 2.1.0
+ * @param string $post_title the title to search for.
+ * @param string $post_type the post type to search within.
+ * @return array the post IDs that are found.
  */
-function a_z_listing_autocomplete_post_titles() {
+function a_z_listing_get_posts_by_title( $post_title, $post_type = '' ) {
 	global $wpdb;
 
-	$post_title = '%' . $wpdb->esc_like( stripslashes( $_POST['post_title']['term'] ) ) . '%';
-	$post_type  = stripslashes( $_POST['post_type'] );
+	$post_title = '%' . $wpdb->esc_like( $post_title ) . '%';
 
 	if ( ! empty( $post_type ) ) {
-		$results = $wpdb->get_results(
+		return $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT `ID`, `post_title` FROM `$wpdb->posts`
-				WHERE `post_type` = %s AND `post_title` LIKE %s AND `post_status` = 'publish'",
-				$post_type,
-				$post_title
+				WHERE `post_title` LIKE %s AND `post_type` = %s AND `post_status` = 'publish'",
+				$post_title,
+				$post_type
 			)
 		);
 	} else {
-		$results = $wpdb->get_results(
+		return $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT `ID`, `post_title` FROM `$wpdb->posts`
 				WHERE `post_title` LIKE %s AND `post_status` = 'publish'",
@@ -483,6 +487,18 @@ function a_z_listing_autocomplete_post_titles() {
 			)
 		);
 	}
+}
+
+/**
+ * Ajax responder for A_Z_Listing_Widget configuration
+ *
+ * @since 2.0.0
+ */
+function a_z_listing_autocomplete_post_titles() {
+	$post_title = stripslashes( $_POST['post_title']['term'] );
+	$post_type  = stripslashes( $_POST['post_type'] );
+
+	$results = a_z_listing_get_posts_by_title( $post_title, $post_type );
 
 	$titles = array();
 	foreach ( $results as $result ) {
@@ -511,6 +527,8 @@ add_action( 'widgets_init', 'a_z_listing_widget' );
 
 /**
  * Enqueue the jquery-ui autocomplete script
+ *
+ * @since 2.0.0
  */
 function a_z_listing_autocomplete_script() {
 	wp_enqueue_script( 'jquery-ui-autocomplete' );

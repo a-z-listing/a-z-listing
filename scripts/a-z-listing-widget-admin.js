@@ -70,7 +70,7 @@ jQuery( function( $ ) {
                             response();
                         },
                     } );
-                },
+				},
                 select: function( event, ui ) {
                     event.preventDefault();
                     target_post_title

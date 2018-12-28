@@ -93,7 +93,8 @@ module.exports = function( grunt ) {
 			},
 			dist: {
 				files: {
-					'css/a-z-listing-default.css': 'css/a-z-listing-default.scss'
+					'css/a-z-listing-default.css': 'css/a-z-listing-default.scss',
+					'css/a-z-listing-customize.css': 'css/a-z-listing-customize.scss'
 				}
 			}
 		},

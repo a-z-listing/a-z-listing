@@ -418,6 +418,7 @@ If there is code already in your functions.php then add just the lines between `
 
 #### Bug Fixes: ####
 
+* Fix widget configuration autocomplete fields for target post and parent post in the theme customizer
 * Fix taxonomy-term-filtered listings displaying all posts (e.g. shortcodes of the form `[a-z-listing taxonomy="category" terms="term"])
 * Fix `get_the_item_object()` to work with old-style overridden indices
 * Fix `get_the_item_object()` to correctly extract the item ID and load the correct item
