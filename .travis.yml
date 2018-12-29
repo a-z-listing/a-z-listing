@@ -75,8 +75,14 @@ before_script:
 script:
   - |
     if [[ ! -z "$WP_VERSION" ]] ; then
-      phpunit
-      WP_MULTISITE=1 phpunit
+      phpunit && \
+      env WP_MULTISITE=1 phpunit
+    fi
+  - |
+    if [[ ! -z "$WP_VERSION" ]] ; then
+      phpenv config-rm mbstring.ini && \
+      phpunit && \
+      env WP_MULTISITE=1 phpunit
     fi
   - |
     if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
