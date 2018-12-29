@@ -202,15 +202,23 @@ class A_Z_Listing {
 			if ( ! $query instanceof WP_Query ) {
 				$query = (array) $query;
 
-				if ( ( ! isset( $query['post_type'] ) || 'page' === $query['post_type'] ) &&
-				isset( $post ) && 'page' === $post->post_type &&
-				! ( isset( $query['child_of'] ) || isset( $query['parent'] ) ) ) {
-					$section       = self::get_section();
-					$q['child_of'] = $section->ID;
+				if ( isset( $query['post_type'] ) ) {
+					if ( is_array( $query['post_type'] ) && count( $query['post_type'] ) === 1 ) {
+						$query['post_type'] = array_shift( $query['post_type'] );
+					}
+				}
+
+				if ( ! isset( $query['post_parent'] ) && ! isset( $query['child_of'] ) ) {
+					if ( isset( $query['post_type'] ) && isset( $post ) ) {
+						if ( 'page' === $query['post_type'] && 'page' === $post->post_type ) {
+							$section           = self::get_section();
+							$query['child_of'] = $section->ID;
+						}
+					}
 				}
 
 				$query = wp_parse_args(
-					(array) $query,
+					$query,
 					array(
 						'post_type'   => 'page',
 						'numberposts' => -1,
@@ -224,18 +232,17 @@ class A_Z_Listing {
 			}
 
 			if ( $query instanceof WP_Query ) {
-				$post_type = $query->post_type;
-			} else {
-				$post_type = $query['post_type'];
-			}
-
-			if ( 'page' === $post_type ) {
-				$items       = get_pages( $query );
+				$items       = $query->posts;
 				$this->query = $query;
 			} else {
-				$wq          = new WP_Query( $query );
-				$items       = $wq->posts;
-				$this->query = $wq;
+				if ( isset( $query['child_of'] ) ) {
+					$items       = get_pages( $query );
+					$this->query = $query;
+				} else {
+					$wq          = new WP_Query( $query );
+					$items       = $wq->posts;
+					$this->query = $wq;
+				}
 			}
 
 			if ( AZLISTINGLOG ) {
@@ -296,12 +303,15 @@ class A_Z_Listing {
 	 * @return array individual multi-byte characters from the string
 	 */
 	public static function mb_string_to_array( $string ) {
-		return array_map(
-			function ( $i ) use ( $string ) {
-				return mb_substr( $string, $i, 1 );
-			},
-			range( 0, mb_strlen( $string ) - 1 )
-		);
+		if ( extension_loaded( 'mbstring' ) ) {
+			return array_map(
+				function ( $i ) use ( $string ) {
+					return mb_substr( $string, $i, 1 );
+				},
+				range( 0, mb_strlen( $string ) - 1 )
+			);
+		}
+		return explode( '', $string );
 	}
 
 	/**
@@ -347,7 +357,7 @@ class A_Z_Listing {
 		 */
 		$others = apply_filters( 'a-z-listing-non-alpha-char', $others );
 
-		$alphabet_groups = mb_split( ',', $alphabet );
+		$alphabet_groups = explode( ',', $alphabet );
 		$letters         = array_reduce(
 			$alphabet_groups,
 			function( $return, $group ) {
@@ -523,7 +533,7 @@ class A_Z_Listing {
 						if ( in_array( $index, array_keys( $this->alphabet ), true ) ) {
 							$index = $this->alphabet[ $index ];
 						} else {
-							$index = '_';
+							$index = $this->unknown_letters;
 						}
 
 						if ( ! isset( $indexed_items[ $index ] ) || ! is_array( $indexed_items[ $index ] ) ) {
@@ -534,7 +544,7 @@ class A_Z_Listing {
 				}
 			}
 
-			if ( ! empty( $index[ $this->unknown_letters ] ) ) {
+			if ( array_key_exists( $this->unknown_letters, $indexed_items ) && ! empty( $indexed_items[ $this->unknown_letters ] ) ) {
 				$this->alphabet_chars[] = $this->unknown_letters;
 			}
 
@@ -580,7 +590,7 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Return the letter links HTML
+	 * Retrieve the letter links HTML
 	 *
 	 * @since 1.0.0
 	 * @param string $target The page to point links toward.
@@ -643,19 +653,6 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Load and execute a theme template
-	 *
-	 * @since 1.0.0
-	 * @param string $template_file The path of the template to execute.
-	 */
-	protected function do_template( $template_file ) {
-		$a_z_query = $this;
-		if ( ! empty( $template_file ) ) {
-			include $template_file;
-		}
-	}
-
-	/**
 	 * Print the index list HTML created by a theme template
 	 *
 	 * @since 2.0.0
@@ -672,15 +669,15 @@ class A_Z_Listing {
 
 		$template = locate_template( array( 'a-z-listing-' . $section . '.php', 'a-z-listing.php' ) );
 		if ( $template ) {
-			$this->do_template( $template );
+			a_z_listing_do_template( $this, $template );
 		} else {
-			$this->do_template( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'a-z-listing.php' );
+			a_z_listing_do_template( $this, dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'a-z-listing.php' );
 		}
 		wp_reset_postdata();
 	}
 
 	/**
-	 * Return the index list HTML created by a theme template
+	 * Retrieve the index list HTML created by a theme template
 	 *
 	 * @since 0.7
 	 * @return string The index list HTML.
@@ -777,7 +774,7 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Get the item object for the current post
+	 * Retrieve the item object for the current post
 	 *
 	 * @since 2.0.0
 	 *
@@ -786,27 +783,65 @@ class A_Z_Listing {
 	 * @return array|null|WP_Error|WP_Post|WP_Term
 	 */
 	public function get_the_item_object( $force = '' ) {
+		global $post;
 		if ( 'I understand the issues!' === $force ) {
-			$item = explode( ':', $this->current_item['item'], 1 );
+			$current_item = $this->current_item['item'];
+			if ( is_string( $current_item ) ) {
+				$item = explode( ':', $current_item, 2 );
 
-			if ( isset( $item[1] ) ) {
-				if ( 'terms' === $this->type ) {
-					return get_term( $item[1] );
+				if ( isset( $item[1] ) ) {
+					if ( 'terms' === $this->type ) {
+						return get_term( $item[1] );
+					}
+
+					$post = get_post( $item[1] );
+					setup_postdata( $post );
+
+					return $post;
 				}
+			}
 
-				global $post;
-				$post = get_post( $item[1] );
+			if ( is_a( $current_item, 'WP_Post' ) ) {
+				$post = $current_item;
 				setup_postdata( $post );
 
 				return $post;
 			}
+
+			return $current_item;
 		}
 
 		return null;
 	}
 
 	/**
-	 * Returns the number of letters in the loaded alphabet
+	 * Retrieve meta field for an item.
+	 *
+	 * @since 2.1.0
+	 * @param string $key The meta key to retrieve. By default returns data for all keys.
+	 * @param bool   $single Whether to return a single value.
+	 * @return mixed Will be an array if $single is false. Will be value of meta data field if $single is true.
+	 */
+	function get_item_meta( $key = '', $single = false ) {
+		if ( is_string( $this->current_item['item'] ) ) {
+			$item = explode( ':', $this->current_item['item'], 2 );
+
+			if ( 'term' === $type[0] ) {
+				return get_term_meta( $item[1], $key, $single );
+			}
+
+			return get_post_meta( $item[1], $key, $single );
+		}
+
+		if ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
+			return get_term_meta( $this->current_item['item']->term_id, $key, $single );
+		}
+
+		return get_post_meta( $this->current_item['item']->ID, $key, $single );
+	}
+
+	/**
+	 * Retrieve the number of letters in the loaded alphabet
 	 *
 	 * @since 1.0.0
 	 * @return int The number of letters
@@ -816,7 +851,7 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Return the number of posts within the current letter
+	 * Retrieve the number of posts within the current letter
 	 *
 	 * @since 0.7
 	 * @see A_Z_Listing::get_the_letter_count()
@@ -828,7 +863,7 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Return the number of posts within the current letter
+	 * Retrieve the number of posts within the current letter
 	 *
 	 * @since 0.7
 	 * @see A_Z_Listing::get_the_letter_count()
@@ -849,7 +884,7 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Return the number of posts within the current letter
+	 * Retrieve the number of posts within the current letter
 	 *
 	 * @since 1.0.0
 	 * @return int The number of posts
@@ -868,7 +903,7 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Return the ID of the current letter. This is not escaped!
+	 * Retrieve the ID of the current letter. This is not escaped!
 	 *
 	 * @since 0.7
 	 * @return string The letter ID
@@ -888,7 +923,7 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Return the title of the current letter. For example, upper-case A or B or C etc. This is not escaped!
+	 * Retrieve the title of the current letter. For example, upper-case A or B or C etc. This is not escaped!
 	 *
 	 * @since 0.7
 	 * @since 1.8.0 Add filters to modify the title of the letter.
@@ -935,19 +970,35 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Return the title of the current post. This is not escaped!
+	 * Retrieve the title of the current post. This is not escaped!
 	 *
 	 * @since 1.0.0
 	 * @return string The post title
 	 */
 	public function get_the_title() {
 		$title = $this->current_item['title'];
-		$item  = $this->current_item['item'];
-		if ( $item instanceof WP_Post ) {
-			$title = apply_filters( 'the_title', $title, $item->ID );
-		} elseif ( $item instanceof WP_Term ) {
-			$title = apply_filters( 'term_name', $title, $item );
+		if ( is_string( $this->current_item['item'] ) ) {
+			$item = explode( ':', $this->current_item['item'], 2 );
+		} else {
+			$item = $this->current_item['item'];
 		}
+
+		if ( is_array( $item ) ) {
+			if ( 'post' === $item[0] ) {
+				return apply_filters( 'the_title', $title, $item[1] );
+			}
+			if ( 'term' === $item[0] ) {
+				return apply_filters( 'term_name', $title, $item[1] );
+			}
+		} else {
+			if ( is_a( $item, 'WP_Post' ) ) {
+				return apply_filters( 'the_title', $title, $item->ID );
+			}
+			if ( is_a( $item, 'WP_Term' ) ) {
+				return apply_filters( 'term_name', $title, $item->term_id );
+			}
+		}
+
 		return $title;
 	}
 
@@ -961,7 +1012,7 @@ class A_Z_Listing {
 	}
 
 	/**
-	 * Return the permalink of the current post. This is not escaped!
+	 * Retrieve the permalink of the current post. This is not escaped!
 	 *
 	 * @since 1.0.0
 	 * @return string The permalink
@@ -969,6 +1020,17 @@ class A_Z_Listing {
 	public function get_the_permalink() {
 		return $this->current_item['link'];
 	}
+}
+
+/**
+ * Load and execute a theme template
+ *
+ * @since 2.1.0
+ * @param A_Z_Query $a_z_query The Query object.
+ * @param string    $template_file The path of the template to execute.
+ */
+function a_z_listing_do_template( $a_z_query, $template_file ) {
+	require $template_file;
 }
 
 /**

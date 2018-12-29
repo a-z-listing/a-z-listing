@@ -15,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.0
  * @since 1.7.0 Add numbers attribute to append or prepend numerics to the listing.
  * @since 1.8.0 Fix numbers attribute when selecting to display terms. Add grouping to numbers via attribute. Add alphabet override via new attribute.
+ * @since 2.0.0 Add parent-term and hide-empty parameters.
  * @param  array $attributes Provided by WordPress core. Contains the shortcode attributes.
  * @return string The A-Z Listing HTML.
  */
@@ -23,18 +24,20 @@ function a_z_shortcode_handler( $attributes ) {
 		array(
 			'alphabet'         => '',
 			'display'          => 'posts',
-			'group-numbers'    => false,
-			'grouping'         => '',
-			'numbers'          => 'hide',
-			'post-type'        => 'page',
 			'exclude-posts'    => '',
-			'taxonomy'         => '',
-			'terms'            => '',
 			'exclude-terms'    => '',
-			'hide-empty-terms' => false,
+			'get-all-children' => 'false',
+			'group-numbers'    => '',
+			'grouping'         => '',
+			'hide-empty-terms' => 'false',
+			'numbers'          => 'hide',
+			'parent-post'      => '',
 			'parent-term'      => '',
+			'post-type'        => 'page',
 			'return'           => 'listing',
 			'target'           => '',
+			'taxonomy'         => '',
+			'terms'            => '',
 		),
 		$attributes,
 		'a-z-listing'
@@ -52,31 +55,28 @@ function a_z_shortcode_handler( $attributes ) {
 
 	$grouping      = $attributes['grouping'];
 	$group_numbers = false;
+	if ( ! empty( $attributes['group-numbers'] ) && a_z_listing_is_truthy( $attributes['group-numbers'] ) ) {
+		$group_numbers = true;
+	}
+
 	if ( 'numbers' === $grouping ) {
 		$group_numbers = true;
 		$grouping      = 0;
 	} else {
 		$grouping = intval( $grouping );
-		if ( 1 < $grouping ) {
+		if ( 1 < $grouping && empty( $attributes['group-numbers'] ) ) {
 			$group_numbers = true;
 		}
 	}
 
-	if ( true === $attributes['group-numbers'] ) {
-		$group_numbers = true;
-	}
-
 	$grouping_obj = new A_Z_Listing_Grouping( $grouping );
-
-	$numbers_obj = null;
-	if ( ! empty( $attributes['numbers'] ) && 'hide' !== $attributes['numbers'] ) {
-		$numbers_obj = add_a_z_numbers( $attributes['numbers'], $group_numbers );
-	}
+	$numbers_obj  = new A_Z_Listing_Numbers( $attributes['numbers'], $group_numbers );
 
 	if ( 'terms' === $attributes['display'] && ! empty( $attributes['taxonomy'] ) ) {
 		$taxonomy = '' !== $attributes['taxonomy'] ? $attributes['taxonomy'] : 'category';
 		$query    = array(
-			'taxonomy' => $taxonomy,
+			'taxonomy'   => $taxonomy,
+			'hide_empty' => isset( $attributes['hide_empty'] ) && a_z_listing_is_truthy( $attributes['hide-empty'] ),
 		);
 
 		$terms_string  = '';
@@ -90,7 +90,7 @@ function a_z_shortcode_handler( $attributes ) {
 		}
 
 		if ( ! empty( $terms_string ) ) {
-			$terms = mb_split( ',', $terms_string );
+			$terms = explode( ',', $terms_string );
 			$terms = array_map( 'trim', $terms );
 			$terms = array_map( 'intval', $terms );
 			$terms = array_filter(
@@ -119,10 +119,8 @@ function a_z_shortcode_handler( $attributes ) {
 		}
 
 		if ( ! empty( $attributes['hide-empty-terms'] ) ) {
-			$hide_empty = false;
-			if ( 'true' === $attributes['hide-empty-terms'] || '1' === $attributes['hide-empty-terms'] ) {
-				$hide_empty = true;
-			}
+			$hide_empty = a_z_listing_is_truthy( $attributes['hide-empty-terms'] );
+
 			$query = wp_parse_args(
 				$query,
 				array(
@@ -133,12 +131,15 @@ function a_z_shortcode_handler( $attributes ) {
 
 		$a_z_query = new A_Z_Listing( $query, 'terms' );
 	} else {
+		$post_type = explode( ',', $attributes['post-type'] );
+		$post_type = array_map( 'trim', $post_type );
+
 		$query = array(
-			'post_type' => $attributes['post-type'],
+			'post_type' => $post_type,
 		);
 
 		if ( ! empty( $attributes['exclude-posts'] ) ) {
-			$exclude_posts = mb_split( ',', $attributes['exclude-posts'] );
+			$exclude_posts = explode( ',', $attributes['exclude-posts'] );
 			$exclude_posts = array_map( 'trim', $exclude_posts );
 			$exclude_posts = array_map( 'intval', $exclude_posts );
 			$exclude_posts = array_filter(
@@ -150,39 +151,60 @@ function a_z_shortcode_handler( $attributes ) {
 			$exclude_posts = array_unique( $exclude_posts );
 
 			if ( ! empty( $exclude_posts ) ) {
-				$query = wp_parse_args(
-					$query,
-					array(
-						'post__not_in' => $exclude_posts,
-					)
-				);
+				$query = wp_parse_args( $query, array( 'post__not_in' => $exclude_posts ) );
 			}
 		}
 
+		if ( ! empty( $attributes['parent-post'] ) ) {
+			if ( a_z_listing_is_truthy( $attributes['get-all-children'] ) ) {
+				$child_query = array( 'child_of' => $attributes['parent-post'] );
+			} else {
+				$child_query = array( 'post_parent' => $attributes['parent-post'] );
+			}
+			$query = wp_parse_args( $query, $child_query );
+		}
+
+		$taxonomy  = '' !== $attributes['taxonomy'] ? $attributes['taxonomy'] : 'category';
+		$tax_query = array();
 		if ( ! empty( $attributes['terms'] ) ) {
-			$taxonomy = '' !== $attributes['taxonomy'] ? $attributes['taxonomy'] : 'category';
-			$terms    = mb_split( ',', $attributes['terms'] );
-			$terms    = array_map( 'trim', $terms );
-			$terms    = array_filter(
+			$terms = explode( ',', $attributes['terms'] );
+			$terms = array_map( 'trim', $terms );
+			$terms = array_filter(
 				$terms,
 				function( $value ) {
 					return ! empty( $value );
 				}
 			);
-			$terms    = array_unique( $terms );
+			$terms = array_unique( $terms );
 
-			$query = wp_parse_args(
-				$query,
-				array(
-					'tax_query' => array(
-						array(
-							'taxonomy' => $taxonomy,
-							'field'    => 'slug',
-							'terms'    => $terms,
-						),
-					),
-				)
+			$tax_query[] = array(
+				'taxonomy' => $taxonomy,
+				'field'    => 'slug',
+				'terms'    => $terms,
+				'operator' => 'IN',
 			);
+		}
+		if ( ! empty( $attributes['exclude-terms'] ) ) {
+			$ex_terms = explode( ',', $attributes['exclude-termsterms'] );
+			$ex_terms = array_map( 'trim', $terms );
+			$ex_terms = array_filter(
+				$ex_terms,
+				function( $value ) {
+					return ! empty( $value );
+				}
+			);
+			$ex_terms = array_unique( $ex_terms );
+
+			$tax_query[] = array(
+				'taxonomy' => $taxonomy,
+				'field'    => 'slug',
+				'terms'    => $ex_terms,
+				'operator' => 'NOT IN',
+			);
+		}
+
+		if ( ! empty( $tax_query ) ) {
+			$query['tax_query'] = $tax_query;
 		}
 
 		$a_z_query = new A_Z_Listing( $query, 'posts' );
@@ -204,9 +226,7 @@ function a_z_shortcode_handler( $attributes ) {
 	}
 
 	$grouping_obj->teardown();
-	if ( null != $numbers_obj ) {
-		$numbers_obj->teardown();
-	}
+	$numbers_obj->teardown();
 
 	return $ret;
 }

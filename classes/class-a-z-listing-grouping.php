@@ -32,6 +32,21 @@ class A_Z_Listing_Grouping {
 	private $headings;
 
 	/**
+	 * Perform a multibyte substring operation if mbstring is loaded, else use substr.
+	 *
+	 * @since 2.1.0
+	 * @param string $string The string to extract the substring from.
+	 * @param int    $start Start the substring at this character number (starts at zero).
+	 * @param int    $length Number of characters to include in the substring.
+	 */
+	public static function maybe_mb_substr( $string, $start, $length ) {
+		if ( extension_loaded( 'mbstring' ) ) {
+			return mb_substr( $string, $start, $length, 'UTF-8' );
+		}
+		return substr( $string, $start, $length );
+	}
+
+	/**
 	 * Add filters to group the alphabet letters
 	 *
 	 * @since 2.0.0
@@ -65,7 +80,7 @@ class A_Z_Listing_Grouping {
 	 */
 	public function alphabet_filter( $alphabet ) {
 		$headings = array();
-		$letters  = mb_split( ',', $alphabet );
+		$letters  = explode( ',', $alphabet );
 		$letters  = array_map( 'trim', $letters );
 
 		$i = 0;
@@ -81,7 +96,7 @@ class A_Z_Listing_Grouping {
 				} else {
 					$carry[ $j ] = $carry[ $j ] . $letter;
 				}
-				$headings[ $j ][] = mb_substr( $letter, 0, 1 );
+				$headings[ $j ][] = A_Z_Listing_Grouping::maybe_mb_substr( $letter, 0, 1 );
 
 				if ( $i + 1 === $grouping ) {
 					$i = 0;

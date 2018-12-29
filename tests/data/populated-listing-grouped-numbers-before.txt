@@ -1,27 +1,29 @@
-<div id="letters">
-    <div class="az-letters">
-        <ul class="az-links">
-            <li class="first odd"><span>0-9</span></li>
-            <li class="even"><span>A-C</span></li>
-            <li class="odd"><span>D-F</span></li>
-            <li class="even"><span>G-I</span></li>
-            <li class="odd"><span>J-L</span></li>
-            <li class="even"><span>M-O</span></li>
-            <li class="odd"><span>P-R</span></li>
-            <li class="even"><a href="#letter-S"><span>S-U</span></a></li>
-            <li class="odd"><span>V-X</span></li>
-            <li class="last even"><span>Y-Z</span></li>
-        </ul>
-        <div class="clear empty"></div>
+<div id="az-tabs">
+    <div id="letters">
+        <div class="az-letters">
+            <ul class="az-links">
+                <li class="first odd no-posts"><span>0-9</span></li>
+                <li class="even no-posts"><span>A-C</span></li>
+                <li class="odd no-posts"><span>D-F</span></li>
+                <li class="even no-posts"><span>G-I</span></li>
+                <li class="odd no-posts"><span>J-L</span></li>
+                <li class="even no-posts"><span>M-O</span></li>
+                <li class="odd no-posts"><span>P-R</span></li>
+                <li class="even no-posts"><a href="#letter-S"><span>S-U</span></a></li>
+                <li class="odd no-posts"><span>V-X</span></li>
+                <li class="last even no-posts"><span>Y-Z</span></li>
+            </ul>
+        </div>
     </div>
-</div>
-<div id="az-slider">
-    <div id="inner-slider">
-        <div class="letter-section" id="letter-S">
-            <h2><span>S-U</span></h2>
-            <div><ul>
-                <li><a href="http://example.org/?page_id=%2$d">%1$s</a></li>
-            </ul></div>
+    <div id="az-slider">
+        <div id="inner-slider">
+            <div class="letter-section" id="letter-S">
+                <h2 class="letter-title"><span>S-U</span></h2>
+                <ul class="columns max-0-columns">
+                    <li><a href="http://example.org/?page_id=%2$d">%1$s</a></li>
+                </ul>
+                <div class="back-to-top"><a href="#letters">Back to top</a></div>
+            </div>
         </div>
     </div>
 </div>

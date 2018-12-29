@@ -15,7 +15,7 @@
     width: 2em;
     height: 2em;
     box-sizing: border-box;
-    margin: 0.15em;
+    margin: 0 0 0.6em;
     border: 2px solid #e5e5e5;
     background: #f5f5f5;
     color: #adadad;
@@ -45,55 +45,55 @@
     width: 100%;
     box-sizing: border-box;
     column-gap: 0.6em;
-    column-width: 10em;
+    column-width: 15em;
     line-height: 1.6em; }
     .letter-section ul.columns li {
       display: block; }
     .letter-section ul.columns.max-0-columns, .letter-section ul.columns.max-1-columns {
       column-count: 1;
-      max-width: 10.6em; }
+      max-width: 15.6em; }
     .letter-section ul.columns.max-2-columns {
       column-count: 2;
-      max-width: 20.6em; }
+      max-width: 30.6em; }
     .letter-section ul.columns.max-3-columns {
       column-count: 3;
-      max-width: 31.2em; }
+      max-width: 46.2em; }
     .letter-section ul.columns.max-4-columns {
       column-count: 4;
-      max-width: 41.8em; }
+      max-width: 61.8em; }
     .letter-section ul.columns.max-5-columns {
       column-count: 5;
-      max-width: 52.4em; }
+      max-width: 77.4em; }
     .letter-section ul.columns.max-6-columns {
       column-count: 6;
-      max-width: 63em; }
+      max-width: 93em; }
     .letter-section ul.columns.max-7-columns {
       column-count: 7;
-      max-width: 73.6em; }
+      max-width: 108.6em; }
     .letter-section ul.columns.max-8-columns {
       column-count: 8;
-      max-width: 84.2em; }
+      max-width: 124.2em; }
     .letter-section ul.columns.max-9-columns {
       column-count: 9;
-      max-width: 94.8em; }
+      max-width: 139.8em; }
     .letter-section ul.columns.max-10-columns {
       column-count: 10;
-      max-width: 105.4em; }
+      max-width: 155.4em; }
     .letter-section ul.columns.max-11-columns {
       column-count: 11;
-      max-width: 116em; }
+      max-width: 171em; }
     .letter-section ul.columns.max-12-columns {
       column-count: 12;
-      max-width: 126.6em; }
+      max-width: 186.6em; }
     .letter-section ul.columns.max-13-columns {
       column-count: 13;
-      max-width: 137.2em; }
+      max-width: 202.2em; }
     .letter-section ul.columns.max-14-columns {
       column-count: 14;
-      max-width: 147.8em; }
+      max-width: 217.8em; }
     .letter-section ul.columns.max-15-columns {
       column-count: 15;
-      max-width: 158.4em; }
+      max-width: 233.4em; }
   .letter-section div.back-to-top {
     width: 100%;
     text-align: right; }

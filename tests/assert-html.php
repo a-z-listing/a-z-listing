@@ -2,12 +2,14 @@
 
 class AZ_UnitTestCase extends WP_UnitTestCase {
 	protected function assertHTMLEquals( $expected, $actual ) {
-		$expected_dom = new DomDocument( $expected );
-		$actual_dom   = new DomDocument( $actual );
+		$expected_dom = new DomDocument();
+		$actual_dom   = new DomDocument();
 
-		$expected_dom->preserveWhiteSpace = false;
-		$actual_dom->preserveWhiteSpace   = false;
+		$this->assertNotEmpty( $actual );
+		
+		$expected_dom->loadXML( '<test>' . $expected . '</test>' );
+		$actual_dom->loadXML( '<test>' . $actual . '</test>' );
 
-		$this->assertEquals( $expected_dom->saveHTML(), $actual_dom->saveHTML() );
+		$this->assertEqualXMLStructure( $expected_dom->firstChild, $actual_dom->firstChild, true, $actual );
 	}
 }

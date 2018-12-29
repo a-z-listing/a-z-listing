@@ -17,9 +17,18 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function a_z_listing_enqueue_styles( $force = false ) {
 	global $post;
-	if ( $force || is_active_widget( false, false, 'bh_az_widget', true ) || ( is_singular() && has_shortcode( $post->post_content, 'a-z-listing' ) ) ) {
+	if ( $force || is_customize_preview() || is_active_widget( false, false, 'bh_az_widget', true ) || ( is_singular() && has_shortcode( $post->post_content, 'a-z-listing' ) ) ) {
 		wp_enqueue_style( 'a-z-listing' );
 	}
+}
+
+/**
+ * Enqueue A-Z customizer styles.
+ *
+ * @since 2.1.0
+ */
+function a_z_listing_customize_enqueue_styles() {
+	wp_enqueue_style( 'a-z-listing-admin' );
 }
 
 /**
