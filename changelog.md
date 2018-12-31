@@ -5,8 +5,8 @@
 **Bug Fix:**
 
 * Replace hardcoded path to `admin-ajax.php` in widget administration javascript.
-  * This release fixes the widget administration form for sites running in a path similar to https://example.com/wp/. You should install this fix if your site is a configured in a subfolder to be able to successfully configure the widget.
-  * Sites running in the top-level, e.g. https://example.com/, already work correctly and their behaviour is unchanged by this fix. You do not need to hurry to update if your site is configured at the top-level without a subfolder.
+  * This release fixes the widget administration form for sites running in a path similar to [https://example.com/wp/](https://example.com/wp/). You should install this fix if your site is a configured in a subfolder to be able to successfully configure the widget.
+  * Sites running in the top-level, e.g. [https://example.com/](https://example.com/), already work correctly and their behaviour is unchanged by this fix. You do not need to hurry to update if your site is configured at the top-level without a subfolder.
 
 ## 2.1.0 ##
 
@@ -66,6 +66,7 @@
 * Introduce PHP classes for adding numbers and grouping to the alphabet. Allows unhooking from the filters to undo the changes, where previously you could not unhook these modifications once they'd been applied.
 
 ### BREAKING CHANGES ###
+
 * Multi column example:
   If you have copied the multi-column example in previous releases to your theme folder then you will need to perform some manual steps.
   If you have not edited the file, just delete it and the new template from the plugin will take control and perform the same functionality.
