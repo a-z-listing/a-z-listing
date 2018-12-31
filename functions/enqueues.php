@@ -49,6 +49,13 @@ function a_z_listing_do_enqueue() {
 		false,
 		true
 	);
+	wp_localize_script(
+		'a-z-listing-widget-admin',
+		'a_z_listing_widget_admin',
+		array(
+			'ajax_url' => admin_url( 'admin-ajax.php' ),
+		)
+	);
 
 	$add_styles = get_option( 'a-z-listing-add-styling', true );
 	/**

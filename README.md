@@ -415,6 +415,14 @@ If there is code already in your functions.php then add just the lines between `
 
 ## Changelog ##
 
+### 2.1.1 ###
+
+#### Bug Fix: ####
+
+* Replace hardcoded path to `admin-ajax.php` in widget administration javascript.
+  * This release fixes the widget administration form for sites running in a path similar to https://example.com/wp/. You should install this fix if your site is a configured in a subfolder to be able to successfully configure the widget.
+  * Sites running in the top-level, e.g. https://example.com/, already work correctly and their behaviour is unchanged by this fix. You do not need to hurry to update if your site is configured at the top-level without a subfolder.
+
 ### 2.1.0 ###
 
 #### Bug Fixes: ####
