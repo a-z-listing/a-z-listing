@@ -54,9 +54,7 @@ $_a_z_listing_minpercol = 10;
 								$a_z_query->the_item();
 								?>
 								<li>
-									<a href="
-										<?php $a_z_query->the_permalink(); ?>
-									">
+									<a href="<?php $a_z_query->the_permalink(); ?>">
 										<?php $a_z_query->the_title(); ?>
 									</a>
 								</li>
