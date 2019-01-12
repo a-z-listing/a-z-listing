@@ -1,8 +1,14 @@
 # Full Changelog #
 
+## 2.1.2 ##
+
+### Bug Fix ###
+
+* Post links in 2.1.0 and 2.1.1 included a series of `%09` which caused visitors' clicks to return a 404 Not Found error. Thanks to @forestpump for their effort in finding the problem and highlighting the fix.
+
 ## 2.1.1 ##
 
-**Bug Fix:**
+### Bug Fix ###
 
 * Replace hardcoded path to `admin-ajax.php` in widget administration javascript.
   * This release fixes the widget administration form for sites running in a path similar to [https://example.com/wp/](https://example.com/wp/). You should install this fix if your site is a configured in a subfolder to be able to successfully configure the widget.

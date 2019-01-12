@@ -1,7 +1,7 @@
 === A-Z Listing ===
 
 Contributors: diddledan
-Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=N7QFVVD4PZVFE
+Donate Link: https://liberapay.com/diddledan/donate
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 4.6
 Requires PHP: 5.6
@@ -17,32 +17,11 @@ Provides an A to Z index page and widget. The widget links to the index page at 
 [![Build Status](https://travis-ci.org/bowlhat/wp-a-z-listing.svg?branch=master)](https://travis-ci.org/bowlhat/wp-a-z-listing)
 [![LiberaPay](https://img.shields.io/liberapay/receives/diddledan.svg?logo=liberapay)](https://liberapay.com/diddledan/donate)
 
-This plugin provides a widget which aggregates all pages into an A to Z listing. The widget includes just
-the letters as links to the A-Z Index page. Also provided is an implementation for the A-Z Index page.
-If a letter doesn't have any pages then the widget will display the letter unlinked; likewise the index page
-will omit the display for that letter entirely.
+Show your posts, pages, and terms alphabetically in a Rolodex-, catalogue-, or directory-style list with the A-Z Listing plugin!
 
-Both the Widget and Index page can be section-targeted or global-targeted. i.e. they can limit their output
-to displaying only the pages below a single top-level parent page or they can display the entirety of the
-site's pages.
+The plugin has a shortcode for the list, and a widget so you can link to the list from anywhere on your site. If a letter doesn't have any pages then the widget will display the letter unlinked. The list page will omit the display for that letter entirely.
 
-*By default* the widget and index page become section-targeted by including them on pages below a top-level page:
-e.g. if your site layout has:
-
-    home
-    section1
-        section1a
-        section1b
-        a-z
-    section2
-        section2a
-        section2b
-        a-z
-
-then placing the widget onto either section1, section1a or section1b will target the widget to displaying only children of section1.
-placing the a-z index on a child of section1 will likewise limit the index page to display only children of section1.
-
-Likewise for section2, section2a and section2b.
+Show posts from any or multiple post types including the in-built posts and pages. Also supported are post-types from plugins like WooCommerce products. Alternatively, show terms like categories or tags.
 
 == Installation ==
 
@@ -51,7 +30,7 @@ This section describes how to install the plugin and get it working.
 = Requirements =
 
 1. PHP 5.6 is the minimum version you should be using. Preferably use the most-recent version of PHP your host offers; PHP 7.1 is ideal. I try to keep the plugin compatible back to PHP 5.3, but cannot guarantee continued compatibility.
-1. The plugin requires `mbstring` turned-on in your PHP installation. Without this feature WordPress will display a WSOD (White Screen of Death).
+1. The plugin requires `mbstring` turned-on in your PHP installation. Without this feature the plugin might behave oddly or fail.
 
 = Instructions =
 
@@ -174,7 +153,7 @@ get_the_a_z_listing( $query );
 ?>
 `
 
-`$query` is one of the following:
+Where `$query` is one of the following:
 
 * any valid [`WP_Query`](https://codex.wordpress.org/Class_Reference/WP_Query) parameter array
 * a `WP_Query` object formed from `new WP_Query();`
@@ -411,9 +390,15 @@ If there is code already in your functions.php then add just the lines between `
 
 == Changelog ==
 
+= 2.1.2 =
+
+**Bug Fix**
+
+* Post links in 2.1.0 and 2.1.1 included a series of `%09` which caused visitors' clicks to return a 404 Not Found error. Thanks to @forestpump for their effort in finding the problem and highlighting the fix.
+
 = 2.1.1 =
 
-**Bug Fix:**
+**Bug Fix**
 
 * Replace hardcoded path to `admin-ajax.php` in widget administration javascript.
   * This release fixes the widget administration form for sites running in a path similar to https://example.com/wp/. You should install this fix if your site is a configured in a subfolder to be able to successfully configure the widget.
@@ -421,7 +406,7 @@ If there is code already in your functions.php then add just the lines between `
 
 = 2.1.0 =
 
-**Bug Fixes:**
+**Bug Fixes**
 
 * Fix widget configuration autocomplete fields for target post and parent post in the theme customizer
 * Fix taxonomy-term-filtered listings displaying all posts (e.g. shortcodes of the form `[a-z-listing taxonomy="category" terms="term"])
@@ -430,7 +415,7 @@ If there is code already in your functions.php then add just the lines between `
 * Improve javascript on the widget configuration
 * Clarified the examples with explanations about "post types", "taxonomies", and "terms" to explain what each of these mean.
 
-**New Features:**
+**New Features**
 
 * Add parent-page attribute to the shortcode
 * Add simpler and safer filter for overriding the index letter for an item
@@ -460,15 +445,15 @@ If there is code already in your functions.php then add just the lines between `
 * Fix the stylesheet to better cope with variances in font-size and text length in the alphabet links list and widget.
 * Introduce PHP classes for adding numbers and grouping to the alphabet. Allows unhooking from the filters to undo the changes, where previously you could not unhook these modifications once they'd been applied.
 
-**BREAKING CHANGES:**
+**BREAKING CHANGES**
 
-*Multi column example:*
+*Multi column example*
 
 * If you have copied the multi-column example in previous releases to your theme folder then you will need to perform some manual steps.
 * If you have not edited the file, just delete it and the new template from the plugin will take control and perform the same functionality.
 * If you have modified the example template then you will need to compare with the file in the plugin at `templates/a-z-listing.php` and merge any changes into your template.
 
-*Template customisations:*
+*Template customisations*
 
 * If you have customised the in-built templates or written your own then you may experience breakage due to the post object not being loaded automatically.
 * If you require the template to access more than the post title and URL then you will need to add an additional call after `the_item()` to load the full `WP_Post` object into memory.
