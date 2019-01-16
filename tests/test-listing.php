@@ -71,6 +71,26 @@ class AZ_Listing_Tests extends AZ_UnitTestCase {
 		$this->assertHTMLEquals( $expected, $actual );
 	}
 
+	public function test_populated_listing_with_unknown_letters() {
+		$title = '*Test Page';
+		$p     = $this->factory->post->create(
+			array(
+				'post_title' => $title,
+				'post_type'  => 'page',
+			)
+		);
+		$q     = new WP_Query(
+			array(
+				'post_type' => 'page',
+			)
+		);
+
+		$expected = sprintf( file_get_contents( 'tests/data/populated-listing-unknown-letters.txt' ), $title, $p );
+		$actual   = get_the_a_z_listing( $q, false );
+
+		$this->assertHTMLEquals( $expected, $actual );
+	}
+
 	public function test_populated_taxonomy_listing() {
 		$title = 'Test Category';
 		$t     = $this->factory->term->create(
