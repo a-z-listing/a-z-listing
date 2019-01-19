@@ -545,7 +545,8 @@ class A_Z_Listing {
 			}
 
 			if ( array_key_exists( $this->unknown_letters, $indexed_items ) && ! empty( $indexed_items[ $this->unknown_letters ] ) ) {
-				$this->alphabet_chars[] = $this->unknown_letters;
+				$this->alphabet_chars[]                   = $this->unknown_letters;
+				$this->alphabet[ $this->unknown_letters ] = $this->unknown_letters;
 			}
 
 			foreach ( $this->alphabet_chars as $character ) {
@@ -909,7 +910,11 @@ class A_Z_Listing {
 	 * @return string The letter ID
 	 */
 	public function get_the_letter_id() {
-		return 'letter-' . $this->alphabet[ $this->alphabet_chars[ $this->current_letter_index - 1 ] ];
+		$id = $this->alphabet[ $this->alphabet_chars[ $this->current_letter_index - 1 ] ];
+		if ( $this->unknown_letters === $id ) {
+			$id = '_';
+		}
+		return 'letter-' . $id;
 	}
 
 	/**

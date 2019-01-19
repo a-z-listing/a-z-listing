@@ -1,5 +1,12 @@
 # Full Changelog #
 
+## 2.1.3 ##
+
+### Bug Fix ###
+
+* Fixed the bug reported by @ighosts22 where the letter for non-alphabetic items was not pointing at the list of items.
+* Fixed incorrect behaviour discovered after adding tests to the automated testing to verify that I correctly fixed the above bug.
+
 ## 2.1.2 ##
 
 ### Bug Fix ###

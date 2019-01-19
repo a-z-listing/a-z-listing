@@ -6,7 +6,7 @@
 **Requires at least:** 4.6  
 **Requires PHP:** 5.6  
 **Tested up to:** 5.0  
-**Stable tag:** 2.1.2  
+**Stable tag:** 2.1.3  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -393,6 +393,13 @@ If there is code already in your functions.php then add just the lines between `
 
 
 ## Changelog ##
+
+### 2.1.3 ###
+
+#### Bug Fix ####
+
+* Fixed the bug reported by @ighosts22 where the letter for non-alphabetic items was not pointing at the list of items.
+* Fixed incorrect behaviour discovered after adding tests to the automated testing to verify that I correctly fixed the above bug.
 
 ### 2.1.2 ###
 
