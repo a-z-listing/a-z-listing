@@ -211,8 +211,10 @@ class A_Z_Listing {
 				if ( ! isset( $query['post_parent'] ) && ! isset( $query['child_of'] ) ) {
 					if ( isset( $query['post_type'] ) && isset( $post ) ) {
 						if ( 'page' === $query['post_type'] && 'page' === $post->post_type ) {
-							$section           = self::get_section();
-							$query['child_of'] = $section->ID;
+							$section = self::get_section();
+							if ( $section && is_a( $section, 'WP_Post' ) ) {
+								$query['child_of'] = $section->ID;
+							}
 						}
 					}
 				}

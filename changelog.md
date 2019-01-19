@@ -1,5 +1,14 @@
 # Full Changelog #
 
+## 2.1.4 ##
+
+### Bug Fix ###
+
+* Fixed a spurious `NOTICE` message (shown below) when error logging is output to the browser. Thanks to the discovery by @npiper.
+  * If your site is not showing the message below then you do not need to upgrade with any urgency.
+
+`Notice: Trying to get property of non-object in [Path-to-WordPress]/wp-content/plugins/a-z-listing/classes/class-a-z-listing.php on line 215`
+
 ## 2.1.3 ##
 
 ### Bug Fix ###
