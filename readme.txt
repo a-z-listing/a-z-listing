@@ -6,7 +6,7 @@ Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 4.6
 Requires PHP: 5.6
 Tested up to: 5.0
-Stable tag: 2.1.4
+Stable tag: 2.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,7 +29,7 @@ This section describes how to install the plugin and get it working.
 
 = Requirements =
 
-1. PHP 5.6 is the minimum version you should be using. Preferably use the most-recent version of PHP your host offers; PHP 7.1 is ideal. I try to keep the plugin compatible back to PHP 5.3, but cannot guarantee continued compatibility.
+1. PHP 5.6 is the minimum version you should be using. Preferably use the most-recent version of PHP your host offers; PHP 7.2 is ideal. Older versions of PHP than 5.6 are unsupported.
 1. The plugin requires `mbstring` turned-on in your PHP installation. Without this feature the plugin might behave oddly or fail.
 
 = Instructions =
@@ -389,6 +389,11 @@ If there is code already in your functions.php then add just the lines between `
 2. The Widget is shown here
 
 == Changelog ==
+
+= 2.2.0 =
+
+* Add `get_the_item_post_count` and `the_item_post_count` template methods to get or display the number of posts associated with a term.
+* Deprecate PHP 5.3-5.5.
 
 = 2.1.4 =
 

@@ -795,26 +795,26 @@ class A_Z_Listing {
 				if ( isset( $item[1] ) ) {
 					if ( 'terms' === $this->type ) {
 						return get_term( $item[1] );
+					} else {
+						$post = get_post( $item[1] );
+						setup_postdata( $post );
+
+						return $post;
 					}
-
-					$post = get_post( $item[1] );
-					setup_postdata( $post );
-
-					return $post;
 				}
-			}
-
-			if ( is_a( $current_item, 'WP_Post' ) ) {
+			} elseif ( is_a( $current_item, 'WP_Post' ) ) {
 				$post = $current_item;
 				setup_postdata( $post );
 
 				return $post;
+			} elseif ( is_a( $current_item, 'WP_Term' ) ) {
+				return get_term( $current_item );
+			} else {
+				return $current_item;
 			}
-
-			return $current_item;
+		} else {
+			return null;
 		}
-
-		return null;
 	}
 
 	/**
@@ -831,16 +831,46 @@ class A_Z_Listing {
 
 			if ( 'term' === $type[0] ) {
 				return get_term_meta( $item[1], $key, $single );
+			} else {
+				return get_post_meta( $item[1], $key, $single );
 			}
-
-			return get_post_meta( $item[1], $key, $single );
-		}
-
-		if ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
+		} elseif ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
 			return get_term_meta( $this->current_item['item']->term_id, $key, $single );
+		} else {
+			return get_post_meta( $this->current_item['item']->ID, $key, $single );
 		}
+	}
 
-		return get_post_meta( $this->current_item['item']->ID, $key, $single );
+	/**
+	 * Print the number of posts assigned to the current term
+	 * 
+	 * @since 2.2.0
+	 */
+	function the_item_post_count() {
+		echo esc_html( $this->get_the_item_post_count() );
+	}
+
+	/**
+	 * Retrieve the number of posts assigned to the current term
+	 * 
+	 * @since 2.2.0
+	 * @return int The number of posts
+	 */
+	function get_the_item_post_count() {
+		if ( 'terms' === $this->type) {
+			if ( is_string( $this->current_item['item'] ) ) {
+				$item = explode( ':', $this->current_item['item'], 2 );
+				$term = get_term( $item[1] );
+				return $term->count;
+			} elseif ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
+				$term = get_term( $this->current_item['item'] );
+				return $term->count;
+			} else {
+				return 0;
+			}
+		} else {
+			return 0;
+		}
 	}
 
 	/**
