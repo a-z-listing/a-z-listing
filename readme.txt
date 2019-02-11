@@ -207,6 +207,14 @@ These helper functions cope with the dual usage of the plugin supporting both `W
 
 == Frequently Asked Questions ==
 
+= Why is the list layout completely broken? =
+
+If you are using a page-builder such as WPBakery or Elementor you need to ensure that you put the shortcode into a normal text area. Placing the shortcode into a preformatted text area will add `<pre>` tags around the listing output. These extra tags break the layout considerably.
+
+= Why is my list in a single column? =
+
+The list of items under each letter heading needs to have at least 11 items for a second column to be created. Once you hit the magic 11 items, the list will break into two columns with 6 items in the first column and 5 items in the second. When you get to 21 items a third column will be added if there is room on your page; and so-on up to a maximum of 15 columns if there is enough space, though it is unexpected that any webpage be wide enough for more than a few columns to fit. The columns will fill-up evenly once you have more than one column on the page.
+
 = How do I show posts of a different post-type (not pages) or multiple post-types (e.g. posts AND pages) =
 
 This can be achieved using the shortcode or PHP. In these examples the generic phrase `post-type-slug` is used to describe the concept. The default post types provided by WordPress are called "Posts" and "Pages". Their slugs are `post` and `page` respectively. You need to use these names in place of the examples (i.e. `your-post-type-slug`, `type1-slug`, and `type1-slug`).
