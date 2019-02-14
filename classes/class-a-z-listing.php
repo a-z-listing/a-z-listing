@@ -829,7 +829,7 @@ class A_Z_Listing {
 		if ( is_string( $this->current_item['item'] ) ) {
 			$item = explode( ':', $this->current_item['item'], 2 );
 
-			if ( 'term' === $type[0] ) {
+			if ( 'term' === $item[0] ) {
 				return get_term_meta( $item[1], $key, $single );
 			} else {
 				return get_post_meta( $item[1], $key, $single );
