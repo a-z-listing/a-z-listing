@@ -829,7 +829,7 @@ class A_Z_Listing {
 		if ( is_string( $this->current_item['item'] ) ) {
 			$item = explode( ':', $this->current_item['item'], 2 );
 
-			if ( 'term' === $type[0] ) {
+			if ( 'term' === $item[0] ) {
 				return get_term_meta( $item[1], $key, $single );
 			} else {
 				return get_post_meta( $item[1], $key, $single );
@@ -843,7 +843,7 @@ class A_Z_Listing {
 
 	/**
 	 * Print the number of posts assigned to the current term
-	 * 
+	 *
 	 * @since 2.2.0
 	 */
 	function the_item_post_count() {
@@ -852,12 +852,12 @@ class A_Z_Listing {
 
 	/**
 	 * Retrieve the number of posts assigned to the current term
-	 * 
+	 *
 	 * @since 2.2.0
 	 * @return int The number of posts
 	 */
 	function get_the_item_post_count() {
-		if ( 'terms' === $this->type) {
+		if ( 'terms' === $this->type ) {
 			if ( is_string( $this->current_item['item'] ) ) {
 				$item = explode( ':', $this->current_item['item'], 2 );
 				$term = get_term( $item[1] );
