@@ -661,6 +661,7 @@ class A_Z_Listing {
 	 * @since 2.0.0
 	 */
 	public function the_listing() {
+		global $post;
 		if ( 'terms' === $this->type ) {
 			$section = $this->taxonomy;
 		} else {
@@ -670,11 +671,15 @@ class A_Z_Listing {
 			}
 		}
 
-		$template = locate_template( array( 'a-z-listing-' . $section . '.php', 'a-z-listing.php' ) );
+		$template = locate_template( array(
+			'a-z-listing-' . $post->post_name . '.php',
+			'a-z-listing-' . $section . '.php',
+			'a-z-listing.php'
+		) );
 		if ( $template ) {
 			a_z_listing_do_template( $this, $template );
 		} else {
-			a_z_listing_do_template( $this, dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'a-z-listing.php' );
+			a_z_listing_do_template( $this, plugin_dir_path( __DIR__ ) . 'templates/a-z-listing.php' );
 		}
 		wp_reset_postdata();
 	}
