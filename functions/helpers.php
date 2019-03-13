@@ -336,6 +336,7 @@ function get_the_a_z_letters( $query = null, $target = false, $styling = false, 
 function a_z_listing_is_truthy( $value ) {
 	switch ( $value ) {
 		case '1':
+		case 'on':
 		case 'yes':
 		case 'true':
 		case 1:
