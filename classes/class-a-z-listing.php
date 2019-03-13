@@ -327,7 +327,7 @@ class A_Z_Listing {
 		}
 
 		/* translators: List the aphabet of your language in the order that your language prefers. list as groups of identical meanings but different characters together, e.g. in English we group A with a because they are both the same letter but different character-code. Each character group should be followed by a comma separating it from the next group. Any amount of characters per group are acceptible, and there is no requirement for all the groups to contain the same amount of characters as all the others. Be careful with the character you place first in each group as that will be used as the identifier for the group which gets displayed on the page, e.g. in English a group definition of "Aa" will indicate that we display all the posts in the group, i.e. whose titles begin with either "A" or "a", listed under a heading of "A" (the first character in the definition). */
-		$alphabet = __( 'AÁÀÄÂaáàäâ,Bb,Cc,Dd,EÉÈËÊeéèëê,Ff,Gg,Hh,IÍÌÏÎiíìïî,Jj,Kk,Ll,Mm,Nn,OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz', 'a-z-listing' );
+		$alphabet = __( 'AÁÀÄÂaáàäâ,Bb,CÇcç,Dd,EÉÈËÊeéèëê,Ff,Gg,Hh,IÍÌÏÎiíìïî,Jj,Kk,Ll,Mm,Nn,OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz', 'a-z-listing' );
 		/* translators: This should be a single character to denote "all entries that didn't fit under one of the alphabet character groups defined". This is used in English to categorise posts whose title begins with a numeric (0 through to 9), or some other character that is not a standard English alphabet letter. */
 		$others = __( '#', 'a-z-listing' );
 
@@ -829,7 +829,7 @@ class A_Z_Listing {
 		if ( is_string( $this->current_item['item'] ) ) {
 			$item = explode( ':', $this->current_item['item'], 2 );
 
-			if ( 'term' === $type[0] ) {
+			if ( 'term' === $item[0] ) {
 				return get_term_meta( $item[1], $key, $single );
 			} else {
 				return get_post_meta( $item[1], $key, $single );
@@ -843,7 +843,7 @@ class A_Z_Listing {
 
 	/**
 	 * Print the number of posts assigned to the current term
-	 * 
+	 *
 	 * @since 2.2.0
 	 */
 	function the_item_post_count() {
@@ -852,12 +852,12 @@ class A_Z_Listing {
 
 	/**
 	 * Retrieve the number of posts assigned to the current term
-	 * 
+	 *
 	 * @since 2.2.0
 	 * @return int The number of posts
 	 */
 	function get_the_item_post_count() {
-		if ( 'terms' === $this->type) {
+		if ( 'terms' === $this->type ) {
 			if ( is_string( $this->current_item['item'] ) ) {
 				$item = explode( ':', $this->current_item['item'], 2 );
 				$term = get_term( $item[1] );

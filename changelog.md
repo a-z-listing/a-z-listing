@@ -3,6 +3,7 @@
 ## 2.2.0 ##
 
 * Add `get_the_item_post_count` and `the_item_post_count` template methods to get or display the number of posts associated with a term.
+* Add support for `get-all-children` when specifying a `parent-term`.
 * Deprecate PHP 5.3-5.5.
 
 ## 2.1.4 ##
