@@ -671,11 +671,19 @@ class A_Z_Listing {
 			}
 		}
 
-		$template = locate_template( array(
-			'a-z-listing-' . $post->post_name . '.php',
+		$templates = array(
 			'a-z-listing-' . $section . '.php',
-			'a-z-listing.php'
-		) );
+			'a-z-listing.php',
+		);
+
+		if ( $post ) {
+			array_unshift(
+				$templates,
+				'a-z-listing-' . $post->post_name . '.php'
+			);
+		}
+
+		$template = locate_template( $templates );
 		if ( $template ) {
 			a_z_listing_do_template( $this, $template );
 		} else {
