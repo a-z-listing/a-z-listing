@@ -7,15 +7,15 @@
     "build": "grunt"
   },
   "devDependencies": {
-    "babel-core": "^6.26.0",
+    "babel-core": "^6.26.3",
     "babel-plugin-transform-react-jsx": "^6.24.1",
-    "babel-preset-env": "^1.6.1",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "grunt": "^1.0.3",
     "grunt-babel": "^7.0.0",
     "grunt-sass": "^3.0.1",
-    "grunt-wp-i18n": "^1.0.2",
+    "grunt-wp-i18n": "^1.0.3",
     "grunt-wp-readme-to-markdown": "^2.0.1",
-    "node-sass": "^4.9.2"
+    "node-sass": "^4.11.0"
   }
 }

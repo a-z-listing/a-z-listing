@@ -5,7 +5,7 @@ Donate Link: https://liberapay.com/diddledan/donate
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 4.6
 Requires PHP: 5.6
-Tested up to: 5.0
+Tested up to: 5.1
 Stable tag: 2.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -402,7 +402,9 @@ If there is code already in your functions.php then add just the lines between `
 
 * Add `get_the_item_post_count` and `the_item_post_count` template methods to get or display the number of posts associated with a term.
 * Add support for `get-all-children` when specifying a `parent-term`.
-* Deprecate PHP 5.3-5.5.
+* Add extra filename for template matching: `a-z-listing-$slug.php` where `$slug` is the slug of the post containing the shortcode.
+* Deprecate PHP 5.3-5.5. Please ensure you are running at least PHP 5.6. The plugin may work on older PHP versions, but compatibility is not guaranteed.
+* Bugfix for incorrect behaviour of `exclude-terms` in the shortcode. Thanks go to Chris Skrzypchak for finding this.
 
 = 2.1.4 =
 

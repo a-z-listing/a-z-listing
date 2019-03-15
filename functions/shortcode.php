@@ -194,7 +194,7 @@ function a_z_shortcode_handler( $attributes ) {
 			);
 		}
 		if ( ! empty( $attributes['exclude-terms'] ) ) {
-			$ex_terms = explode( ',', $attributes['exclude-termsterms'] );
+			$ex_terms = explode( ',', $attributes['exclude-terms'] );
 			$ex_terms = array_map( 'trim', $ex_terms );
 			$ex_terms = array_filter(
 				$ex_terms,
