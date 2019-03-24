@@ -110,12 +110,21 @@ function a_z_shortcode_handler( $attributes ) {
 		}
 
 		if ( ! empty( $attributes['parent-term'] ) ) {
-			$query = wp_parse_args(
-				$query,
-				array(
-					'child_of' => $attributes['parent-term'],
-				)
-			);
+			$parent_id = intval( $attributes['parent-term'] );
+			if ( ! empty( $attributes['get-all-children'] ) && a_z_listing_is_truthy( $attributes['get-all-children'] ) ) {
+				$parent_selector = 'child_of';
+			} else {
+				$parent_selector = 'parent';
+			}
+
+			if ( 0 < $parent_id ) {
+				$query = wp_parse_args(
+					$query,
+					array(
+						$parent_selector => $parent_id,
+					)
+				);
+			}
 		}
 
 		if ( ! empty( $attributes['hide-empty-terms'] ) ) {
@@ -185,8 +194,8 @@ function a_z_shortcode_handler( $attributes ) {
 			);
 		}
 		if ( ! empty( $attributes['exclude-terms'] ) ) {
-			$ex_terms = explode( ',', $attributes['exclude-termsterms'] );
-			$ex_terms = array_map( 'trim', $terms );
+			$ex_terms = explode( ',', $attributes['exclude-terms'] );
+			$ex_terms = array_map( 'trim', $ex_terms );
 			$ex_terms = array_filter(
 				$ex_terms,
 				function( $value ) {

@@ -1,0 +1,23 @@
+<Project Sdk="Peachpie.NET.Sdk/0.9.33">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>A-Z Listing plugin for WordPress (Peachpied.WordPress)</Description>
+    <AssemblyName>a-z-listing</AssemblyName>
+    <PackageId>a-z-listing</PackageId>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="**/*.php" Exclude=".git/**;.vscode/**;node_modules/**;obj/**;bin/**;**/tests/**;**/test/**;**/cli/**;**/composer-php52/**" />
+    <Content Include="README.md;LICENSE;changelog.md;**/*.pot;**/*.js;**/*.css;" Exclude="Gruntfile.js;.git/**;.vscode/**;node_modules/**;obj/**;bin/**;**/tests/**;**/test/**;**/cli/**;**/composer-php52/**" CopyToOutputDirectory="PreserveNewest">
+      <PackagePath>contentFiles/any/netcoreapp2.0/wordpress/</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+      <Link>wordpress\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="PeachPied.WordPress" Version="1.0.0-alpha6" />
+  </ItemGroup>
+</Project>

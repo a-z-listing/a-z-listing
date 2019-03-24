@@ -131,7 +131,7 @@ class A_Z_Listing_Widget extends WP_Widget {
 
 			<div class="a-z-listing-target-post-wrapper">
 				<p>
-					<label for="<?php echo esc_attr( $target_post_id ); ?>">
+					<label for="<?php echo esc_attr( $target_post_title_id ); ?>">
 						<?php esc_html_e( 'Sitemap A-Z page', 'a-z-listing' ); ?>
 					</label>
 					<input type="text" class="widefat a-z-listing-target-post-title"
@@ -190,7 +190,7 @@ class A_Z_Listing_Widget extends WP_Widget {
 
 			<div class="a-z-listing-parent-post-wrapper" <?php echo ( 'terms' !== $display_type ) ? '' : 'style="display: none"'; ?>>
 				<p>
-					<label for="<?php echo esc_attr( $listing_parent_post_id ); ?>">
+					<label for="<?php echo esc_attr( $listing_parent_post_title_id ); ?>">
 						<?php esc_html_e( 'Show only children of this post (ID)', 'a-z-listing' ); ?>
 					</label>
 					<input type="text" class="widefat a-z-listing-parent-post-title"
@@ -405,8 +405,8 @@ function get_the_section_a_z_widget( $args, $instance ) {
 		)
 	);
 
-	$title  = esc_html( $instance['title'] );
-	$target = '';
+	$title      = esc_html( $instance['title'] );
+	$target_url = '';
 	if ( 0 < $instance['post'] || 0 < $instance['page'] ) { // target.
 		$target_id = (int) $instance['post']; // target.
 		if ( ! ( 0 < $instance['post'] ) ) {

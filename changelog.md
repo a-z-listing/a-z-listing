@@ -1,5 +1,13 @@
 # Full Changelog #
 
+## 2.2.0 ##
+
+* Add `get_the_item_post_count` and `the_item_post_count` template methods to get or display the number of posts associated with a term.
+* Add support for `get-all-children` when specifying a `parent-term`.
+* Add extra filename for template matching: `a-z-listing-$slug.php` where `$slug` is the slug of the post containing the shortcode.
+* Deprecate PHP 5.3-5.5. Please ensure you are running at least PHP 5.6. The plugin may work on older PHP versions, but compatibility is not guaranteed.
+* Bugfix for incorrect behaviour of `exclude-terms` in the shortcode. Thanks go to Chris Skrzypchak for finding this.
+
 ## 2.1.4 ##
 
 ### Bug Fix ###

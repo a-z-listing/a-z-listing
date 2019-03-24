@@ -5,8 +5,8 @@ Donate Link: https://liberapay.com/diddledan/donate
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 4.6
 Requires PHP: 5.6
-Tested up to: 5.0
-Stable tag: 2.1.4
+Tested up to: 5.1
+Stable tag: 2.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,7 +29,7 @@ This section describes how to install the plugin and get it working.
 
 = Requirements =
 
-1. PHP 5.6 is the minimum version you should be using. Preferably use the most-recent version of PHP your host offers; PHP 7.1 is ideal. I try to keep the plugin compatible back to PHP 5.3, but cannot guarantee continued compatibility.
+1. PHP 5.6 is the minimum version you should be using. Preferably use the most-recent version of PHP your host offers; PHP 7.2 is ideal. Older versions of PHP than 5.6 are unsupported.
 1. The plugin requires `mbstring` turned-on in your PHP installation. Without this feature the plugin might behave oddly or fail.
 
 = Instructions =
@@ -206,6 +206,14 @@ These helper functions cope with the dual usage of the plugin supporting both `W
 * `$a_z_query->get_the_permalink()` returns the current item's Permalink but does not print it directly
 
 == Frequently Asked Questions ==
+
+= Why is the list layout completely broken? =
+
+If you are using a page-builder such as WPBakery or Elementor you need to ensure that you put the shortcode into a normal text area. Placing the shortcode into a preformatted text area will add `<pre>` tags around the listing output. These extra tags break the layout considerably.
+
+= Why is my list in a single column? =
+
+The list of items under each letter heading needs to have at least 11 items for a second column to be created. Once you hit the magic 11 items, the list will break into two columns with 6 items in the first column and 5 items in the second. When you get to 21 items a third column will be added if there is room on your page; and so-on up to a maximum of 15 columns if there is enough space, though it is unexpected that any webpage be wide enough for more than a few columns to fit. The columns will fill-up evenly once you have more than one column on the page.
 
 = How do I show posts of a different post-type (not pages) or multiple post-types (e.g. posts AND pages) =
 
@@ -389,6 +397,14 @@ If there is code already in your functions.php then add just the lines between `
 2. The Widget is shown here
 
 == Changelog ==
+
+= 2.2.0 =
+
+* Add `get_the_item_post_count` and `the_item_post_count` template methods to get or display the number of posts associated with a term.
+* Add support for `get-all-children` when specifying a `parent-term`.
+* Add extra filename for template matching: `a-z-listing-$slug.php` where `$slug` is the slug of the post containing the shortcode.
+* Deprecate PHP 5.3-5.5. Please ensure you are running at least PHP 5.6. The plugin may work on older PHP versions, but compatibility is not guaranteed.
+* Bugfix for incorrect behaviour of `exclude-terms` in the shortcode. Thanks go to Chris Skrzypchak for finding this.
 
 = 2.1.4 =
 

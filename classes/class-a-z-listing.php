@@ -327,7 +327,7 @@ class A_Z_Listing {
 		}
 
 		/* translators: List the aphabet of your language in the order that your language prefers. list as groups of identical meanings but different characters together, e.g. in English we group A with a because they are both the same letter but different character-code. Each character group should be followed by a comma separating it from the next group. Any amount of characters per group are acceptible, and there is no requirement for all the groups to contain the same amount of characters as all the others. Be careful with the character you place first in each group as that will be used as the identifier for the group which gets displayed on the page, e.g. in English a group definition of "Aa" will indicate that we display all the posts in the group, i.e. whose titles begin with either "A" or "a", listed under a heading of "A" (the first character in the definition). */
-		$alphabet = __( 'AÁÀÄÂaáàäâ,Bb,Cc,Dd,EÉÈËÊeéèëê,Ff,Gg,Hh,IÍÌÏÎiíìïî,Jj,Kk,Ll,Mm,Nn,OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz', 'a-z-listing' );
+		$alphabet = __( 'AÁÀÄÂaáàäâ,Bb,CÇcç,Dd,EÉÈËÊeéèëê,Ff,Gg,Hh,IÍÌÏÎiíìïî,Jj,Kk,Ll,Mm,Nn,OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz', 'a-z-listing' );
 		/* translators: This should be a single character to denote "all entries that didn't fit under one of the alphabet character groups defined". This is used in English to categorise posts whose title begins with a numeric (0 through to 9), or some other character that is not a standard English alphabet letter. */
 		$others = __( '#', 'a-z-listing' );
 
@@ -661,6 +661,7 @@ class A_Z_Listing {
 	 * @since 2.0.0
 	 */
 	public function the_listing() {
+		global $post;
 		if ( 'terms' === $this->type ) {
 			$section = $this->taxonomy;
 		} else {
@@ -670,11 +671,23 @@ class A_Z_Listing {
 			}
 		}
 
-		$template = locate_template( array( 'a-z-listing-' . $section . '.php', 'a-z-listing.php' ) );
+		$templates = array(
+			'a-z-listing-' . $section . '.php',
+			'a-z-listing.php',
+		);
+
+		if ( $post ) {
+			array_unshift(
+				$templates,
+				'a-z-listing-' . $post->post_name . '.php'
+			);
+		}
+
+		$template = locate_template( $templates );
 		if ( $template ) {
 			a_z_listing_do_template( $this, $template );
 		} else {
-			a_z_listing_do_template( $this, dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'a-z-listing.php' );
+			a_z_listing_do_template( $this, plugin_dir_path( __DIR__ ) . 'templates/a-z-listing.php' );
 		}
 		wp_reset_postdata();
 	}
@@ -795,26 +808,26 @@ class A_Z_Listing {
 				if ( isset( $item[1] ) ) {
 					if ( 'terms' === $this->type ) {
 						return get_term( $item[1] );
+					} else {
+						$post = get_post( $item[1] );
+						setup_postdata( $post );
+
+						return $post;
 					}
-
-					$post = get_post( $item[1] );
-					setup_postdata( $post );
-
-					return $post;
 				}
-			}
-
-			if ( is_a( $current_item, 'WP_Post' ) ) {
+			} elseif ( is_a( $current_item, 'WP_Post' ) ) {
 				$post = $current_item;
 				setup_postdata( $post );
 
 				return $post;
+			} elseif ( is_a( $current_item, 'WP_Term' ) ) {
+				return get_term( $current_item );
+			} else {
+				return $current_item;
 			}
-
-			return $current_item;
+		} else {
+			return null;
 		}
-
-		return null;
 	}
 
 	/**
@@ -829,18 +842,48 @@ class A_Z_Listing {
 		if ( is_string( $this->current_item['item'] ) ) {
 			$item = explode( ':', $this->current_item['item'], 2 );
 
-			if ( 'term' === $type[0] ) {
+			if ( 'term' === $item[0] ) {
 				return get_term_meta( $item[1], $key, $single );
+			} else {
+				return get_post_meta( $item[1], $key, $single );
 			}
-
-			return get_post_meta( $item[1], $key, $single );
-		}
-
-		if ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
+		} elseif ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
 			return get_term_meta( $this->current_item['item']->term_id, $key, $single );
+		} else {
+			return get_post_meta( $this->current_item['item']->ID, $key, $single );
 		}
+	}
 
-		return get_post_meta( $this->current_item['item']->ID, $key, $single );
+	/**
+	 * Print the number of posts assigned to the current term
+	 *
+	 * @since 2.2.0
+	 */
+	function the_item_post_count() {
+		echo esc_html( $this->get_the_item_post_count() );
+	}
+
+	/**
+	 * Retrieve the number of posts assigned to the current term
+	 *
+	 * @since 2.2.0
+	 * @return int The number of posts
+	 */
+	function get_the_item_post_count() {
+		if ( 'terms' === $this->type ) {
+			if ( is_string( $this->current_item['item'] ) ) {
+				$item = explode( ':', $this->current_item['item'], 2 );
+				$term = get_term( $item[1] );
+				return $term->count;
+			} elseif ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
+				$term = get_term( $this->current_item['item'] );
+				return $term->count;
+			} else {
+				return 0;
+			}
+		} else {
+			return 0;
+		}
 	}
 
 	/**
