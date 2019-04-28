@@ -65,7 +65,7 @@ class A_Z_Listing_Widget extends WP_Widget {
 		$widget_title_id   = $this->get_field_id( 'title' );
 		$widget_title_name = $this->get_field_name( 'title' );
 
-		$display_type      = ( 'terms' === $instance['type'] ) ? 'terms' : 'posts';
+		$display_type      = ( isset( $instance['type'] ) && 'terms' === $instance['type'] ) ? 'terms' : 'posts';
 		$display_type_id   = $this->get_field_id( 'type' );
 		$display_type_name = $this->get_field_name( 'type' );
 

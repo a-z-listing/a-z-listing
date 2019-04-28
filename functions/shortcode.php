@@ -173,7 +173,7 @@ function a_z_shortcode_handler( $attributes ) {
 			$query = wp_parse_args( $query, $child_query );
 		}
 
-		$taxonomy  = '' !== $attributes['taxonomy'] ? $attributes['taxonomy'] : 'category';
+		$taxonomy  = $attributes['taxonomy'] ? $attributes['taxonomy'] : 'category';
 		$tax_query = array();
 		if ( ! empty( $attributes['terms'] ) ) {
 			$terms = explode( ',', $attributes['terms'] );
