@@ -7,7 +7,7 @@
  * Author URI:      https://bowlhat.net/
  * Text Domain:     a-z-listing
  * Domain Path:     /languages
- * Version:         2.2.0
+ * Version:         2.3.0
  *
  * @package         A_Z_Listing
  */
