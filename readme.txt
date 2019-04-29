@@ -398,6 +398,11 @@ If there is code already in your functions.php then add just the lines between `
 
 == Changelog ==
 
+= 2.3.0 =
+
+* Add multiple taxonomy support to taxonomy terms listing.
+* Fix `hide-empty-terms` in a taxonomy terms listing. Previously completely broken.
+
 = 2.2.0 =
 
 * Add `get_the_item_post_count` and `the_item_post_count` template methods to get or display the number of posts associated with a term.

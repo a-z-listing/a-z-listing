@@ -18,7 +18,7 @@ class A_Z_Listing {
 	/**
 	 * The taxonomy
 	 *
-	 * @var string
+	 * @var string|array
 	 */
 	private $taxonomy;
 
@@ -160,6 +160,9 @@ class A_Z_Listing {
 			 */
 			$query = apply_filters( 'a-z-listing-query', $query, 'terms' );
 
+			if ( is_object( $query ) ) {
+				$query = (array) $query;
+			}
 			$this->taxonomy = $query['taxonomy'];
 
 			if ( $this->check_cache( $query, $type, $use_cache ) ) {
@@ -187,6 +190,7 @@ class A_Z_Listing {
 			 * Modify or replace the query
 			 *
 			 * @since 1.0.0
+			 * @since 2.0.0 apply to taxonomy queries. Add type parameter indicating type of query.
 			 * @param array|Object|WP_Query $query The query object
 			 */
 			$query = apply_filters( 'a_z_listing_query', $query );
@@ -195,6 +199,7 @@ class A_Z_Listing {
 			 * Modify or replace the query
 			 *
 			 * @since 1.7.1
+			 * @since 2.0.0 apply to taxonomy queries. Add type parameter indicating type of query.
 			 * @param array|Object|WP_Query $query The query object
 			 */
 			$query = apply_filters( 'a-z-listing-query', $query );
