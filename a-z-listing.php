@@ -32,6 +32,7 @@ function a_z_listing_init() {
  */
 function a_z_listing_plugins_loaded() {
 	require 'functions/i18n.php';
+	require 'functions/health-check.php';
 	require 'functions/helpers.php';
 	require 'functions/styles.php';
 	require 'functions/scripts.php';
