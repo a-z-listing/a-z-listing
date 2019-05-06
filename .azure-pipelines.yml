@@ -1,0 +1,103 @@
+name: $(Date:yyyyMMdd).$(Rev:.r)
+
+resources:
+  containers:
+  - container: php56
+    image: php:5.6
+  - container: php70
+    image: php:7.0
+  - container: php71
+    image: php:7.1
+  - container: php72
+    image: php:7.2
+  - container: php73
+    image: php:7.3
+  - container: mysql
+    image: mysql
+
+strategy:
+  matrix:
+    php56:
+      containerResource: php56
+    php70:
+      containerResource: php70
+    php71:
+      containerResource: php71
+    php72:
+      containerResource: php72
+    php73:
+      containerResource: php73
+
+jobs:
+- job: PhpUnit
+  displayName: PHPUnit WordPress
+  strategy:
+    matrix:
+      WordPress 4.6:
+        WP_VERSION: 4.6
+      WordPress 4.7:
+        WP_VERSION: 4.7
+      WordPRess 4.8:
+        WP_VERSION: 4.8
+      WordPress 4.9:
+        WP_VERSION: 4.9
+      WordPress 5.0:
+        WP_VERSION: 5.0
+      WordPress 5.1:
+        WP_VERSION: 5.1
+      WordPress latest:
+        WP_VERSION: latest
+      WordPress Trunk:
+        WP_VERSION: trunk
+  pool:
+    vmImage: 'ubuntu-16.04'
+  container: $[ variables['containerResource'] ]
+  services:
+    mysql: mysql
+  steps:
+  - script: bash bin/install-wp-tests.sh wordpress_test root '' "${AGENT_SERVICES_MYSQL_PORTS_3306}" $WP_VERSION
+  - script: composer global require "phpunit/phpunit=4.8.*|5.7.*"
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |
+        phpunit
+
+- job: PhpUnitMultisite
+  displayName: PHPUnit WordPress Multisite
+  strategy:
+    matrix:
+      WordPress 4.6:
+        WP_VERSION: 4.6
+      WordPress 4.7:
+        WP_VERSION: 4.7
+      WordPRess 4.8:
+        WP_VERSION: 4.8
+      WordPress 4.9:
+        WP_VERSION: 4.9
+      WordPress 5.0:
+        WP_VERSION: 5.0
+      WordPress 5.1:
+        WP_VERSION: 5.1
+      WordPress latest:
+        WP_VERSION: latest
+      WordPress Trunk:
+        WP_VERSION: trunk
+  pool:
+    vmImage: 'ubuntu-16.04'
+  container: $[ variables['containerResource'] ]
+  services:
+    mysql: mysql
+  steps:
+  - bash: bin/install-wp-tests.sh wordpress_test root '' "${AGENT_SERVICES_MYSQL_PORTS_3306}" $WP_VERSION
+  - bash: composer global require "phpunit/phpunit=4.8.*|5.7.*"
+  - bash: env WP_MULTISITE=1 $HOME/.composer/vendor/bin/phpunit
+
+- job: PhpCs
+  displayName: PHP Code Sniffer
+  pool:
+    vmImage: 'ubuntu-16.04'
+  container: php73
+  steps:
+  - bash: composer global require wp-coding-standards/wpcs
+  - bash: $HOME/.composer/vendor/bin/phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs
