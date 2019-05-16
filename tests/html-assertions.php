@@ -1,6 +1,6 @@
 <?php
 
-class AZ_UnitTestCase extends WP_UnitTestCase {
+trait HtmlAssertions {
 	protected function assertHTMLEquals( $expected, $actual ) {
 		$expected_dom = new DomDocument();
 		$actual_dom   = new DomDocument();

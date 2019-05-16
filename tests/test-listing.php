@@ -1,5 +1,11 @@
 <?php
-class AZ_Listing_Tests extends AZ_UnitTestCase {
+
+// Load a-z-listing-specific test extension
+require_once 'html-assertions.php';
+
+class AZ_Listing_Tests extends WP_UnitTestCase {
+	use HtmlAssertions;
+
 	public function test_empty_letters() {
 		$expected = file_get_contents( 'tests/data/default-letters.txt' );
 		$actual   = get_the_a_z_letters( null, false, false, false );
@@ -91,7 +97,7 @@ class AZ_Listing_Tests extends AZ_UnitTestCase {
 		$this->assertHTMLEquals( $expected, $actual );
 	}
 
-	public function test_populated_taxonomy_listing() {
+	public function test_populated_taxonomy_listing_string_query() {
 		$title = 'Test Category';
 		$t     = $this->factory->term->create(
 			array(
@@ -102,6 +108,58 @@ class AZ_Listing_Tests extends AZ_UnitTestCase {
 
 		$expected = sprintf( file_get_contents( 'tests/data/populated-taxonomy-listing.txt' ), $title, $t );
 		$actual   = get_the_a_z_listing( 'category', false );
+
+		$this->assertHTMLEquals( $expected, $actual );
+	}
+
+	public function test_populated_taxonomy_listing_array_query() {
+		$title = 'Test Category';
+		$t     = $this->factory->term->create(
+			array(
+				'name'     => $title,
+				'taxonomy' => 'category',
+			)
+		);
+
+		$expected    = sprintf( file_get_contents( 'tests/data/populated-taxonomy-listing.txt' ), $title, $t );
+		$a_z_listing = new A_Z_Listing(
+			array(
+				'taxonomy' => 'category',
+			),
+			'terms'
+		);
+		$actual      = $a_z_listing->get_the_listing();
+
+		$this->assertHTMLEquals( $expected, $actual );
+	}
+
+	public function test_populated_multiple_taxonomy_listing_array_query() {
+		$cat_title = 'Test Category';
+		$cat       = $this->factory->term->create(
+			array(
+				'name'     => $cat_title,
+				'taxonomy' => 'category',
+			)
+		);
+		$tag_title = 'Test Tag';
+		$tag       = $this->factory->term->create(
+			array(
+				'name'     => $tag_title,
+				'taxonomy' => 'post_tag',
+			)
+		);
+
+		$expected    = sprintf( file_get_contents( 'tests/data/populated-multiple-taxonomy-listing.txt' ), $cat_title, $cat, $tag_title, $tag );
+		$a_z_listing = new A_Z_Listing(
+			array(
+				'taxonomy' => array(
+					'category',
+					'post_tag',
+				),
+			),
+			'terms'
+		);
+		$actual      = $a_z_listing->get_the_listing();
 
 		$this->assertHTMLEquals( $expected, $actual );
 	}

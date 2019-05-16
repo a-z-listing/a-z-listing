@@ -334,15 +334,15 @@ function get_the_a_z_letters( $query = null, $target = false, $styling = false, 
  * @return bool The truthiness of the value.
  */
 function a_z_listing_is_truthy( $value ) {
-	switch ( $value ) {
-		case '1':
-		case 'on':
-		case 'yes':
-		case 'true':
-		case 1:
-		case true:
-			return true;
-		default:
-			return false;
+	if ( '1' === $value ||
+		'on' === $value ||
+		'yes' === $value ||
+		'true' === $value ||
+		1 === $value ||
+		true === $value
+	) {
+		return true;
+	} else {
+		return false;
 	}
 }

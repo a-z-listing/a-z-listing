@@ -132,9 +132,12 @@ class A_Z_Listing {
 			if ( is_array( $query ) ) {
 				$query = wp_parse_args( $query, $defaults );
 			} elseif ( is_string( $query ) ) {
+				$taxonomies = explode( ',', $query );
+				$taxonomies = array_unique( array_filter( array_map( 'trim', $taxonomies ) ) );
+
 				$query = wp_parse_args(
 					array(
-						'taxonomy' => $query,
+						'taxonomy' => (array) $taxonomies,
 					),
 					$defaults
 				);
@@ -462,9 +465,7 @@ class A_Z_Listing {
 		$section_name   = null;
 		if ( $section_object === $page ) {
 			$section_object = null;
-		}
-
-		if ( null !== $section_object ) {
+		} elseif ( null !== $section_object ) {
 			if ( isset( $section_object->post_name ) ) {
 				$section_name = $section_object->post_name;
 			} else {
@@ -668,7 +669,11 @@ class A_Z_Listing {
 	public function the_listing() {
 		global $post;
 		if ( 'terms' === $this->type ) {
-			$section = $this->taxonomy;
+			if ( is_array( $this->taxonomy ) ) {
+				$section = join( '_', $this->taxonomy );
+			} else {
+				$section = $this->taxonomy;
+			}
 		} else {
 			$section = self::get_section();
 			if ( $section instanceof WP_Post ) {

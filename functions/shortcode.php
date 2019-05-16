@@ -73,8 +73,12 @@ function a_z_shortcode_handler( $attributes ) {
 	$numbers_obj  = new A_Z_Listing_Numbers( $attributes['numbers'], $group_numbers );
 
 	if ( 'terms' === $attributes['display'] && ! empty( $attributes['taxonomy'] ) ) {
-		$taxonomy   = ! empty( $attributes['taxonomy'] ) ? $attributes['taxonomy'] : 'category';
-		$hide_empty = a_z_listing_is_truthy( $attributes['hide-empty'] ) || a_z_listing_is_truthy( $attributes['hide-empty-terms']);
+		$taxonomy = ! empty( $attributes['taxonomy'] ) ? $attributes['taxonomy'] : 'category';
+		if ( isset( $attributes['hide-empty'] ) && ! empty( $attributes['hide-empty'] ) ) {
+			$hide_empty = a_z_listing_is_truthy( $attributes['hide-empty'] );
+		} else {
+			$hide_empty = a_z_listing_is_truthy( $attributes['hide-empty-terms'] );
+		}
 
 		$taxonomies = explode( ',', $taxonomy );
 		$taxonomies = array_unique( array_filter( array_map( 'trim', $taxonomies ) ) );
@@ -132,17 +136,6 @@ function a_z_shortcode_handler( $attributes ) {
 					)
 				);
 			}
-		}
-
-		if ( ! empty( $attributes['hide-empty-terms'] ) ) {
-			$hide_empty = a_z_listing_is_truthy( $attributes['hide-empty-terms'] );
-
-			$query = wp_parse_args(
-				$query,
-				array(
-					'hide_empty' => $hide_empty,
-				)
-			);
 		}
 
 		$a_z_query = new A_Z_Listing( $query, 'terms' );
