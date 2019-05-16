@@ -19,24 +19,51 @@ cache:
   directories:
     - $HOME/.composer/cache
 
-php:
-  - '7.3'
-  - '7.2'
-  - '7.1'
-  - '7.0'
-  - '5.6'
 env:
   matrix:
+    # single site
     - WP_VERSION=4.6
     - WP_VERSION=4.7
     - WP_VERSION=4.8
     - WP_VERSION=4.9
     - WP_VERSION=5.0
+    - WP_VERSION=5.1
+    - WP_VERSION=5.2
     - WP_VERSION=latest
     - WP_VERSION=trunk
 
+    # multisite
+    - WP_VERSION=4.6
+      WP_MULTISITE=1
+    - WP_VERSION=4.7
+      WP_MULTISITE=1
+    - WP_VERSION=4.8
+      WP_MULTISITE=1
+    - WP_VERSION=4.9
+      WP_MULTISITE=1
+    - WP_VERSION=5.0
+      WP_MULTISITE=1
+    - WP_VERSION=5.1
+      WP_MULTISITE=1
+    - WP_VERSION=5.2
+      WP_MULTISITE=1
+    - WP_VERSION=latest
+      WP_MULTISITE=1
+    - WP_VERSION=trunk
+      WP_MULTISITE=1
+
 matrix:
   include:
+    - php: '7.3'
+      env: PHPUNIT_VERSION="^8"
+    - php: '7.2'
+      env: PHPUNIT_VERSION="^7"
+    - php: '7.1'
+      env: PHPUNIT_VERSION="^7"
+    - php: '7.0'
+      env: PHPUNIT_VERSION="^6"
+    - php: '5.6'
+      env: PHPUNIT_VERSION="^5"
     - php: '7.3'
       env: WP_TRAVISCI=phpcs
 
@@ -49,9 +76,9 @@ before_script:
       echo "xdebug.ini does not exist"
     fi
   - |
-    if [[ ! -z "$WP_VERSION" ]] ; then
+    if [[ ! -z "$WP_VERSION" ]] && [[ "$WP_TRAVISCI" != "phpcs" ]] ; then
       bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
-      composer global require "phpunit/phpunit=4.8.*|5.7.*"
+      composer global require "phpunit/phpunit=$PHPUNIT_VERSION"
     fi
   - |
     if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
@@ -61,9 +88,8 @@ before_script:
 
 script:
   - |
-    if [[ ! -z "$WP_VERSION" ]] ; then
+    if [[ ! -z "$WP_VERSION" ]] && [[ "$WP_TRAVISCI" != "phpcs" ]] ; then
       phpunit
-      WP_MULTISITE=1 phpunit
     fi
   - |
     if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then

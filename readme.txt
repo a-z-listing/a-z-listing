@@ -401,6 +401,7 @@ If there is code already in your functions.php then add just the lines between `
 = 2.3.0 =
 
 * Add multiple taxonomy support to taxonomy terms listing.
+* Add site health-check feature compatibility.
 * Fix `hide-empty-terms` in a taxonomy terms listing. Previously completely broken.
 
 = 2.2.0 =

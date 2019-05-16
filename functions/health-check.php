@@ -14,7 +14,7 @@
 function a_z_listing_add_health_check( $tests ) {
 	$tests['direct']['a_z_listing'] = array(
 		'mbstring_module' => array(
-			'label' => __( 'PHP mbstring mobule' ),
+			'label' => __( 'A to Z Listing plugin' ),
 			'test'  => 'a_z_listing_mbstring_health_check',
 		),
 	);
