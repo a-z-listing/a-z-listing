@@ -18,7 +18,8 @@ if ( ! file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 require_once $_tests_dir . '/includes/functions.php';
 
 // Load a-z-listing-specific test extension
-require 'assert-html.php';
+require_once $_tests_dir . '/includes/testcase.php';
+require_once 'assert-html.php';
 
 /**
  * Manually load the plugin being tested.
