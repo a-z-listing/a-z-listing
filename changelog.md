@@ -1,16 +1,22 @@
 # Full Changelog #
 
+## 2.3.0 ##
+
+* Add multiple taxonomy support to taxonomy terms listing.
+* Add site health-check feature compatibility.
+* Fix `hide-empty-terms` in a taxonomy terms listing. Previously completely broken.
+* Fix hard-coded `admin-ajax.php` URL in widget configuration javascript.
+* Improve documentation in the readme.txt file, which is shown on the plugin page at WordPress.org.
+
 ## 2.2.0 ##
 
 * Add `get_the_item_post_count` and `the_item_post_count` template methods to get or display the number of posts associated with a term.
 * Add support for `get-all-children` when specifying a `parent-term`.
-* Add extra filename for template matching: `a-z-listing-$slug.php` where `$slug` is the slug of the post containing the shortcode.
+* Add extra filename for template matching: `a-z-listing-$slug.php` where `$slug` is the slug of the post containing the short-code.
 * Deprecate PHP 5.3-5.5. Please ensure you are running at least PHP 5.6. The plugin may work on older PHP versions, but compatibility is not guaranteed.
-* Bugfix for incorrect behaviour of `exclude-terms` in the shortcode. Thanks go to Chris Skrzypchak for finding this.
+* Bugfix for incorrect behaviour of `exclude-terms` in the short-code. Thanks go to Chris Skrzypchak for finding this.
 
 ## 2.1.4 ##
-
-### Bug Fix ###
 
 * Fixed a spurious `NOTICE` message (shown below) when error logging is output to the browser. Thanks to the discovery by @npiper.
   * If your site is not showing the message below then you do not need to upgrade with any urgency.
@@ -19,20 +25,14 @@
 
 ## 2.1.3 ##
 
-### Bug Fix ###
-
 * Fixed the bug reported by @ighosts22 where the letter for non-alphabetic items was not pointing at the list of items.
 * Fixed incorrect behaviour discovered after adding tests to the automated testing to verify that I correctly fixed the above bug.
 
 ## 2.1.2 ##
 
-### Bug Fix ###
-
 * Post links in 2.1.0 and 2.1.1 included a series of `%09` which caused visitors' clicks to return a 404 Not Found error. Thanks to @forestpump for their effort in finding the problem and highlighting the fix.
 
 ## 2.1.1 ##
-
-### Bug Fix ###
 
 * Replace hardcoded path to `admin-ajax.php` in widget administration javascript.
   * This release fixes the widget administration form for sites running in a path similar to [https://example.com/wp/](https://example.com/wp/). You should install this fix if your site is a configured in a subfolder to be able to successfully configure the widget.
@@ -40,23 +40,18 @@
 
 ## 2.1.0 ##
 
-### Bug Fixes ###
-
-* Fix widget configuration autocomplete fields for target post and parent post in the theme customizer
-* Fix taxonomy-term-filtered listings displaying all posts (e.g. shortcodes of the form `[a-z-listing taxonomy="category" terms="term"])
-* Fix `get_the_item_object()` to work with old-style overridden indices
-* Fix `get_the_item_object()` to correctly extract the item ID and load the correct item
-* Improve javascript on the widget configuration
-* Clarified the examples with explanations about "post types", "taxonomies", and "terms" to explain what each of these mean.
-
-### New Features ###
-
-* Add parent-page attribute to the shortcode
+* Add parent-page attribute to the short-code
 * Add simpler and safer filter for overriding the index letter for an item
 * Add simpler and safer filter for overriding the title for an item
 * Add new function for fetching meta data in a template: `$a_z_listing->get_item_meta()`
 * Allow exclude-terms to be used with display="posts"
 * Moved template loading function outside of the `A_Z_Query` class to prevent accidental access to the plugin internal structure
+* Fix widget configuration autocomplete fields for target post and parent post in the theme customizer
+* Fix taxonomy-term-filtered listings displaying all posts (e.g. short-codes of the form `[a-z-listing taxonomy="category" terms="term"])
+* Fix `get_the_item_object()` to work with old-style overridden indices
+* Fix `get_the_item_object()` to correctly extract the item ID and load the correct item
+* Improve javascript on the widget configuration
+* Clarified the examples with explanations about "post types", "taxonomies", and "terms" to explain what each of these mean.
 
 ## 2.0.6 ##
 
@@ -86,16 +81,16 @@
 ## 2.0.0 ##
 
 * Improved widget configuration.
-* New attribute added to the shortcode when `display="posts"`:
+* New attribute added to the short-code when `display="posts"`:
   * `exclude-posts`: remove specific posts from the list
-* New attributes added to the shortcode when `display="terms"`:
+* New attributes added to the short-code when `display="terms"`:
   * `exclude-terms`: sets the terms to exclude from display
   * `parent-term`: set the parent that all displayed terms must be organised under
   * `hide-empty-terms`: hide terms that have no posts associated
 * Fix the stylesheet to better cope with variances in font-size and text length in the alphabet links list and widget.
 * Introduce PHP classes for adding numbers and grouping to the alphabet. Allows unhooking from the filters to undo the changes, where previously you could not unhook these modifications once they'd been applied.
 
-### BREAKING CHANGES ###
+### BREAKING CHANGES in 2.0.0+ ###
 
 * Multi column example:
   If you have copied the multi-column example in previous releases to your theme folder then you will need to perform some manual steps.
@@ -133,7 +128,7 @@ You can use these classes to hide letters that have no posts by including the fo
 
 ## 1.8.0 ##
 
-* Add extra shortcode attributes:
+* Add extra short-code attributes:
   * `numbers`: appends or prepends numerals to the alphabet
     * Default value: unset
     * Can be set to either `before` or `after`.
@@ -143,7 +138,7 @@ You can use these classes to hide letters that have no posts by including the fo
     * Can be set to any positive number higher than `1` or the value `numbers`
     * Any value other than a positive number or the value `numbers` will default to disabling all grouping functionality
     * When set to a number higher than `1` the listing will group letters together into ranges
-      * For example, if you chose `3` then a latin alphabet will group together `A`, `B`, and `C` into `A-C`. Likewise for `D-F`, `G-I` and so-on
+      * For example, if you chose `3` then a Latin alphabet will group together `A`, `B`, and `C` into `A-C`. Likewise for `D-F`, `G-I` and so-on
       * When using this setting, if numbers are also shown via the `numbers="before"` or `numbers="after"` attribute then they will be shown as a single separate group `0-9`
     * When set to the value `numbers` it will group numerals into a single group `0-9`
       * This requires the numbers to be displayed via the `numbers="before"` or `numbers="after"` attributes
@@ -154,21 +149,21 @@ You can use these classes to hide letters that have no posts by including the fo
     * Accepts a single line of letters/symbols, which need to be separated via the comma character `,`
     * Including more than one letter/symbol in each group will display posts starting with any of those under the same section
     * The first letter/symbol in each group is used as the group's heading when displayed on your site
-* Bugfix: Shortcode to display taxonomy terms wouldn't also display numbers groups. Hat-tip to @sotos for the report.
+* Bugfix: short-code to display taxonomy terms wouldn't also display numbers groups. Hat-tip to @sotos for the report.
 
 ## 1.7.2 ##
 
-* Bugfix: Previous release broke the shortcode
+* Bugfix: Previous release broke the short-code
 
 ## 1.7.1 ##
 
 * Add additional filters allowing for hyphens or underscores to be used when defining. The readme.txt incorrectly used then-unsupported names with hyphens in examples so now we support both.
-* Add numbers="before" and numbers="after" in shortcode
+* Add numbers="before" and numbers="after" in short-code
 
 ## 1.7.0 ##
 
-* Add support for taxonomy term listings to the shortcode
-* Add support for filtering by taxonomy terms to the shortcode
+* Add support for taxonomy term listings to the short-code
+* Add support for filtering by taxonomy terms to the short-code
 
 ## 1.6.5 ##
 
@@ -208,8 +203,8 @@ You can use these classes to hide letters that have no posts by including the fo
 
 ## 1.5.1 ##
 
-* Fix multiple post-types support for shortcode
-* Update documentation to explain how to show multiple post-types with the shortcode
+* Fix multiple post-types support for short-code
+* Update documentation to explain how to show multiple post-types with the short-code
 
 ## 1.5.0 ##
 
@@ -224,7 +219,7 @@ You can use these classes to hide letters that have no posts by including the fo
 
 * Add support for passing a WP_Post object instead of an ID to the widget function
 * Fix widget config not saving post-type parameter
-* Fix warning of incorrect usage of `has_shortcode()` function
+* Fix warning of incorrect usage of `has_short-code()` function
 * Fix section-targeting to work as described
 
 ## 1.3.1 ##
@@ -252,7 +247,7 @@ You can use these classes to hide letters that have no posts by including the fo
 ## 1.0.0 ##
 
 * BREAKING CHANGE: Refactored several function names. If you have written your own template/loop you will need to adapt your code. See the readme's Theming section for details.
-* Added `post-type` attribute into the shortcode to display for post-types other than pages.
+* Added `post-type` attribute into the short-code to display for post-types other than pages.
 * Minor code cleanup.
 
 ## 0.8.0 ##
@@ -283,7 +278,7 @@ You can use these classes to hide letters that have no posts by including the fo
 
 ## 0.5 ##
 
-* Added new shortcode to display the index page.
+* Added new short-code to display the index page.
 
 ## 0.4 ##
 
