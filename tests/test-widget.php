@@ -1,5 +1,11 @@
 <?php
-class AZ_Widget_Tests extends AZ_UnitTestCase {
+
+// Load a-z-listing-specific test extension
+require_once 'html-assertions.php';
+
+class AZ_Widget_Tests extends WP_UnitTestCase {
+	use HtmlAssertions;
+	
 	public function test_widget() {
 		$p = $this->factory->post->create(
 			array(

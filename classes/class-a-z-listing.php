@@ -18,7 +18,7 @@ class A_Z_Listing {
 	/**
 	 * The taxonomy
 	 *
-	 * @var string
+	 * @var string|array
 	 */
 	private $taxonomy;
 
@@ -132,9 +132,12 @@ class A_Z_Listing {
 			if ( is_array( $query ) ) {
 				$query = wp_parse_args( $query, $defaults );
 			} elseif ( is_string( $query ) ) {
+				$taxonomies = explode( ',', $query );
+				$taxonomies = array_unique( array_filter( array_map( 'trim', $taxonomies ) ) );
+
 				$query = wp_parse_args(
 					array(
-						'taxonomy' => $query,
+						'taxonomy' => (array) $taxonomies,
 					),
 					$defaults
 				);
@@ -160,6 +163,9 @@ class A_Z_Listing {
 			 */
 			$query = apply_filters( 'a-z-listing-query', $query, 'terms' );
 
+			if ( is_object( $query ) ) {
+				$query = (array) $query;
+			}
 			$this->taxonomy = $query['taxonomy'];
 
 			if ( $this->check_cache( $query, $type, $use_cache ) ) {
@@ -187,6 +193,7 @@ class A_Z_Listing {
 			 * Modify or replace the query
 			 *
 			 * @since 1.0.0
+			 * @since 2.0.0 apply to taxonomy queries. Add type parameter indicating type of query.
 			 * @param array|Object|WP_Query $query The query object
 			 */
 			$query = apply_filters( 'a_z_listing_query', $query );
@@ -195,6 +202,7 @@ class A_Z_Listing {
 			 * Modify or replace the query
 			 *
 			 * @since 1.7.1
+			 * @since 2.0.0 apply to taxonomy queries. Add type parameter indicating type of query.
 			 * @param array|Object|WP_Query $query The query object
 			 */
 			$query = apply_filters( 'a-z-listing-query', $query );
@@ -457,9 +465,7 @@ class A_Z_Listing {
 		$section_name   = null;
 		if ( $section_object === $page ) {
 			$section_object = null;
-		}
-
-		if ( null !== $section_object ) {
+		} elseif ( null !== $section_object ) {
 			if ( isset( $section_object->post_name ) ) {
 				$section_name = $section_object->post_name;
 			} else {
@@ -663,7 +669,11 @@ class A_Z_Listing {
 	public function the_listing() {
 		global $post;
 		if ( 'terms' === $this->type ) {
-			$section = $this->taxonomy;
+			if ( is_array( $this->taxonomy ) ) {
+				$section = join( '_', $this->taxonomy );
+			} else {
+				$section = $this->taxonomy;
+			}
 		} else {
 			$section = self::get_section();
 			if ( $section instanceof WP_Post ) {

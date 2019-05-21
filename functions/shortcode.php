@@ -73,10 +73,19 @@ function a_z_shortcode_handler( $attributes ) {
 	$numbers_obj  = new A_Z_Listing_Numbers( $attributes['numbers'], $group_numbers );
 
 	if ( 'terms' === $attributes['display'] && ! empty( $attributes['taxonomy'] ) ) {
-		$taxonomy = '' !== $attributes['taxonomy'] ? $attributes['taxonomy'] : 'category';
-		$query    = array(
-			'taxonomy'   => $taxonomy,
-			'hide_empty' => isset( $attributes['hide_empty'] ) && a_z_listing_is_truthy( $attributes['hide-empty'] ),
+		$taxonomy = ! empty( $attributes['taxonomy'] ) ? $attributes['taxonomy'] : 'category';
+		if ( isset( $attributes['hide-empty'] ) && ! empty( $attributes['hide-empty'] ) ) {
+			$hide_empty = a_z_listing_is_truthy( $attributes['hide-empty'] );
+		} else {
+			$hide_empty = a_z_listing_is_truthy( $attributes['hide-empty-terms'] );
+		}
+
+		$taxonomies = explode( ',', $taxonomy );
+		$taxonomies = array_unique( array_filter( array_map( 'trim', $taxonomies ) ) );
+
+		$query = array(
+			'taxonomy'   => $taxonomies,
+			'hide_empty' => $hide_empty,
 		);
 
 		$terms_string  = '';
@@ -91,15 +100,17 @@ function a_z_shortcode_handler( $attributes ) {
 
 		if ( ! empty( $terms_string ) ) {
 			$terms = explode( ',', $terms_string );
-			$terms = array_map( 'trim', $terms );
-			$terms = array_map( 'intval', $terms );
-			$terms = array_filter(
-				$terms,
-				function( $value ) {
-					return 0 < $value;
-				}
+			$terms = array_unique(
+				array_filter(
+					array_map(
+						'intval',
+						array_map( 'trim', $terms )
+					),
+					function( $value ) {
+						return 0 < $value;
+					}
+				)
 			);
-			$terms = array_unique( $terms );
 
 			$query = wp_parse_args(
 				$query,
@@ -127,21 +138,10 @@ function a_z_shortcode_handler( $attributes ) {
 			}
 		}
 
-		if ( ! empty( $attributes['hide-empty-terms'] ) ) {
-			$hide_empty = a_z_listing_is_truthy( $attributes['hide-empty-terms'] );
-
-			$query = wp_parse_args(
-				$query,
-				array(
-					'hide_empty' => $hide_empty,
-				)
-			);
-		}
-
 		$a_z_query = new A_Z_Listing( $query, 'terms' );
 	} else {
 		$post_type = explode( ',', $attributes['post-type'] );
-		$post_type = array_map( 'trim', $post_type );
+		$post_type = array_unique( array_filter( array_map( 'trim', $post_type ) ) );
 
 		$query = array(
 			'post_type' => $post_type,
@@ -149,15 +149,17 @@ function a_z_shortcode_handler( $attributes ) {
 
 		if ( ! empty( $attributes['exclude-posts'] ) ) {
 			$exclude_posts = explode( ',', $attributes['exclude-posts'] );
-			$exclude_posts = array_map( 'trim', $exclude_posts );
-			$exclude_posts = array_map( 'intval', $exclude_posts );
-			$exclude_posts = array_filter(
-				$exclude_posts,
-				function( $value ) {
-					return 0 < $value;
-				}
+			$exclude_posts = array_unique(
+				array_filter(
+					array_map(
+						'intval',
+						array_map( 'trim', $exclude_posts )
+					),
+					function( $value ) {
+						return 0 < $value;
+					}
+				)
 			);
-			$exclude_posts = array_unique( $exclude_posts );
 
 			if ( ! empty( $exclude_posts ) ) {
 				$query = wp_parse_args( $query, array( 'post__not_in' => $exclude_posts ) );
@@ -173,18 +175,11 @@ function a_z_shortcode_handler( $attributes ) {
 			$query = wp_parse_args( $query, $child_query );
 		}
 
-		$taxonomy  = '' !== $attributes['taxonomy'] ? $attributes['taxonomy'] : 'category';
+		$taxonomy  = $attributes['taxonomy'] ? $attributes['taxonomy'] : 'category';
 		$tax_query = array();
 		if ( ! empty( $attributes['terms'] ) ) {
 			$terms = explode( ',', $attributes['terms'] );
-			$terms = array_map( 'trim', $terms );
-			$terms = array_filter(
-				$terms,
-				function( $value ) {
-					return ! empty( $value );
-				}
-			);
-			$terms = array_unique( $terms );
+			$terms = array_unique( array_filter( array_map( 'trim', $terms ) ) );
 
 			$tax_query[] = array(
 				'taxonomy' => $taxonomy,
@@ -195,14 +190,7 @@ function a_z_shortcode_handler( $attributes ) {
 		}
 		if ( ! empty( $attributes['exclude-terms'] ) ) {
 			$ex_terms = explode( ',', $attributes['exclude-terms'] );
-			$ex_terms = array_map( 'trim', $ex_terms );
-			$ex_terms = array_filter(
-				$ex_terms,
-				function( $value ) {
-					return ! empty( $value );
-				}
-			);
-			$ex_terms = array_unique( $ex_terms );
+			$ex_terms = array_unique( array_filter( array_map( 'trim', $ex_terms ) ) );
 
 			$tax_query[] = array(
 				'taxonomy' => $taxonomy,
