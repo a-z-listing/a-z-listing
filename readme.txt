@@ -457,6 +457,13 @@ If there is code already in your functions.php then add just the lines between `
 
 == Changelog ==
 
+= 2.4.0 =
+
+* Add `get_the_item_id` and `the_item_id` template tags.
+* Add `get_the_item_type` template tag.
+* Minor refactoring of `get_the_item_object`, `get_item_meta`, and `get_the_item_count` template tags.
+* Miscellaneous documentation Fixes.
+
 = 2.3.0 =
 
 * Add multiple taxonomy support to taxonomy terms listing.

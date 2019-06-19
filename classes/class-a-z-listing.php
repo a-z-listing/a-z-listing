@@ -803,10 +803,8 @@ class A_Z_Listing {
 	 * Retrieve the item object for the current post
 	 *
 	 * @since 2.0.0
-	 *
 	 * @param string $force Set this to 'I understand the issues!' to acknowledge that this function will cause slowness on large sites.
-	 *
-	 * @return array|null|WP_Error|WP_Post|WP_Term
+	 * @return array|WP_Error|WP_Post|WP_Term
 	 */
 	public function get_the_item_object( $force = '' ) {
 		global $post;
@@ -816,28 +814,27 @@ class A_Z_Listing {
 				$item = explode( ':', $current_item, 2 );
 
 				if ( isset( $item[1] ) ) {
-					if ( 'terms' === $this->type ) {
+					if ( 'term' === $item[0] ) {
 						return get_term( $item[1] );
-					} else {
+					}
+					if ( 'post' === $item[0] ) {
 						$post = get_post( $item[1] );
 						setup_postdata( $post );
-
 						return $post;
 					}
 				}
-			} elseif ( is_a( $current_item, 'WP_Post' ) ) {
+			}
+			if ( is_a( $current_item, 'WP_Post' ) ) {
 				$post = $current_item;
 				setup_postdata( $post );
-
 				return $post;
-			} elseif ( is_a( $current_item, 'WP_Term' ) ) {
-				return get_term( $current_item );
-			} else {
-				return $current_item;
 			}
-		} else {
-			return null;
+			if ( is_a( $current_item, 'WP_Term' ) ) {
+				return get_term( $current_item );
+			}
+			return $current_item;
 		}
+		return new WP_Error( 'understanding', 'You must tell the plugin "I understand the issues!" when calling get_the_item_object().' );
 	}
 
 	/**
@@ -846,7 +843,7 @@ class A_Z_Listing {
 	 * @since 2.1.0
 	 * @param string $key The meta key to retrieve. By default returns data for all keys.
 	 * @param bool   $single Whether to return a single value.
-	 * @return mixed Will be an array if $single is false. Will be value of meta data field if $single is true.
+	 * @return mixed|WP_Error Will be an array if $single is false. Will be value of meta data field if $single is true.
 	 */
 	function get_item_meta( $key = '', $single = false ) {
 		if ( is_string( $this->current_item['item'] ) ) {
@@ -854,14 +851,18 @@ class A_Z_Listing {
 
 			if ( 'term' === $item[0] ) {
 				return get_term_meta( $item[1], $key, $single );
-			} else {
+			}
+			if ( 'post' === $item[0] ) {
 				return get_post_meta( $item[1], $key, $single );
 			}
-		} elseif ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
+		}
+		if ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
 			return get_term_meta( $this->current_item['item']->term_id, $key, $single );
-		} else {
+		}
+		if ( is_a( $this->current_item['item'], 'WP_Post' ) ) {
 			return get_post_meta( $this->current_item['item']->ID, $key, $single );
 		}
+		return new WP_Error( 'no-type', 'Unknown item type.' );
 	}
 
 	/**
@@ -880,20 +881,23 @@ class A_Z_Listing {
 	 * @return int The number of posts
 	 */
 	function get_the_item_post_count() {
-		if ( 'terms' === $this->type ) {
-			if ( is_string( $this->current_item['item'] ) ) {
-				$item = explode( ':', $this->current_item['item'], 2 );
+		if ( is_string( $this->current_item['item'] ) ) {
+			$item = explode( ':', $this->current_item['item'], 2 );
+			$term = null;
+			if ( 'term' === $item[0] ) {
 				$term = get_term( $item[1] );
-				return $term->count;
-			} elseif ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
-				$term = get_term( $this->current_item['item'] );
-				return $term->count;
-			} else {
-				return 0;
+				if ( $term ) {
+					return $term->count;
+				}
 			}
-		} else {
-			return 0;
 		}
+		if ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
+			$term = get_term( $this->current_item['item'] );
+			if ( $term ) {
+				return $term->count;
+			}
+		}
+		return 0;
 	}
 
 	/**
@@ -970,6 +974,65 @@ class A_Z_Listing {
 			$id = '_';
 		}
 		return 'letter-' . $id;
+	}
+
+	/**
+	 * Print the escaped ID of the current item.
+	 *
+	 * @since 2.4.0
+	 */
+	public function the_item_id() {
+		echo esc_attr( $this->get_the_item_id() );
+	}
+
+	/**
+	 * Retreive the ID of the current item. This is not escaped!
+	 *
+	 * @since 2.4.0
+	 * @return int The item ID.
+	 */
+	public function get_the_item_id() {
+		$current_item = $this->current_item['item'];
+		if ( is_string( $current_item ) ) {
+			$item = explode( ':', $current_item, 2 );
+
+			if ( isset( $item[1] ) ) {
+				return $item[1];
+			}
+		}
+		if ( is_a( $current_item, 'WP_Post' ) ) {
+			return $current_item->ID;
+		}
+		if ( is_a( $current_item, 'WP_Term' ) ) {
+			return $current_item->term_id;
+		}
+		return $current_item;
+	}
+
+	/**
+	 * Retreive the type of the current item.
+	 *
+	 * @since 2.4.0
+	 * @return string|WP_Error The type of the current item. Either `post` or `term`. Will return a WP_Error object if the type of the current item cannot be determined.
+	 */
+	public function get_the_item_type() {
+		$current_item = $this->current_item['item'];
+		if ( is_a( $current_item, 'WP_Post' ) ) {
+			return 'post';
+		}
+		if ( is_a( $current_item, 'WP_Term' ) ) {
+			return 'term';
+		}
+		if ( is_string( $current_item ) ) {
+			$item = explode( ':', $current_item, 2 );
+			if ( isset( $item[0] ) && in_array( $item[0], [ 'post', 'term' ] ) ) {
+				return $item[0];
+			}
+		}
+		if ( in_array( $this->type, [ 'terms', 'posts' ] ) ) {
+			return 'terms' === $this->type ? 'term' : 'post';
+		}
+		return new WP_Error( 'no-type', 'Unknown item type.' );
 	}
 
 	/**
