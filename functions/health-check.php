@@ -3,10 +3,13 @@
  * Health Check functionality
  *
  * @package a-z-listing
+ * @since 2.3.0
  */
 
 /**
  * Add A-Z Listing Health Checks
+ *
+ * @since 2.3.0
  *
  * @param array $tests The health checks.
  * @return array The health checks.
@@ -22,6 +25,8 @@ add_filter( 'site_status_tests', 'a_z_listing_add_health_check' );
 
 /**
  * The mbstring health check
+ *
+ * @since 2.3.0
  *
  * @return array The health check results.
  */
@@ -57,6 +62,8 @@ function a_z_listing_mbstring_health_check() {
 
 /**
  * Add mbstring to the recommended modules section of the health-check feature
+ *
+ * @since 2.3.0
  *
  * @param array $modules An associated array of module properties used during testing.
  * @return array The `$modules` array with `mbstring` added.
