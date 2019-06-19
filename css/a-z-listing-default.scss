@@ -3,7 +3,8 @@
 .az-letters,
 .a-z-listing-widget .az-letters,
 .a-z-listing-widget.widget .az-letters {
-	ul.az-links {
+	white-space: unset;
+	> ul.az-links {
 		padding: 0;
 		margin: 0;
 		width: 100%;
@@ -11,7 +12,7 @@
 		flex-direction: row;
 		flex-wrap: wrap;
 		justify-content: center;
-		li {
+		> li {
 			list-style: none;
 			width: 2em;
 			height: 2em;
@@ -35,13 +36,15 @@
 
 .letter-section {
 	margin-bottom: 2em;
+	white-space: unset;
 	h2.letter-title {
 		border-bottom: 1px solid black;
 		margin-bottom: 0.2em;
 		padding-bottom: 0.2em;
 		width: 100%;
 	}
-	ul, ul li {
+	ul,
+	ul > li {
 		list-style: none;
 		margin: 0;
 		padding: 0;
@@ -52,7 +55,7 @@
 		column-gap: 0.6em;
 		column-width: 15em;
 		line-height: 1.6em;
-		li {
+		> li {
 			display: block;
 		}
 		&.max-0-columns,

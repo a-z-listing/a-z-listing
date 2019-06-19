@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: A-Z Listing 2.3.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/a-z-listing\n"
-"POT-Creation-Date: 2019-05-20 22:04:04+00:00\n"
+"POT-Creation-Date: 2019-06-19 21:21:24+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -51,33 +51,35 @@ msgstr ""
 msgid "#"
 msgstr ""
 
-#: functions/health-check.php:17
+#: functions/health-check.php:19
 msgid "A to Z Listing plugin"
 msgstr ""
 
-#: functions/health-check.php:32
-msgid "PHP mbstring module is enabled"
+#: functions/health-check.php:35
+msgid "A-Z Listing: PHP mbstring module is enabled"
 msgstr ""
 
-#: functions/health-check.php:35
+#: functions/health-check.php:38
 msgid "mbstring"
 msgstr ""
 
-#: functions/health-check.php:40
-msgid "The mbstring PHP module improves support for non-latin languages."
+#: functions/health-check.php:43
+msgid ""
+"The mbstring PHP module improves support for non-latin languages in the A-Z "
+"Listing plugin."
 msgstr ""
 
-#: functions/health-check.php:48
-msgid "PHP mbstring module is not enabled"
+#: functions/health-check.php:51
+msgid "A-Z Listing: PHP mbstring module is not enabled"
 msgstr ""
 
-#: functions/health-check.php:52
+#: functions/health-check.php:55
 msgid ""
 "The mbstring PHP module is not enabled on your server. This module improves "
-"support for non-latin languages."
+"support for non-latin languages in the A-Z Listing plugin."
 msgstr ""
 
-#: functions/health-check.php:54
+#: functions/health-check.php:57
 msgid ""
 "Contact your web host to request that the mbstring PHP module is enabled "
 "for your site."
