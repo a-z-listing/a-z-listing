@@ -5,4 +5,5 @@ patreon: # Replace with a single Patreon username
 open_collective: # Replace with a single Open Collective username
 ko_fi: diddledan
 tidelift: # Replace with a single Tidelift platform-name/package-name e.g., npm/babel
-custom: https://liberapay.com/diddledan/
+liberapay: diddledan
+custom: # Replace with a single URL
