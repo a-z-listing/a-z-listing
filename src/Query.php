@@ -597,7 +597,7 @@ class Query {
 	 * @param string $style CSS classes to apply to the output.
 	 */
 	public function the_letters( $target = '', $style = null ) {
-		echo $this->get_the_letters( $target, $style ); // WPCS: XSS OK.
+		echo $this->get_the_letters( $target, $style ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -1106,7 +1106,7 @@ class Query {
 	 */
 	public function the_title() {
 		// to match core we do NOT escape the output!
-		echo $this->get_the_title(); // wpcs: XSS OK.
+		echo $this->get_the_title(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**

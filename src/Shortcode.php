@@ -37,7 +37,7 @@ class Shortcode extends Singleton {
 		/**
 		 * Run extensions.
 		 */
-		do_action( '_a_z_listing_shortcode', $attributes );
+		do_action( '_a_z_listing_shortcode_start', $attributes );
 
 		$attributes = shortcode_atts(
 			array(
@@ -243,6 +243,8 @@ class Shortcode extends Singleton {
 
 		$grouping_obj->teardown();
 		$numbers_obj->teardown();
+
+		do_action( '_a_z_listing_shortcode_end', $attributes );
 
 		return $ret;
 	}

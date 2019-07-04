@@ -292,7 +292,7 @@ function the_az_letters( $query = null, $target = false, $styling = false ) {
  * @param bool                                     $use_cache use the plugin's in-built query cache.
  */
 function the_a_z_letters( $query = null, $target = false, $styling = false, $use_cache = true ) {
-	echo get_the_a_z_letters( $query, $target, $styling, $use_cache ); // WPCS: XSS OK.
+	echo get_the_a_z_letters( $query, $target, $styling, $use_cache ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 /**

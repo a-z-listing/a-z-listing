@@ -356,7 +356,7 @@ function the_section_az_widget( $args, $instance ) {
  * @param  array $instance Configuration of this Widget. Unique to this invocation.
  */
 function the_section_a_z_widget( $args, $instance ) {
-	echo get_the_section_a_z_widget( $args, $instance ); // WPCS: XSS OK.
+	echo get_the_section_a_z_widget( $args, $instance ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 /**

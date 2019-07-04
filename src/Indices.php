@@ -75,6 +75,12 @@ class Indices extends Singleton {
 		 */
 		$title = apply_filters( 'a_z_listing_pre_index_item_title', $title, $item, $type );
 
+		if ( 'terms' === $type ) {
+			$item->term_name = $title;
+		} else {
+			$item->post_title = $title;
+		}
+
 		$index = self::get_index_letter( $title );
 
 		/**
