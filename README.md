@@ -1,14 +1,14 @@
 # A-Z Listing #
 
-**Contributors:** [diddledan](https://profiles.wordpress.org/diddledan)  
-**Donate Link:** https://liberapay.com/diddledan/donate  
-**Tags:** a to z, a-z, archive, listing, widget, index  
-**Requires at least:** 4.6  
-**Requires PHP:** 5.6  
-**Tested up to:** 5.2  
-**Stable tag:** 2.3.0  
-**License:** GPLv2 or later  
-**License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
+**Contributors:** [diddledan](https://profiles.wordpress.org/diddledan)
+**Donate Link:** https://liberapay.com/diddledan/donate
+**Tags:** a to z, a-z, archive, listing, widget, index
+**Requires at least:** 4.6
+**Requires PHP:** 5.6
+**Tested up to:** 5.2
+**Stable tag:** 3.0.0
+**License:** GPLv2 or later
+**License URI:** http://www.gnu.org/licenses/gpl-2.0.html
 
 Provides an A to Z index page and widget. The widget links to the index page at the appropriate letter.
 
@@ -464,6 +464,10 @@ If there is code already in your functions.php then add just the lines between `
 ### 3.0.0 ###
 
 This is a major version change, which means that it might break your site when you upgrade. Please check in a test site first!
+
+#### NEW EXTENSIONS ####
+
+Check out the two new extensions at [A-Z-Listing.com](https://a-z-listing.com/shop). These extensions provide convinience functionality. Purchasing one or both will help towards the cost of maintaining the A-Z Listing plugin.
 
 * Add `get_the_item_id` and `the_item_id` template tags.
 * Add `get_the_item_type` template tag.
