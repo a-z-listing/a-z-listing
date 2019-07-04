@@ -5,6 +5,8 @@
  * @package a-z-listing
  */
 
+namespace A_Z_Listing;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -12,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class A_Z_Indices
  */
-class A_Z_Listing_Indices extends A_Z_Listing_Singleton {
+class Indices extends Singleton {
 	/**
 	 * Bind the index parsing functions to their respective filters.
 	 */
@@ -72,6 +74,12 @@ class A_Z_Listing_Indices extends A_Z_Listing_Singleton {
 		 * @param string          $item_type The type of the item. Either 'posts' or 'terms'.
 		 */
 		$title = apply_filters( 'a_z_listing_pre_index_item_title', $title, $item, $type );
+
+		if ( 'terms' === $type ) {
+			$item->term_name = $title;
+		} else {
+			$item->post_title = $title;
+		}
 
 		$index = self::get_index_letter( $title );
 

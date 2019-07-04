@@ -5,6 +5,8 @@
  * @package a-z-listing
  */
 
+namespace A_Z_Listing;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -12,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * A_Z_Listing_Singleton
  */
-abstract class A_Z_Listing_Singleton implements A_Z_Listing_Extension {
+abstract class Singleton {
 	/**
 	 * Instances
 	 *
@@ -23,7 +25,7 @@ abstract class A_Z_Listing_Singleton implements A_Z_Listing_Extension {
 	/**
 	 * Singleton
 	 *
-	 * @return A_Z_Listing_Extension extension object.
+	 * @return Extension extension object.
 	 */
 	final public static function instance() {
 		$class = get_called_class();
@@ -36,18 +38,17 @@ abstract class A_Z_Listing_Singleton implements A_Z_Listing_Extension {
 	/**
 	 * Activate
 	 *
-	 * @param string $plugin the plugin path.
+	 * @param string $file   the plugin file.
+	 * @param string $plugin the plugin details.
 	 *
-	 * @return A_Z_Listing_Singleton
+	 * @return Singleton
 	 */
-	public function activate( $plugin = '' ) {
-		return $this; // no-op.
+	public function activate( $file = '', $plugin = '' ) {
+		return $this;
 	}
 
 	/**
 	 * Initialize
 	 */
-	public function initialize() {
-		return; // no-op.
-	}
+	abstract public function initialize();
 }

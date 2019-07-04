@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the A-Z Listing package.
 msgid ""
 msgstr ""
-"Project-Id-Version: A-Z Listing 2.3.0\n"
+"Project-Id-Version: A-Z Listing 3.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/a-z-listing\n"
-"POT-Creation-Date: 2019-05-20 22:04:04+00:00\n"
+"POT-Creation-Date: 2019-07-04 23:12:18+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,7 +24,41 @@ msgstr ""
 "X-Textdomain-Support: yes\n"
 "X-Generator: grunt-wp-i18n 1.0.3\n"
 
-#: classes/class-a-z-listing.php:338
+#: functions/health-check.php:19
+msgid "A to Z Listing plugin"
+msgstr ""
+
+#: functions/health-check.php:35
+msgid "A-Z Listing: PHP mbstring module is enabled"
+msgstr ""
+
+#: functions/health-check.php:38
+msgid "Compatibility"
+msgstr ""
+
+#: functions/health-check.php:43
+msgid ""
+"The mbstring PHP module improves support for non-latin languages in the A-Z "
+"Listing plugin."
+msgstr ""
+
+#: functions/health-check.php:51
+msgid "A-Z Listing: PHP mbstring module is not enabled"
+msgstr ""
+
+#: functions/health-check.php:55
+msgid ""
+"The mbstring PHP module is not enabled on your server. This module improves "
+"support for non-latin languages in the A-Z Listing plugin."
+msgstr ""
+
+#: functions/health-check.php:57
+msgid ""
+"Contact your web host to request that the mbstring PHP module is enabled "
+"for your site."
+msgstr ""
+
+#: src/Query.php:355
 #. translators: List the aphabet of your language in the order that your
 #. language prefers. list as groups of identical meanings but different
 #. characters together, e.g. in English we group A with a because they are both
@@ -42,45 +76,13 @@ msgid ""
 "OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz"
 msgstr ""
 
-#: classes/class-a-z-listing.php:340
+#: src/Query.php:357
 #. translators: This should be a single character to denote "all entries that
 #. didn't fit under one of the alphabet character groups defined". This is used
 #. in English to categorise posts whose title begins with a numeric (0 through
 #. to 9), or some other character that is not a standard English alphabet
 #. letter.
 msgid "#"
-msgstr ""
-
-#: functions/health-check.php:17
-msgid "A to Z Listing plugin"
-msgstr ""
-
-#: functions/health-check.php:32
-msgid "PHP mbstring module is enabled"
-msgstr ""
-
-#: functions/health-check.php:35
-msgid "mbstring"
-msgstr ""
-
-#: functions/health-check.php:40
-msgid "The mbstring PHP module improves support for non-latin languages."
-msgstr ""
-
-#: functions/health-check.php:48
-msgid "PHP mbstring module is not enabled"
-msgstr ""
-
-#: functions/health-check.php:52
-msgid ""
-"The mbstring PHP module is not enabled on your server. This module improves "
-"support for non-latin languages."
-msgstr ""
-
-#: functions/health-check.php:54
-msgid ""
-"Contact your web host to request that the mbstring PHP module is enabled "
-"for your site."
 msgstr ""
 
 #: templates/a-z-listing.example.php:45 templates/a-z-listing.php:65

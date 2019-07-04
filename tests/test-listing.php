@@ -122,7 +122,7 @@ class AZ_Listing_Tests extends WP_UnitTestCase {
 		);
 
 		$expected    = sprintf( file_get_contents( 'tests/data/populated-taxonomy-listing.txt' ), $title, $t );
-		$a_z_listing = new A_Z_Listing(
+		$a_z_listing = new \A_Z_Listing\Query(
 			array(
 				'taxonomy' => 'category',
 			),
@@ -150,7 +150,7 @@ class AZ_Listing_Tests extends WP_UnitTestCase {
 		);
 
 		$expected    = sprintf( file_get_contents( 'tests/data/populated-multiple-taxonomy-listing.txt' ), $cat_title, $cat, $tag_title, $tag );
-		$a_z_listing = new A_Z_Listing(
+		$a_z_listing = new \A_Z_Listing\Query(
 			array(
 				'taxonomy' => array(
 					'category',

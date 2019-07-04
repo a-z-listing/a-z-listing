@@ -5,6 +5,8 @@
  * @package  a-z-listing
  */
 
+namespace A_Z_Listing;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -14,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 0.1
  */
-class A_Z_Listing {
+class Query {
 	/**
 	 * The taxonomy
 	 *
@@ -245,14 +247,16 @@ class A_Z_Listing {
 				$items       = $query->posts;
 				$this->query = $query;
 			} else {
+				add_filter( 'posts_fields', array( $this, 'wp_query_fields' ), 10, 2 );
 				if ( isset( $query['child_of'] ) ) {
 					$items       = get_pages( $query );
 					$this->query = $query;
 				} else {
-					$wq          = new WP_Query( $query );
+					$wq          = new \WP_Query( $query );
 					$items       = $wq->posts;
 					$this->query = $wq;
 				}
+				remove_filter( 'posts_fields', array( $this, 'wp_query_fields' ), 10, 2 );
 			}
 
 			if ( AZLISTINGLOG ) {
@@ -274,6 +278,19 @@ class A_Z_Listing {
 		if ( $use_cache ) {
 			do_action( 'a_z_listing_save_cache', $query, $type, $this->matched_item_indices );
 		}
+	}
+
+	/**
+	 * Set the fields we require on WP_Query.
+	 *
+	 * @since 3.0.0 Introduced.
+	 * @param string   $fields The current fields in SQL format.
+	 * @param WP_Query $query The WP_Query object.
+	 * @return string The new fields in SQL format.
+	 */
+	public function wp_query_fields( $fields, $query ) {
+		global $wpdb;
+		return "{$wpdb->posts}.ID, {$wpdb->posts}.post_title";
 	}
 
 	/**
@@ -371,7 +388,7 @@ class A_Z_Listing {
 		$letters         = array_reduce(
 			$alphabet_groups,
 			function( $return, $group ) {
-				$group                 = A_Z_Listing::mb_string_to_array( $group );
+				$group                 = \A_Z_Listing\Query::mb_string_to_array( $group );
 				$group_index_character = $group[0];
 				$group                 = array_reduce(
 					$group,
@@ -580,7 +597,7 @@ class A_Z_Listing {
 	 * @param string $style CSS classes to apply to the output.
 	 */
 	public function the_letters( $target = '', $style = null ) {
-		echo $this->get_the_letters( $target, $style ); // WPCS: XSS OK.
+		echo $this->get_the_letters( $target, $style ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -695,9 +712,9 @@ class A_Z_Listing {
 
 		$template = locate_template( $templates );
 		if ( $template ) {
-			a_z_listing_do_template( $this, $template );
+			_do_template( $this, $template );
 		} else {
-			a_z_listing_do_template( $this, plugin_dir_path( __DIR__ ) . 'templates/a-z-listing.php' );
+			_do_template( $this, plugin_dir_path( __DIR__ ) . 'templates/a-z-listing.php' );
 		}
 		wp_reset_postdata();
 	}
@@ -803,10 +820,8 @@ class A_Z_Listing {
 	 * Retrieve the item object for the current post
 	 *
 	 * @since 2.0.0
-	 *
 	 * @param string $force Set this to 'I understand the issues!' to acknowledge that this function will cause slowness on large sites.
-	 *
-	 * @return array|null|WP_Error|WP_Post|WP_Term
+	 * @return array|WP_Error|WP_Post|WP_Term
 	 */
 	public function get_the_item_object( $force = '' ) {
 		global $post;
@@ -816,28 +831,27 @@ class A_Z_Listing {
 				$item = explode( ':', $current_item, 2 );
 
 				if ( isset( $item[1] ) ) {
-					if ( 'terms' === $this->type ) {
+					if ( 'term' === $item[0] ) {
 						return get_term( $item[1] );
-					} else {
+					}
+					if ( 'post' === $item[0] ) {
 						$post = get_post( $item[1] );
 						setup_postdata( $post );
-
 						return $post;
 					}
 				}
-			} elseif ( is_a( $current_item, 'WP_Post' ) ) {
+			}
+			if ( is_a( $current_item, 'WP_Post' ) ) {
 				$post = $current_item;
 				setup_postdata( $post );
-
 				return $post;
-			} elseif ( is_a( $current_item, 'WP_Term' ) ) {
-				return get_term( $current_item );
-			} else {
-				return $current_item;
 			}
-		} else {
-			return null;
+			if ( is_a( $current_item, 'WP_Term' ) ) {
+				return get_term( $current_item );
+			}
+			return $current_item;
 		}
+		return new WP_Error( 'understanding', 'You must tell the plugin "I understand the issues!" when calling get_the_item_object().' );
 	}
 
 	/**
@@ -846,7 +860,7 @@ class A_Z_Listing {
 	 * @since 2.1.0
 	 * @param string $key The meta key to retrieve. By default returns data for all keys.
 	 * @param bool   $single Whether to return a single value.
-	 * @return mixed Will be an array if $single is false. Will be value of meta data field if $single is true.
+	 * @return mixed|WP_Error Will be an array if $single is false. Will be value of meta data field if $single is true.
 	 */
 	function get_item_meta( $key = '', $single = false ) {
 		if ( is_string( $this->current_item['item'] ) ) {
@@ -854,14 +868,18 @@ class A_Z_Listing {
 
 			if ( 'term' === $item[0] ) {
 				return get_term_meta( $item[1], $key, $single );
-			} else {
+			}
+			if ( 'post' === $item[0] ) {
 				return get_post_meta( $item[1], $key, $single );
 			}
-		} elseif ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
+		}
+		if ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
 			return get_term_meta( $this->current_item['item']->term_id, $key, $single );
-		} else {
+		}
+		if ( is_a( $this->current_item['item'], 'WP_Post' ) ) {
 			return get_post_meta( $this->current_item['item']->ID, $key, $single );
 		}
+		return new WP_Error( 'no-type', 'Unknown item type.' );
 	}
 
 	/**
@@ -880,20 +898,23 @@ class A_Z_Listing {
 	 * @return int The number of posts
 	 */
 	function get_the_item_post_count() {
-		if ( 'terms' === $this->type ) {
-			if ( is_string( $this->current_item['item'] ) ) {
-				$item = explode( ':', $this->current_item['item'], 2 );
+		if ( is_string( $this->current_item['item'] ) ) {
+			$item = explode( ':', $this->current_item['item'], 2 );
+			$term = null;
+			if ( 'term' === $item[0] ) {
 				$term = get_term( $item[1] );
-				return $term->count;
-			} elseif ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
-				$term = get_term( $this->current_item['item'] );
-				return $term->count;
-			} else {
-				return 0;
+				if ( $term ) {
+					return $term->count;
+				}
 			}
-		} else {
-			return 0;
 		}
+		if ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
+			$term = get_term( $this->current_item['item'] );
+			if ( $term ) {
+				return $term->count;
+			}
+		}
+		return 0;
 	}
 
 	/**
@@ -973,6 +994,65 @@ class A_Z_Listing {
 	}
 
 	/**
+	 * Print the escaped ID of the current item.
+	 *
+	 * @since 2.4.0
+	 */
+	public function the_item_id() {
+		echo esc_attr( $this->get_the_item_id() );
+	}
+
+	/**
+	 * Retreive the ID of the current item. This is not escaped!
+	 *
+	 * @since 2.4.0
+	 * @return int The item ID.
+	 */
+	public function get_the_item_id() {
+		$current_item = $this->current_item['item'];
+		if ( is_string( $current_item ) ) {
+			$item = explode( ':', $current_item, 2 );
+
+			if ( isset( $item[1] ) ) {
+				return $item[1];
+			}
+		}
+		if ( is_a( $current_item, 'WP_Post' ) ) {
+			return $current_item->ID;
+		}
+		if ( is_a( $current_item, 'WP_Term' ) ) {
+			return $current_item->term_id;
+		}
+		return $current_item;
+	}
+
+	/**
+	 * Retreive the type of the current item.
+	 *
+	 * @since 2.4.0
+	 * @return string|WP_Error The type of the current item. Either `post` or `term`. Will return a WP_Error object if the type of the current item cannot be determined.
+	 */
+	public function get_the_item_type() {
+		$current_item = $this->current_item['item'];
+		if ( is_a( $current_item, 'WP_Post' ) ) {
+			return 'post';
+		}
+		if ( is_a( $current_item, 'WP_Term' ) ) {
+			return 'term';
+		}
+		if ( is_string( $current_item ) ) {
+			$item = explode( ':', $current_item, 2 );
+			if ( isset( $item[0] ) && in_array( $item[0], [ 'post', 'term' ], true ) ) {
+				return $item[0];
+			}
+		}
+		if ( in_array( $this->type, [ 'terms', 'posts' ], true ) ) {
+			return 'terms' === $this->type ? 'term' : 'post';
+		}
+		return new WP_Error( 'no-type', 'Unknown item type.' );
+	}
+
+	/**
 	 * Print the escaped title of the current letter. For example, upper-case A or B or C etc.
 	 *
 	 * @since 0.7
@@ -1026,7 +1106,7 @@ class A_Z_Listing {
 	 */
 	public function the_title() {
 		// to match core we do NOT escape the output!
-		echo $this->get_the_title(); // wpcs: XSS OK.
+		echo $this->get_the_title(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -1089,18 +1169,6 @@ class A_Z_Listing {
  * @param A_Z_Query $a_z_query The Query object.
  * @param string    $template_file The path of the template to execute.
  */
-function a_z_listing_do_template( $a_z_query, $template_file ) {
+function _do_template( $a_z_query, $template_file ) {
 	require $template_file;
-}
-
-/**
- * Get a saved copy of the A_Z_Listing instance if we have one, or make a new one and save it for later
- *
- * @param array|string|WP_Query|A_Z_Listing $query     A valid WordPress query or an A_Z_Listing instance.
- * @param string                            $type      The type of items displayed in the listing: 'terms' or 'posts'.
- * @param bool                              $use_cache Try to use a caching plugin. See https://a-z-listing.com/ for the caching plugin we created to work with this feature.
- * @return A_Z_Listing                                 A new or previously-saved instance of A_Z_Listing using the provided construct_query
- */
-function a_z_listing_cache( $query = null, $type = '', $use_cache = true ) {
-	return new A_Z_Listing( $query, $type, $use_cache );
 }
