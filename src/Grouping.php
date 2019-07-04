@@ -5,6 +5,8 @@
  * @package  a-z-listing
  */
 
+namespace A_Z_Listing;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -14,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 2.0.0
  */
-class A_Z_Listing_Grouping {
+class Grouping {
 	/**
 	 * The configured grouping count
 	 *
@@ -96,7 +98,7 @@ class A_Z_Listing_Grouping {
 				} else {
 					$carry[ $j ] = $carry[ $j ] . $letter;
 				}
-				$headings[ $j ][] = A_Z_Listing_Grouping::maybe_mb_substr( $letter, 0, 1 );
+				$headings[ $j ][] = \A_Z_Listing\Grouping::maybe_mb_substr( $letter, 0, 1 );
 
 				if ( $i + 1 === $grouping ) {
 					$i = 0;

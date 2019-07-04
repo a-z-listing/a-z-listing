@@ -5,6 +5,8 @@
  * @package  a-z-listing
  */
 
+namespace A_Z_Listing;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -14,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 0.1
  */
-class A_Z_Listing {
+class Query {
 	/**
 	 * The taxonomy
 	 *
@@ -245,14 +247,16 @@ class A_Z_Listing {
 				$items       = $query->posts;
 				$this->query = $query;
 			} else {
+				add_filter( 'posts_fields', array( $this, 'wp_query_fields' ), 10, 2 );
 				if ( isset( $query['child_of'] ) ) {
 					$items       = get_pages( $query );
 					$this->query = $query;
 				} else {
-					$wq          = new WP_Query( $query );
+					$wq          = new \WP_Query( $query );
 					$items       = $wq->posts;
 					$this->query = $wq;
 				}
+				remove_filter( 'posts_fields', array( $this, 'wp_query_fields' ), 10, 2 );
 			}
 
 			if ( AZLISTINGLOG ) {
@@ -274,6 +278,19 @@ class A_Z_Listing {
 		if ( $use_cache ) {
 			do_action( 'a_z_listing_save_cache', $query, $type, $this->matched_item_indices );
 		}
+	}
+
+	/**
+	 * Set the fields we require on WP_Query.
+	 *
+	 * @since 3.0.0 Introduced.
+	 * @param string   $fields The current fields in SQL format.
+	 * @param WP_Query $query The WP_Query object.
+	 * @return string The new fields in SQL format.
+	 */
+	public function wp_query_fields( $fields, $query ) {
+		global $wpdb;
+		return "{$wpdb->posts}.ID, {$wpdb->posts}.post_title";
 	}
 
 	/**
@@ -371,7 +388,7 @@ class A_Z_Listing {
 		$letters         = array_reduce(
 			$alphabet_groups,
 			function( $return, $group ) {
-				$group                 = A_Z_Listing::mb_string_to_array( $group );
+				$group                 = \A_Z_Listing\Query::mb_string_to_array( $group );
 				$group_index_character = $group[0];
 				$group                 = array_reduce(
 					$group,
@@ -695,9 +712,9 @@ class A_Z_Listing {
 
 		$template = locate_template( $templates );
 		if ( $template ) {
-			a_z_listing_do_template( $this, $template );
+			_do_template( $this, $template );
 		} else {
-			a_z_listing_do_template( $this, plugin_dir_path( __DIR__ ) . 'templates/a-z-listing.php' );
+			_do_template( $this, plugin_dir_path( __DIR__ ) . 'templates/a-z-listing.php' );
 		}
 		wp_reset_postdata();
 	}
@@ -1152,18 +1169,6 @@ class A_Z_Listing {
  * @param A_Z_Query $a_z_query The Query object.
  * @param string    $template_file The path of the template to execute.
  */
-function a_z_listing_do_template( $a_z_query, $template_file ) {
+function _do_template( $a_z_query, $template_file ) {
 	require $template_file;
-}
-
-/**
- * Get a saved copy of the A_Z_Listing instance if we have one, or make a new one and save it for later
- *
- * @param array|string|WP_Query|A_Z_Listing $query     A valid WordPress query or an A_Z_Listing instance.
- * @param string                            $type      The type of items displayed in the listing: 'terms' or 'posts'.
- * @param bool                              $use_cache Try to use a caching plugin. See https://a-z-listing.com/ for the caching plugin we created to work with this feature.
- * @return A_Z_Listing                                 A new or previously-saved instance of A_Z_Listing using the provided construct_query
- */
-function a_z_listing_cache( $query = null, $type = '', $use_cache = true ) {
-	return new A_Z_Listing( $query, $type, $use_cache );
 }

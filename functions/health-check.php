@@ -35,7 +35,7 @@ function a_z_listing_mbstring_health_check() {
 		'label'       => __( 'A-Z Listing: PHP mbstring module is enabled', 'a-z-listing' ),
 		'status'      => 'good',
 		'badge'       => array(
-			'label' => __( 'mbstring', 'a-z-listing' ),
+			'label' => __( 'Compatibility', 'a-z-listing' ),
 			'color' => 'green',
 		),
 		'description' => sprintf(

@@ -14,5 +14,8 @@
             "email": "daniel@bowlhat.net"
         }
     ],
-    "require": {}
+    "require": {},
+    "autoload": {
+        "psr-4": {"A_Z_Listing\\": "src/"}
+    }
 }

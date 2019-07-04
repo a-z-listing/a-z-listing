@@ -457,10 +457,14 @@ If there is code already in your functions.php then add just the lines between `
 
 == Changelog ==
 
-= 2.4.0 =
+= 3.0.0 =
+
+This is a major version change, which means that it might break your site when you upgrade. Please check in a test site first!
 
 * Add `get_the_item_id` and `the_item_id` template tags.
 * Add `get_the_item_type` template tag.
+* Add support for extensions.
+* Complete refactor to use more modern PHP features.
 * Minor refactoring of `get_the_item_object`, `get_item_meta`, and `get_the_item_count` template tags.
 * Miscellaneous documentation Fixes.
 

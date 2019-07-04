@@ -5,6 +5,8 @@
  * @package a-z-listing
  */
 
+namespace A_Z_Listing;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -12,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class A_Z_Indices
  */
-class A_Z_Listing_Indices extends A_Z_Listing_Singleton {
+class Indices extends Singleton {
 	/**
 	 * Bind the index parsing functions to their respective filters.
 	 */
