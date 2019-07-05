@@ -5,6 +5,7 @@
 .git
 .gitignore
 .gitlab-ci.yml
+.github
 .idea
 .jshintrc
 .travis.yml
@@ -34,6 +35,5 @@ phpunit.xml.dist
 README.md
 tests
 Thumbs.db
-vendor
 wp-cli.local.yml
 yarn.lock

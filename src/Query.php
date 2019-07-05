@@ -290,7 +290,7 @@ class Query {
 	 */
 	public function wp_query_fields( $fields, $query ) {
 		global $wpdb;
-		return "{$wpdb->posts}.ID, {$wpdb->posts}.post_title";
+		return "{$wpdb->posts}.ID, {$wpdb->posts}.post_title, {$wpdb->posts}.post_type, {$wpdb->posts}.post_name, {$wpdb->posts}.post_date";
 	}
 
 	/**
