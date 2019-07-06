@@ -6,7 +6,7 @@ Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 4.6
 Requires PHP: 5.6
 Tested up to: 5.2
-Stable tag: 3.0.1
+Stable tag: 3.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -456,6 +456,23 @@ If there is code already in your functions.php then add just the lines between `
 2. The Widget is shown here
 
 == Changelog ==
+
+= 3.0.2 =
+
+* Fix for causing "This site is experiencing difficulties" errors on some sites.
+
+If you are upgrading from pre-3.0.0 this is a major version change, which means that it might break your site when you upgrade. Please check in a test site first!
+
+**NEW EXTENSIONS**
+
+Check out the two new extensions at [A-Z-Listing.com](https://a-z-listing.com/shop). These extensions provide convinience functionality. Purchasing one or both will help towards the cost of maintaining the A-Z Listing plugin.
+
+* Add `get_the_item_id` and `the_item_id` template tags.
+* Add `get_the_item_type` template tag.
+* Add support for extensions.
+* Complete refactor to use more modern PHP features.
+* Minor refactoring of `get_the_item_object`, `get_item_meta`, and `get_the_item_count` template tags.
+* Miscellaneous documentation Fixes.
 
 = 3.0.1 =
 

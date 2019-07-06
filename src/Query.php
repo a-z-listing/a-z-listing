@@ -97,7 +97,7 @@ class Query {
 	/**
 	 * The query for this instance of the A-Z Listing
 	 *
-	 * @var WP_Query|array
+	 * @var \WP_Query|array
 	 */
 	private $query;
 
@@ -105,11 +105,11 @@ class Query {
 	 * A_Z_Listing constructor
 	 *
 	 * @since 0.1
-	 * @since 1.9.2 Instantiate the WP_Query object here instead of in `A_Z_Listing::construct_query()`
+	 * @since 1.9.2 Instantiate the \WP_Query object here instead of in `A_Z_Listing::construct_query()`
 	 * @since 2.0.0 add $type and $use_cache parameters
-	 * @param null|WP_Query|array|string $query     A WP_Query-compatible query definition or a taxonomy name.
-	 * @param null|string                $type      Specify the listing type; either 'posts' or 'terms'.
-	 * @param boolean                    $use_cache Cache the Listing via WordPress transients.
+	 * @param null|\WP_Query|array|string $query     A \WP_Query-compatible query definition or a taxonomy name.
+	 * @param null|string                 $type      Specify the listing type; either 'posts' or 'terms'.
+	 * @param boolean                     $use_cache Cache the Listing via WordPress transients.
 	 */
 	public function __construct( $query = null, $type = 'posts', $use_cache = true ) {
 		global $post;
@@ -150,7 +150,7 @@ class Query {
 			 *
 			 * @since 1.0.0
 			 * @since 2.0.0 apply to taxonomy queries. Add type parameter indicating type of query.
-			 * @param array|Object|WP_Query  $query  The query object
+			 * @param array|Object|\WP_Query  $query  The query object
 			 * @param string  $type  The type of the query. Either 'posts' or 'terms'.
 			 */
 			$query = apply_filters( 'a_z_listing_query', $query, 'terms' );
@@ -160,7 +160,7 @@ class Query {
 			 *
 			 * @since 1.7.1
 			 * @since 2.0.0 apply to taxonomy queries. Add type parameter indicating type of query.
-			 * @param array|Object|WP_Query  $query  The query object
+			 * @param array|Object|\WP_Query  $query  The query object
 			 * @param string  $type  The type of the query. Either 'posts' or 'terms'.
 			 */
 			$query = apply_filters( 'a-z-listing-query', $query, 'terms' );
@@ -196,7 +196,7 @@ class Query {
 			 *
 			 * @since 1.0.0
 			 * @since 2.0.0 apply to taxonomy queries. Add type parameter indicating type of query.
-			 * @param array|Object|WP_Query $query The query object
+			 * @param array|Object|\WP_Query $query The query object
 			 */
 			$query = apply_filters( 'a_z_listing_query', $query );
 
@@ -205,11 +205,11 @@ class Query {
 			 *
 			 * @since 1.7.1
 			 * @since 2.0.0 apply to taxonomy queries. Add type parameter indicating type of query.
-			 * @param array|Object|WP_Query $query The query object
+			 * @param array|Object|\WP_Query $query The query object
 			 */
 			$query = apply_filters( 'a-z-listing-query', $query );
 
-			if ( ! $query instanceof WP_Query ) {
+			if ( ! $query instanceof \WP_Query ) {
 				$query = (array) $query;
 
 				if ( isset( $query['post_type'] ) ) {
@@ -222,7 +222,7 @@ class Query {
 					if ( isset( $query['post_type'] ) && isset( $post ) ) {
 						if ( 'page' === $query['post_type'] && 'page' === $post->post_type ) {
 							$section = self::get_section();
-							if ( $section && is_a( $section, 'WP_Post' ) ) {
+							if ( $section && $section instanceof \WP_Post ) {
 								$query['child_of'] = $section->ID;
 							}
 						}
@@ -243,7 +243,7 @@ class Query {
 				return $this;
 			}
 
-			if ( $query instanceof WP_Query ) {
+			if ( $query instanceof \WP_Query ) {
 				$items       = $query->posts;
 				$this->query = $query;
 			} else {
@@ -281,11 +281,11 @@ class Query {
 	}
 
 	/**
-	 * Set the fields we require on WP_Query.
+	 * Set the fields we require on \WP_Query.
 	 *
 	 * @since 3.0.0 Introduced.
-	 * @param string   $fields The current fields in SQL format.
-	 * @param WP_Query $query The WP_Query object.
+	 * @param string    $fields The current fields in SQL format.
+	 * @param \WP_Query $query The \WP_Query object.
 	 * @return string The new fields in SQL format.
 	 */
 	public function wp_query_fields( $fields, $query ) {
@@ -412,14 +412,14 @@ class Query {
 	 * Find a post's parent post. Will return the original post if the post-type is not hierarchical or the post does not have a parent.
 	 *
 	 * @since 1.4.0
-	 * @param WP_Post|int $page The post whose parent we want to find.
-	 * @return WP_Post|bool The parent post or the original post if no parents were found. Will be false if the function is called with incorrect arguments.
+	 * @param \WP_Post|int $page The post whose parent we want to find.
+	 * @return \WP_Post|bool The parent post or the original post if no parents were found. Will be false if the function is called with incorrect arguments.
 	 */
 	public static function find_post_parent( $page ) {
 		if ( ! $page ) {
 			return false;
 		}
-		if ( ! $page instanceof WP_Post ) {
+		if ( ! $page instanceof \WP_Post ) {
 			$page = get_post( $page );
 		}
 		if ( ! $page->post_parent ) {
@@ -432,8 +432,8 @@ class Query {
 	 * Calculate the top-level section of the requested page
 	 *
 	 * @since 0.1
-	 * @param WP_Post|int $page Optional: The post object, or post-ID, of the page whose section we want to find.
-	 * @return WP_Post|null The post object of the current section's top-level page.
+	 * @param \WP_Post|int $page Optional: The post object, or post-ID, of the page whose section we want to find.
+	 * @return \WP_Post|null The post object of the current section's top-level page.
 	 */
 	protected static function get_section( $page = 0 ) {
 		global $post;
@@ -510,7 +510,7 @@ class Query {
 	 * Fetch the query we are currently using
 	 *
 	 * @since 1.0.0
-	 * @return WP_Query The query object
+	 * @return \WP_Query The query object
 	 */
 	public function get_the_query() {
 		return $this->query;
@@ -693,7 +693,7 @@ class Query {
 			}
 		} else {
 			$section = self::get_section();
-			if ( $section instanceof WP_Post ) {
+			if ( $section instanceof \WP_Post ) {
 				$section = $section->post_name;
 			}
 		}
@@ -716,7 +716,7 @@ class Query {
 		} else {
 			_do_template( $this, plugin_dir_path( __DIR__ ) . 'templates/a-z-listing.php' );
 		}
-		wp_reset_postdata();
+		\wp_reset_postdata();
 	}
 
 	/**
@@ -821,7 +821,7 @@ class Query {
 	 *
 	 * @since 2.0.0
 	 * @param string $force Set this to 'I understand the issues!' to acknowledge that this function will cause slowness on large sites.
-	 * @return array|WP_Error|WP_Post|WP_Term
+	 * @return array|\WP_Error|\WP_Post|\WP_Term
 	 */
 	public function get_the_item_object( $force = '' ) {
 		global $post;
@@ -841,17 +841,17 @@ class Query {
 					}
 				}
 			}
-			if ( is_a( $current_item, 'WP_Post' ) ) {
+			if ( $current_item instanceof \WP_Post ) {
 				$post = $current_item;
 				setup_postdata( $post );
 				return $post;
 			}
-			if ( is_a( $current_item, 'WP_Term' ) ) {
+			if ( $current_item instanceof \WP_Term ) {
 				return get_term( $current_item );
 			}
 			return $current_item;
 		}
-		return new WP_Error( 'understanding', 'You must tell the plugin "I understand the issues!" when calling get_the_item_object().' );
+		return new \WP_Error( 'understanding', 'You must tell the plugin "I understand the issues!" when calling get_the_item_object().' );
 	}
 
 	/**
@@ -860,7 +860,7 @@ class Query {
 	 * @since 2.1.0
 	 * @param string $key The meta key to retrieve. By default returns data for all keys.
 	 * @param bool   $single Whether to return a single value.
-	 * @return mixed|WP_Error Will be an array if $single is false. Will be value of meta data field if $single is true.
+	 * @return mixed|\WP_Error Will be an array if $single is false. Will be value of meta data field if $single is true.
 	 */
 	function get_item_meta( $key = '', $single = false ) {
 		if ( is_string( $this->current_item['item'] ) ) {
@@ -873,13 +873,13 @@ class Query {
 				return get_post_meta( $item[1], $key, $single );
 			}
 		}
-		if ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
+		if ( $this->current_item['item'] instanceof \WP_Term ) {
 			return get_term_meta( $this->current_item['item']->term_id, $key, $single );
 		}
-		if ( is_a( $this->current_item['item'], 'WP_Post' ) ) {
+		if ( $this->current_item['item'] instanceof \WP_Post ) {
 			return get_post_meta( $this->current_item['item']->ID, $key, $single );
 		}
-		return new WP_Error( 'no-type', 'Unknown item type.' );
+		return new \WP_Error( 'no-type', 'Unknown item type.' );
 	}
 
 	/**
@@ -908,7 +908,7 @@ class Query {
 				}
 			}
 		}
-		if ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
+		if ( $this->current_item['item'] instanceof \WP_Term ) {
 			$term = get_term( $this->current_item['item'] );
 			if ( $term ) {
 				return $term->count;
@@ -1017,10 +1017,10 @@ class Query {
 				return $item[1];
 			}
 		}
-		if ( is_a( $current_item, 'WP_Post' ) ) {
+		if ( $current_item instanceof \WP_Post ) {
 			return $current_item->ID;
 		}
-		if ( is_a( $current_item, 'WP_Term' ) ) {
+		if ( $current_item instanceof \WP_Term ) {
 			return $current_item->term_id;
 		}
 		return $current_item;
@@ -1030,14 +1030,14 @@ class Query {
 	 * Retreive the type of the current item.
 	 *
 	 * @since 2.4.0
-	 * @return string|WP_Error The type of the current item. Either `post` or `term`. Will return a WP_Error object if the type of the current item cannot be determined.
+	 * @return string|\WP_Error The type of the current item. Either `post` or `term`. Will return a \WP_Error object if the type of the current item cannot be determined.
 	 */
 	public function get_the_item_type() {
 		$current_item = $this->current_item['item'];
-		if ( is_a( $current_item, 'WP_Post' ) ) {
+		if ( $current_item instanceof \WP_Post ) {
 			return 'post';
 		}
-		if ( is_a( $current_item, 'WP_Term' ) ) {
+		if ( $current_item instanceof \WP_Term ) {
 			return 'term';
 		}
 		if ( is_string( $current_item ) ) {
@@ -1049,7 +1049,7 @@ class Query {
 		if ( in_array( $this->type, [ 'terms', 'posts' ], true ) ) {
 			return 'terms' === $this->type ? 'term' : 'post';
 		}
-		return new WP_Error( 'no-type', 'Unknown item type.' );
+		return new \WP_Error( 'no-type', 'Unknown item type.' );
 	}
 
 	/**
@@ -1131,10 +1131,10 @@ class Query {
 				return apply_filters( 'term_name', $title, $item[1] );
 			}
 		} else {
-			if ( is_a( $item, 'WP_Post' ) ) {
+			if ( $item instanceof \WP_Post ) {
 				return apply_filters( 'the_title', $title, $item->ID );
 			}
-			if ( is_a( $item, 'WP_Term' ) ) {
+			if ( $item instanceof \WP_Term ) {
 				return apply_filters( 'term_name', $title, $item->term_id );
 			}
 		}

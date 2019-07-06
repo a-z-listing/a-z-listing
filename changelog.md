@@ -1,5 +1,13 @@
 # Full Changelog #
 
+## 3.0.2 ##
+
+* Fix for causing "This site is experiencing difficulties" errors on some sites.
+
+## 3.0.1 ##
+
+* Fix broken permalinks in 3.0.0
+
 ## 3.0.0 ##
 
 This is a major version change, which means that it might break your site when you upgrade. Please check in a test site first!
