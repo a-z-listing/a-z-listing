@@ -7,7 +7,7 @@
  * Author URI:      https://bowlhat.net/
  * Text Domain:     a-z-listing
  * Domain Path:     /languages
- * Version:         3.0.2
+ * Version:         3.1.0
  *
  * @package         A_Z_Listing
  */
@@ -20,7 +20,7 @@ if ( ! defined( 'AZLISTINGLOG' ) ) {
 	define( 'AZLISTINGLOG', false );
 }
 
-require 'vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
 /**
  * Initialize the plugin.
@@ -34,14 +34,14 @@ function a_z_listing_init() {
  * Load all the plugin code.
  */
 function a_z_listing_plugins_loaded() {
-	require 'functions/i18n.php';
-	require 'functions/health-check.php';
-	require 'functions/helpers.php';
-	require 'functions/styles.php';
-	require 'functions/scripts.php';
-	require 'functions/enqueues.php';
+	require __DIR__ . '/functions/i18n.php';
+	require __DIR__ . '/functions/health-check.php';
+	require __DIR__ . '/functions/helpers.php';
+	require __DIR__ . '/functions/styles.php';
+	require __DIR__ . '/functions/scripts.php';
+	require __DIR__ . '/functions/enqueues.php';
 
-	require 'widgets/class-a-z-listing-widget.php';
+	require __DIR__ . '/widgets/class-a-z-listing-widget.php';
 
 	add_action( 'init', 'a_z_listing_init', 5 );
 }

@@ -6,7 +6,7 @@ Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 4.6
 Requires PHP: 5.6
 Tested up to: 5.2
-Stable tag: 3.0.2
+Stable tag: 3.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -456,6 +456,15 @@ If there is code already in your functions.php then add just the lines between `
 2. The Widget is shown here
 
 == Changelog ==
+
+= 3.1.0 =
+
+* Ensure paths are correct when loading PHP files.
+* Add hook to customise sorting of items within each letter.
+
+**NEW EXTENSIONS**
+
+Check out the two new extensions at [A-Z-Listing.com](https://a-z-listing.com/shop). These extensions provide convinience functionality. Purchasing one or both will help towards the cost of maintaining the A-Z Listing plugin.
 
 = 3.0.2 =
 
