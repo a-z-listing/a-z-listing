@@ -492,7 +492,7 @@ class Query {
 		}
 
 		if ( AZLISTINGLOG ) {
-			do_action( 'log', 'A-Z Section selection', $section_name, $sections );
+			do_action( 'log', 'A-Z Listing: Section selection', $section_name, $sections );
 		}
 
 		if ( null !== $section_name && ! in_array( $section_name, $sections, true ) ) {
@@ -501,7 +501,7 @@ class Query {
 		}
 
 		if ( AZLISTINGLOG ) {
-			do_action( 'log', 'A-Z Section', $section_name );
+			do_action( 'log', 'A-Z Listing: Proceeding with section', $section_name );
 		}
 		return $section_object;
 	}
@@ -579,7 +579,21 @@ class Query {
 					usort(
 						$indexed_items[ $character ],
 						function ( $a, $b ) {
-							return strcasecmp( $a['title'], $b['title'] );
+							$default_sort = strcasecmp( $a['title'], $b['title'] );
+							$sort = apply_filters(
+								'a_z_listing_item_sorting_comparator',
+								$default_sort,
+								$a['title'],
+								$b['title']
+							);
+							if ( -1 === $sort || 0 === $sort || 1 === $sort ) {
+								if ( AZLISTINGLOG ) {
+									do_action( 'log', 'A-Z Listing: value returned from `a_z_listing_item_sorting_comparator` filter sorting was not -1, 0, or 1', $sort, $a['title'], $b['title'] );
+								}
+								return $sort;
+							} else {
+								return $default_sort;
+							}
 						}
 					);
 				}
