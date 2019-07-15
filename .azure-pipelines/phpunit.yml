@@ -1,24 +1,24 @@
 parameters:
   phpvers: []
   wpvers: []
-  multisites: [0, 1]
+  multisites:
+  - name: 'normal'
+    value: 0
+  - name: 'multisite'
+    value: 1
 
 jobs:
 - ${{ each phpver in parameters.phpvers }}:
   - ${{ each wpver in parameters.wpvers }}:
     - ${{ each doMultisite in parameters.multisites }}:
-      - ${{ if eq(doMultisite, 0) }}:
-          job: PHPUnit_${{ phpver }}_${{ wpver }}
-          displayName: PHPUnit; PHP ${{ phpver }} WordPress ${{ wpver }}
-        ${{ if eq(doMultisite, 1) }}:
-          job: PHPUnit_${{ phpver }}_${{ wpver }}_multisite
-          displayName: PHPUnit; PHP ${{ phpver }} WordPress ${{ wpver }} (multisite)
+      - job: PHPUnit_${{ phpver.name }}_${{ wpver.name }}_${{ doMultisite.name }}
+        displayName: PHPUnit; PHP ${{ phpver.value }} WordPress ${{ wpver.value }} (${{ doMultisite.value }})
         pool:
           vmImage: 'ubuntu-16.04'
-        container: diddledan/gitlab-php-runner:${{ phpver }}
+        container: diddledan/gitlab-php-runner:${{ phpver.value }}
         variables:
-          WP_VERSION: ${{ wpver }}
-          WP_MULTISITE: ${{ doMultisite }}
+          WP_VERSION: ${{ wpver.value }}
+          WP_MULTISITE: ${{ doMultisite.value }}
         services:
           mysql: mysql
         steps:
