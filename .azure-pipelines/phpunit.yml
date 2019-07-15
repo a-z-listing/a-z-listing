@@ -15,7 +15,7 @@ jobs:
         displayName: PHPUnit; PHP ${{ phpver.value }} WordPress ${{ wpver.value }} (${{ doMultisite.value }})
         pool:
           vmImage: 'ubuntu-16.04'
-        container: diddledan/gitlab-php-runner:${{ phpver.value }}
+        container: bowlhat/gitlab-php-runner:${{ phpver.value }}
         variables:
           WP_VERSION: ${{ wpver.value }}
           WP_MULTISITE: ${{ doMultisite.value }}
