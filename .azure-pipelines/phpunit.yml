@@ -12,7 +12,7 @@ jobs:
   - ${{ each wpver in parameters.wpvers }}:
     - ${{ each doMultisite in parameters.multisites }}:
       - job: PHPUnit_${{ phpver.name }}_${{ wpver.name }}_${{ doMultisite.name }}
-        displayName: PHPUnit; PHP ${{ phpver.value }} WordPress ${{ wpver.value }} (${{ doMultisite.value }})
+        displayName: PHPUnit PHP-${{ phpver.value }} WordPress-${{ wpver.value }} (${{ doMultisite.name }})
         pool:
           vmImage: 'ubuntu-16.04'
         container: bowlhat/gitlab-php-runner:${{ phpver.value }}
