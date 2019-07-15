@@ -14,12 +14,12 @@ jobs:
           displayName: PHPUnit; PHP ${{ phpver }}; WP ${{ wpver }} (multisite)
         pool:
           vmImage: 'ubuntu-16.04'
-        container: diddledan/gitlab-php-runner:${{ phpver }}
-        services:
-          mysql: mysql
-        env:
+        containers: diddledan/gitlab-php-runner:${{ phpver }}
+        variables:
           WP_VERSION: ${{ wpver }}
           WP_MULTISITE: ${{ doMultisite }}
+        services:
+          mysql: mysql
         steps:
         - bash: bin/install-wp-tests.sh wordpress_test root '' "${AGENT_SERVICES_MYSQL_PORTS_3306}" $WP_VERSION
         - bash: composer global require "phpunit/phpunit=4.8.*|5.7.*"
