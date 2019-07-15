@@ -55,7 +55,7 @@ jQuery( function( $ ) {
             $( target_post_title ).autocomplete( {
                 source: function( post_title, response ) {
                     jQuery.ajax( {
-                        url:      a_z_listing_widget_admin.ajax_url || 'admin-ajax.php',
+                        url:      a_z_listing_widget_admin.ajax_url || '/wp-admin/admin-ajax.php',
                         type:     'POST',
                         dataType: 'json',
                         data: {
@@ -84,7 +84,7 @@ jQuery( function( $ ) {
             $( listing_parent_post_title ).autocomplete( {
                 source: function( post_title, response ) {
                     jQuery.ajax( {
-                        url:      '/wp-admin/admin-ajax.php',
+                        url:      a_z_listing_widget_admin.ajax_url || '/wp-admin/admin-ajax.php',
                         type:     'POST',
                         dataType: 'json',
                         data: {

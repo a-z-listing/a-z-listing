@@ -2,11 +2,7 @@
 jQuery( document ).ready( function() {
     const tabs = document.getElementById( 'az-tabs' );
     if ( tabs ) {
-        let link;
-        const letters = tabs.getElementById( 'letters' );
-        if ( letters ) {
-            link = letters.querySelector( `a[href="${window.location.hash}"]` );
-        }
+        const link = tabs.querySelector( `#letters a[href="${window.location.hash}"]` );
 
         if ( window.location.hash && link ) {
             const activeTab = jQuery( link ).parent().index();

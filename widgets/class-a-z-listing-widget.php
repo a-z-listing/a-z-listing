@@ -65,7 +65,7 @@ class A_Z_Listing_Widget extends WP_Widget {
 		$widget_title_id   = $this->get_field_id( 'title' );
 		$widget_title_name = $this->get_field_name( 'title' );
 
-		$display_type      = ( 'terms' === $instance['type'] ) ? 'terms' : 'posts';
+		$display_type      = ( isset( $instance['type'] ) && 'terms' === $instance['type'] ) ? 'terms' : 'posts';
 		$display_type_id   = $this->get_field_id( 'type' );
 		$display_type_name = $this->get_field_name( 'type' );
 
@@ -356,7 +356,7 @@ function the_section_az_widget( $args, $instance ) {
  * @param  array $instance Configuration of this Widget. Unique to this invocation.
  */
 function the_section_a_z_widget( $args, $instance ) {
-	echo get_the_section_a_z_widget( $args, $instance ); // WPCS: XSS OK.
+	echo get_the_section_a_z_widget( $args, $instance ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 /**

@@ -5,6 +5,8 @@
  * @package  a-z-listing
  */
 
+namespace A_Z_Listing;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -14,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 2.0.0
  */
-class A_Z_Listing_Numbers {
+class Numbers {
 	/**
 	 * Where to place the numbers.
 	 *

@@ -1,5 +1,11 @@
 <?php
-class AZ_Shortcode_Grouping_Numbers_After_Tests extends AZ_UnitTestCase {
+
+// Load a-z-listing-specific test extension
+require_once 'html-assertions.php';
+
+class AZ_Shortcode_Grouping_Numbers_After_Tests extends WP_UnitTestCase {
+	use HtmlAssertions;
+
 	public function test_empty() {
 		$expected = file_get_contents( 'tests/data/default-listing-grouped-numbers-after.txt' );
 		$actual   = do_shortcode( '[a-z-listing grouping="3" numbers="after"]' );

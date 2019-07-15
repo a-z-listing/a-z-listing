@@ -5,6 +5,8 @@
  * @package a-z-listing
  */
 
+namespace A_Z_Listing;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -12,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class A_Z_Indices
  */
-class A_Z_Listing_Indices extends A_Z_Listing_Singleton {
+class Indices extends Singleton {
 	/**
 	 * Bind the index parsing functions to their respective filters.
 	 */
@@ -37,9 +39,9 @@ class A_Z_Listing_Indices extends A_Z_Listing_Singleton {
 	 * Find and return the index letter for a post
 	 *
 	 * @since 2.0.0
-	 * @param array       $indices Previously discovered indices.
-	 * @param int|WP_Term $item ID of the item whose index letters we want to find.
-	 * @param string      $type Type of listing - terms or posts.
+	 * @param array        $indices Previously discovered indices.
+	 * @param int|\WP_Term $item ID of the item whose index letters we want to find.
+	 * @param string       $type Type of listing - terms or posts.
 	 * @return array The post's index letters (usually matching the first character of the post title)
 	 */
 	public static function get_item_indices( $indices, $item, $type ) {
@@ -58,7 +60,7 @@ class A_Z_Listing_Indices extends A_Z_Listing_Singleton {
 		 *
 		 * @since 2.1.0
 		 * @param string          $title The current title
-		 * @param WP_Term|WP_Post $item The item
+		 * @param \WP_Term|\WP_Post $item The item
 		 * @param string          $item_type The type of the item. Either 'posts' or 'terms'.
 		 */
 		$title = apply_filters( 'a-z-listing-pre-index-item-title', $title, $item, $type );
@@ -68,10 +70,16 @@ class A_Z_Listing_Indices extends A_Z_Listing_Singleton {
 		 *
 		 * @since 2.1.0
 		 * @param string          $title The current title
-		 * @param WP_Term|WP_Post $item The item
+		 * @param \WP_Term|\WP_Post $item The item
 		 * @param string          $item_type The type of the item. Either 'posts' or 'terms'.
 		 */
 		$title = apply_filters( 'a_z_listing_pre_index_item_title', $title, $item, $type );
+
+		if ( 'terms' === $type ) {
+			$item->term_name = $title;
+		} else {
+			$item->post_title = $title;
+		}
 
 		$index = self::get_index_letter( $title );
 
@@ -80,7 +88,7 @@ class A_Z_Listing_Indices extends A_Z_Listing_Singleton {
 		 *
 		 * @since 2.1.0
 		 * @param array           $indices The current indices
-		 * @param WP_Term|WP_Post $item The item
+		 * @param \WP_Term|\WP_Post $item The item
 		 * @param string          $item_type The type of the item. Either 'posts' or 'terms'.
 		 */
 		$index_letters = apply_filters( 'a-z-listing-item-index-letter', array( $index ), $item, $type );
@@ -90,7 +98,7 @@ class A_Z_Listing_Indices extends A_Z_Listing_Singleton {
 		 *
 		 * @since 2.1.0
 		 * @param array           $indices The current indices
-		 * @param WP_Term|WP_Post $item The item
+		 * @param \WP_Term|\WP_Post $item The item
 		 * @param string          $item_type The type of the item. Either 'posts' or 'terms'.
 		 */
 		$index_letters = apply_filters( 'a_z_listing_item_index_letter', $index_letters, $item, $type );
@@ -129,7 +137,7 @@ class A_Z_Listing_Indices extends A_Z_Listing_Singleton {
 		 * @deprecated Use a_z_listing_item_index_letter and/or a_z_listing_item_title
 		 * @see a_z_listing_item_index_letter, a_z_listing_item_title
 		 * @param array           $indices The current indices
-		 * @param WP_Term|WP_Post $item The item
+		 * @param \WP_Term|\WP_Post $item The item
 		 * @param string          $item_type The type of the item. Either 'posts' or 'terms'.
 		 */
 		$indices = apply_filters_deprecated( 'a_z_listing_item_indices', array( $indices, $item, $type ), '2.1.0', 'a_z_listing_item_index_letter' );
@@ -142,7 +150,7 @@ class A_Z_Listing_Indices extends A_Z_Listing_Singleton {
 		 * @deprecated Use a_z_listing_item_index_letter and/or a_z_listing_item_title
 		 * @see a_z_listing_item_index_letter, a_z_listing_item_title
 		 * @param array           $indices The current indices
-		 * @param WP_Term|WP_Post $item The item
+		 * @param \WP_Term|\WP_Post $item The item
 		 * @param string          $item_type The type of the item. Either 'posts' or 'terms'.
 		 */
 		$indices = apply_filters_deprecated( 'a-z-listing-item-indices', array( $indices, $item, $type ), '2.1.0', 'a_z_listing_item_index_letter' );

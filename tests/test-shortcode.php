@@ -1,5 +1,11 @@
 <?php
-class AZ_Shortcode_Tests extends AZ_UnitTestCase {
+
+// Load a-z-listing-specific test extension
+require_once 'html-assertions.php';
+
+class AZ_Shortcode_Tests extends WP_UnitTestCase {
+	use HtmlAssertions;
+
 	public function test_empty() {
 		$expected = file_get_contents( 'tests/data/default-listing.txt' );
 		$actual   = do_shortcode( '[a-z-listing]' );
@@ -69,6 +75,28 @@ class AZ_Shortcode_Tests extends AZ_UnitTestCase {
 
 		$expected = sprintf( file_get_contents( 'tests/data/populated-taxonomy-listing.txt' ), $title, $t );
 		$actual   = do_shortcode( '[a-z-listing display="terms" taxonomy="category"]' );
+
+		$this->assertHTMLEquals( $expected, $actual );
+	}
+
+	public function test_populated_multiple_taxonomy_listing() {
+		$cat_title = 'Test Category';
+		$cat       = $this->factory->term->create(
+			array(
+				'name'     => $cat_title,
+				'taxonomy' => 'category',
+			)
+		);
+		$tag_title = 'Test Tag';
+		$tag       = $this->factory->term->create(
+			array(
+				'name'     => $tag_title,
+				'taxonomy' => 'post_tag',
+			)
+		);
+		
+		$expected = sprintf( file_get_contents( 'tests/data/populated-multiple-taxonomy-listing.txt' ), $cat_title, $cat, $tag_title, $tag );
+		$actual   = do_shortcode( '[a-z-listing display="terms" taxonomy="category,post_tag"]' );
 
 		$this->assertHTMLEquals( $expected, $actual );
 	}

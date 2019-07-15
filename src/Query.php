@@ -5,6 +5,8 @@
  * @package  a-z-listing
  */
 
+namespace A_Z_Listing;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -14,11 +16,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 0.1
  */
-class A_Z_Listing {
+class Query {
 	/**
 	 * The taxonomy
 	 *
-	 * @var string
+	 * @var string|array
 	 */
 	private $taxonomy;
 
@@ -95,7 +97,7 @@ class A_Z_Listing {
 	/**
 	 * The query for this instance of the A-Z Listing
 	 *
-	 * @var WP_Query|array
+	 * @var \WP_Query|array
 	 */
 	private $query;
 
@@ -103,11 +105,11 @@ class A_Z_Listing {
 	 * A_Z_Listing constructor
 	 *
 	 * @since 0.1
-	 * @since 1.9.2 Instantiate the WP_Query object here instead of in `A_Z_Listing::construct_query()`
+	 * @since 1.9.2 Instantiate the \WP_Query object here instead of in `A_Z_Listing::construct_query()`
 	 * @since 2.0.0 add $type and $use_cache parameters
-	 * @param null|WP_Query|array|string $query     A WP_Query-compatible query definition or a taxonomy name.
-	 * @param null|string                $type      Specify the listing type; either 'posts' or 'terms'.
-	 * @param boolean                    $use_cache Cache the Listing via WordPress transients.
+	 * @param null|\WP_Query|array|string $query     A \WP_Query-compatible query definition or a taxonomy name.
+	 * @param null|string                 $type      Specify the listing type; either 'posts' or 'terms'.
+	 * @param boolean                     $use_cache Cache the Listing via WordPress transients.
 	 */
 	public function __construct( $query = null, $type = 'posts', $use_cache = true ) {
 		global $post;
@@ -132,9 +134,12 @@ class A_Z_Listing {
 			if ( is_array( $query ) ) {
 				$query = wp_parse_args( $query, $defaults );
 			} elseif ( is_string( $query ) ) {
+				$taxonomies = explode( ',', $query );
+				$taxonomies = array_unique( array_filter( array_map( 'trim', $taxonomies ) ) );
+
 				$query = wp_parse_args(
 					array(
-						'taxonomy' => $query,
+						'taxonomy' => (array) $taxonomies,
 					),
 					$defaults
 				);
@@ -145,7 +150,7 @@ class A_Z_Listing {
 			 *
 			 * @since 1.0.0
 			 * @since 2.0.0 apply to taxonomy queries. Add type parameter indicating type of query.
-			 * @param array|Object|WP_Query  $query  The query object
+			 * @param array|Object|\WP_Query  $query  The query object
 			 * @param string  $type  The type of the query. Either 'posts' or 'terms'.
 			 */
 			$query = apply_filters( 'a_z_listing_query', $query, 'terms' );
@@ -155,11 +160,14 @@ class A_Z_Listing {
 			 *
 			 * @since 1.7.1
 			 * @since 2.0.0 apply to taxonomy queries. Add type parameter indicating type of query.
-			 * @param array|Object|WP_Query  $query  The query object
+			 * @param array|Object|\WP_Query  $query  The query object
 			 * @param string  $type  The type of the query. Either 'posts' or 'terms'.
 			 */
 			$query = apply_filters( 'a-z-listing-query', $query, 'terms' );
 
+			if ( is_object( $query ) ) {
+				$query = (array) $query;
+			}
 			$this->taxonomy = $query['taxonomy'];
 
 			if ( $this->check_cache( $query, $type, $use_cache ) ) {
@@ -187,7 +195,8 @@ class A_Z_Listing {
 			 * Modify or replace the query
 			 *
 			 * @since 1.0.0
-			 * @param array|Object|WP_Query $query The query object
+			 * @since 2.0.0 apply to taxonomy queries. Add type parameter indicating type of query.
+			 * @param array|Object|\WP_Query $query The query object
 			 */
 			$query = apply_filters( 'a_z_listing_query', $query );
 
@@ -195,11 +204,12 @@ class A_Z_Listing {
 			 * Modify or replace the query
 			 *
 			 * @since 1.7.1
-			 * @param array|Object|WP_Query $query The query object
+			 * @since 2.0.0 apply to taxonomy queries. Add type parameter indicating type of query.
+			 * @param array|Object|\WP_Query $query The query object
 			 */
 			$query = apply_filters( 'a-z-listing-query', $query );
 
-			if ( ! $query instanceof WP_Query ) {
+			if ( ! $query instanceof \WP_Query ) {
 				$query = (array) $query;
 
 				if ( isset( $query['post_type'] ) ) {
@@ -212,7 +222,7 @@ class A_Z_Listing {
 					if ( isset( $query['post_type'] ) && isset( $post ) ) {
 						if ( 'page' === $query['post_type'] && 'page' === $post->post_type ) {
 							$section = self::get_section();
-							if ( $section && is_a( $section, 'WP_Post' ) ) {
+							if ( $section && $section instanceof \WP_Post ) {
 								$query['child_of'] = $section->ID;
 							}
 						}
@@ -233,18 +243,20 @@ class A_Z_Listing {
 				return $this;
 			}
 
-			if ( $query instanceof WP_Query ) {
+			if ( $query instanceof \WP_Query ) {
 				$items       = $query->posts;
 				$this->query = $query;
 			} else {
+				add_filter( 'posts_fields', array( $this, 'wp_query_fields' ), 10, 2 );
 				if ( isset( $query['child_of'] ) ) {
 					$items       = get_pages( $query );
 					$this->query = $query;
 				} else {
-					$wq          = new WP_Query( $query );
+					$wq          = new \WP_Query( $query );
 					$items       = $wq->posts;
 					$this->query = $wq;
 				}
+				remove_filter( 'posts_fields', array( $this, 'wp_query_fields' ), 10, 2 );
 			}
 
 			if ( AZLISTINGLOG ) {
@@ -266,6 +278,19 @@ class A_Z_Listing {
 		if ( $use_cache ) {
 			do_action( 'a_z_listing_save_cache', $query, $type, $this->matched_item_indices );
 		}
+	}
+
+	/**
+	 * Set the fields we require on \WP_Query.
+	 *
+	 * @since 3.0.0 Introduced.
+	 * @param string    $fields The current fields in SQL format.
+	 * @param \WP_Query $query The \WP_Query object.
+	 * @return string The new fields in SQL format.
+	 */
+	public function wp_query_fields( $fields, $query ) {
+		global $wpdb;
+		return "{$wpdb->posts}.ID, {$wpdb->posts}.post_title, {$wpdb->posts}.post_type, {$wpdb->posts}.post_name, {$wpdb->posts}.post_date";
 	}
 
 	/**
@@ -363,7 +388,7 @@ class A_Z_Listing {
 		$letters         = array_reduce(
 			$alphabet_groups,
 			function( $return, $group ) {
-				$group                 = A_Z_Listing::mb_string_to_array( $group );
+				$group                 = \A_Z_Listing\Query::mb_string_to_array( $group );
 				$group_index_character = $group[0];
 				$group                 = array_reduce(
 					$group,
@@ -387,14 +412,14 @@ class A_Z_Listing {
 	 * Find a post's parent post. Will return the original post if the post-type is not hierarchical or the post does not have a parent.
 	 *
 	 * @since 1.4.0
-	 * @param WP_Post|int $page The post whose parent we want to find.
-	 * @return WP_Post|bool The parent post or the original post if no parents were found. Will be false if the function is called with incorrect arguments.
+	 * @param \WP_Post|int $page The post whose parent we want to find.
+	 * @return \WP_Post|bool The parent post or the original post if no parents were found. Will be false if the function is called with incorrect arguments.
 	 */
 	public static function find_post_parent( $page ) {
 		if ( ! $page ) {
 			return false;
 		}
-		if ( ! $page instanceof WP_Post ) {
+		if ( ! $page instanceof \WP_Post ) {
 			$page = get_post( $page );
 		}
 		if ( ! $page->post_parent ) {
@@ -407,8 +432,8 @@ class A_Z_Listing {
 	 * Calculate the top-level section of the requested page
 	 *
 	 * @since 0.1
-	 * @param WP_Post|int $page Optional: The post object, or post-ID, of the page whose section we want to find.
-	 * @return WP_Post|null The post object of the current section's top-level page.
+	 * @param \WP_Post|int $page Optional: The post object, or post-ID, of the page whose section we want to find.
+	 * @return \WP_Post|null The post object of the current section's top-level page.
 	 */
 	protected static function get_section( $page = 0 ) {
 		global $post;
@@ -457,9 +482,7 @@ class A_Z_Listing {
 		$section_name   = null;
 		if ( $section_object === $page ) {
 			$section_object = null;
-		}
-
-		if ( null !== $section_object ) {
+		} elseif ( null !== $section_object ) {
 			if ( isset( $section_object->post_name ) ) {
 				$section_name = $section_object->post_name;
 			} else {
@@ -469,7 +492,7 @@ class A_Z_Listing {
 		}
 
 		if ( AZLISTINGLOG ) {
-			do_action( 'log', 'A-Z Section selection', $section_name, $sections );
+			do_action( 'log', 'A-Z Listing: Section selection', $section_name, $sections );
 		}
 
 		if ( null !== $section_name && ! in_array( $section_name, $sections, true ) ) {
@@ -478,7 +501,7 @@ class A_Z_Listing {
 		}
 
 		if ( AZLISTINGLOG ) {
-			do_action( 'log', 'A-Z Section', $section_name );
+			do_action( 'log', 'A-Z Listing: Proceeding with section', $section_name );
 		}
 		return $section_object;
 	}
@@ -487,7 +510,7 @@ class A_Z_Listing {
 	 * Fetch the query we are currently using
 	 *
 	 * @since 1.0.0
-	 * @return WP_Query The query object
+	 * @return \WP_Query The query object
 	 */
 	public function get_the_query() {
 		return $this->query;
@@ -556,7 +579,21 @@ class A_Z_Listing {
 					usort(
 						$indexed_items[ $character ],
 						function ( $a, $b ) {
-							return strcasecmp( $a['title'], $b['title'] );
+							$default_sort = strcasecmp( $a['title'], $b['title'] );
+							$sort = apply_filters(
+								'a_z_listing_item_sorting_comparator',
+								$default_sort,
+								$a['title'],
+								$b['title']
+							);
+							if ( -1 === $sort || 0 === $sort || 1 === $sort ) {
+								if ( AZLISTINGLOG ) {
+									do_action( 'log', 'A-Z Listing: value returned from `a_z_listing_item_sorting_comparator` filter sorting was not -1, 0, or 1', $sort, $a['title'], $b['title'] );
+								}
+								return $sort;
+							} else {
+								return $default_sort;
+							}
 						}
 					);
 				}
@@ -574,7 +611,7 @@ class A_Z_Listing {
 	 * @param string $style CSS classes to apply to the output.
 	 */
 	public function the_letters( $target = '', $style = null ) {
-		echo $this->get_the_letters( $target, $style ); // WPCS: XSS OK.
+		echo $this->get_the_letters( $target, $style ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -663,10 +700,14 @@ class A_Z_Listing {
 	public function the_listing() {
 		global $post;
 		if ( 'terms' === $this->type ) {
-			$section = $this->taxonomy;
+			if ( is_array( $this->taxonomy ) ) {
+				$section = join( '_', $this->taxonomy );
+			} else {
+				$section = $this->taxonomy;
+			}
 		} else {
 			$section = self::get_section();
-			if ( $section instanceof WP_Post ) {
+			if ( $section instanceof \WP_Post ) {
 				$section = $section->post_name;
 			}
 		}
@@ -685,11 +726,11 @@ class A_Z_Listing {
 
 		$template = locate_template( $templates );
 		if ( $template ) {
-			a_z_listing_do_template( $this, $template );
+			_do_template( $this, $template );
 		} else {
-			a_z_listing_do_template( $this, plugin_dir_path( __DIR__ ) . 'templates/a-z-listing.php' );
+			_do_template( $this, plugin_dir_path( __DIR__ ) . 'templates/a-z-listing.php' );
 		}
-		wp_reset_postdata();
+		\wp_reset_postdata();
 	}
 
 	/**
@@ -793,10 +834,8 @@ class A_Z_Listing {
 	 * Retrieve the item object for the current post
 	 *
 	 * @since 2.0.0
-	 *
 	 * @param string $force Set this to 'I understand the issues!' to acknowledge that this function will cause slowness on large sites.
-	 *
-	 * @return array|null|WP_Error|WP_Post|WP_Term
+	 * @return array|\WP_Error|\WP_Post|\WP_Term
 	 */
 	public function get_the_item_object( $force = '' ) {
 		global $post;
@@ -806,28 +845,27 @@ class A_Z_Listing {
 				$item = explode( ':', $current_item, 2 );
 
 				if ( isset( $item[1] ) ) {
-					if ( 'terms' === $this->type ) {
+					if ( 'term' === $item[0] ) {
 						return get_term( $item[1] );
-					} else {
+					}
+					if ( 'post' === $item[0] ) {
 						$post = get_post( $item[1] );
 						setup_postdata( $post );
-
 						return $post;
 					}
 				}
-			} elseif ( is_a( $current_item, 'WP_Post' ) ) {
+			}
+			if ( $current_item instanceof \WP_Post ) {
 				$post = $current_item;
 				setup_postdata( $post );
-
 				return $post;
-			} elseif ( is_a( $current_item, 'WP_Term' ) ) {
-				return get_term( $current_item );
-			} else {
-				return $current_item;
 			}
-		} else {
-			return null;
+			if ( $current_item instanceof \WP_Term ) {
+				return get_term( $current_item );
+			}
+			return $current_item;
 		}
+		return new \WP_Error( 'understanding', 'You must tell the plugin "I understand the issues!" when calling get_the_item_object().' );
 	}
 
 	/**
@@ -836,7 +874,7 @@ class A_Z_Listing {
 	 * @since 2.1.0
 	 * @param string $key The meta key to retrieve. By default returns data for all keys.
 	 * @param bool   $single Whether to return a single value.
-	 * @return mixed Will be an array if $single is false. Will be value of meta data field if $single is true.
+	 * @return mixed|\WP_Error Will be an array if $single is false. Will be value of meta data field if $single is true.
 	 */
 	function get_item_meta( $key = '', $single = false ) {
 		if ( is_string( $this->current_item['item'] ) ) {
@@ -844,14 +882,18 @@ class A_Z_Listing {
 
 			if ( 'term' === $item[0] ) {
 				return get_term_meta( $item[1], $key, $single );
-			} else {
+			}
+			if ( 'post' === $item[0] ) {
 				return get_post_meta( $item[1], $key, $single );
 			}
-		} elseif ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
+		}
+		if ( $this->current_item['item'] instanceof \WP_Term ) {
 			return get_term_meta( $this->current_item['item']->term_id, $key, $single );
-		} else {
+		}
+		if ( $this->current_item['item'] instanceof \WP_Post ) {
 			return get_post_meta( $this->current_item['item']->ID, $key, $single );
 		}
+		return new \WP_Error( 'no-type', 'Unknown item type.' );
 	}
 
 	/**
@@ -870,20 +912,23 @@ class A_Z_Listing {
 	 * @return int The number of posts
 	 */
 	function get_the_item_post_count() {
-		if ( 'terms' === $this->type ) {
-			if ( is_string( $this->current_item['item'] ) ) {
-				$item = explode( ':', $this->current_item['item'], 2 );
+		if ( is_string( $this->current_item['item'] ) ) {
+			$item = explode( ':', $this->current_item['item'], 2 );
+			$term = null;
+			if ( 'term' === $item[0] ) {
 				$term = get_term( $item[1] );
-				return $term->count;
-			} elseif ( is_a( $this->current_item['item'], 'WP_Term' ) ) {
-				$term = get_term( $this->current_item['item'] );
-				return $term->count;
-			} else {
-				return 0;
+				if ( $term ) {
+					return $term->count;
+				}
 			}
-		} else {
-			return 0;
 		}
+		if ( $this->current_item['item'] instanceof \WP_Term ) {
+			$term = get_term( $this->current_item['item'] );
+			if ( $term ) {
+				return $term->count;
+			}
+		}
+		return 0;
 	}
 
 	/**
@@ -963,6 +1008,65 @@ class A_Z_Listing {
 	}
 
 	/**
+	 * Print the escaped ID of the current item.
+	 *
+	 * @since 2.4.0
+	 */
+	public function the_item_id() {
+		echo esc_attr( $this->get_the_item_id() );
+	}
+
+	/**
+	 * Retreive the ID of the current item. This is not escaped!
+	 *
+	 * @since 2.4.0
+	 * @return int The item ID.
+	 */
+	public function get_the_item_id() {
+		$current_item = $this->current_item['item'];
+		if ( is_string( $current_item ) ) {
+			$item = explode( ':', $current_item, 2 );
+
+			if ( isset( $item[1] ) ) {
+				return $item[1];
+			}
+		}
+		if ( $current_item instanceof \WP_Post ) {
+			return $current_item->ID;
+		}
+		if ( $current_item instanceof \WP_Term ) {
+			return $current_item->term_id;
+		}
+		return $current_item;
+	}
+
+	/**
+	 * Retreive the type of the current item.
+	 *
+	 * @since 2.4.0
+	 * @return string|\WP_Error The type of the current item. Either `post` or `term`. Will return a \WP_Error object if the type of the current item cannot be determined.
+	 */
+	public function get_the_item_type() {
+		$current_item = $this->current_item['item'];
+		if ( $current_item instanceof \WP_Post ) {
+			return 'post';
+		}
+		if ( $current_item instanceof \WP_Term ) {
+			return 'term';
+		}
+		if ( is_string( $current_item ) ) {
+			$item = explode( ':', $current_item, 2 );
+			if ( isset( $item[0] ) && in_array( $item[0], [ 'post', 'term' ], true ) ) {
+				return $item[0];
+			}
+		}
+		if ( in_array( $this->type, [ 'terms', 'posts' ], true ) ) {
+			return 'terms' === $this->type ? 'term' : 'post';
+		}
+		return new \WP_Error( 'no-type', 'Unknown item type.' );
+	}
+
+	/**
 	 * Print the escaped title of the current letter. For example, upper-case A or B or C etc.
 	 *
 	 * @since 0.7
@@ -1016,7 +1120,7 @@ class A_Z_Listing {
 	 */
 	public function the_title() {
 		// to match core we do NOT escape the output!
-		echo $this->get_the_title(); // wpcs: XSS OK.
+		echo $this->get_the_title(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -1041,10 +1145,10 @@ class A_Z_Listing {
 				return apply_filters( 'term_name', $title, $item[1] );
 			}
 		} else {
-			if ( is_a( $item, 'WP_Post' ) ) {
+			if ( $item instanceof \WP_Post ) {
 				return apply_filters( 'the_title', $title, $item->ID );
 			}
-			if ( is_a( $item, 'WP_Term' ) ) {
+			if ( $item instanceof \WP_Term ) {
 				return apply_filters( 'term_name', $title, $item->term_id );
 			}
 		}
@@ -1079,18 +1183,6 @@ class A_Z_Listing {
  * @param A_Z_Query $a_z_query The Query object.
  * @param string    $template_file The path of the template to execute.
  */
-function a_z_listing_do_template( $a_z_query, $template_file ) {
+function _do_template( $a_z_query, $template_file ) {
 	require $template_file;
-}
-
-/**
- * Get a saved copy of the A_Z_Listing instance if we have one, or make a new one and save it for later
- *
- * @param array|string|WP_Query|A_Z_Listing $query     A valid WordPress query or an A_Z_Listing instance.
- * @param string                            $type      The type of items displayed in the listing: 'terms' or 'posts'.
- * @param bool                              $use_cache Try to use a caching plugin. See https://a-z-listing.com/ for the caching plugin we created to work with this feature.
- * @return A_Z_Listing                                 A new or previously-saved instance of A_Z_Listing using the provided construct_query
- */
-function a_z_listing_cache( $query = null, $type = '', $use_cache = true ) {
-	return new A_Z_Listing( $query, $type, $use_cache );
 }

@@ -5,8 +5,8 @@ Donate Link: https://liberapay.com/diddledan/donate
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 4.6
 Requires PHP: 5.6
-Tested up to: 5.1
-Stable tag: 2.2.0
+Tested up to: 5.2
+Stable tag: 3.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,7 +19,7 @@ Provides an A to Z index page and widget. The widget links to the index page at 
 
 Show your posts, pages, and terms alphabetically in a Rolodex-, catalogue-, or directory-style list with the A-Z Listing plugin!
 
-The plugin has a shortcode for the list, and a widget so you can link to the list from anywhere on your site. If a letter doesn't have any pages then the widget will display the letter unlinked. The list page will omit the display for that letter entirely.
+The plugin has a short-code for the list, and a widget so you can link to the list from anywhere on your site. If a letter doesn't have any pages then the widget will display the letter unlinked. The list page will omit the display for that letter entirely.
 
 Show posts from any or multiple post types including the in-built posts and pages. Also supported are post-types from plugins like WooCommerce products. Alternatively, show terms like categories or tags.
 
@@ -34,46 +34,62 @@ This section describes how to install the plugin and get it working.
 
 = Instructions =
 
-1. Upload the `a-z-listing` folder to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Place `<?php the_a_z_listing(); ?>` in your templates for the index page output (see the **php** section of this document for details) or use the `a-z-listing` shortcode (see the **shortcode** section of this document for details).
-1. Add the A-Z Site Map widget to a sidebar or use `<?php the_a_z_widget( null, array( 'post' => get_page( $id ) ) ); ?>` in your templates (see the **php** section of this document for details).
+1. Upload the a-z-listing folder to the `/wp-content/plugins/` directory.
+1. Activate the plugin through the 'Plugins' menu in WordPress.
+1. Use the `[a-z-listing]` short-code on the page or post that you want to show the listing.
+1. Add the A-Z Site Map widget to a sidebar.
 
-== Shortcode ==
+== short-code ==
 
-The plugin supplies a shortcode for the full A-Z listing allowing use without modifying your theme's templates.
+The plugin supplies a short-code for the full A-Z listing allowing use without modifying your theme's templates.
 
 Basic usage is as follows:
 
     [a-z-listing]
 
-To specify a post-type to display instead of `page` then use, e.g. `Posts`:
+To specify a post-type to display instead of `page` then use, e.g. `post`:
 
-    [a-z-listing post-type="post"]
+    [a-z-listing display="posts" post-type="post"]
 
 To filter the posts by a term from a taxonomy:
 
-    [a-z-listing taxonomy="category" terms="my-term-slug"]
+    [a-z-listing display="posts" taxonomy="category" terms="my-term-slug"]
+
+To display pages that are direct children of the page with ID `24`:
+
+    [a-z-listing display="posts" post-type="page" parent-post="24"]
+
+To display pages that are children of any depth below the page with ID `24`:
+
+    [a-z-listing display="posts" post-type="page" parent-post="24" get-all-children="yes"]
 
 To show terms from a taxonomy instead of posts and pages, e.g. Terms from the `Categories` taxonomy:
 
-    [a-z-listing taxonomy="category" display="terms"]
+    [a-z-listing display="terms" taxonomy="category"]
+
+To show terms from the `Categories` taxonomy that are direct children of the term with ID of `42`:
+
+    [a-z-listing display="terms" taxonomy="category" parent-term="42"]
+
+To show terms from the `Categories` taxonomy that are children of any depth in the tree below the term with ID of `42`:
+
+    [a-z-listing display="terms" taxonomy="category" parent-term="42" get-all-children="yes"]
 
 To override the alphabet used by the plugin:
 
-    [a-z-listing alphabet="Aa,Bb,Cc,Dd,Ee,Ff,Gg,Hh,Ii,Jj,Kk,Ll,Mm,Nn,Oo,Pp,Qq,Rr,Ss,Tt,Uu,Vv,Ww,Xx,Yy,Zz"]
+    [a-z-listing display="posts" alphabet="Aa,Bb,Cc,Dd,Ee,Ff,Gg,Hh,Ii,Jj,Kk,Ll,Mm,Nn,Oo,Pp,Qq,Rr,Ss,Tt,Uu,Vv,Ww,Xx,Yy,Zz"]
 
 To add numbers to the listing:
 
-    [a-z-listing numbers="after"]
+    [a-z-listing display="posts" numbers="after"]
 
 The numbers can also be shown before the alphabet:
 
-    [a-z-listing numbers="before"]
+    [a-z-listing display="posts" numbers="before"]
 
 You can group the numbers into a single collection for all posts beginning with a numeral:
 
-    [a-z-listing numbers="after" grouping="numbers"]
+    [a-z-listing numbers="after" group-numbers="yes"]
 
 To group the alphabet letters into a range:
 
@@ -81,66 +97,109 @@ To group the alphabet letters into a range:
 
 ** The arguments are all optional **
 
-* `display`: specifies whether to display posts or terms from a taxonomy
-  * Default value: `posts`
-  * May be set to either `posts` or `terms`
-  * Any value other than unset, `posts` or `terms` will default to displaying posts
-* `post-type`: sets the listing to show a specific post-type
-  * Default value: `page`
-  * You may specify multiple post-types by separating with commas (`,`) e.g. `post-type="page,post"`
-* `exclude-posts`: remove specific posts from the list
-  * Default value: unset
-  * Uses the `ID` of the post(s)
-  * Multiple posts may be specified by separating by commas: `,`
-  * Only affects `display="posts"`
-* `taxonomy`: does nothing by itself, see the combinations below
-  * Default value: unset
-  * Uses the `slug` of the taxonomy
-  * When combined with:
-    * `terms=""`, will filter your posts by the terms you set there, which appear in the taxonomy set here
-    * `display="terms"`, will switch from displaying post titles to displaying the names of terms from the taxonomy specified
-* `terms`: sets the taxonomy terms for filtering posts
-  * Default value: unset
-  * The taxonomy must also be specified in `taxonomy`
-  * Uses the `slug` of the term(s) when `display="posts"` and the `ID` of the term(s) when `display="terms"`
-  * Multiple terms may be specified by separating with commas: `,`
-  * May not be used with `exclude-terms=""`
-* `exclude-terms`: sets the terms to exclude from display
-  * Default value: unset
-  * The taxonomy must also be specified in `taxonomy`
-  * Uses the `ID` of the term(s)
-  * Multiple terms may be specified by separating with commas: `,`
-  * May not be used with `terms=""`
-  * Only affects `display="terms"`
-* `parent-term`: set the parent that all displayed terms must be organised under
-  * Default value: unset
-  * Uses the `slug` of the parent term
-  * Single value only
-  * Only affects `display="terms"`
-* `hide-empty-terms`: hide terms that have no posts associated
-  * Default value: `false`
-  * May be set to `true` or `1` to hide the empty terms
-  * Only affects `display="terms"`
-* `numbers`: appends or prepends numerals to the alphabet
-  * Default value: unset
-  * May be set to either `before` or `after`
-  * Any value other than unset, `before` or `after` will default to **appending** numerals to the alphabet
-* `grouping`: tells the plugin if and how to group the alphabet
-  * Default value: unset
-  * May be set to any positive number greater than `1` or the value `numbers`
-  * Any value other than a positive number or the value `numbers` will default to disabling all grouping functionality
-  * When set to a number higher than `1` the listing will group letters together into ranges
-    * For example, if you chose `3` then a latin alphabet will group together `A`, `B`, and `C` into `A-C`. Likewise for `D-F`, `G-I` and so-on
-    * When using this setting, if numbers are also shown via the `numbers="before"` or `numbers="after"` attribute then they will be shown as a single separate group `0-9`
-  * When set to the value `numbers` it will group numerals into a single group `0-9`
-    * This requires the numbers to be displayed via the `numbers="before"` or `numbers="after"` attributes
-* `alphabet`: allows you to override the alphabet that the plugin uses
-  * Default value: unset
-  * When this attribute is unset, the plugin will either use the untranslated default, or if [glotpress](https://translate.wordpress.org/projects/wp-plugins/a-z-listing) includes a translation for your site's language as set in `Admin -> Settings -> Site Language` it will use that translation
-  * The current untranslated default is: `AÁÀÄÂaáàäâ,Bb,Cc,Dd,EÉÈËÊeéèëê,Ff,Gg,Hh,IÍÌÏÎiíìïî,Jj,Kk,Ll,Mm,Nn,OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz`
-  * Accepts a single line of letters/symbols, which need to be separated via the comma character `,`
-  * Including more than one letter/symbol in each group will display posts starting with any of those under the same section
-  * The first letter/symbol in each group is used as the group's heading when displayed on your site
+= Common options =
+
+* `display`: specifies whether to display posts or terms from a taxonomy.
+  * Default value: `posts`.
+  * May only contain one value.
+  * Must be set to either `posts` or `terms`.
+  * Any value other than `posts` or `terms` will default to displaying posts.
+* `numbers`: appends or prepends numerals to the alphabet.
+  * Default value: `unset`.
+  * May only contain one value.
+  * Must be set to either `before` or `after`.
+  * Any value other than `before` or `after` will default to **appending** numerals to the alphabet.
+* `grouping`: tells the plugin if and how to group the alphabet.
+  * Default value: `unset`.
+  * May only contain one value.
+  * Must be set to any positive number greater than `1` or the value `numbers`.
+  * Any value other than a positive number or the value `numbers` will default to disabling all grouping functionality.
+  * When set to a number higher than `1` the listing will group letters together into ranges.
+    * For example, if you chose `3` then a Latin alphabet will group together `A`, `B`, and `C` into `A-C`. Likewise for `D-F`, `G-I` and so-on.
+    * When using this setting, if numbers are also shown via the `numbers="before"` or `numbers="after"` attribute then they will be shown as a single separate group `0-9`.
+  * When set to the value `numbers` it will group numerals into a single group `0-9`.
+    * This requires the numbers to be displayed via the `numbers="before"` or `numbers="after"` attributes.
+* `group-numbers`: tells the plugin to group all items beginning with a numeral into a single collection.
+  * Default value: `false`.
+  * May only contain one value.
+  * Must be set to `true`, `yes`, `on`, or `1` to group items beginning with a numeral in a single collection. All other values will keep the default behaviour.
+* `alphabet`: allows you to override the alphabet that the plugin uses.
+  * Default value: `unset`.
+  * When this attribute is not defined, the plugin will either use the untranslated default, or if [glotpress](https://translate.wordpress.org/projects/wp-plugins/a-z-listing) includes a translation for your site's language as set in `Admin -> Settings -> Site Language` it will use that translation.
+  * The current untranslated default is: `AÁÀÄÂaáàäâ,Bb,Cc,Dd,EÉÈËÊeéèëê,Ff,Gg,Hh,IÍÌÏÎiíìïî,Jj,Kk,Ll,Mm,Nn,OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz`.
+  * Accepts a single line of letters/symbols, which need to be separated via the comma character `,`.
+  * Including more than one letter/symbol in each group will display posts starting with any of those under the same section.
+  * The first letter/symbol in each group is used as the group's heading when displayed on your site.
+
+= Posts options =
+
+* `post-type`: sets the listing to show a specific post-type.
+  * Default value: `page`.
+  * Multiple post-types may be specified by separating with commas (`,`) e.g. `post-type="page,post"`.
+  * Must be the `slug` of the post-type(s).
+* `parent-post`: sets the parent post that all displayed posts must be descended from.
+  * Default value: `unset`.
+  * May only contain one value.
+  * Must be the `ID` of the parent post.
+  * Add `get-all-children="yes"` to also include all descendants of any depth below the parent post.
+* `exclude-posts`: remove these posts from the list.
+  * Default value: `unset`.
+  * Multiple posts may be specified by separating by commas: `,`.
+  * Must be the `ID` of the post(s).
+* `taxonomy`: sets the taxonomy containing the terms specified in the `terms=""` option.
+  * Default value: `unset`.
+  * May only contain one value.
+  * Must be the `slug` of the taxonomy.
+* `terms`: sets the taxonomy terms for filtering posts.
+  * Default value: `unset`.
+  * The taxonomy must also be specified in `taxonomy`.
+  * Multiple terms may be specified by separating with commas: `,`.
+  * Must be the `slug` of the term(s).
+
+= Terms options =
+
+* `taxonomy`: sets the taxonomy to display terms from in the listing.
+  * Default value: `unset`.
+  * Multiple taxonomies may be specified by separating with commas: `,`.
+  * Must be the `slug` of the taxonomy.
+* `terms`: sets the taxonomy terms to include in the listing.
+  * Default value: `unset`.
+  * The taxonomy must also be specified in `taxonomy`.
+  * Multiple terms may be specified by separating with commas: `,`.
+  * Must be the `ID` of the term(s).
+  * Cannot be used with `exclude-terms=""`.
+* `exclude-terms`: sets the terms to exclude from display.
+  * Default value: `unset`.
+  * The taxonomy must also be specified in `taxonomy`.
+  * Multiple terms may be specified by separating with commas: `,`.
+  * Must be the `ID` of the term(s).
+  * Cannot be used with `terms=""`.
+* `parent-term`: set the parent that all displayed terms must be descended from.
+  * Default value: `unset`.
+  * May only contain one value.
+  * Must be the `slug` of the parent term.
+  * Add `get-all-children="yes"` to also include all descendants of any depth below the parent term.
+* `get-all-children`: when a parent term is chosen this option is used to show all children of any depth or only direct children.
+  * Default value: `false`.
+  * May only contain one value.
+  * Must be set to `true`, `yes`, `on`, or `1` to include all children of any depth. Any value other will use the default behaviour of only showing direct children.
+* `hide-empty-terms`: hide terms that have no posts associated.
+  * Default value: `false`.
+  * May only contain one value.
+  * Must be set to `true`, `yes`, `on`, or `1` to hide the empty terms. Any other value will use the default behaviour of showing all terms.
+
+= Internal-use options for completeness =
+
+** You should not need to touch these, as they are meant for internal use by the plugin only**
+
+* `target`: the default target for a listing that doesn't show any items.
+  * Default value: `unset`.
+  * May only contain one value.
+  * Must be set to a URL which will be used as the target for the letters' hyperlinks.
+* `return`: what type of listing to show, either `listing` or `letters`.
+  * Default value: `listing`.
+  * May only contain one value.
+  * Must be set to either `listing` to display the default view, or `letters` to show only the letters without any items (posts or terms).
 
 == PHP ==
 
@@ -164,9 +223,9 @@ Where `$query` is one of the following:
 
 Full API documentation is available at [A-Z-Listing Reference](https://a-z-listing.com/reference/)
 
-== Multi Column Output ==
+== Multiple Column Output ==
 
-If you want the multi-column output support, you need to copy the file `a-z-listing-multi-column.example.php` from the plugin inside the `templates` directory to your theme. The file needs to also be renamed to `a-z-listing.php` when copied to your theme. The **Templates and Theming** section of this Document details the functions used within templates and The Loop process this plugin follows.
+Multiple column layout is the default on wide screens. A letter's group of items must contain at least 15 items to create two or more columns. This is to provide a more aesthetically pleasing view when a list is short with only a few items.
 
 == Templates and Theming ==
 
@@ -184,13 +243,13 @@ Important functions to use in your template are as follows:
 
 * `$a_z_query->the_letters()` prints the full alphabet, and links the letters that have posts to their section within the index page.
 * `$a_z_query->have_letters()` returns true or false depending on whether there are any letters left to loop-through. This is part of the Letter Loop.
-* `$a_z_query->have_items()` this behaves very similarly to Core's `have_posts()` function. It is part of the Item Loop.
+* `$a_z_query->have_items()` behaves very similarly to Core's `have_posts()` function. It is part of the Item Loop.
 * `$a_z_query->the_letter()` similar to Core's `the_post()`, this will set-up the next iteration of the A-Z Listing's Letter Loop. This needs to wrap-around the Item Loop.
 * `$a_z_query->the_item()` similar to Core's `the_post()`, this will set-up the next iteration of the A-Z Listing's Item Loop, the same way the normal WordPress Loop works. This needs to be _within_ the Letter Loop.
 
 When you are within the Item Loop you may utilise all in-built WordPress Core post-related functions such as `the_content()`. Note that titles and permalinks have helper functions to cope with the A-Z Listing showing taxonomy terms (see the next section).
 
-I advise that you start with a copy of the default template or the multi-column template when customizing your own version. The supplied templates show the usage of most of the functions this plugin provides.
+I advise that you start with a copy of the default template template when customizing your own version. The supplied templates show the usage of most of the functions this plugin provides.
 
 = Helper functions =
 
@@ -209,17 +268,17 @@ These helper functions cope with the dual usage of the plugin supporting both `W
 
 = Why is the list layout completely broken? =
 
-If you are using a page-builder such as WPBakery or Elementor you need to ensure that you put the shortcode into a normal text area. Placing the shortcode into a preformatted text area will add `<pre>` tags around the listing output. These extra tags break the layout considerably.
+If you are using a page-builder such as WPBakery or Elementor you need to ensure that you put the short-code into a normal text area. Placing the short-code into a preformatted text area will add `<pre>` tags around the listing output. These extra tags break the layout considerably.
 
 = Why is my list in a single column? =
 
-The list of items under each letter heading needs to have at least 11 items for a second column to be created. Once you hit the magic 11 items, the list will break into two columns with 6 items in the first column and 5 items in the second. When you get to 21 items a third column will be added if there is room on your page; and so-on up to a maximum of 15 columns if there is enough space, though it is unexpected that any webpage be wide enough for more than a few columns to fit. The columns will fill-up evenly once you have more than one column on the page.
+The list of items under each letter heading needs to have at least 11 items for a second column to be created. Once you hit the magic 11 items, the list will break into two columns with 6 items in the first column and 5 items in the second. When you get to 21 items a third column will be added if there is room on your page; and so-on up to a maximum of 15 columns if there is enough space, though it is unexpected that any web-page be wide enough for more than a few columns to fit. The columns will fill-up evenly once you have more than one column on the page.
 
-= How do I show posts of a different post-type (not pages) or multiple post-types (e.g. posts AND pages) =
+= How do I show posts of a different post-type (not pages) or multiple post-types (e.g. posts AND pages)? =
 
-This can be achieved using the shortcode or PHP. In these examples the generic phrase `post-type-slug` is used to describe the concept. The default post types provided by WordPress are called "Posts" and "Pages". Their slugs are `post` and `page` respectively. You need to use these names in place of the examples (i.e. `your-post-type-slug`, `type1-slug`, and `type1-slug`).
+This can be achieved using the short-code or PHP. In these examples the generic phrase `post-type-slug` is used to describe the concept. The default post types provided by WordPress are called "Posts" and "Pages". Their slugs are `post` and `page` respectively. You need to use these names in place of the examples (i.e. `your-post-type-slug`, `type1-slug`, and `type1-slug`).
 
-**Shortcode method**
+**short-code method**
 
 *Single post-type*
 
@@ -233,7 +292,7 @@ For multiple post-types just separate them with a comma.
 
 **PHP method**
 
-PHP code needs to be added to your theme files, and cannot be used as post or page content in the way that a shortcode can.
+PHP code needs to be added to your theme files, and cannot be used as post or page content in the way that a short-code can.
 
 *Single post-type*
 
@@ -259,11 +318,11 @@ The argument to `the_a_z_listing()` is an [array](https://secure.php.net/manual/
 
 The code above needs to be within a php block which is denoted by the `<?php` and `?>` pair. Depending on your theme, you might not need the opening and closing php tags shown in the above snippet; if that is the case, you are free to omit them in your code.
 
-= How do I show posts from a specific category only =
+= How do I show posts from a specific category only? =
 
-This can be achieved using the shortcode or PHP. In these examples the generic phrase `taxonomy` and `term` are used to describe the concept. The default taxonomies provided by WordPress are called "Categories" and "Tags". Their slugs are `category` and `post_tag` respectively. Each Category and Tag are then known as "terms". You need to use the slug for each individual category or tag in place of the example slugs (i.e. `term-slug`, `term1-slug`, and `term1-slug`).
+This can be achieved using the short-code or PHP. In these examples the generic phrase `taxonomy` and `term` are used to describe the concept. The default taxonomies provided by WordPress are called "Categories" and "Tags". Their slugs are `category` and `post_tag` respectively. Each Category and Tag are then known as "terms". You need to use the slug for each individual category or tag in place of the example slugs (i.e. `term-slug`, `term1-slug`, and `term1-slug`).
 
-**Shortcode method**
+**short-code method**
 
 *Single term*
 
@@ -277,7 +336,7 @@ For multiple terms just separate them with a comma.
 
 **PHP method**
 
-PHP code needs to be added to your theme files, and cannot be used as post or page content in the way that a shortcode can.
+PHP code needs to be added to your theme files, and cannot be used as post or page content in the way that a short-code can.
 
 `
 <?php
@@ -297,11 +356,11 @@ The argument to `the_a_z_listing()` is an [array](https://secure.php.net/manual/
 
 The code above needs to be within a php block which is denoted by the `<?php` and `?>` pair. Depending on your theme, you might not need the opening and closing php tags shown in the above snippet; if that is the case, you are free to omit them in your code.
 
-= How do I show terms from a taxonomy instead of posts =
+= How do I show terms from a taxonomy instead of posts? =
 
-This can be achieved using the shortcode or PHP. In these examples the generic phrase `taxonomy` and `term` are used to describe the concept. The default taxonomies provided by WordPress are called "Categories" and "Tags". Their slugs are `category` and `post_tag` respectively. You need to use the slug for the taxonomy in place of the example slugs (i.e. `taxonomy-slug`).
+This can be achieved using the short-code or PHP. In these examples the generic phrase `taxonomy` and `term` are used to describe the concept. The default taxonomies provided by WordPress are called "Categories" and "Tags". Their slugs are `category` and `post_tag` respectively. You need to use the slug for the taxonomy in place of the example slugs (i.e. `taxonomy-slug`).
 
-**Shortcode method**
+**short-code method**
 
     [a-z-listing taxonomy="taxonomy-slug" display="terms"]
 
@@ -311,7 +370,7 @@ The `display="terms"` attribute is required to display taxonomy terms instead of
 
 **PHP method**
 
-PHP code needs to be added to your theme files, and cannot be used as post or page content in the way that a shortcode can.
+PHP code needs to be added to your theme files, and cannot be used as post or page content in the way that a short-code can.
 
 `
 <?php
@@ -325,7 +384,7 @@ The code above needs to be within a php block which is denoted by the `<?php` an
 
 = How do I remove section targeting or limit which sections are available? =
 
-In your theme's functions.php add the following code:
+In your theme's `functions.php` file add the following code:
 
 `
 <?php
@@ -339,7 +398,7 @@ If there is code already in your functions.php then add just the lines between `
 
 = I am not using the short-code so the styles are not working, can I still use the in-built styles without the short-code? =
 
-Yes you can. This needs the following code added to your theme's functions.php. We purposely only display the stylesheet on pages where the short-code is active.
+Yes you can. This needs the following code added to your theme's `functions.php` file. We purposely only display the stylesheet on pages where the short-code is active.
 
 `
 <?php
@@ -347,7 +406,7 @@ add_action( 'init', 'a_z_listing_force_enable_styles', 99 );
 ?>
 `
 
-If there is code already in your functions.php then add just the lines between `<?php` and `?>` on the line directly after the very first instance of `<?php`.
+If there is code already in your theme's `functions.php` file then add just the lines between `<?php` and `?>` on the line directly after the very first instance of `<?php`.
 
 The sidebar widget styling also works in a similar manner, and will also respond to the same code above to forcibly enable it.
 
@@ -365,7 +424,7 @@ function your_override_wrapper_function() {
 ?>
 `
 
-If there is code already in your functions.php then add just the lines between `<?php` and `?>` on the line directly after the very first instance of `<?php`.
+If there is code already in your theme's `functions.php` file then add just the lines between `<?php` and `?>` on the line directly after the very first instance of `<?php`.
 
 = How do I disable the in-built styling? =
 
@@ -385,7 +444,7 @@ In your theme's functions.php add the following code:
 
 `
 <?php
-add_filter( 'a-z-listing-add-tabs', '__return_true' );
+add_filter( 'a-z-listing-tabify', '__return_true' );
 ?>
 `
 
@@ -398,86 +457,81 @@ If there is code already in your functions.php then add just the lines between `
 
 == Changelog ==
 
+= 3.1.0 =
+
+* Ensure paths are correct when loading PHP files.
+* Add hook to customise sorting of items within each letter.
+
+**NEW EXTENSIONS**
+
+Check out the two new extensions at [A-Z-Listing.com](https://a-z-listing.com/shop). These extensions provide convinience functionality. Purchasing one or both will help towards the cost of maintaining the A-Z Listing plugin.
+
+= 3.0.2 =
+
+* Fix for causing "This site is experiencing difficulties" errors on some sites.
+
+If you are upgrading from pre-3.0.0 this is a major version change, which means that it might break your site when you upgrade. Please check in a test site first!
+
+**NEW EXTENSIONS**
+
+Check out the two new extensions at [A-Z-Listing.com](https://a-z-listing.com/shop). These extensions provide convinience functionality. Purchasing one or both will help towards the cost of maintaining the A-Z Listing plugin.
+
+* Add `get_the_item_id` and `the_item_id` template tags.
+* Add `get_the_item_type` template tag.
+* Add support for extensions.
+* Complete refactor to use more modern PHP features.
+* Minor refactoring of `get_the_item_object`, `get_item_meta`, and `get_the_item_count` template tags.
+* Miscellaneous documentation Fixes.
+
+= 3.0.1 =
+
+* Fix broken permalinks in 3.0.0
+
+If you are upgrading from pre-3.0.0 this is a major version change, which means that it might break your site when you upgrade. Please check in a test site first!
+
+**NEW EXTENSIONS**
+
+Check out the two new extensions at [A-Z-Listing.com](https://a-z-listing.com/shop). These extensions provide convinience functionality. Purchasing one or both will help towards the cost of maintaining the A-Z Listing plugin.
+
+* Add `get_the_item_id` and `the_item_id` template tags.
+* Add `get_the_item_type` template tag.
+* Add support for extensions.
+* Complete refactor to use more modern PHP features.
+* Minor refactoring of `get_the_item_object`, `get_item_meta`, and `get_the_item_count` template tags.
+* Miscellaneous documentation Fixes.
+
+= 3.0.0 =
+
+This is a major version change, which means that it might break your site when you upgrade. Please check in a test site first!
+
+**NEW EXTENSIONS**
+
+Check out the two new extensions at [A-Z-Listing.com](https://a-z-listing.com/shop). These extensions provide convinience functionality. Purchasing one or both will help towards the cost of maintaining the A-Z Listing plugin.
+
+* Add `get_the_item_id` and `the_item_id` template tags.
+* Add `get_the_item_type` template tag.
+* Add support for extensions.
+* Complete refactor to use more modern PHP features.
+* Minor refactoring of `get_the_item_object`, `get_item_meta`, and `get_the_item_count` template tags.
+* Miscellaneous documentation Fixes.
+
+= 2.3.0 =
+
+* Add multiple taxonomy support to taxonomy terms listing.
+* Add site health-check feature compatibility.
+* Fix `hide-empty-terms` in a taxonomy terms listing. Previously completely broken.
+* Fix hard-coded `admin-ajax.php` URL in widget configuration javascript.
+* Improve documentation in the readme.txt file, which is shown on the plugin page at WordPress.org.
+
 = 2.2.0 =
 
 * Add `get_the_item_post_count` and `the_item_post_count` template methods to get or display the number of posts associated with a term.
 * Add support for `get-all-children` when specifying a `parent-term`.
-* Add extra filename for template matching: `a-z-listing-$slug.php` where `$slug` is the slug of the post containing the shortcode.
+* Add extra filename for template matching: `a-z-listing-$slug.php` where `$slug` is the slug of the post containing the short-code.
 * Deprecate PHP 5.3-5.5. Please ensure you are running at least PHP 5.6. The plugin may work on older PHP versions, but compatibility is not guaranteed.
-* Bugfix for incorrect behaviour of `exclude-terms` in the shortcode. Thanks go to Chris Skrzypchak for finding this.
+* Bugfix for incorrect behaviour of `exclude-terms` in the short-code. Thanks go to Chris Skrzypchak for finding this.
 
-= 2.1.4 =
-
-**Bug Fix**
-
-* Fixed a spurious `NOTICE` message (shown below) when error logging is output to the browser. Thanks to the discovery by @npiper.
-  * If your site is not showing the message below then you do not need to upgrade with any urgency.
-
-`Notice: Trying to get property of non-object in [Path-to-WordPress]/wp-content/plugins/a-z-listing/classes/class-a-z-listing.php on line 215`
-
-= 2.1.3 =
-
-**Bug Fix**
-
-* Fixed the bug reported by @ighosts22 where the letter for non-alphabetic items was not pointing at the list of items.
-* Fixed incorrect behaviour discovered after adding tests to the automated testing to verify that I correctly fixed the above bug.
-
-= 2.1.2 =
-
-**Bug Fix**
-
-* Post links in 2.1.0 and 2.1.1 included a series of `%09` which caused visitors' clicks to return a 404 Not Found error. Thanks to @forestpump for their effort in finding the problem and highlighting the fix.
-
-= 2.1.1 =
-
-**Bug Fix**
-
-* Replace hardcoded path to `admin-ajax.php` in widget administration javascript.
-  * This release fixes the widget administration form for sites running in a path similar to https://example.com/wp/. You should install this fix if your site is a configured in a subfolder to be able to successfully configure the widget.
-  * Sites running in the top-level, e.g. https://example.com/, already work correctly and their behaviour is unchanged by this fix. You do not need to hurry to update if your site is configured at the top-level without a subfolder.
-
-= 2.1.0 =
-
-**Bug Fixes**
-
-* Fix widget configuration autocomplete fields for target post and parent post in the theme customizer
-* Fix taxonomy-term-filtered listings displaying all posts (e.g. shortcodes of the form `[a-z-listing taxonomy="category" terms="term"])
-* Fix `get_the_item_object()` to work with old-style overridden indices
-* Fix `get_the_item_object()` to correctly extract the item ID and load the correct item
-* Improve javascript on the widget configuration
-* Clarified the examples with explanations about "post types", "taxonomies", and "terms" to explain what each of these mean.
-
-**New Features**
-
-* Add parent-page attribute to the shortcode
-* Add simpler and safer filter for overriding the index letter for an item
-* Add simpler and safer filter for overriding the title for an item
-* Add new function for fetching meta data in a template: `$a_z_listing->get_item_meta()`
-* Allow exclude-terms to be used with display="posts"
-* Moved template loading function outside of the `A_Z_Query` class to prevent accidental access to the plugin internal structure
-
-= 2.0.6 =
-
-* Fix widget target post support
-* Fix filtering posts by multiple taxonomy terms
-* Fix styling error causing two or more posts to sometimes appear on the same line
-* Minor style tweak to fix short listings, and long titles
-* Fix broken styling in 2.0.0
-* Fix javascript error on widgets screen
-
-= 2.0.0 =
-
-* Improved widget configuration.
-* New attribute added to the shortcode when `display="posts"`:
-  * `exclude-posts`: remove specific posts from the list
-* New attributes added to the shortcode when `display="terms"`:
-  * `exclude-terms`: sets the terms to exclude from display
-  * `parent-term`: set the parent that all displayed terms must be organised under
-  * `hide-empty-terms`: hide terms that have no posts associated
-* Fix the stylesheet to better cope with variances in font-size and text length in the alphabet links list and widget.
-* Introduce PHP classes for adding numbers and grouping to the alphabet. Allows unhooking from the filters to undo the changes, where previously you could not unhook these modifications once they'd been applied.
-
-**BREAKING CHANGES**
+= BREAKING CHANGES in 2.0.0+ =
 
 *Multi column example*
 
