@@ -1,18 +1,12 @@
 parameters:
   phpvers: []
   wpvers: []
-
-resources:
-  containers:
-  - container: mysql
-    image: mysql:5.6
-    ports:
-    - 3306
+  multisites: [0, 1]
 
 jobs:
 - ${{ each phpver in parameters.phpvers }}:
   - ${{ each wpver in parameters.wpvers }}:
-    - ${{ each doMultisite in [0, 1] }}:
+    - ${{ each doMultisite in multisites }}:
       - job: PhpUnit
         ${{ if eq(doMultisite, 0) }}:
           displayName: PHPUnit; PHP ${{ phpver }}; WP ${{ wpver }}
