@@ -22,13 +22,19 @@ jobs:
         services:
           mysql: mysql
         steps:
-        - bash: apt-get -yqq update
-        - bash: env DEBIAN_FRONTEND=noninteractive apt-get -yqqf install zip unzip subversion mariadb-client libmariadb-dev --fix-missing
+        - bash: |
+            sudo apt-get -yqq update
+            sudo env DEBIAN_FRONTEND=noninteractive apt-get -yqqf install zip unzip subversion mariadb-client libmariadb-dev --fix-missing
+          displayName: Install dependencies from APT
         - bash: bin/install-wp-tests.sh wordpress_test root '' "${AGENT_SERVICES_MYSQL_PORTS_3306}" $WP_VERSION
+          displayName: Install WordPress tests
         - bash: composer global require "phpunit/phpunit=4.8.*|5.7.*"
+          displayName: Install PHPUnit
         - bash: phpunit --log-junit phpunit.xml
+          displayName: Run test suite
         - task: PublishTestResults@2
           inputs:
             testResultsFormat: JUnit
             testResultsFiles: 'phpunit.xml'
             failTaskOnFailedTests: true
+          displayName: Save test results
