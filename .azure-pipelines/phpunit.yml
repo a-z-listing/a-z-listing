@@ -1,0 +1,37 @@
+parameters:
+  phpvers: []
+  wpvers: []
+
+resources:
+  containers:
+  - container: mysql
+    image: mysql:5.6
+    ports:
+    - 3306
+
+jobs:
+- ${{ each phpver in parameters.phpvers }}:
+  - ${{ each wpver in parameters.wpvers }}:
+    - ${{ each doMultisite in [0, 1] }}:
+      - job: PhpUnit
+        ${{ if eq(doMultisite, 0) }}:
+          displayName: PHPUnit; PHP ${{ phpver }}; WP ${{ wpver }}
+        ${{ if eq(doMultisite, 1) }}:
+          displayName: PHPUnit; PHP ${{ phpver }}; WP ${{ wpver }} (multisite)
+        pool:
+          vmImage: 'ubuntu-16.04'
+        container: diddledan/gitlab-php-runner:${{ phpver }}
+        services:
+          mysql: mysql
+        env:
+          WP_VERSION: ${{ wpver }}
+          WP_MULTISITE: ${{ doMultisite }}
+        steps:
+        - bash: bin/install-wp-tests.sh wordpress_test root '' "${AGENT_SERVICES_MYSQL_PORTS_3306}" $WP_VERSION
+        - bash: composer global require "phpunit/phpunit=4.8.*|5.7.*"
+        - bash: phpunit --log-junit phpunit.xml
+        - task: PublishTestResults@2
+          inputs:
+            testResultsFormat: JUnit
+            testResultsFiles: 'phpunit.xml'
+            failTaskOnFailedTests: true
