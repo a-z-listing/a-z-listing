@@ -8,9 +8,11 @@ jobs:
   - ${{ each wpver in parameters.wpvers }}:
     - ${{ each doMultisite in parameters.multisites }}:
       - ${{ if eq(doMultisite, 0) }}:
-          job: PHPUnit_PHP_${{ phpver }}_WP_${{ wpver }}
+          job: PHPUnit_${{ phpver }}_${{ wpver }}
+          displayName: PHPUnit; PHP ${{ phpver }} WordPress ${{ wpver }}
         ${{ if eq(doMultisite, 1) }}:
-          job: PHPUnit_PHP_${{ phpver }}_WP_${{ wpver }}_multisite
+          job: PHPUnit_${{ phpver }}_${{ wpver }}_multisite
+          displayName: PHPUnit; PHP ${{ phpver }} WordPress ${{ wpver }} (multisite)
         pool:
           vmImage: 'ubuntu-16.04'
         container: diddledan/gitlab-php-runner:${{ phpver }}
