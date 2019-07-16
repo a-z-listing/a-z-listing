@@ -32,7 +32,7 @@ jobs:
           displayName: Install PHPUnit
         - bash: composer install --no-dev
           displayName: Install dependencies from composer
-        - bash: phpunit --log-junit phpunit.xml
+        - bash: $HOME/.composer/vendor/bin/phpunit --log-junit phpunit.xml
           displayName: Run test suite
         - task: PublishTestResults@2
           inputs:
