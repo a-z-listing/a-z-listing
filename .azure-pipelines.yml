@@ -72,7 +72,7 @@ jobs:
   displayName: PHP Code Sniffer
   pool:
     vmImage: 'ubuntu-16.04'
-  container: php:7.3
+  container: bowlhat/gitlab-php-runner:7.3
   steps:
   - bash: composer global require wp-coding-standards/wpcs
   - bash: $HOME/.composer/vendor/bin/phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs
