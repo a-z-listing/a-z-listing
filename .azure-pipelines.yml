@@ -1,0 +1,78 @@
+name: $(Date:yyyyMMdd).$(Rev:.r)
+
+resources:
+  containers:
+  - container: mysql
+    image: mysql:5.6
+    env:
+      MYSQL_DATABASE: wordpress_tests
+      MYSQL_ROOT_PASSWORD: mysql
+
+jobs:
+- template: .azure-pipelines/phpunit.yml
+  parameters:
+    phpvers:
+    - name: '5_6'
+      value: '5.6'
+    - name: '7_0'
+      value: '7.0'
+    - name: '7_1'
+      value: '7.1'
+    - name: '7_2'
+      value: '7.2'
+    multisite:
+    - name: ''
+      value: false
+    - name: 'multisite'
+      value: true
+    wpvers:
+    - name: '4_6'
+      value: '4.6'
+    - name: '4_7'
+      value: '4.7'
+    - name: '4_8'
+      value: '4.8'
+    - name: '4_9'
+      value: '4.9'
+    - name: '5_0'
+      value: '5.0'
+    - name: '5_1'
+      value: '5.1'
+    - name: '5_2'
+      value: '5.2'
+    - name: 'latest'
+      value: 'latest'
+    - name: 'nightly'
+      value: 'nightly'
+
+- template: .azure-pipelines/phpunit.yml
+  parameters:
+    phpvers:
+    - name: '7_3'
+      value: '7.3'
+    multisite:
+    - name: ''
+      value: false
+    - name: 'multisite'
+      value: true
+    wpvers:
+    - name: '5_0'
+      value: '5.0'
+    - name: '5_1'
+      value: '5.1'
+    - name: '5_2'
+      value: '5.2'
+    - name: 'latest'
+      value: 'latest'
+    - name: 'nightly'
+      value: 'nightly'
+
+
+- job: PHPCS
+  displayName: PHP Code Sniffer
+  pool:
+    vmImage: 'ubuntu-16.04'
+  container: bowlhat/gitlab-php-runner:7.3
+  steps:
+  - bash: composer global require wp-coding-standards/wpcs
+  - bash: $HOME/.composer/vendor/bin/phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs
