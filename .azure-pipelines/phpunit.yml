@@ -30,7 +30,7 @@ jobs:
           displayName: Install WordPress tests
         - bash: composer global require "phpunit/phpunit=4.8.*|5.7.*"
           displayName: Install PHPUnit
-        - bash: composer install --prefer-dist
+        - bash: composer install --no-dev
           displayName: Install dependencies from composer
         - bash: phpunit --log-junit phpunit.xml
           displayName: Run test suite
