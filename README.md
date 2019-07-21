@@ -472,7 +472,6 @@ Check out the two new extensions at [A-Z-Listing.com](https://a-z-listing.com/sh
 
 * Ensure paths are correct when loading PHP files.
 * Add hook to customise sorting of items within each letter.
-* Fix broken permalinks on hierarchical post-types, e.g. page.
 
 ### 3.0.2 ###
 
