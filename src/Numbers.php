@@ -105,8 +105,8 @@ class Numbers {
  * @param string $position set to before to place the numbers first. Any other value will place them last.
  * @param bool   $group    group the numbers in a single collection rather than individually.
  *
- * @return A_Z_Listing_Numbers
+ * @return \A_Z_Listing\Numbers
  */
 function add_a_z_numbers( $position = 'after', $group = false ) {
-	return new A_Z_Listing_Numbers( $position, $group );
+	return new Numbers( $position, $group );
 }

@@ -20,11 +20,6 @@ jobs:
       value: '7.1'
     - name: '7_2'
       value: '7.2'
-    multisite:
-    - name: ''
-      value: false
-    - name: 'multisite'
-      value: true
     wpvers:
     - name: '4_6'
       value: '4.6'
@@ -50,11 +45,6 @@ jobs:
     phpvers:
     - name: '7_3'
       value: '7.3'
-    multisite:
-    - name: ''
-      value: false
-    - name: 'multisite'
-      value: true
     wpvers:
     - name: '5_0'
       value: '5.0'
@@ -67,6 +57,7 @@ jobs:
     - name: 'nightly'
       value: 'nightly'
 
+- template: .azure-pipelines/phpunit-dotnet.yml
 
 - job: PHPCS
   displayName: PHP Code Sniffer

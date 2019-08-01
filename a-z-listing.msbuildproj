@@ -1,11 +1,11 @@
-<Project Sdk="Peachpie.NET.Sdk/0.9.40">
+<Project Sdk="Peachpie.NET.Sdk/0.9.44">
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Description>A-Z Listing plugin for WordPress (Peachpied.WordPress)</Description>
-    <AssemblyName>a-z-listing</AssemblyName>
-    <PackageId>a-z-listing</PackageId>
+    <AssemblyName>bowlhat.wp-a-z-listing</AssemblyName>
+    <PackageId>wp-a-z-listing</PackageId>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
@@ -18,6 +18,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="PeachPied.WordPress" Version="1.0.0-beta4" />
+    <PackageReference Include="PeachPied.WordPress" Version="1.0.0-beta8" />
   </ItemGroup>
 </Project>

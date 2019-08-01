@@ -1,42 +1,67 @@
 parameters:
   phpvers: []
   wpvers: []
-  multisites:
-  - name: 'normal'
-    value: 0
-  - name: 'multisite'
-    value: 1
 
-jobs:
-- ${{ each phpver in parameters.phpvers }}:
-  - ${{ each wpver in parameters.wpvers }}:
-    - ${{ each doMultisite in parameters.multisites }}:
-      - job: PHPUnit_${{ phpver.name }}_${{ wpver.name }}_${{ doMultisite.name }}
-        displayName: PHPUnit PHP-${{ phpver.value }} WordPress-${{ wpver.value }} (${{ doMultisite.name }})
+profiles:
+- name: 'normal'
+  value: '0'
+- name: 'multisite'
+  value: '1'
+
+# Test
+testArguments: "--log-junit phpunit-log.xml"
+
+phases:
+  - name: Test
+    jobs:
+      {{#each phpver in parameters.phpvers}}
+      {{#each wpver in parameters.wpvers}}
+      {{#each profile in profiles}}
+      - name: PHPUnit_${{ phpver.name }}_${{ wpver.name }}_${{ profile.name }}
+        display: PHPUnit PHP-${{ phpver.value }} WordPress-${{ wpver.value }} (${{ profile.name }})
         pool:
           vmImage: 'ubuntu-16.04'
         container: bowlhat/gitlab-php-runner:${{ phpver.value }}
         variables:
           WP_VERSION: ${{ wpver.value }}
-          WP_MULTISITE: ${{ doMultisite.value }}
+          WP_MULTISITE: ${{ profile.value }}
         services:
           mysql: mysql
         steps:
-        - bash: |
-            sudo apt-get -yqq update
-            sudo env DEBIAN_FRONTEND=noninteractive apt-get -yqqf install zip unzip subversion mariadb-client libmariadb-dev --fix-missing
-          displayName: Install dependencies from APT
-        - bash: bin/install-wp-tests.sh wordpress_test root mysql mysql $WP_VERSION
-          displayName: Install WordPress tests
-        - bash: composer global require "phpunit/phpunit=4.8.*|5.7.*"
-          displayName: Install PHPUnit
-        - bash: composer install --no-dev
-          displayName: Install dependencies from composer
-        - bash: $HOME/.composer/vendor/bin/phpunit --log-junit phpunit.xml
-          displayName: Run test suite
-        - task: PublishTestResults@2
-          inputs:
-            testResultsFormat: JUnit
-            testResultsFiles: 'phpunit.xml'
-            failTaskOnFailedTests: true
-          displayName: Save test results
+          - phase: preRestore
+          - phase: restore
+            steps:
+              - bash: |
+                  sudo apt-get -yqq update
+                  sudo env DEBIAN_FRONTEND=noninteractive apt-get -yqqf install zip unzip subversion mariadb-client libmariadb-dev --fix-missing
+                display: Install dependencies from APT
+              - bash: composer install --no-dev
+                display: Install dependencies from composer
+          - phase: postRestore
+          - phase: preBuild
+          - phase: build
+          - phase: postBuild
+          - phase: preTest
+            steps:
+              - bash: bin/install-wp-tests.sh wordpress_test root mysql mysql $WP_VERSION
+                display: Install WordPress tests
+              - bash: curl -o phpunit.phar https://phar.phpunit.de/phpunit-6.phar
+                display: Install PHPUnit
+          - phase: test
+            steps:
+            - bash: "php phpunit.phar -- {{testArguments}}"
+              display: Test
+          - phase: postTest
+          - phase: preTestResults
+          - phase: testResults
+            steps:
+            - task: PublishTestResults@2.*
+              display: Publish Test Results
+              inputs:
+                testResultsFormat: JUnit
+                testResultsFiles: 'phpunit-log.xml'
+                failTaskOnFailedTests: true
+          - phase: postTestResults
+      {{/each}}
+      {{/each}}
+      {{/each}}

@@ -1,0 +1,91 @@
+parameters:
+  wpvers: []
+  multisite:
+  - name: 'normal'
+    value: 0
+  - name: 'multisite'
+    value: 1
+
+# Restore
+restoreArguments: ""
+
+# Build
+buildProjects: "**/*-phpunit.msbuildproj"
+buildArguments: ""
+
+# Test
+testArguments: "--log-junit phpunit-log.xml"
+
+phases:
+  - name: Test
+    jobs:
+      {{#each doMultisite in parameters.multisite}}
+      - name: PHPUnit_peachpie_${{ wpver.name }}_${{ doMultisite.name }}
+        display: PHPUnit PeachPie WordPress-${{ wpver.value }} (${{ doMultisite.name }})
+        pool:
+          vmImage: 'windows-latest'
+        variables:
+          WP_VERSION: ${{ wpver.value }}
+          WP_MULTISITE: ${{ doMultisite.value }}
+        services:
+          mysql: mysql
+        steps:
+          - phase: preRestore
+          - phase: restore
+            steps:
+              - bash: composer install --no-dev
+                display: Install dependencies from composer
+              - task: DotNetCoreCLI@0.*
+                display: Restore
+                inputs:
+                  command: restore
+                  publishWebProjects: true
+                  projects: "{{buildProjects}}"
+                  arguments: "{{restoreArguments}}"
+                  zipAfterPublish: true
+          - phase: postRestore
+          - phase: preBuild
+          - phase: build
+            steps:
+              - task: DotNetCoreCLI@0.*
+                display: Build
+                inputs:
+                  command: build
+                  publishWebProjects: true
+                  projects: "{{buildProjects}}"
+                  arguments: "--configuration $(buildConfiguration) {{buildArguments}}"
+                  zipAfterPublish: true
+          - phase: postBuild
+          - phase: preTest
+            steps:
+              - task: PowerShell@2.*
+                display: Install WordPress tests
+                inputs:
+                  filePath: ./bin/install-wp-tests.ps1
+                  arguments: "wordpress_test root mysql mysql $WP_VERSION"
+              - task: PowerShell@2.*
+                display: Install PHPUnit
+                inputs:
+                  pwsh: Invoke-WebRequest -Uri "https://phar.phpunit.de/phpunit-5.phar" -OutFile "phpunit.phar"
+          - phase: test
+            steps:
+            - task: DotNetCoreCLI@0.*
+                display: Test
+                inputs:
+                  command: run
+                  publishWebProjects: true
+                  projects: "{{buildProjects}}"
+                  arguments: "--configuration $(buildConfiguration) {{buildArguments}} -- {{testArguments}}"
+                  zipAfterPublish: true
+          - phase: postTest
+          - phase: preTestResults
+          - phase: testResults
+            steps:
+            - task: PublishTestResults@2.*
+              display: Publish Test Results
+              inputs:
+                testResultsFormat: JUnit
+                testResultsFiles: 'phpunit-log.xml'
+                failTaskOnFailedTests: true
+          - phase: postTestResults
+      {{/each}}

@@ -1,0 +1,18 @@
+<Project Sdk="Peachpie.NET.Sdk/0.9.44">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <StartupObject>phpunit.phar</StartupObject>
+    <AssemblyName>bowlhat.wp-a-z-listing</AssemblyName>
+    <PackageId>wp-a-z-listing</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="*.phar;**/*.php" Exclude=".git/**;.vscode/**;node_modules/**;obj/**;bin/**;**/composer-php52/**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="PeachPied.WordPress.AspNetCore" Version="1.0.0-beta8" />
+    <PackageReference Include="PeachPied.WordPress" Version="1.0.0-beta8" />
+  </ItemGroup>
+</Project>
