@@ -1,6 +1,5 @@
 local downstreamRepos = [
     "a-z-listing/proper-nouns",
-    "a-z-listing/search-replace",
 ];
 
 local mysqlver = "5.6";
@@ -91,7 +90,7 @@ local triggerSteps = [
         settings: {
             server: "https://drone.bowlhat.net/",
             token: {
-                fromSecret: "drone-token",
+                from_secret: "drone_token",
             },
             fork: true,
             repositories: downstreamRepos,

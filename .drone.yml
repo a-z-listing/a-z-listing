@@ -1049,10 +1049,9 @@ steps:
     fork: true
     repositories:
     - a-z-listing/proper-nouns
-    - a-z-listing/search-replace
     server: https://drone.bowlhat.net/
     token:
-      fromSecret: drone-token
+      from_secret: drone_token
 
 trigger:
   branch:
