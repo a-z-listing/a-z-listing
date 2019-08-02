@@ -88,7 +88,7 @@ local triggerSteps = [
         name: "trigger",
         image: "plugins/downstream",
         settings: {
-            server: "https://drone.bowlhat.net/",
+            server: "https://drone.bowlhat.net",
             token: {
                 from_secret: "drone_token",
             },

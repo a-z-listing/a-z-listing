@@ -1049,7 +1049,7 @@ steps:
     fork: true
     repositories:
     - a-z-listing/proper-nouns
-    server: https://drone.bowlhat.net/
+    server: https://drone.bowlhat.net
     token:
       from_secret: drone_token
 
