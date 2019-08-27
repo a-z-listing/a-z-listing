@@ -13,4 +13,4 @@ jobs:
     - uses: rtCamp/action-phpcs-code-review@v1.0.0
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        args: ["WordPress,WordPress-Core,WordPress-Docs"]
+        args: "WordPress,WordPress-Core,WordPress-Docs"
