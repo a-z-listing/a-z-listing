@@ -13,6 +13,6 @@ jobs:
     - uses: actions/checkout@v1
     - uses: rtCamp/action-phpcs-code-review@master
       env:
-        GH_BOT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_BOT_TOKEN: ${{ secrets.GH_BOT_TOKEN }}
       with:
         args: "WordPress,WordPress-Core,WordPress-Docs"
