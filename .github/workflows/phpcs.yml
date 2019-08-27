@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: rtCamp/action-phpcs-code-review@v1.0.0
+    - uses: bowlhat/action-phpcs-code-review@master
       with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        gh_bot_token: ${{ secrets.GITHUB_TOKEN }}
         args: "WordPress,WordPress-Core,WordPress-Docs"
