@@ -1,0 +1,7 @@
+.phpcs:
+  extends:
+    - .php74-linux
+  stage: test
+  needs: [build]
+  script:
+    - ./tools/phpcs

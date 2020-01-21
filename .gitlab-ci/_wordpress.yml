@@ -1,0 +1,31 @@
+
+.wordpress46:
+  variables:
+    WP_VERSION: '4.6'
+.wordpress47:
+  variables:
+    WP_VERSION: '4.7'
+.wordpress48:
+  variables:
+    WP_VERSION: '4.8'
+.wordpress49:
+  variables:
+    WP_VERSION: '4.9'
+.wordpress50:
+  variables:
+    WP_VERSION: '5.0'
+.wordpress51:
+  variables:
+    WP_VERSION: '5.1'
+.wordpress52:
+  variables:
+    WP_VERSION: '5.2'
+.wordpress53:
+  variables:
+    WP_VERSION: '5.3'
+.wordpress-latest:
+  variables:
+    WP_VERSION: 'latest'
+.wordpress-nightly:
+  variables:
+    WP_VERSION: 'nightly'
