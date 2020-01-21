@@ -4,13 +4,15 @@
   services:
     - mysql:5.6
   script:
-    - bash bin/install-wp-tests.sh wordpress_tests root mysql wordpress $WP_VERSION true
-    - ./tools/phpunit --log-junit phpunit.xml --coverage-text
+    - &install-tests
+      bash bin/install-wp-tests.sh wordpress_tests root mysql wordpress $WP_VERSION true
+    - ./tools/phpunit --log-junit phpunit-results.xml --coverage-text
   artifacts:
     reports:
-      junit: phpunit.xml
+      junit: phpunit-results.xml.xml
 
 .phpunit-multisite:
   extends: .phpunit
   script:
-    - ./tools/phpunit -c phpunit-multisite.xml --log-junit phpunit.xml --coverage-text
+    - *install-tests
+    - ./tools/phpunit -c phpunit-multisite.xml --log-junit phpunit-results.xml --coverage-text
