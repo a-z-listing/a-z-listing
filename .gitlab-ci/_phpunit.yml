@@ -9,7 +9,7 @@
     - ./tools/phpunit --log-junit phpunit-results.xml --coverage-text
   artifacts:
     reports:
-      junit: phpunit-results.xml.xml
+      junit: phpunit-results.xml
 
 .phpunit-multisite:
   extends: .phpunit
