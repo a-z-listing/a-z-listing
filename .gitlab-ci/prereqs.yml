@@ -2,28 +2,28 @@ before_script:
   - |
     echo "Install base packages"
     apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential \
-    libssl-dev \
-    gnupg \
-    libfreetype6-dev \
-    libicu-dev \
-    libjpeg62-turbo-dev \
-    libmcrypt-dev \
-    libonig-dev \
-    libxml2-dev \
-    vim \
-    wget \
-    unzip \
-    git \
-    subversion \
-    default-mysql-client
-    \
+      libssl-dev \
+      gnupg \
+      libfreetype6-dev \
+      libicu-dev \
+      libjpeg62-turbo-dev \
+      libmcrypt-dev \
+      libonig-dev \
+      libxml2-dev \
+      vim \
+      wget \
+      unzip \
+      git \
+      subversion \
+      default-mysql-client
+
     echo "Install composer"
     curl -sS -L https://getcomposer.org/installer | php
     mv composer.phar /usr/local/bin/composer
-    \
+
     echo "Install PHP extensions"
     docker-php-ext-install -j$(nproc) iconv intl xml soap opcache pdo pdo_mysql mysqli mbstring gd
-    \
+
     wget -O phive.phar "https://phar.io/releases/phive.phar"
     wget -O phive.phar.asc "https://phar.io/releases/phive.phar.asc"
     gpg --keyserver hkps.pool.sks-keyservers.net --recv-keys 0x9D8A98B29B2D5D79
@@ -38,7 +38,7 @@ before_script:
     echo "Install node"
     nvm install '10.16.3'
     nvm use '10.16.3'
-    \
+
     echo "Install yarn"
     curl -sS -L https://yarnpkg.com/install.sh | bash
   - |
