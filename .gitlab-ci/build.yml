@@ -4,9 +4,11 @@ build:
   extends: .base
   script:
     - phive install humbug/php-scoper@0.11.4 --force-accept-unsigned
-    - composer install --prefer-dist --no-interaction --no-progress
-    - ./tools/php-scoper add-prefix
-    - composer update --no-dev --optimize-autoloader --prefer-dist --no-interaction --no-progress
+    ## Uncomment if dev dependencies are needed
+    # - composer install --prefer-dist --no-interaction --no-progress --no-suggest
+    # - rm -rf vendor
+    - composer install --no-dev --optimize-autoloader --prefer-dist --no-interaction --no-progress --no-suggest
+    - ./tools/php-scoper add-prefix --no-interaction
     - |
       [ -s "$HOME/.nvm/nvm.sh" ] && \. "$HOME/.nvm/nvm.sh";
       $HOME/.yarn/bin/yarn install --non-interactive --no-progress
@@ -17,6 +19,7 @@ build:
     name: "$CI_JOB_NAME"
     expire_in: 30 days
     paths:
+      - vendor/
       - build/
       - languages/
       - css/
