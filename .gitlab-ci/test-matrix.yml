@@ -12,6 +12,7 @@ include:
 phpcs:
   extends:
     - .phpcs
+    - .php74-linux
 
 # PHP 5.6
 wordpress46:php56-linux:
