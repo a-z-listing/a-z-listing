@@ -1,6 +1,7 @@
 build:
   stage: build
   image: php:7.4
+  extends: .base
   script:
     - phive install humbug/php-scoper@0.11.4 --force-accept-unsigned
     - composer install --prefer-dist --no-interaction --no-progress
