@@ -1,6 +1,7 @@
 .phpunit:
   stage: test
   needs: [build]
+  extends: .base
   services:
     - mysql:5.6
   script:

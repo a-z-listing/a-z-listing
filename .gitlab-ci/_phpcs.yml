@@ -1,5 +1,6 @@
 .phpcs:
   stage: test
   needs: [build]
+  extends: .base
   script:
     - ./tools/phpcs

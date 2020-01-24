@@ -1,4 +1,5 @@
-before_script:
+.base:
+  before_script:
   - |
     echo "Install base packages"
     apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential \
