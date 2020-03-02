@@ -456,13 +456,27 @@ If there is code already in your functions.php then add just the lines between `
 
 == Changelog ==
 
+= 4.0.0 =
+
+* Bump minimum PHP requirement to 7.0
+* Make classes namespaced
+* Update stylesheet to use CSS Variables
+* Lots of refactoring for better maintainability
+* Improvements to documentation
+* Add legacy non-namespaced backwards-compatibility classes
+* Add parent post ID and parent post name support
+* Add PHP type hints
+* Add strict PHP types checking
+* Add php-scoper to reduce conflicts with other plugins
+* Add extra template name to match the displayed post-type
+
+**EXTENSIONS**
+
+Check out the two extensions at [A-Z-Listing.com](https://a-z-listing.com/shop). These extensions provide convinience functionality. Purchasing one or both will help towards the cost of maintaining the A-Z Listing plugin.
+
 = 3.1.1 =
 
 * Bugfix to squash a PHP deprecation warning when running PHP-7.4+
-
-**NEW EXTENSIONS**
-
-Check out the two new extensions at [A-Z-Listing.com](https://a-z-listing.com/shop). These extensions provide convinience functionality. Purchasing one or both will help towards the cost of maintaining the A-Z Listing plugin.
 
 = 3.1.0 =
 
