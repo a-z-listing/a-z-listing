@@ -1,0 +1,25 @@
+
+.php56-linux:
+  image: php:5.6
+  tags:
+    - linux
+.php70-linux:
+  image: php:7.0
+  tags:
+    - linux
+.php71-linux:
+  image: php:7.1
+  tags:
+    - linux
+.php72-linux:
+  image: php:7.2
+  tags:
+    - linux
+.php73-linux:
+  image: php:7.3
+  tags:
+    - linux
+.php74-linux:
+  image: php:7.4
+  tags:
+    - linux

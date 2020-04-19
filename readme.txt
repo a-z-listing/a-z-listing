@@ -457,6 +457,10 @@ If there is code already in your functions.php then add just the lines between `
 
 == Changelog ==
 
+= 3.1.1 =
+
+* NPM dependencies update.
+
 = 3.1.0 =
 
 * Ensure paths are correct when loading PHP files.
