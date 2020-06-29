@@ -20,6 +20,7 @@ cache:
     - $HOME/.composer/cache
 
 php:
+  - '7.4'
   - '7.3'
   - '7.2'
   - '7.1'
@@ -32,6 +33,8 @@ env:
     - WP_VERSION=5.0
     - WP_VERSION=5.1
     - WP_VERSION=5.2
+    - WP_VERSION=5.3
+    - WP_VERSION=5.4
     - WP_VERSION=latest
     - WP_VERSION=trunk
 
@@ -41,6 +44,10 @@ env:
     - WP_VERSION=5.1
       WP_MULTISITE=1
     - WP_VERSION=5.2
+      WP_MULTISITE=1
+    - WP_VERSION=5.3
+      WP_MULTISITE=1
+    - WP_VERSION=5.4
       WP_MULTISITE=1
     - WP_VERSION=latest
       WP_MULTISITE=1
