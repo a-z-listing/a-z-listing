@@ -34,6 +34,10 @@
   variables:
     WP_VERSION: '5.3'
     <<: *mysql-config
+.wordpress54:
+  variables:
+    WP_VERSION: '54'
+    <<: *mysql-config
 .wordpress-latest:
   variables:
     WP_VERSION: 'latest'
