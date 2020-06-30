@@ -15,6 +15,11 @@ phpcs:
     - .php74-linux
 
 # PHP 7.0
+wordpress46:php70-linux:
+  extends:
+    - .phpunit
+    - .wordpress47
+    - .php70-linux
 wordpress47:php70-linux:
   extends:
     - .phpunit
@@ -44,6 +49,16 @@ wordpress52:php70-linux:
   extends:
     - .phpunit
     - .wordpress52
+    - .php70-linux
+wordpress53:php70-linux:
+  extends:
+    - .phpunit
+    - .wordpress53
+    - .php70-linux
+wordpress54:php70-linux:
+  extends:
+    - .phpunit
+    - .wordpress54
     - .php70-linux
 WordPress-latest:php70-linux:
   extends:
@@ -87,6 +102,16 @@ wordpress52:php71-linux:
     - .phpunit
     - .wordpress52
     - .php71-linux
+wordpress53:php71-linux:
+  extends:
+    - .phpunit
+    - .wordpress53
+    - .php71-linux
+wordpress54:php71-linux:
+  extends:
+    - .phpunit
+    - .wordpress54
+    - .php71-linux
 WordPress-latest:php71-linux:
   extends:
     - .phpunit
@@ -129,6 +154,16 @@ wordpress52:php72-linux:
     - .phpunit
     - .wordpress52
     - .php72-linux
+wordpress53:php72-linux:
+  extends:
+    - .phpunit
+    - .wordpress53
+    - .php72-linux
+wordpress54:php72-linux:
+  extends:
+    - .phpunit
+    - .wordpress54
+    - .php72-linux
 WordPress-latest:php72-linux:
   extends:
     - .phpunit
@@ -156,6 +191,16 @@ wordpress52:php73-linux:
     - .phpunit
     - .wordpress52
     - .php73-linux
+wordpress53:php73-linux:
+  extends:
+    - .phpunit
+    - .wordpress53
+    - .php73-linux
+wordpress54:php73-linux:
+  extends:
+    - .phpunit
+    - .wordpress54
+    - .php73-linux
 WordPress-latest:php73-linux:
   extends:
     - .phpunit
@@ -182,6 +227,16 @@ wordpress52:php74-linux:
   extends:
     - .phpunit
     - .wordpress52
+    - .php74-linux
+wordpress53:php74-linux:
+  extends:
+    - .phpunit
+    - .wordpress53
+    - .php74-linux
+wordpress54:php74-linux:
+  extends:
+    - .phpunit
+    - .wordpress54
     - .php74-linux
 WordPress-latest:php74-linux:
   extends:
@@ -226,6 +281,16 @@ wordpress52-multisite:php70-linux:
     - .phpunit-multisite
     - .wordpress52
     - .php70-linux
+wordpress53-multisite:php70-linux:
+  extends:
+    - .phpunit-multisite
+    - .wordpress53
+    - .php70-linux
+wordpress54-multisite:php70-linux:
+  extends:
+    - .phpunit-multisite
+    - .wordpress54
+    - .php70-linux
 WordPress-multisite-latest:php70-linux:
   extends:
     - .phpunit-multisite
@@ -267,6 +332,16 @@ wordpress52-multisite:php71-linux:
   extends:
     - .phpunit-multisite
     - .wordpress52
+    - .php71-linux
+wordpress53-multisite:php71-linux:
+  extends:
+    - .phpunit-multisite
+    - .wordpress53
+    - .php71-linux
+wordpress54-multisite:php71-linux:
+  extends:
+    - .phpunit-multisite
+    - .wordpress54
     - .php71-linux
 WordPress-multisite-latest:php71-linux:
   extends:
@@ -310,6 +385,16 @@ wordpress52-multisite:php72-linux:
     - .phpunit-multisite
     - .wordpress52
     - .php72-linux
+wordpress53-multisite:php72-linux:
+  extends:
+    - .phpunit-multisite
+    - .wordpress53
+    - .php72-linux
+wordpress54-multisite:php72-linux:
+  extends:
+    - .phpunit-multisite
+    - .wordpress54
+    - .php72-linux
 WordPress-multisite-latest:php72-linux:
   extends:
     - .phpunit-multisite
@@ -337,6 +422,16 @@ wordpress52-multisite:php73-linux:
     - .phpunit-multisite
     - .wordpress52
     - .php73-linux
+wordpress53-multisite:php73-linux:
+  extends:
+    - .phpunit-multisite
+    - .wordpress53
+    - .php73-linux
+wordpress54-multisite:php73-linux:
+  extends:
+    - .phpunit-multisite
+    - .wordpress54
+    - .php73-linux
 WordPress-multisite-latest:php73-linux:
   extends:
     - .phpunit-multisite
@@ -363,6 +458,16 @@ wordpress52-multisite:php74-linux:
   extends:
     - .phpunit-multisite
     - .wordpress52
+    - .php74-linux
+wordpress53-multisite:php74-linux:
+  extends:
+    - .phpunit-multisite
+    - .wordpress53
+    - .php74-linux
+wordpress54-multisite:php74-linux:
+  extends:
+    - .phpunit-multisite
+    - .wordpress54
     - .php74-linux
 WordPress-multisite-latest:php74-linux:
   extends:
