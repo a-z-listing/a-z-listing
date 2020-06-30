@@ -26,8 +26,8 @@ require __DIR__ . '/vendor/autoload.php';
  * Initialize the plugin.
  */
 function a_z_listing_init() {
-	\A_Z_Listing\Shortcode::instance()->activate( __FILE__, [] )->initialize();
-	\A_Z_Listing\Indices::instance()->activate( __FILE__, [] )->initialize();
+	\A_Z_Listing\Shortcode::instance()->activate( __FILE__, array() )->initialize();
+	\A_Z_Listing\Indices::instance()->activate( __FILE__, array() )->initialize();
 }
 
 /**
