@@ -5,7 +5,8 @@
   services:
     - mysql:5.6
   script:
-    - bash bin/install-wp-tests.sh "${MYSQL_DATABASE:-wordpress}" root "$MYSQL_ROOT_PASSWORD" mysql $WP_VERSION true
+    - &install-tests
+      bash bin/install-wp-tests.sh "${MYSQL_DATABASE:-wordpress}" root "$MYSQL_ROOT_PASSWORD" mysql $WP_VERSION true
     - ./tools/phpunit --log-junit phpunit-results.xml --coverage-text
   artifacts:
     reports:
@@ -14,5 +15,5 @@
 .phpunit-multisite:
   extends: .phpunit
   script:
-    - bash bin/install-wp-tests.sh "${MYSQL_DATABASE:-wordpress}" root "$MYSQL_ROOT_PASSWORD" mysql $WP_VERSION true
+    - *install-tests
     - ./tools/phpunit -c phpunit-multisite.xml --log-junit phpunit-results.xml --coverage-text

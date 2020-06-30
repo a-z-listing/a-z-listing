@@ -24,6 +24,7 @@ build:
     name: "$CI_JOB_NAME"
     expire_in: 30 days
     paths:
+      - vendor/
       - build/
       - languages/
       - css/
