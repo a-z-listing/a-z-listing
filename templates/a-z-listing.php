@@ -20,15 +20,15 @@
  */
 $a_z_listing_minpercol = 10;
 ?>
-<div id="az-tabs">
-	<div id="letters">
+<div id="<?php $a_z_query->the_instance_id; ?>" class="az-listing">
+	<div class="az-letters-wrap">
 		<div class="az-letters">
 			<?php $a_z_query->the_letters(); ?>
 		</div>
 	</div>
 	<?php if ( $a_z_query->have_letters() ) : ?>
-	<div id="az-slider">
-		<div id="inner-slider">
+	<div class="items-outer">
+		<div class="items-inner">
 			<?php
 			while ( $a_z_query->have_letters() ) :
 				$a_z_query->the_letter();
