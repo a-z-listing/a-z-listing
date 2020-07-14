@@ -3,7 +3,7 @@ include:
   - template: SAST.gitlab-ci.yml
   - template: Dependency-Scanning.gitlab-ci.yml
   - project: a-z-listing/wp-a-z-listing
-    file: /.gitlab-ci/prereqs.yml
+    file: /.gitlab-ci/_prereqs.yml
   - project: a-z-listing/wp-a-z-listing
     file: /.gitlab-ci/build.yml
   - project: a-z-listing/wp-a-z-listing
