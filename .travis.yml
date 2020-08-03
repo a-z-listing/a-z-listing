@@ -1,4 +1,4 @@
-sudo: false
+os: linux
 dist: xenial
 
 services:
@@ -20,6 +20,7 @@ cache:
     - $HOME/.composer/cache
 
 php:
+  - '7.4'
   - '7.3'
   - '7.2'
   - '7.1'
@@ -27,47 +28,87 @@ php:
   - '5.6'
 
 env:
-  matrix:
-    # single site
-    - WP_VERSION=5.0
-    - WP_VERSION=5.1
-    - WP_VERSION=5.2
-    - WP_VERSION=latest
-    - WP_VERSION=trunk
+  # single site
+  - WP_VERSION=4.6
+  - WP_VERSION=4.7
+  - WP_VERSION=4.8
+  - WP_VERSION=4.9
+  - WP_VERSION=5.0
+  - WP_VERSION=5.1
+  - WP_VERSION=5.2
+  - WP_VERSION=5.3
+  - WP_VERSION=5.4
+  - WP_VERSION=latest
+  - WP_VERSION=trunk
 
-    # multisite
-    - WP_VERSION=5.0
-      WP_MULTISITE=1
-    - WP_VERSION=5.1
-      WP_MULTISITE=1
-    - WP_VERSION=5.2
-      WP_MULTISITE=1
-    - WP_VERSION=latest
-      WP_MULTISITE=1
-    - WP_VERSION=trunk
-      WP_MULTISITE=1
+  # multisite
+  - WP_VERSION=4.6 WP_MULTISITE=1
+  - WP_VERSION=4.7 WP_MULTISITE=1
+  - WP_VERSION=4.8 WP_MULTISITE=1
+  - WP_VERSION=4.9 WP_MULTISITE=1
+  - WP_VERSION=5.0 WP_MULTISITE=1
+  - WP_VERSION=5.1 WP_MULTISITE=1
+  - WP_VERSION=5.2 WP_MULTISITE=1
+  - WP_VERSION=5.3 WP_MULTISITE=1
+  - WP_VERSION=5.4 WP_MULTISITE=1
+  - WP_VERSION=latest WP_MULTISITE=1
+  - WP_VERSION=trunk WP_MULTISITE=1
 
-matrix:
+jobs:
   include:
     - php: '7.3'
       env: WP_TRAVISCI=phpcs
 
-    - php: '5.6'
-      env: WP_VERSION=4.6
-    - php: '5.6'
-      env: WP_VERSION=4.7
-    - php: '5.6'
-      env: WP_VERSION=4.8
-    - php: '5.6'
+  exclude:
+    # Exclude WordPress that don't support PHP 7.4
+    - php: '7.4'
+      env: WP_VERSION=5.2
+    - php: '7.4'
+      env: WP_VERSION=5.1
+    - php: '7.4'
+      env: WP_VERSION=5.0
+    - php: '7.4'
       env: WP_VERSION=4.9
-    - php: '5.6'
-      env: WP_VERSION=4.6 WP_MULTISITE=1
-    - php: '5.6'
-      env: WP_VERSION=4.7 WP_MULTISITE=1
-    - php: '5.6'
-      env: WP_VERSION=4.8 WP_MULTISITE=1
-    - php: '5.6'
+    - php: '7.4'
+      env: WP_VERSION=4.8
+    - php: '7.4'
+      env: WP_VERSION=4.7
+    - php: '7.4'
+      env: WP_VERSION=4.6
+
+    - php: '7.4'
+      env: WP_VERSION=5.2 WP_MULTISITE=1
+    - php: '7.4'
+      env: WP_VERSION=5.1 WP_MULTISITE=1
+    - php: '7.4'
+      env: WP_VERSION=5.0 WP_MULTISITE=1
+    - php: '7.4'
       env: WP_VERSION=4.9 WP_MULTISITE=1
+    - php: '7.4'
+      env: WP_VERSION=4.8 WP_MULTISITE=1
+    - php: '7.4'
+      env: WP_VERSION=4.7 WP_MULTISITE=1
+    - php: '7.4'
+      env: WP_VERSION=4.6 WP_MULTISITE=1
+
+    # Exclude WordPress that don't support PHP 7.3
+    - php: '7.3'
+      env: WP_VERSION=4.9
+    - php: '7.3'
+      env: WP_VERSION=4.8
+    - php: '7.3'
+      env: WP_VERSION=4.7
+    - php: '7.3'
+      env: WP_VERSION=4.6
+
+    - php: '7.3'
+      env: WP_VERSION=4.9 WP_MULTISITE=1
+    - php: '7.3'
+      env: WP_VERSION=4.8 WP_MULTISITE=1
+    - php: '7.3'
+      env: WP_VERSION=4.7 WP_MULTISITE=1
+    - php: '7.3'
+      env: WP_VERSION=4.6 WP_MULTISITE=1
 
 before_script:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
