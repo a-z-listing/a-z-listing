@@ -17,7 +17,7 @@ notifications:
 
 cache:
   directories:
-    - $HOME/.composer/cache
+    - $HOME/.config/composer/cache
 
 php:
   - '7.4'
@@ -111,7 +111,7 @@ jobs:
       env: WP_VERSION=4.6 WP_MULTISITE=1
 
 before_script:
-  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  - export PATH="$HOME/.config/composer/vendor/bin:$PATH"
   - |
     if [ -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ]; then
       phpenv config-rm xdebug.ini
@@ -127,15 +127,15 @@ before_script:
   - |
     if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
       composer global require wp-coding-standards/wpcs
-      $HOME/.composer/vendor/bin/phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs
+      $HOME/.config/composer/vendor/bin/phpcs --config-set installed_paths $HOME/.config/composer/vendor/wp-coding-standards/wpcs
     fi
 
 script:
   - |
     if [[ ! -z "$WP_VERSION" ]] && [[ "$WP_TRAVISCI" != phpcs ]] ; then
-      $HOME/.composer/vendor/bin/phpunit
+      $HOME/.config/composer/vendor/bin/phpunit
     fi
   - |
     if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
-      $HOME/.composer/vendor/bin/phpcs
+      $HOME/.config/composer/vendor/bin/phpcs
     fi
