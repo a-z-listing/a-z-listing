@@ -94,7 +94,7 @@ class AZ_Shortcode_Tests extends WP_UnitTestCase {
 				'taxonomy' => 'post_tag',
 			)
 		);
-		
+
 		$expected = sprintf( file_get_contents( 'tests/data/populated-multiple-taxonomy-listing.txt' ), $cat_title, $cat, $tag_title, $tag );
 		$actual   = do_shortcode( '[a-z-listing display="terms" taxonomy="category,post_tag"]' );
 
@@ -186,6 +186,36 @@ class AZ_Shortcode_Tests extends WP_UnitTestCase {
 
 		$expected = sprintf( file_get_contents( 'tests/data/populated-listing-multiple-post-types.txt' ), $title1, $post1, $title2, $post2 );
 		$actual   = do_shortcode( '[a-z-listing post-type="post,page"]' );
+
+		$this->assertHTMLEquals( $expected, $actual );
+	}
+
+	public function test_populated_symbols_last_listing() {
+		$title = '%Test Page';
+		$p     = $this->factory->post->create(
+			array(
+				'post_title' => $title,
+				'post_type'  => 'page',
+			)
+		);
+
+		$expected = sprintf( file_get_contents( 'tests/data/populated-listing-symbols-last.txt' ), $title, $p );
+		$actual   = do_shortcode( '[a-z-listing]' );
+
+		$this->assertHTMLEquals( $expected, $actual );
+	}
+
+	public function test_populated_symbols_first_listing() {
+		$title = '%Test Page';
+		$p     = $this->factory->post->create(
+			array(
+				'post_title' => $title,
+				'post_type'  => 'page',
+			)
+		);
+
+		$expected = sprintf( file_get_contents( 'tests/data/populated-listing-symbols-first.txt' ), $title, $p );
+		$actual   = do_shortcode( '[a-z-listing]' );
 
 		$this->assertHTMLEquals( $expected, $actual );
 	}
