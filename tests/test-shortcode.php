@@ -214,8 +214,10 @@ class AZ_Shortcode_Tests extends WP_UnitTestCase {
 			)
 		);
 
+		add_filter( 'a_z_listing_unknown_letters_first', '__return_true' );
 		$expected = sprintf( file_get_contents( 'tests/data/populated-listing-symbols-first.txt' ), $title, $p );
 		$actual   = do_shortcode( '[a-z-listing]' );
+		remove_filter( 'a_z_listing_unknown_letters_first', '__return_true' );
 
 		$this->assertHTMLEquals( $expected, $actual );
 	}
