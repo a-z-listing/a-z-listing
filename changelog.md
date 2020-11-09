@@ -1,6 +1,5 @@
 # Full Changelog #
 
-
 ## 3.1.1 ##
 
 * Bugfix to squash a PHP deprecation warning when running PHP-7.4+
