@@ -457,8 +457,9 @@ If there is code already in your functions.php then add just the lines between `
 
 == Changelog ==
 
-= 3.1.1 =
+= 3.2.0 =
 
+* Add support for symbols-first display
 * NPM dependencies update.
 
 = 3.1.0 =
