@@ -38,6 +38,7 @@ env:
   - WP_VERSION=5.2
   - WP_VERSION=5.3
   - WP_VERSION=5.4
+  - WP_VERSION=5.5
   - WP_VERSION=latest
   - WP_VERSION=trunk
 
@@ -51,6 +52,7 @@ env:
   - WP_VERSION=5.2 WP_MULTISITE=1
   - WP_VERSION=5.3 WP_MULTISITE=1
   - WP_VERSION=5.4 WP_MULTISITE=1
+  - WP_VERSION=5.5 WP_MULTISITE=1
   - WP_VERSION=latest WP_MULTISITE=1
   - WP_VERSION=trunk WP_MULTISITE=1
 
@@ -60,6 +62,37 @@ jobs:
       env: WP_TRAVISCI=phpcs
 
   exclude:
+    # Exclude WordPress that don't support PHP 7.5
+    - php: '7.5'
+      env: WP_VERSION=5.2
+    - php: '7.5'
+      env: WP_VERSION=5.1
+    - php: '7.5'
+      env: WP_VERSION=5.0
+    - php: '7.5'
+      env: WP_VERSION=4.9
+    - php: '7.5'
+      env: WP_VERSION=4.8
+    - php: '7.5'
+      env: WP_VERSION=4.7
+    - php: '7.5'
+      env: WP_VERSION=4.6
+
+    - php: '7.5'
+      env: WP_VERSION=5.2 WP_MULTISITE=1
+    - php: '7.5'
+      env: WP_VERSION=5.1 WP_MULTISITE=1
+    - php: '7.5'
+      env: WP_VERSION=5.0 WP_MULTISITE=1
+    - php: '7.5'
+      env: WP_VERSION=4.9 WP_MULTISITE=1
+    - php: '7.5'
+      env: WP_VERSION=4.8 WP_MULTISITE=1
+    - php: '7.5'
+      env: WP_VERSION=4.7 WP_MULTISITE=1
+    - php: '7.5'
+      env: WP_VERSION=4.6 WP_MULTISITE=1
+
     # Exclude WordPress that don't support PHP 7.4
     - php: '7.4'
       env: WP_VERSION=5.2
