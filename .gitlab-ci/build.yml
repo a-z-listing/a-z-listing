@@ -3,7 +3,7 @@ build:
   image: php:7.4
   extends: .base
   script:
-    - phive install https://github.com/humbug/php-scoper/releases/download/0.13.1/php-scoper.phar --force-accept-unsigned
+    - phive install https://github.com/humbug/php-scoper/releases/download/0.13.9/php-scoper.phar --force-accept-unsigned
     - composer install --prefer-dist --no-interaction --no-progress
     - ./tools/php-scoper add-prefix
     - composer update --no-dev --optimize-autoloader --prefer-dist --no-interaction --no-progress
