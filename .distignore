@@ -8,7 +8,8 @@
 .gitlab-ci.yml
 .gitlab-ci/
 .drone*
-.github
+.github/
+.wordpress-org/
 .idea
 .jshintrc
 .travis.yml
