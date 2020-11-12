@@ -5,7 +5,7 @@ Donate Link: https://liberapay.com/diddledan/donate
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 4.6
 Requires PHP: 5.6
-Tested up to: 5.4
+Tested up to: 5.5
 Stable tag: 3.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -456,10 +456,6 @@ If there is code already in your functions.php then add just the lines between `
 2. The Widget is shown here
 
 == Changelog ==
-
-= 3.1.1 =
-
-* NPM dependencies update.
 
 = 3.1.0 =
 
