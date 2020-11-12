@@ -4,7 +4,10 @@
 .editorconfig
 .git
 .gitignore
+.gitattributes
 .gitlab-ci.yml
+.gitlab-ci/
+.drone*
 .github
 .idea
 .jshintrc
@@ -30,10 +33,12 @@ package-lock.json
 package.json
 phpcs.xml
 phpcs.xml.dist
-phpunit.xml
-phpunit.xml.dist
+phpunit*.xml
+phpunit*.xml.dist
+Dockunit.json
 README.md
 tests
 Thumbs.db
 wp-cli.local.yml
 yarn.lock
+*.msbuildproj

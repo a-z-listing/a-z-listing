@@ -7,3 +7,14 @@
 /.gitattributes export-ignore
 /.gitignore export-ignore
 /.gitlab-ci.yml export-ignore
+/.drone.jsonnet export-ignore
+/.drone.yml export-ignore
+/Dockunit.json export-ignore
+/a-z-listing.msbuildproj export-ignore
+/a-z-listing-phpunit.msbuildproj export-ignore
+/phpunit.xml export-ignore
+/phpunit.xml.dist export-ignore
+/phpunit-multisite.xml export-ignore
+/phpunit-multisite.xml.dist export-ignore
+/phpcs.xml export-ignore
+/phpcs.xml.dist export-ignore
