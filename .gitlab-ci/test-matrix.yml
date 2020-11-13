@@ -1,12 +1,8 @@
 include:
-  - project: a-z-listing/wp-a-z-listing
-    file: /.gitlab-ci/_php.yml
-  - project: a-z-listing/wp-a-z-listing
-    file: /.gitlab-ci/_phpcs.yml
-  - project: a-z-listing/wp-a-z-listing
-    file: /.gitlab-ci/_phpunit.yml
-  - project: a-z-listing/wp-a-z-listing
-    file: /.gitlab-ci/_wordpress.yml
+  - local: .gitlab-ci/_php.yml
+  - local: .gitlab-ci/_phpcs.yml
+  - local: .gitlab-ci/_phpunit.yml
+  - local: .gitlab-ci/_wordpress.yml
 
 # PHPCS
 phpcs:

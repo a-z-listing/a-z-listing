@@ -2,12 +2,9 @@ include:
   - template: Code-Quality.gitlab-ci.yml
   - template: SAST.gitlab-ci.yml
   - template: Dependency-Scanning.gitlab-ci.yml
-  - project: a-z-listing/wp-a-z-listing
-    file: /.gitlab-ci/_prereqs.yml
-  - project: a-z-listing/wp-a-z-listing
-    file: /.gitlab-ci/build.yml
-  - project: a-z-listing/wp-a-z-listing
-    file: /.gitlab-ci/test-matrix.yml
+  - local: .gitlab-ci/_prereqs.yml
+  - local: .gitlab-ci/build.yml
+  - local: .gitlab-ci/test-matrix.yml
 
 stages:
   - build
