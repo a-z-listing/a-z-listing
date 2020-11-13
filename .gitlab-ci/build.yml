@@ -25,5 +25,6 @@ build:
     expire_in: 30 days
     paths:
       - build/
-      - languages/
       - css/
+      - languages/
+      - vendor/
