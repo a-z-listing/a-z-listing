@@ -20,7 +20,7 @@
  */
 $a_z_listing_minpercol = 10;
 ?>
-<div id="<?php $a_z_query->the_instance_id; ?>" class="az-listing">
+<div id="<?php $a_z_query->the_instance_id(); ?>" class="az-listing">
 	<div class="az-letters-wrap">
 		<div class="az-letters">
 			<?php $a_z_query->the_letters(); ?>
@@ -40,15 +40,20 @@ $a_z_listing_minpercol = 10;
 						$a_z_listing_item_count / $a_z_listing_minpercol
 					);
 					?>
-					<div class="letter-section"
-						id="<?php $a_z_query->the_letter_id(); ?>">
+					<div class="letter-section" id="<?php $a_z_query->the_letter_id(); ?>">
 						<h2 class="letter-title">
 							<span>
 								<?php $a_z_query->the_letter_title(); ?>
 							</span>
 						</h2>
+<<<<<<< HEAD
 						<?php $a_z_listing_column_class = "max-$a_z_listing_num_columns-columns"; ?>
 						<ul class="columns <?php echo $a_z_listing_column_class; ?>">
+=======
+
+						<?php $column_class = "max-$num_columns-columns"; ?>
+						<ul class="az-columns <?php echo $column_class; ?>">
+>>>>>>> Update templates
 							<?php
 							while ( $a_z_query->have_items() ) :
 								$a_z_query->the_item();
@@ -60,8 +65,9 @@ $a_z_listing_minpercol = 10;
 								</li>
 							<?php endwhile; ?>
 						</ul>
+
 						<div class="back-to-top">
-							<a href="#letters">
+							<a href="#<?php $a_z_query->the_instance_id(); ?>">
 								<?php esc_html_e( 'Back to top', 'a-z-listing' ); ?>
 							</a>
 						</div>
