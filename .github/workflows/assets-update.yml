@@ -1,4 +1,5 @@
-name: Update asset/readme on WordPress.org
+name: "🚀 RELEASE: asset/readme on WordPress.org"
+
 on:
   push:
     branches:
@@ -8,9 +9,10 @@ jobs:
     name: Push to master
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+
     - name: WordPress.org plugin asset/readme update
-      uses: 10up/action-wordpress-plugin-asset-update@master
+      uses: 10up/action-wordpress-plugin-asset-update@1.4.1
       env:
         SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
         SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
