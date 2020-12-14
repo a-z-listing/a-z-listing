@@ -157,7 +157,7 @@ jobs:
     - name: Run phpunit
       run: |
         if [ ${{ matrix.multisite }} -eq 1 ]; then
-          phpunit -c phpunit-multisite.xml $GITHUB_WORKSPACE        
+          phpunit --verbose -c phpunit-multisite.xml
         else
-          phpunit $GITHUB_WORKSPACE
+          phpunit --verbose -c phpunit.xml.dist
         fi
