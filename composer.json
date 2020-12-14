@@ -20,10 +20,16 @@
             "php": "7.0"
         }
     },
+    "require": {
+        "symfony/polyfill-mbstring": "1.19"
+    },
+    "replace": {
+        "symfony/polyfill-php54": "*",
+        "symfony/polyfill-php55": "*",
+        "symfony/polyfill-php56": "*",
+        "symfony/polyfill-php70": "*"
+    },
     "autoload": {
         "psr-4": {"A_Z_Listing\\": "src/"}
-    },
-    "require": {
-        "symfony/polyfill-mbstring": "^1.13"
     }
 }
