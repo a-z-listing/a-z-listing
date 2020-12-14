@@ -104,14 +104,11 @@ jobs:
     name: phpcs
     runs-on: ubuntu-latest
     if: github.repository_owner == 'Upvision'
-    strategy:
-      matrix:
-        php: ['7.4']
     steps:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: ${{ matrix.php }}
+        php-version: '7.4'
         extensions: iconv, intl, soap, mbstring, mysql, mysqli, gd
         ini-values: phar.readonly=0
         tools: phpcs
@@ -138,10 +135,7 @@ jobs:
         - '7.2'
         - '7.3'
         - '7.4'
-<<<<<<< Updated upstream
-=======
         # - '8.0'
->>>>>>> Stashed changes
         wordpress:
         - '5.0'
         - '5.1'
