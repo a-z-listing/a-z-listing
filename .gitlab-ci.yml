@@ -7,12 +7,6 @@ include:
   - project: a-z-listing/ci-config
     file: /release-WordPress.org.yml
 
-code_quality:
-  services:
-    - name: docker:stable-dind
-      command: [--storage-driver, aufs]
-
-
 stages:
   - build
   - test
