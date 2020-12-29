@@ -123,7 +123,7 @@ class Query {
 			$this->type = 'terms';
 			if ( empty( $attributes ) ) {
 				$attributes = array( 'taxonomy' => $query );
-				$query = apply_filters( 'a_z_listing_shortcode_query_for_display__terms', array(), $attributes );
+				$query      = \apply_filters( 'a_z_listing_shortcode_query_for_display__terms', array(), $attributes );
 			}
 		} elseif ( 'terms' === $type && ! empty( $query ) ) {
 			$this->type = 'terms';
@@ -137,7 +137,7 @@ class Query {
 			if ( empty( $attributes ) ) {
 				$attributes = array( 'taxonomy' => $taxonomy );
 			}
-			$query = apply_filters( 'a_z_listing_shortcode_query_for_display__terms', $query, $attributes );
+			$query = \apply_filters( 'a_z_listing_shortcode_query_for_display__terms', $query, $attributes );
 		} else {
 			if ( empty( $type ) ) {
 				if ( isset( $attributes['display'] ) ) {
@@ -153,7 +153,7 @@ class Query {
 			 * @param array<string> $types The supported display/query types.
 			 * @return array<string> The supported display/query types.
 			 */
-			$types      = apply_filters( 'a_z_listing_shortcode_query_types', array() );
+			$types      = \apply_filters( 'a_z_listing_shortcode_query_types', array() );
 			$this->type = in_array( $type, $types, true ) ? $type : 'posts';
 
 			if ( empty( $attributes ) ) {
@@ -162,13 +162,13 @@ class Query {
 			if ( empty( $query ) ) {
 				$query = array();
 			}
-			$query = apply_filters( "a_z_listing_shortcode_query_for_display__{$this->type}", $query, $attributes );
+			$query = \apply_filters( "a_z_listing_shortcode_query_for_display__{$this->type}", $query, $attributes );
 		}
 
 		// Must be after filter 'a_z_listing_shortcode_query_for_display__$display'
 		// to correctly wire-up the query-part filters.
 		if ( ! defined( 'PHPUNIT_TEST_SUITE' ) || ! PHPUNIT_TEST_SUITE ) {
-			$this->instance_id = apply_filters( 'a_z_listing_instance_id', ++self::$num_instances );
+			$this->instance_id = \apply_filters( 'a_z_listing_instance_id', ++self::$num_instances );
 		} else {
 			$this->instance_id = 'testId';
 		}
@@ -182,7 +182,7 @@ class Query {
 		 * @param array|Object|\WP_Query  $query  The query object
 		 * @param string  $type  The type of the query. Either 'posts' or 'terms'.
 		 */
-		$query = apply_filters( 'a_z_listing_query', $query, $this->type );
+		$query = \apply_filters( 'a_z_listing_query', $query, $this->type );
 
 		/**
 		 * Modify or replace the query
@@ -192,7 +192,7 @@ class Query {
 		 * @param array|Object|\WP_Query  $query  The query object
 		 * @param string  $type  The type of the query. Either 'posts' or 'terms'.
 		 */
-		$query = apply_filters( 'a-z-listing-query', $query, $this->type ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+		$query = \apply_filters( 'a-z-listing-query', $query, $this->type ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
 		if ( is_array( $query ) && isset( $query['taxonomy'] ) ) {
 			$this->taxonomy = $query['taxonomy'];
@@ -214,7 +214,7 @@ class Query {
 		 * @param array  $query  The query.
 		 * @param string  $type  The type of the query. e.g. posts, terms, etc.
 		 */
-		$items = apply_filters( 'a_z_listing_get_cached_query', array(), (array) $query, $this->type );
+		$items = \apply_filters( 'a_z_listing_get_cached_query', array(), (array) $query, $this->type );
 
 		if ( ! is_array( $items ) || 0 === count( $items ) ) {
 			/**
@@ -224,7 +224,7 @@ class Query {
 			 * @param array $items The items.
 			 * @param array|\WP_Query $query The query.
 			 */
-			$items = apply_filters( "a_z_listing_get_items_for_display__{$this->type}", array(), $query );
+			$items = \apply_filters( "a_z_listing_get_items_for_display__{$this->type}", array(), $query );
 		}
 
 		if ( defined( 'A_Z_LISTING_LOG' ) && A_Z_LISTING_LOG ) {
@@ -239,7 +239,7 @@ class Query {
 		 * @param string $type  The query type - e.g. terms, posts, etc.
 		 * @param array  $query The query as an array.
 		 */
-		$items = apply_filters( 'a-z-listing-filter-items', $items, $this->type, (array) $query ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+		$items = \apply_filters( 'a-z-listing-filter-items', $items, $this->type, (array) $query ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
 		$this->matched_item_indices = $this->get_all_indices( $items );
 
@@ -252,7 +252,7 @@ class Query {
 			 * @param string  $type  The type of the query. e.g. posts, terms, etc.
 			 * @param array  $items  The items from query.
 			 */
-			do_action( 'a_z_listing_save_cache', (array) $query, $this->type, $this->matched_item_indices );
+			\do_action( 'a_z_listing_save_cache', (array) $query, $this->type, $this->matched_item_indices );
 		}
 	}
 
@@ -311,20 +311,20 @@ class Query {
 		 * @deprecated Use a_z_listing_sections
 		 * @see a_z_listing_sections
 		 */
-		$sections = apply_filters_deprecated( 'az_sections', array( $sections ), '1.0.0', 'a_z_listing_sections' );
+		$sections = \apply_filters_deprecated( 'az_sections', array( $sections ), '1.0.0', 'a_z_listing_sections' );
 		/**
 		 * Override the detected top-level sections for the site. Defaults to contain each page with no post-parent.
 		 *
 		 * @param array $sections The sections for the site.
 		 */
-		$sections = apply_filters( 'a_z_listing_sections', $sections );
+		$sections = \apply_filters( 'a_z_listing_sections', $sections );
 		/**
 		 * Override the detected top-level sections for the site. Defaults to contain each page with no post-parent.
 		 *
 		 * @since 1.7.1
 		 * @param array $sections The sections for the site.
 		 */
-		$sections = apply_filters( 'a-z-listing-sections', $sections ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+		$sections = \apply_filters( 'a-z-listing-sections', $sections ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
 		if ( ! $page instanceof \WP_Post ) {
 			$page = get_post( $page );
@@ -409,7 +409,7 @@ class Query {
 		}
 
 		if ( defined( 'A_Z_LISTING_LOG' ) && A_Z_LISTING_LOG > 2 ) {
-			do_action( 'a_z_listing_log', 'A-Z Listing: Complete item indices', $indexed_items );
+			\do_action( 'a_z_listing_log', 'A-Z Listing: Complete item indices', $indexed_items );
 		}
 		return $indexed_items;
 	}
@@ -454,7 +454,7 @@ class Query {
 				if ( 0 === $offset % $posts_per_page ) {
 					$q           = $this->query->query;
 					$q['offset'] = $offset * $posts_per_page;
-					$this->query = new WP_Query( $q );
+					$this->query = new \WP_Query( $q );
 				}
 				$this->alphabet[ $this->unknown_letters ] = $this->unknown_letters;
 			}
@@ -487,7 +487,7 @@ class Query {
 							 * @param string $b The second title. Converted to lower case.
 							 * @return int The new order preference: -1 if $a is less than $b. 1 if $a is greater than $b. 0 if they are identical.
 							 */
-							$sort = apply_filters(
+							$sort = \apply_filters(
 								'a_z_listing_item_sorting_comparator',
 								$default_sort,
 								$atitle,
@@ -499,7 +499,7 @@ class Query {
 							}
 
 							if ( defined( 'AZLISTINGLOG' ) && AZLISTINGLOG ) {
-								\do_action( 'log', 'A-Z Listing: value returned from `a_z_listing_item_sorting_comparator` filter sorting was not an integer', $sort, $atitle, $btitle );
+								\do_action( 'a_z_listing_log', 'A-Z Listing: value returned from `a_z_listing_item_sorting_comparator` filter sorting was not an integer', $sort, $atitle, $btitle );
 							}
 							return $default_sort;
 						}
@@ -786,7 +786,7 @@ class Query {
 	 * @return void
 	 */
 	public function the_item() {
-		$this->current_item         = $this->current_letter_items[ $this->current_item_offset ];
+		$this->current_item = $this->current_letter_items[ $this->current_item_offset ];
 		++$this->current_item_offset;
 	}
 
@@ -1061,14 +1061,14 @@ class Query {
 		 * @since 1.8.0
 		 * @param string $letter The title of the letter.
 		 */
-		$letter = apply_filters( 'the_a_z_letter_title', $letter ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+		$letter = \apply_filters( 'the_a_z_letter_title', $letter ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		/**
 		 * Modify the letter title or heading
 		 *
 		 * @since 1.8.0
 		 * @param string $letter The title of the letter.
 		 */
-		$letter = apply_filters( 'the-a-z-letter-title', $letter ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+		$letter = \apply_filters( 'the-a-z-letter-title', $letter ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
 		return $letter;
 	}
@@ -1100,15 +1100,15 @@ class Query {
 
 		if ( is_array( $item ) ) {
 			if ( 'post' === $item[0] ) {
-				return apply_filters( 'the_title', $title, $item[1] ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+				return \apply_filters( 'the_title', $title, $item[1] ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 			} elseif ( 'term' === $item[0] ) {
-				return apply_filters( 'term_name', $title, $item[1] ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+				return \apply_filters( 'term_name', $title, $item[1] ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 			}
 		} else {
 			if ( $item instanceof \WP_Post ) {
-				return apply_filters( 'the_title', $title, $item->ID ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+				return \apply_filters( 'the_title', $title, $item->ID ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 			} elseif ( $item instanceof \WP_Term ) {
-				return apply_filters( 'term_name', $title, $item->term_id ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+				return \apply_filters( 'term_name', $title, $item->term_id ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 			}
 		}
 

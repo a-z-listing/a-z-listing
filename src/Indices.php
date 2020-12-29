@@ -39,7 +39,7 @@ class Indices extends Singleton implements Extension {
 	public static function get_item_indices( array $indices, $item, string $type, Alphabet $alphabet ): array {
 		/**
 		 * Get the item object.
-		 * 
+		 *
 		 * @since 4.0.0
 		 * @param mixed The item object or ID.
 		 * @return string The item object.
@@ -48,7 +48,7 @@ class Indices extends Singleton implements Extension {
 
 		/**
 		 * Get the item permalink.
-		 * 
+		 *
 		 * @since 4.0.0
 		 * @param string The permalink.
 		 * @param mixed  The item object or ID.
@@ -58,7 +58,7 @@ class Indices extends Singleton implements Extension {
 
 		/**
 		 * Get the item title.
-		 * 
+		 *
 		 * @since 4.0.0
 		 * @param string The title.
 		 * @param mixed  The item object or ID.
@@ -68,7 +68,7 @@ class Indices extends Singleton implements Extension {
 
 		/**
 		 * Get the item title.
-		 * 
+		 *
 		 * @since 4.0.0
 		 * @param string The title.
 		 * @param mixed  The item object or ID.

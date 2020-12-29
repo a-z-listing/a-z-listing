@@ -61,7 +61,7 @@ class TermsQuery extends Query {
 
 	/**
 	 * Get the item.
-	 * 
+	 *
 	 * @param mixed $previous The previous item object.
 	 * @param mixed $item     The item object or ID.
 	 * @return \WP_Term The item object.
@@ -80,7 +80,7 @@ class TermsQuery extends Query {
 
 	/**
 	 * Get the item ID.
-	 * 
+	 *
 	 * @param int      $item_id The item ID.
 	 * @param \WP_Term $item    The item object.
 	 * @return int The item ID.
@@ -99,7 +99,7 @@ class TermsQuery extends Query {
 
 	/**
 	 * Get the item title.
-	 * 
+	 *
 	 * @param string   $title The item title.
 	 * @param \WP_Term $item  The item object.
 	 * @return string The item title.
