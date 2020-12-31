@@ -69,10 +69,10 @@ class A_Z_Listing_Widget extends WP_Widget {
 		$display_type_id   = $this->get_field_id( 'type' );
 		$display_type_name = $this->get_field_name( 'type' );
 
-		$target_post            = isset( $instance['post'] ) ? intval( $instance['post'] ) : ( isset( $instance['page'] ) ? intval( $instance['page'] ) : 0 );
+		$target_post            = isset( $instance['post'] ) ? intval( $instance['post'] ) : ( ( isset( $instance['page'] ) ? intval( $instance['page'] ) : 0 ) );
 		$target_post_id         = $this->get_field_id( 'post' );
 		$target_post_name       = $this->get_field_name( 'post' );
-		$target_post_title      = isset( $instance['target_post'] ) ? $instance['target_post'] : ( 0 < $target_post ) ? get_the_title( $target_post ) : '';
+		$target_post_title      = isset( $instance['target_post'] ) ? $instance['target_post'] : ( ( 0 < $target_post ) ? get_the_title( $target_post ) : '' );
 		$target_post_title_id   = $this->get_field_id( 'target_post_title' );
 		$target_post_title_name = $this->get_field_name( 'target_post_title' );
 
@@ -83,7 +83,7 @@ class A_Z_Listing_Widget extends WP_Widget {
 		$listing_parent_post            = isset( $instance['parent_post'] ) ? $instance['parent_post'] : '';
 		$listing_parent_post_id         = $this->get_field_id( 'parent_post' );
 		$listing_parent_post_name       = $this->get_field_name( 'parent_post' );
-		$listing_parent_post_title      = isset( $instance['parent_post_title'] ) ? $instance['parent_post_title'] : ( 0 < $listing_parent_post ) ? get_the_title( $listing_parent_post ) : '';
+		$listing_parent_post_title      = isset( $instance['parent_post_title'] ) ? $instance['parent_post_title'] : ( ( 0 < $listing_parent_post ) ? get_the_title( $listing_parent_post ) : '' );
 		$listing_parent_post_title_id   = $this->get_field_id( 'parent_post_title' );
 		$listing_parent_post_title_name = $this->get_field_name( 'parent_post_title' );
 

@@ -2,16 +2,12 @@ include:
   - template: Code-Quality.gitlab-ci.yml
   - template: SAST.gitlab-ci.yml
   - template: Dependency-Scanning.gitlab-ci.yml
-  - local: .gitlab-ci/_prereqs.yml
-  - local: .gitlab-ci/build.yml
-  - local: .gitlab-ci/test-matrix.yml
+  - project: a-z-listing/ci-config
+    file: /build-and-test.yml
+  - project: a-z-listing/ci-config
+    file: /release-WordPress.org.yml
 
 stages:
   - build
   - test
-  # - release
-
-# .release:
-#   stage: release
-#   only:
-#     - tags
+  - release
