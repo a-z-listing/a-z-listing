@@ -1,5 +1,16 @@
 # Full Changelog #
 
+
+## 3.1.1 ##
+
+* Bugfix to squash a PHP deprecation warning when running PHP-7.4+
+
+## 3.1.0 ##
+
+* Ensure paths are correct when loading PHP files.
+* Add hook to customise sorting of items within each letter.
+* Fix broken permalinks on hierarchical post-types, e.g. page.
+
 ## 3.0.2 ##
 
 * Fix for causing "This site is experiencing difficulties" errors on some sites.

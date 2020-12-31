@@ -42,7 +42,11 @@
 							<?php endwhile; ?>
 						</ul>
 
-						<div class="back-to-top"><a href="#letters"><?php _e( 'Back to top', 'a-z-listing' ); ?></a></div>
+						<div class="back-to-top">
+							<a href="#letters">
+								<?php esc_html_e( 'Back to top', 'a-z-listing' ); ?>
+							</a>
+						</div>
 					</div>
 				<?php endif; ?>
 			<?php endwhile; ?>
