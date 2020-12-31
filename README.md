@@ -14,7 +14,6 @@ Provides an A to Z index page and widget. The widget links to the index page at 
 
 ## Description ##
 
-[![Build Status](https://travis-ci.org/bowlhat/wp-a-z-listing.svg?branch=master)](https://travis-ci.org/bowlhat/wp-a-z-listing)
 [![LiberaPay](https://img.shields.io/liberapay/receives/diddledan.svg?logo=liberapay)](https://liberapay.com/diddledan/donate)
 
 Show your posts, pages, and terms alphabetically in a Rolodex-, catalogue-, or directory-style list with the A-Z Listing plugin!
