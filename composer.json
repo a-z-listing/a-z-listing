@@ -21,5 +21,8 @@
     },
     "autoload": {
         "psr-4": {"A_Z_Listing\\": "src/"}
+    },
+    "require": {
+        "phpunit/phpunit": "^6"
     }
 }

@@ -299,17 +299,17 @@ class A_Z_Listing_Widget extends WP_Widget {
 	public function update( $new_instance, $old_instance ) {
 		$instance = $old_instance;
 
-		$instance['title']             = strip_tags( $new_instance['title'] );
-		$instance['type']              = strip_tags( $new_instance['type'] );
+		$instance['title']             = wp_strip_all_tags( $new_instance['title'] );
+		$instance['type']              = wp_strip_all_tags( $new_instance['type'] );
 		$instance['post']              = (int) $new_instance['post']; // target.
-		$instance['target_post_title'] = strip_tags( $new_instance['target_post_title'] );
-		$instance['post_type']         = strip_tags( $new_instance['post_type'] );
-		$instance['taxonomy']          = strip_tags( $new_instance['taxonomy'] );
+		$instance['target_post_title'] = wp_strip_all_tags( $new_instance['target_post_title'] );
+		$instance['post_type']         = wp_strip_all_tags( $new_instance['post_type'] );
+		$instance['taxonomy']          = wp_strip_all_tags( $new_instance['taxonomy'] );
 		$instance['parent_post']       = (int) $new_instance['parent_post'];
 		$instance['all_children']      = 'on' === $new_instance['all_children'] ? 'true' : 'false';
-		$instance['parent_term']       = strip_tags( $new_instance['parent_term'] );
-		$instance['terms']             = strip_tags( $new_instance['terms'] );
-		$instance['exclude_terms']     = strip_tags( $new_instance['exclude_terms'] );
+		$instance['parent_term']       = wp_strip_all_tags( $new_instance['parent_term'] );
+		$instance['terms']             = wp_strip_all_tags( $new_instance['terms'] );
+		$instance['exclude_terms']     = wp_strip_all_tags( $new_instance['exclude_terms'] );
 		$instance['hide_empty_terms']  = 'on' === $new_instance['hide_empty_terms'] ? 'true' : 'false';
 
 		if ( empty( $new_instance['target_post_title'] ) ) {
@@ -355,7 +355,7 @@ function the_section_az_widget( $args, $instance ) {
  * @param  array $args     General widget configuration. Often shared between all widgets on the site.
  * @param  array $instance Configuration of this Widget. Unique to this invocation.
  */
-function the_section_a_z_widget( $args, $instance ) {
+function the_section_a_z_widget( $args, $instance ) { //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 	echo get_the_section_a_z_widget( $args, $instance ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
@@ -384,7 +384,7 @@ function get_the_section_az_widget( $args, $instance ) {
  * @param  array $instance Configuration of this Widget. Unique to this invocation.
  * @return  string The complete A-Z Widget HTML ready for echoing to the page.
  */
-function get_the_section_a_z_widget( $args, $instance ) {
+function get_the_section_a_z_widget( $args, $instance ) { //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 	do_action( 'log', 'A-Z Listing: Running widget' );
 
 	$instance = wp_parse_args(
@@ -508,7 +508,7 @@ function a_z_listing_autocomplete_post_titles() {
 		);
 	}
 
-	echo json_encode( $titles );
+	echo wp_json_encode( $titles );
 
 	exit();
 }

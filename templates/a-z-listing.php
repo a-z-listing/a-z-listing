@@ -18,7 +18,7 @@
  * 10 here will create two columns with 6 items in the first column and 5 items
  * in the second column.
  */
-$_a_z_listing_minpercol = 10;
+$a_z_listing_minpercol = 10;
 ?>
 <div id="az-tabs">
 	<div id="letters">
@@ -35,9 +35,9 @@ $_a_z_listing_minpercol = 10;
 				?>
 				<?php if ( $a_z_query->have_items() ) : ?>
 					<?php
-					$item_count  = $a_z_query->get_the_letter_count();
-					$num_columns = ceil(
-						$item_count / $_a_z_listing_minpercol
+					$a_z_listing_item_count  = $a_z_query->get_the_letter_count();
+					$a_z_listing_num_columns = ceil(
+						$a_z_listing_item_count / $a_z_listing_minpercol
 					);
 					?>
 					<div class="letter-section"
@@ -47,8 +47,8 @@ $_a_z_listing_minpercol = 10;
 								<?php $a_z_query->the_letter_title(); ?>
 							</span>
 						</h2>
-						<?php $column_class = "max-$num_columns-columns"; ?>
-						<ul class="columns <?php echo $column_class; ?>">
+						<?php $a_z_listing_column_class = "max-$a_z_listing_num_columns-columns"; ?>
+						<ul class="columns <?php echo $a_z_listing_column_class; ?>">
 							<?php
 							while ( $a_z_query->have_items() ) :
 								$a_z_query->the_item();
@@ -62,7 +62,7 @@ $_a_z_listing_minpercol = 10;
 						</ul>
 						<div class="back-to-top">
 							<a href="#letters">
-								<?php _e( 'Back to top', 'a-z-listing' ); ?>
+								<?php esc_html_e( 'Back to top', 'a-z-listing' ); ?>
 							</a>
 						</div>
 					</div>
