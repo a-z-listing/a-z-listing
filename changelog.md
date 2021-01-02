@@ -1,5 +1,8 @@
 # Full Changelog #
 
+## 3.1.2 ##
+
+* Ensure extra composer dependencies aren't included in distribution. Otherwise identical to 3.1.1.
 
 ## 3.1.1 ##
 
