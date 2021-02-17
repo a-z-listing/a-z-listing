@@ -489,7 +489,7 @@ This is a major version change, which means that it might break your site when y
 
 Check out the two extensions at [A-Z-Listing.com](https://a-z-listing.com/shop). These extensions provide convinience functionality. Purchasing one or both will help towards the cost of maintaining the A-Z Listing plugin.
 
-### 3.1.1 ###
+### 3.1.1 ###
 
 * Bugfix to squash a PHP deprecation warning when running PHP-7.4+
 
