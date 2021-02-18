@@ -33,11 +33,11 @@ class PostsTerms extends TermsCommon {
 	 * @param mixed  $query      The query.
 	 * @param string $display    The display/query type.
 	 * @param string $key        The name of the attribute.
-	 * @param string $value      The shortcode attribute value.
+	 * @param mixed  $value      The shortcode attribute value.
 	 * @param array  $attributes The complete set of shortcode attributes.
 	 * @return mixed The updated query.
 	 */
-	public function shortcode_query_for_display_and_attribute( $query, string $display, string $key, string $value, array $attributes ) {
+	public function shortcode_query_for_display_and_attribute( $query, string $display, string $key, $value, array $attributes ) {
 		$taxonomies = isset( $attributes['taxonomy'] ) ? Strings::maybe_mb_split( ',', $attributes['taxonomy'] ) : array();
 
 		$terms = $this->get_terms( $value, $taxonomies );

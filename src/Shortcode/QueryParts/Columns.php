@@ -16,23 +16,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 use \A_Z_Listing\Shortcode\Extension;
 
 /**
- * Alphabet Query Part extension
+ * Instance ID Query Part extension
  */
-class Alphabet extends Extension {
+class Columns extends Extension {
 	/**
 	 * The attribute for this Query Part.
 	 *
 	 * @since 4.0.0
 	 * @var string
 	 */
-	public $attribute_name = 'alphabet';
+	public $attribute_name = 'columns';
 
 	/**
-	 * The alphabet.
+	 * The instance_id.
 	 *
 	 * @var string
 	 */
-	public $alphabet = '';
+	public $columns = 3;
 
 	/**
 	 * Update the query with this extension's additional configuration.
@@ -45,17 +45,17 @@ class Alphabet extends Extension {
 	 * @return mixed The updated query.
 	 */
 	public function shortcode_query( $query, string $display, string $attribute, $value, array $attributes ) {
-		$this->alphabet = $value;
-		$this->add_hook( 'filter', 'a-z-listing-alphabet', array( $this, 'return_alphabet' ), 1, 1 );
+		$this->columns = $value;
+		$this->add_hook( 'filter', 'a_z_listing_styles', array( $this, 'return_styles' ), 10, 3 );
 		return $query;
 	}
 
 	/**
-	 * Return the Alphabet for this instance.
+	 * Return the ID for this instance.
 	 *
 	 * @return string
 	 */
-	public function return_alphabet(): string {
-		return $this->alphabet;
+	public function return_styles( $styles, $a_z_listing, $instance_id ): string {
+		return "$styles\n#a-z-listing-$instance_id { --a-z-listing-column-count: $this->columns; }";
 	}
 }

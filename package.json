@@ -7,7 +7,7 @@
     "build": "wp-scripts build ./scripts/blocks/index.js && grunt",
     "check-engines": "wp-scripts check-engines",
     "check-licenses": "wp-scripts check-licenses",
-    "env": "wp-scripts env",
+    "wp-env": "wp-env",
     "format:js": "wp-scripts format-js ./scripts",
     "lint:css": "wp-scripts lint-style ./css/editor.css ./css/style.css",
     "lint:js": "wp-scripts lint-js ./scripts",
@@ -17,6 +17,7 @@
     "start": "wp-scripts start ./scripts/blocks/index.js"
   },
   "devDependencies": {
+    "@wordpress/env": "^3.0.2",
     "@wordpress/scripts": "^13.0.3",
     "babel-core": "^6.26.3",
     "babel-plugin-transform-react-jsx": "^6.24.1",
@@ -55,6 +56,7 @@
     "@wordpress/icons": "^2.9.1",
     "@wordpress/server-side-render": "^1.20.6",
     "@wordpress/url": "^2.21.2",
+    "lodash": "^4.17.20",
     "uuid": "^8.3.2"
   }
 }

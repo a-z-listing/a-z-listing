@@ -43,7 +43,7 @@ class Taxonomy extends Extension {
 	 * @param array  $attributes The complete set of shortcode attributes.
 	 * @return string The sanitized value.
 	 */
-	public function sanitize_attribute( string $value, array $attributes ): string {
+	public function sanitize_attribute( $value, array $attributes ) {
 		$value = trim( $value );
 		return $value ? $value : '';
 	}
@@ -54,11 +54,11 @@ class Taxonomy extends Extension {
 	 * @param mixed  $query      The query.
 	 * @param string $display    The display/query type.
 	 * @param string $key        The name of the attribute.
-	 * @param string $value      The shortcode attribute value.
+	 * @param mixed  $value      The shortcode attribute value.
 	 * @param array  $attributes The complete set of shortcode attributes.
 	 * @return mixed The updated query.
 	 */
-	public function shortcode_query_for_display_and_attribute( $query, string $display, string $key, string $value, array $attributes ) {
+	public function shortcode_query_for_display_and_attribute( $query, string $display, string $key, $value, array $attributes ) {
 		$query['taxonomy'] = Strings::maybe_mb_split( ',', $value );
 		return $query;
 	}

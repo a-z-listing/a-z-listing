@@ -47,7 +47,7 @@ class GutenBlock extends Singleton implements Extension {
 
 		$script_asset_path = "$dir/build/index.asset.php";
 		if ( ! file_exists( $script_asset_path ) ) {
-			throw new Error(
+			throw new \WP_Error(
 				'You need to run `npm start` or `npm run build` for the "a-z-listing/block" block first.'
 			);
 		}

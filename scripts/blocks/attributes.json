@@ -6,6 +6,10 @@
         "type": "number",
         "default": 3
     },
+    "column-width": {
+      "type": "string",
+      "default": "33.3%"
+    },
     "display": {
         "type": "string",
         "enum": ["posts", "terms"],

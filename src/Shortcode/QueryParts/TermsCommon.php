@@ -36,7 +36,7 @@ abstract class TermsCommon extends Extension {
 	 * @param array  $taxonomies The configured taxonomies.
 	 * @return array<string> The terms.
 	 */
-	public function get_terms( string $value, array $taxonomies ): array {
+	public function get_terms( $value, array $taxonomies ): array {
 		$terms = Strings::maybe_mb_split( ',', $value );
 		$terms = array_map( 'trim', $terms );
 		$terms = array_filter( $terms );

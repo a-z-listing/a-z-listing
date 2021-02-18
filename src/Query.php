@@ -599,7 +599,7 @@ class Query {
 
 				$ret .= '<li class="' . esc_attr( implode( ' ', $classes ) ) . '">';
 				if ( ! empty( $indices[ $character ] ) ) {
-					$ret .= '<a href="' . esc_url( "$target#letter-$id-{$this->instance_id}" ) . '">';
+					$ret .= '<a href="' . esc_url( "$target#a-z-listing-letter-$id-{$this->instance_id}" ) . '">';
 				}
 				$ret .= '<span>' . esc_html( $that->get_the_letter_title( $character ) ) . '</span>';
 				if ( ! empty( $indices[ $character ] ) ) {
@@ -655,12 +655,17 @@ class Query {
 			);
 		}
 
-		$template = locate_template( $templates );
-		if ( empty( $template ) ) {
-			$template = A_Z_LISTING_DEFAULT_TEMPLATE;
-		}
+		/**
+		 * Filter the stylesheet applied to the listing
+		 *
+		 * @param string                  $styles      The styles
+		 * @param A_Z_Listing\A_Z_Listing $a_z_query   The A-Z Listing Query object
+		 * @param string                  $instance_id The instance ID
+		 */
+		$styles = esc_html( apply_filters( 'a_z_listing_styles', '', $this, $this->instance_id ) );
+		echo "<style>\n$styles\n</style>";
 
-		_do_template( $this, $template );
+		_do_template( $this, locate_template( $templates ) );
 
 		wp_reset_postdata();
 	}
@@ -686,7 +691,7 @@ class Query {
 	 * @return string The instance number
 	 */
 	public function get_the_instance_id() {
-		return "az-listing-{$this->instance_id}";
+		return "a-z-listing-{$this->instance_id}";
 	}
 
 	/**
@@ -969,7 +974,7 @@ class Query {
 		if ( $this->alphabet->get_unknown_letter() === $id ) {
 			$id = '_';
 		}
-		return "letter-$id-{$this->instance_id}";
+		return "a-z-listing-letter-$id-{$this->instance_id}";
 	}
 
 	/**

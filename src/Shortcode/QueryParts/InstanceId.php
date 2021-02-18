@@ -1,6 +1,6 @@
 <?php
 /**
- * Alphabet Query Part.
+ * Instance ID Query Part.
  *
  * @package a-z-listing
  */
@@ -40,11 +40,11 @@ class InstanceId extends Extension {
 	 * @param mixed  $query      The query.
 	 * @param string $display    The display/query type.
 	 * @param string $attribute  The name of the attribute.
-	 * @param string $value      The shortcode attribute value.
+	 * @param mixed  $value      The shortcode attribute value.
 	 * @param array  $attributes The complete set of shortcode attributes.
 	 * @return mixed The updated query.
 	 */
-	public function shortcode_query( $query, string $display, string $attribute, string $value, array $attributes ) {
+	public function shortcode_query( $query, string $display, string $attribute, $value, array $attributes ) {
 		$this->instance_id = $value;
 		$this->add_hook( 'filter', 'a_z_listing_instance_id', array( $this, 'return_instance_id' ), 10, 1 );
 		return $query;

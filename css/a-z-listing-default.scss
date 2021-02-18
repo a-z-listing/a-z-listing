@@ -79,7 +79,7 @@ div.letter-section {
 		}
 		@for $column from 2 to 16 {
 			&.max-#{$column}-columns {
-				column-count: $column;
+				column-count: max(var(--a-z-listing-column-count), $column);
 				// Legacy
 				max-width:
 					($column * $defaultColumnWidth)
