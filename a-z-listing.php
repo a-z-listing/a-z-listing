@@ -7,7 +7,7 @@
  * Author URI:      https://bowlhat.net/
  * Text Domain:     a-z-listing
  * Domain Path:     /languages
- * Version:         3.1.0
+ * Version:         3.1.2
  *
  * @package         A_Z_Listing
  */
@@ -26,8 +26,8 @@ require __DIR__ . '/vendor/autoload.php';
  * Initialize the plugin.
  */
 function a_z_listing_init() {
-	\A_Z_Listing\Shortcode::instance()->activate( __FILE__, [] )->initialize();
-	\A_Z_Listing\Indices::instance()->activate( __FILE__, [] )->initialize();
+	\A_Z_Listing\Shortcode::instance()->activate( __FILE__, array() )->initialize();
+	\A_Z_Listing\Indices::instance()->activate( __FILE__, array() )->initialize();
 }
 
 /**

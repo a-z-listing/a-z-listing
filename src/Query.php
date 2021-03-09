@@ -1070,11 +1070,11 @@ class Query {
 		}
 		if ( is_string( $current_item ) ) {
 			$item = explode( ':', $current_item, 2 );
-			if ( isset( $item[0] ) && in_array( $item[0], [ 'post', 'term' ], true ) ) {
+			if ( isset( $item[0] ) && in_array( $item[0], array( 'post', 'term' ), true ) ) {
 				return $item[0];
 			}
 		}
-		if ( in_array( $this->type, [ 'terms', 'posts' ], true ) ) {
+		if ( in_array( $this->type, array( 'terms', 'posts' ), true ) ) {
 			return 'terms' === $this->type ? 'term' : 'post';
 		}
 		return new \WP_Error( 'no-type', 'Unknown item type.' );
