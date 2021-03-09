@@ -17,14 +17,12 @@ jobs:
         php-version: ${{ matrix.php }}
         extensions: iconv intl xml soap opcache pdo pdo_mysql mysqli mbstring gd
         ini-values: phar.readonly=0
-        tools: phpcs
-
-    - name: Configure PHPCS sniffs
-      run: |
-        git clone -b master --depth 1 https://github.com/WordPress/WordPress-Coding-Standards.git /tmp/sniffs
-        phpcs --config-set installed_paths /tmp/sniffs
 
     - uses: actions/checkout@v2
 
+    - name: Run composer install
+      run: |
+        composer install
+
     - name: Run PHPCS Coding Standards
-      run: phpcs $GITHUB_WORKSPACE
+      run: ./vendor/bin/phpcs $GITHUB_WORKSPACE

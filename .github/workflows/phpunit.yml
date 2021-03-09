@@ -237,7 +237,7 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: '7.4'
-        extensions: iconv, intl, soap, mbstring, mysql, mysqli, gd
+        extensions: iconv, intl, soap, mbstring, mysql, mysqli, gd, xdebug
         ini-values: phar.readonly=0
         tools: phpunit:6.5.5
 
@@ -254,4 +254,4 @@ jobs:
         CC_TEST_REPORTER_ID: 6d7dda243546c14b3eb3897386f7f8a7807cbe0984a8d51ac9c1cf37a07a4e55
       with:
         coverageCommand: phpunit --verbose -c phpunit.xml.dist --coverage-clover clover.xml
-        coverateLocations: ${{github.workspace}}/clover.xml:clover
+        coverageLocations: ${{github.workspace}}/clover.xml:clover
