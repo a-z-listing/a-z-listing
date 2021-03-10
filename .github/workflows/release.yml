@@ -281,10 +281,10 @@ jobs:
 
     - name: Copy plugin to A-Z-Listing.com
       run: rsync -rv --chmod=u=rwX,go=rX --exclude-from=.distignore --delete ./ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.SITE_DIRECTORY }}/wp-content/plugins/a-z-listing/
-    
+
     - name: Generate new documentation
       run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -- wp --path=${{ secrets.SITE_DIRECTORY }} parser export ${{ secrets.SITE_DIRECTORY }}/wp-content/plugins/a-z-listing a-z-listing.parsed.json
-    
+
     - name: Delete old documentation
       run: >
         ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -- wp --path=${{ secrets.SITE_DIRECTORY }} post list --post_type=wp-parser-method |
