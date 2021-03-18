@@ -38,7 +38,7 @@ class SymbolsFirst extends Extension {
 	 * @return mixed The updated query.
 	 */
 	public function shortcode_query( $query, string $display, string $attribute, $value, array $attributes ) {
-		if ( \a_z_listing_is_truthy( $value ) ) {
+		if ( a_z_listing_is_truthy( $value ) ) {
 			$this->add_hook( 'filter', 'a_z_listing_unknown_letter_is_first', '__return_true', 10, 1 );
 		} else {
 			$this->add_hook( 'filter', 'a_z_listing_unknown_letter_is_first', '__return_false', 10, 1 );
