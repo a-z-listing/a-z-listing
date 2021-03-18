@@ -45,11 +45,15 @@ class GutenBlock extends Singleton implements Extension {
 	final public function initialize() {
 		$dir = dirname( __DIR__ );
 
-		$script_asset_path = "$dir/build/index.asset.php";
+        $script_asset_path         = "{$dir}/index.asset.php";
+        $script_asset_path_develop = "{$dir}/build/index.asset.php";
 		if ( ! file_exists( $script_asset_path ) ) {
-			throw new \Error(
-				'You need to run `npm start` or `npm run build` for the "a-z-listing/block" block first.'
-			);
+			$script_asset_path = $script_asset_path_develop;
+			if ( ! file_exists( $script_asset_path ) ) {
+				throw new \Error(
+					'You need to run `npm start` or `npm run build` for the "a-z-listing/block" block first.'
+				);
+			}
 		}
 		$index_js     = 'build/index.js';
 		$script_asset = require $script_asset_path;
