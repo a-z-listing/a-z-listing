@@ -27,21 +27,15 @@ if ( ! defined( 'A_Z_LISTING_LOG' ) ) {
 	define( 'A_Z_LISTING_LOG', false );
 }
 
-if ( file_exists( __DIR__ . '/build/vendor/scoper-autoload.php' ) ) {
-	require_once __DIR__ . '/build/vendor/scoper-autoload.php';
-} elseif ( file_exists( __DIR__ . '/build/vendor/autoload.php' ) ) {
-	require_once __DIR__ . '/build/vendor/autoload.php';
-} else {
-	require_once __DIR__ . '/vendor/autoload.php';
-}
+require_once __DIR__ . '/build/vendor/scoper-autoload.php';
 
-require __DIR__ . '/functions/i18n.php';
-require __DIR__ . '/functions/health-check.php';
-require __DIR__ . '/functions/helpers.php';
-require __DIR__ . '/functions/styles.php';
-require __DIR__ . '/functions/scripts.php';
-require __DIR__ . '/functions/enqueues.php';
-require __DIR__ . '/widgets/class-a-z-listing-widget.php';
+require_once __DIR__ . '/functions/i18n.php';
+require_once __DIR__ . '/functions/health-check.php';
+require_once __DIR__ . '/functions/helpers.php';
+require_once __DIR__ . '/functions/styles.php';
+require_once __DIR__ . '/functions/scripts.php';
+require_once __DIR__ . '/functions/enqueues.php';
+require_once __DIR__ . '/widgets/class-a-z-listing-widget.php';
 
 /**
  * Initialize the plugin.
