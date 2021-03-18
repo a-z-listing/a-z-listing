@@ -72,7 +72,7 @@ class Alphabet {
 		 * @since 1.7.1
 		 * @param string $alphabet The $alphabet
 		 */
-		$alphabet = apply_filters( 'a_z_listing_alphabet', $alphabet );
+		$alphabet = \apply_filters( 'a_z_listing_alphabet', $alphabet );
 		/**
 		 * Filters the alphabet. The string should contain groups of similar or
 		 * identical characters separated by commas. The first character in each
@@ -81,7 +81,7 @@ class Alphabet {
 		 * @since 1.7.1
 		 * @param string $alphabet The $alphabet.
 		 */
-		$alphabet = apply_filters( 'a-z-listing-alphabet', $alphabet ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+		$alphabet = \apply_filters( 'a-z-listing-alphabet', $alphabet ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
 		/**
 		 * Specifies the character used for all non-alphabetic titles, such as
@@ -91,7 +91,7 @@ class Alphabet {
 		 * @since 1.7.1
 		 * @param string $non_alpha_char The character for non-alphabetic post titles.
 		 */
-		$others = apply_filters( 'a_z_listing_non_alpha_char', $others );
+		$others = \apply_filters( 'a_z_listing_non_alpha_char', $others );
 		/**
 		 * Specifies the character used for all non-alphabetic titles, such as numeric
 		 * titles in the default setup for English. Defaults to '#' unless overridden
@@ -100,7 +100,7 @@ class Alphabet {
 		 * @since 1.7.1
 		 * @param string $non_alpha_char The character for non-alphabetic post titles.
 		 */
-		$others = apply_filters( 'a-z-listing-non-alpha-char', $others ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+		$others = \apply_filters( 'a-z-listing-non-alpha-char', $others ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
 		$alphabet_groups = explode( ',', $alphabet );
 		if ( defined( 'A_Z_LISTING_LOG' ) && A_Z_LISTING_LOG > 1 ) {
@@ -144,7 +144,7 @@ class Alphabet {
 		}
 
 		$this->unknown_letter          = $others;
-		$this->unknown_letter_is_first = ! ! apply_filters( 'a_z_listing_unknown_letter_is_first', false );
+		$this->unknown_letter_is_first = ! ! \apply_filters( 'a_z_listing_unknown_letter_is_first', false );
 		$this->alphabet_keys           = array_values( array_unique( $letters ) );
 		$this->keyed_alphabet          = $letters;
 	}

@@ -76,7 +76,7 @@ class GutenBlock extends Singleton implements Extension {
 		);
 
 		$attributes = json_decode( file_get_contents( A_Z_LISTING_PLUGIN_DIR . '/scripts/blocks/attributes.json' ), true );
-		$attributes = apply_filters( 'a_z_listing_get_gutenberg_attributes', $attributes );
+		$attributes = \apply_filters( 'a_z_listing_get_gutenberg_attributes', $attributes );
 
 		register_block_type(
 			'a-z-listing/block',
