@@ -40,7 +40,6 @@ class Shortcode extends Singleton implements Extension {
 	 * @suppress PhanPluginPossiblyStaticPublicMethod
 	 */
 	public function handle( $attributes = array() ): string {
-		error_log( print_r( $attributes, true ) );
 		/**
 		 * Run extensions.
 		 */

@@ -27,6 +27,9 @@ if ( ! defined( 'A_Z_LISTING_LOG' ) ) {
 	define( 'A_Z_LISTING_LOG', false );
 }
 
+define( 'A_Z_LISTING_PLUGIN_DIR', __DIR__ );
+define( 'A_Z_LISTING_DEFAULT_TEMPLATE', __DIR__ . '/templates/a-z-listing.php' );
+
 require_once __DIR__ . '/build/vendor/scoper-autoload.php';
 
 require_once __DIR__ . '/functions/i18n.php';

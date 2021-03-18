@@ -43,23 +43,17 @@ class GutenBlock extends Singleton implements Extension {
 	 * @throws Error When the plugin has not been correctly built.
 	 */
 	final public function initialize() {
-		$dir = dirname( __DIR__ );
-
-        $script_asset_path         = "{$dir}/index.asset.php";
-        $script_asset_path_develop = "{$dir}/build/index.asset.php";
+        $script_asset_path = A_Z_LISTING_PLUGIN_DIR . '/build/index.asset.php';
 		if ( ! file_exists( $script_asset_path ) ) {
-			$script_asset_path = $script_asset_path_develop;
-			if ( ! file_exists( $script_asset_path ) ) {
-				throw new \Error(
-					'You need to run `npm start` or `npm run build` for the "a-z-listing/block" block first.'
-				);
-			}
+			throw new \Error(
+				'You need to run `npm start` or `npm run build` for the "a-z-listing/block" block first.'
+			);
 		}
 		$index_js     = 'build/index.js';
 		$script_asset = require $script_asset_path;
 		wp_register_script(
 			'a-z-listing-block-editor',
-			plugins_url( $index_js, __DIR__ ),
+			plugins_url( $index_js, A_Z_LISTING_PLUGIN_DIR ),
 			$script_asset['dependencies'],
 			A_Z_LISTING_VERSION,
 			true
@@ -68,7 +62,7 @@ class GutenBlock extends Singleton implements Extension {
 		$editor_css = 'css/editor.css';
 		wp_register_style(
 			'a-z-listing-block-editor',
-			plugins_url( $editor_css, __DIR__ ),
+			plugins_url( $editor_css, A_Z_LISTING_PLUGIN_DIR ),
 			array(),
 			A_Z_LISTING_VERSION
 		);
@@ -76,12 +70,12 @@ class GutenBlock extends Singleton implements Extension {
 		$style_css = 'css/a-z-listing-default.css';
 		wp_register_style(
 			'a-z-listing-block',
-			plugins_url( $style_css, __DIR__ ),
+			plugins_url( $style_css, A_Z_LISTING_PLUGIN_DIR ),
 			array(),
 			A_Z_LISTING_VERSION
 		);
 
-		$attributes = json_decode( file_get_contents( plugin_dir_path( __DIR__ ) . '/scripts/blocks/attributes.json' ), true );
+		$attributes = json_decode( file_get_contents( A_Z_LISTING_PLUGIN_DIR . '/scripts/blocks/attributes.json' ), true );
 		$attributes = apply_filters( 'a_z_listing_get_gutenberg_attributes', $attributes );
 
 		register_block_type(

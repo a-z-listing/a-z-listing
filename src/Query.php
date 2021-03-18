@@ -13,8 +13,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'A_Z_LISTING_DEFAULT_TEMPLATE', plugin_dir_path( __DIR__ ) . 'templates/a-z-listing.php' );
-
 /**
  * The main A-Z Query class
  *
