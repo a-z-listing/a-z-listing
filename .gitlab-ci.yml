@@ -14,3 +14,17 @@ stages:
   - test
   - release
 
+update-docs-on-release:
+  stage: release
+  image: registry.gitlab.com/a-z-listing/ci-config/php:7.4
+  only:
+    - tags
+  before_script:
+    - mkdir -p $HOME/.ssh && cp known_hosts $HOME/.ssh/ && touch $HOME/.ssh/id_rsa && chmod 600 $HOME/.ssh/id_rsa && echo "$SSH_PRIVATE_KEY" > $HOME/.ssh/id_rsa
+  script:
+    - >-
+      wp --ssh=$SSH_USERNAME@$SSH_HOST:$SITE_DIRECTORY post delete
+      $(wp --ssh=$SSH_USERNAME@$SSH_HOST:$SITE_DIRECTORY post list
+        --post_type=wp-parser-function,wp-parser-class,wp-parser-hook,wp-parser-method
+        --format=ids)
+    - wp --ssh=$SSH_USERNAME@$SSH_HOST:$SITE_DIRECTORY parser create wp-content/plugins/a-z-listing
