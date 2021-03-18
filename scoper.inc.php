@@ -26,6 +26,7 @@ return [
                 'tests',
                 'Tests',
                 'vendor-bin',
+                'composer',
             ])
             ->in('vendor'),
         Finder::create()->append([
@@ -48,7 +49,7 @@ return [
     // For more see: https://github.com/humbug/php-scoper#patchers
     'patchers' => [
         function (string $filePath, string $prefix, string $contents): string {
-            $contents = str_replace( "'Composer\\\\Autoload\\\\ClassLoader'", "'$prefix\\\\Composer\\\\Autoload\\\\ClassLoader'", $contents );
+            // $contents = str_replace( "'Composer\\\\Autoload\\\\ClassLoader'", "'$prefix\\\\Composer\\\\Autoload\\\\ClassLoader'", $contents );
             return $contents;
         },
         function (string $filePath, string $prefix, string $contents): string {
