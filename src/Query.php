@@ -295,7 +295,7 @@ class Query {
 	protected static function get_section( $page = 0 ) {
 		global $post;
 
-		$pages = \get_pages( array( 'parent' => 0 ) );
+		$pages = get_pages( array( 'parent' => 0 ) );
 
 		$sections = array_map(
 			function( \WP_Post $item ): string {
@@ -809,10 +809,10 @@ class Query {
 
 				if ( isset( $item[1] ) ) {
 					if ( 'term' === $item[0] ) {
-						return \get_term( intval( $item[1] ) );
+						return get_term( intval( $item[1] ) );
 					}
 					if ( 'post' === $item[0] ) {
-						$post = \get_post( intval( $item[1] ) ); //phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+						$post = get_post( intval( $item[1] ) ); //phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 						\setup_postdata( $post );
 						return $post;
 					}
@@ -844,9 +844,9 @@ class Query {
 			$item = explode( ':', $this->current_item['item'], 2 );
 
 			if ( 'term' === $item[0] ) {
-				return \get_term_meta( intval( $item[1] ), $key, $single );
+				return get_term_meta( intval( $item[1] ), $key, $single );
 			} elseif ( 'post' === $item[0] ) {
-				return \get_post_meta( intval( $item[1] ), $key, $single );
+				return get_post_meta( intval( $item[1] ), $key, $single );
 			}
 		} elseif ( $this->current_item['item'] instanceof \WP_Term ) {
 			return get_term_meta( $this->current_item['item']->term_id, $key, $single );
@@ -878,7 +878,7 @@ class Query {
 			$item = explode( ':', $this->current_item['item'], 2 );
 			$term = null;
 			if ( 'term' === $item[0] ) {
-				$term = \get_term( intval( $item[1] ) );
+				$term = get_term( intval( $item[1] ) );
 				if ( ! empty( $term ) ) {
 					return $term->count;
 				}
