@@ -45,7 +45,7 @@ class Shortcode extends Singleton implements Extension {
 		 */
 		do_action( 'a_z_listing_shortcode_start', $attributes );
 
-		$defaults   = \apply_filters(
+		$defaults   = apply_filters(
 			'a_z_listing_get_shortcode_attributes',
 			array(
 				'display'          => 'posts',
@@ -64,9 +64,9 @@ class Shortcode extends Singleton implements Extension {
 		);
 
 		foreach ( $attributes as $attribute => &$value ) {
-			$value = \apply_filters( "a_z_listing_sanitize_shortcode_attribute__$attribute", $value, $attributes );
+			$value = apply_filters( "a_z_listing_sanitize_shortcode_attribute__$attribute", $value, $attributes );
 		}
-		$attributes = \apply_filters( 'a_z_listing_sanitize_shortcode_attributes', $attributes );
+		$attributes = apply_filters( 'a_z_listing_sanitize_shortcode_attributes', $attributes );
 
 		$grouping      = $attributes['grouping'];
 		$group_numbers = false;
