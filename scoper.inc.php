@@ -59,14 +59,9 @@ return [
             $contents = str_replace( '\A_Z_Listing\WP_Error', '\WP_Error', $contents );
             return $contents;
         },
-        function (string $filePath, string $prefix, string $contents): string {
-            // $contents = str_replace( 'A_Z_Listing\mb_str_split', 'mb_str_split', $contents );
-            // $contents = str_replace( 'return \A_Z_Listing\mb_str_split(...func_get_args())', 'return p::mb_str_split($string, $split_length, $encoding)', $contents );
-            // $contents = str_replace( '\Symfony\Polyfill\Mbstring\Mbstring::', 'p::', $contents );
-            // $contents = str_replace( "'\\\\Symfony\\\\Polyfill\\\\Mbstring\\\\Mbstring'", "'\\\\$prefix\\\\Symfony\\\\Polyfill\\\\Mbstring\\\\Mbstring'", $contents );
-            // $contents = str_replace( '\A_Z_Listing\apcu_fetch', '\apcu_fetch', $contents );
-            return $contents;
-        },
+        // function (string $filePath, string $prefix, string $contents): string {
+        //     return $contents;
+        // },
     ],
 
     // PHP-Scoper's goal is to make sure that all code for a project lies in a distinct PHP namespace. However, you
