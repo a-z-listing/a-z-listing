@@ -53,10 +53,10 @@ return [
             return $contents;
         },
         function (string $filePath, string $prefix, string $contents): string {
-            // $contents = str_replace( '\A_Z_Listing\WP_Post', '\WP_Post', $contents );
-            // $contents = str_replace( '\A_Z_Listing\WP_Term', '\WP_Term', $contents );
-            // $contents = str_replace( '\A_Z_Listing\WP_Query', '\WP_Query', $contents );
-            // $contents = str_replace( '\A_Z_Listing\WP_Error', '\WP_Error', $contents );
+            $contents = str_replace( '\A_Z_Listing\WP_Post', '\WP_Post', $contents );
+            $contents = str_replace( '\A_Z_Listing\WP_Term', '\WP_Term', $contents );
+            $contents = str_replace( '\A_Z_Listing\WP_Query', '\WP_Query', $contents );
+            $contents = str_replace( '\A_Z_Listing\WP_Error', '\WP_Error', $contents );
             return $contents;
         },
         function (string $filePath, string $prefix, string $contents): string {
