@@ -6,7 +6,7 @@
 **Requires at least:** 5.0  
 **Requires PHP:** 7.0  
 **Tested up to:** 5.6  
-**Stable tag:** 3.1.1  
+**Stable tag:** 3.1.2  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -488,6 +488,14 @@ This is a major version change, which means that it might break your site when y
 #### EXTENSIONS ####
 
 Check out the two extensions at [A-Z-Listing.com](https://a-z-listing.com/shop). These extensions provide convinience functionality. Purchasing one or both will help towards the cost of maintaining the A-Z Listing plugin.
+
+### 3.1.2 ###
+
+* Ensure extra composer dependencies aren't included in distribution. Otherwise identical to 3.1.1.
+
+### 3.1.1 ###
+
+* Bugfix to squash a PHP deprecation warning when running PHP-7.4+
 
 ### 3.1.1 ###
 

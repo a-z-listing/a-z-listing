@@ -21,6 +21,10 @@ This is a major version change, which means that it might break your site when y
 * Use php-scoper to reduce conflicts with other plugins
 * Update NPM dependencies
 
+## 3.1.2 ##
+
+* Ensure extra composer dependencies aren't included in distribution. Otherwise identical to 3.1.1.
+
 ## 3.1.1 ##
 
 * Bugfix to squash a PHP deprecation warning when running PHP-7.4+
