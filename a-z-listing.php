@@ -27,11 +27,21 @@ if ( ! defined( 'A_Z_LISTING_LOG' ) ) {
 	define( 'A_Z_LISTING_LOG', false );
 }
 
-if ( file_exists( __DIR__ . '/build/vendor/autoload.php' ) ) {
-	require __DIR__ . '/build/vendor/autoload.php';
+if ( file_exists( __DIR__ . '/build/vendor/scoper-autoload.php' ) ) {
+	require_once __DIR__ . '/build/vendor/scoper-autoload.php';
+} elseif ( file_exists( __DIR__ . '/build/vendor/autoload.php' ) ) {
+	require_once __DIR__ . '/build/vendor/autoload.php';
 } else {
-	require __DIR__ . '/vendor/autoload.php';
+	require_once __DIR__ . '/vendor/autoload.php';
 }
+
+require __DIR__ . '/functions/i18n.php';
+require __DIR__ . '/functions/health-check.php';
+require __DIR__ . '/functions/helpers.php';
+require __DIR__ . '/functions/styles.php';
+require __DIR__ . '/functions/scripts.php';
+require __DIR__ . '/functions/enqueues.php';
+require __DIR__ . '/widgets/class-a-z-listing-widget.php';
 
 /**
  * Initialize the plugin.
@@ -63,22 +73,4 @@ function a_z_listing_init() {
 	\A_Z_Listing\Shortcode\QueryParts\Taxonomy::instance()->activate( __FILE__ )->initialize();
 	\A_Z_Listing\Shortcode\QueryParts\TermsTerms::instance()->activate( __FILE__ )->initialize();
 }
-
-/**
- * Load all the plugin code.
- *
- * @return void
- */
-function a_z_listing_plugins_loaded() {
-	require __DIR__ . '/functions/i18n.php';
-	require __DIR__ . '/functions/health-check.php';
-	require __DIR__ . '/functions/helpers.php';
-	require __DIR__ . '/functions/styles.php';
-	require __DIR__ . '/functions/scripts.php';
-	require __DIR__ . '/functions/enqueues.php';
-
-	require __DIR__ . '/widgets/class-a-z-listing-widget.php';
-
-	add_action( 'init', 'a_z_listing_init', 5 );
-}
-add_action( 'plugins_loaded', 'a_z_listing_plugins_loaded', 5 );
+add_action( 'init', 'a_z_listing_init', 5 );
