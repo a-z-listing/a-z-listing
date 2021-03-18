@@ -1,5 +1,6 @@
 @import "mixins.scss";
 
+$defaultColumnCount: 3;
 $defaultColumnWidth: 15em;
 $defaultColumnGap: 0.6em;
 
@@ -79,7 +80,7 @@ div.letter-section {
 		}
 		@for $column from 2 to 16 {
 			&.max-#{$column}-columns {
-				column-count: max(var(--a-z-listing-column-count), $column);
+				column-count: unquote('min(var(--a-z-listing-column-count, #{$defaultColumnCount}), #{$column})');
 				// Legacy
 				max-width:
 					($column * $defaultColumnWidth)
