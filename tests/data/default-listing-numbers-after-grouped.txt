@@ -1,3 +1,4 @@
+<style></style>
 <div id="az-listing-testId" class="az-listing">
     <div class="az-letters-wrap">
         <div class="az-letters">
