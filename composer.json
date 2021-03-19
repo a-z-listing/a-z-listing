@@ -31,7 +31,7 @@
     },
     "autoload": {
         "psr-4": {
-            "A_Z_Listing\\A_Z_Listing\\": "src\/"
+            "A_Z_Listing\\": "src\/"
         }
     }
 }

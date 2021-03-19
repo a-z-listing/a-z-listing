@@ -36,8 +36,12 @@ $a_z_listing_minpercol = 10;
 				<?php if ( $a_z_query->have_items() ) : ?>
 					<?php
 					$a_z_listing_item_count  = $a_z_query->get_the_letter_items_count();
-					$a_z_listing_num_columns = ceil(
-						$a_z_listing_item_count / $a_z_listing_minpercol
+					$a_z_listing_num_columns = max(
+						1,
+						min(
+							16,
+							ceil($a_z_listing_item_count / $a_z_listing_minpercol)
+						)
 					);
 					?>
 					<div class="letter-section" id="<?php $a_z_query->the_letter_id(); ?>">

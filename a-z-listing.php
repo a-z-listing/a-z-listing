@@ -27,10 +27,14 @@ if ( ! defined( 'A_Z_LISTING_LOG' ) ) {
 	define( 'A_Z_LISTING_LOG', false );
 }
 
-define( 'A_Z_LISTING_PLUGIN_DIR', __DIR__ );
+define( 'A_Z_LISTING_PLUGIN_FILE', __FILE__ );
 define( 'A_Z_LISTING_DEFAULT_TEMPLATE', __DIR__ . '/templates/a-z-listing.php' );
 
-require_once __DIR__ . '/build/vendor/scoper-autoload.php';
+if ( file_exists( __DIR__ . '/build/vendor/scoper-autoload.php' ) ) {
+	require_once __DIR__ . '/build/vendor/scoper-autoload.php';
+} else {
+	require_once __DIR__ . '/vendor/autoload.php';
+}
 
 require_once __DIR__ . '/functions/i18n.php';
 require_once __DIR__ . '/functions/health-check.php';
@@ -56,6 +60,9 @@ function a_z_listing_init() {
 
 	// Shortcode attribute handlers.
 	\A_Z_Listing\Shortcode\QueryParts\Alphabet::instance()->activate( __FILE__ )->initialize();
+	\A_Z_Listing\Shortcode\QueryParts\Columns::instance()->activate( __FILE__ )->initialize();
+	\A_Z_Listing\Shortcode\QueryParts\ColumnGap::instance()->activate( __FILE__ )->initialize();
+	\A_Z_Listing\Shortcode\QueryParts\ColumnWidth::instance()->activate( __FILE__ )->initialize();
 	\A_Z_Listing\Shortcode\QueryParts\ExcludePosts::instance()->activate( __FILE__ )->initialize();
 	\A_Z_Listing\Shortcode\QueryParts\ExcludeTerms::instance()->activate( __FILE__ )->initialize();
 	\A_Z_Listing\Shortcode\QueryParts\HideEmpty_Deprecated::instance()->activate( __FILE__ )->initialize();

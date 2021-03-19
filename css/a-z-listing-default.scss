@@ -58,8 +58,10 @@ div.letter-section {
 		float: initial;
 		box-sizing: border-box;
 		line-height: 1.6em;
+		column-count: $defaultColumnCount;
 		column-gap: $defaultColumnGap;
 		column-width: $defaultColumnWidth;
+		column-count: var(--a-z-listing-column-count, #{$defaultColumnCount});
 		column-gap: var(--a-z-listing-column-gap, #{$defaultColumnGap});
 		column-width: var(--a-z-listing-column-width, #{$defaultColumnWidth});
 
@@ -70,15 +72,7 @@ div.letter-section {
 			display: block;
 		}
 
-		&.max-0-columns,
-		&.max-1-columns {
-			column-count: 1;
-			// Legacy
-			max-width: $defaultColumnWidth + $defaultColumnGap;
-			// Browsers that support calc() and var()
-			max-width: calc(var(--a-z-listing-column-width, #{$defaultColumnWidth}) + var(--a-z-listing-defualt-column-gap, #{$defaultColumnGap}));
-		}
-		@for $column from 2 to 16 {
+		@for $column from 1 to 17 {
 			&.max-#{$column}-columns {
 				column-count: unquote('min(var(--a-z-listing-column-count, #{$defaultColumnCount}), #{$column})');
 				// Legacy

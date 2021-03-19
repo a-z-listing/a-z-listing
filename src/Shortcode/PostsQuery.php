@@ -40,10 +40,19 @@ class PostsQuery extends Query {
 		add_filter( 'posts_fields', array( $this, 'wp_query_fields' ), 10, 2 );
 		if ( $query instanceof \WP_Query ) {
 			$items = $query->posts;
-		} elseif ( isset( $query['child_of'] ) ) {
-			$items = get_pages( $query );
 		} else {
-			$items = ( new \WP_Query( $query ) )->posts;
+			$query = wp_parse_args(
+				$query,
+				array(
+					'posts_per_page' => -1,
+					'nopaging'       => true,
+				)
+			);
+			if ( isset( $query['child_of'] ) ) {
+				$items = get_pages( $query );
+			} else {
+				$items = ( new \WP_Query( $query ) )->posts;
+			}
 		}
 		remove_filter( 'posts_fields', array( $this, 'wp_query_fields' ) );
 

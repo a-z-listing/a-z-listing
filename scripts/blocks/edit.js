@@ -109,14 +109,15 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 		}
 	} );
 
-	const { postTypes } = useSelect( ( select ) => {
-		const { getPostTypes } = select( coreStore );
+	const { postTypes, allTaxonomies } = useSelect( ( select ) => {
+		const { getPostTypes, getTaxonomies } = select( coreStore );
 		const excludedPostTypes = [ 'attachment' ];
 		const filteredPostTypes = getPostTypes( { per_page: -1 } )?.filter(
 			( { viewable, slug } ) =>
 				viewable && ! excludedPostTypes.includes( slug )
 		);
-		return { postTypes: filteredPostTypes };
+		const taxonomies = getTaxonomies() ?? [];
+		return { postTypes: filteredPostTypes, allTaxonomies: taxonomies };
 	} );
 	const postTypesMap = useMemo( () => {
 		if ( ! postTypes?.length ) return;
@@ -141,15 +142,28 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 		}, {} );
 	}, [ postTypes ] );
 	const postTypesTaxonomiesSelectOptions = useMemo( () => {
-		let taxonomies = [''];
-		if ( attributes['post-type'] && postTypesTaxonomiesMap ) {
-			taxonomies = taxonomies.concat( postTypesTaxonomiesMap[ attributes['post-type'] ] );
+		let postTaxonomies = [];
+		if ( attributes['display'] === 'posts' && attributes['post-type'] && postTypesTaxonomiesMap ) {
+			postTaxonomies = postTypesTaxonomiesMap[ attributes['post-type'] ];
 		}
-		return taxonomies.map( ( slug ) => ( {
-			label: slug,
-			value: slug,
-		} ) );
-	}, [ attributes['post-type'], postTypesTaxonomiesMap ]);
+		return [ { label: '', slug: '' } ].concat(
+			allTaxonomies
+				.filter( ( tax ) => postTaxonomies.includes( tax.slug ) )
+				.map( ( tax ) => ( {
+					label: tax.name,
+					value: tax.slug,
+				} ) )
+		);
+	}, [ attributes['post-type'], postTypesTaxonomiesMap, allTaxonomies ]);
+
+	const taxonomiesSelectOptions = useMemo( () => {
+		return [ { label: '', slug: '' } ].concat(
+			allTaxonomies.map( ( tax ) => ( {
+				label: tax.name,
+				value: tax.slug,
+			} ) )
+		);
+	}, [ allTaxonomies ] );
 
 	const validationErrors = useMemo( () => {
 		const errors = [];
@@ -163,26 +177,6 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 		}
 		return errors;
 	}, [ attributes.display, attributes.taxonomy ] );
-
-	// const getFilteredTaxonomies = useMemo( () => {
-	// 	let r = [];
-	// 	if ( 'posts' === display ) {
-	// 		const postType = postType;
-	// 		if ( postType in postTypes ) {
-	// 			r = postTypes[ postType ].taxonomies.map( ( tax ) => ( {
-	// 				value: tax,
-	// 				label: taxonomiesList[ tax ]?.name ?? tax,
-	// 			} ) );
-	// 		}
-	// 	} else if ( 'terms' === attributes.display ) {
-	// 		r = Object.keys( taxonomiesList ).map( ( tax ) => ( {
-	// 			value: tax,
-	// 			label: taxonomiesList[ tax ]?.name ?? tax,
-	// 		} ) );
-	// 	}
-	// 	r.unshift( { value: '', label: '' } );
-	// 	return r;
-	// } );
 
 	const inspectorControls = (
 		<InspectorControls>
@@ -315,7 +309,11 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 											<SelectControl
 												label={ __( 'Taxonomy', 'a-z-listing' ) }
 												value={ attributes.taxonomy }
-												options={ postTypesTaxonomiesSelectOptions }
+												options={
+													'posts' === attributes.display
+													? postTypesTaxonomiesSelectOptions
+													: taxonomiesSelectOptions
+												}
 												onChange={ ( value ) =>
 													setAttributes(
 														applyFilters(

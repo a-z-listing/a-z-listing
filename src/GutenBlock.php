@@ -43,7 +43,7 @@ class GutenBlock extends Singleton implements Extension {
 	 * @throws \Error When the plugin has not been correctly built.
 	 */
 	final public function initialize() {
-		$script_asset_path = A_Z_LISTING_PLUGIN_DIR . '/build/index.asset.php';
+		$script_asset_path = dirname( A_Z_LISTING_PLUGIN_FILE ) . '/build/index.asset.php';
 		if ( ! file_exists( $script_asset_path ) ) {
 			throw new \Error(
 				'You need to run `npm start` or `npm run build` for the "a-z-listing/block" block first.'
@@ -53,7 +53,7 @@ class GutenBlock extends Singleton implements Extension {
 		$script_asset = require $script_asset_path;
 		wp_register_script(
 			'a-z-listing-block-editor',
-			plugins_url( $index_js, A_Z_LISTING_PLUGIN_DIR ),
+			plugins_url( $index_js, A_Z_LISTING_PLUGIN_FILE ),
 			$script_asset['dependencies'],
 			A_Z_LISTING_VERSION,
 			true
@@ -62,7 +62,7 @@ class GutenBlock extends Singleton implements Extension {
 		$editor_css = 'css/editor.css';
 		wp_register_style(
 			'a-z-listing-block-editor',
-			plugins_url( $editor_css, A_Z_LISTING_PLUGIN_DIR ),
+			plugins_url( $editor_css, A_Z_LISTING_PLUGIN_FILE ),
 			array(),
 			A_Z_LISTING_VERSION
 		);
@@ -70,12 +70,12 @@ class GutenBlock extends Singleton implements Extension {
 		$style_css = 'css/a-z-listing-default.css';
 		wp_register_style(
 			'a-z-listing-block',
-			plugins_url( $style_css, A_Z_LISTING_PLUGIN_DIR ),
+			plugins_url( $style_css, A_Z_LISTING_PLUGIN_FILE ),
 			array(),
 			A_Z_LISTING_VERSION
 		);
 
-		$attributes = json_decode( file_get_contents( A_Z_LISTING_PLUGIN_DIR . '/scripts/blocks/attributes.json' ), true );  //phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$attributes = json_decode( file_get_contents( dirname( A_Z_LISTING_PLUGIN_FILE ) . '/scripts/blocks/attributes.json' ), true );  //phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 		$attributes = apply_filters( 'a_z_listing_get_gutenberg_attributes', $attributes );
 
 		register_block_type(

@@ -45,7 +45,7 @@ class ColumnWidth extends Extension {
 	 * @return mixed The updated query.
 	 */
 	public function shortcode_query( $query, string $display, string $key, $value, array $attributes ) {
-		$this->columns = $value;
+		$this->column_width = $value;
 		$this->add_hook( 'filter', 'a_z_listing_styles', array( $this, 'return_styles' ), 10, 3 );
 		return $query;
 	}

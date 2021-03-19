@@ -55,8 +55,10 @@ div.letter-section {
     float: initial;
     box-sizing: border-box;
     line-height: 1.6em;
+    column-count: 3;
     column-gap: 0.6em;
     column-width: 15em;
+    column-count: var(--a-z-listing-column-count, 3);
     column-gap: var(--a-z-listing-column-gap, 0.6em);
     column-width: var(--a-z-listing-column-width, 15em); }
     div.letter-section > ul.az-columns > li {
@@ -64,10 +66,10 @@ div.letter-section {
       margin: 0 0 0.6em;
       list-style: none;
       display: block; }
-    div.letter-section > ul.az-columns.max-0-columns, div.letter-section > ul.az-columns.max-1-columns {
-      column-count: 1;
-      max-width: 15.6em;
-      max-width: calc(var(--a-z-listing-column-width, 15em) + var(--a-z-listing-defualt-column-gap, 0.6em)); }
+    div.letter-section > ul.az-columns.max-1-columns {
+      column-count: min(var(--a-z-listing-column-count, 3), 1);
+      max-width: 15em;
+      max-width: calc( (1 * var(--a-z-listing-column-width, 15em)) + ((1 - 1) * var(--a-z-listing-column-gap, 0.6em))); }
     div.letter-section > ul.az-columns.max-2-columns {
       column-count: min(var(--a-z-listing-column-count, 3), 2);
       max-width: 30.6em;
@@ -124,6 +126,10 @@ div.letter-section {
       column-count: min(var(--a-z-listing-column-count, 3), 15);
       max-width: 233.4em;
       max-width: calc( (15 * var(--a-z-listing-column-width, 15em)) + ((15 - 1) * var(--a-z-listing-column-gap, 0.6em))); }
+    div.letter-section > ul.az-columns.max-16-columns {
+      column-count: min(var(--a-z-listing-column-count, 3), 16);
+      max-width: 249em;
+      max-width: calc( (16 * var(--a-z-listing-column-width, 15em)) + ((16 - 1) * var(--a-z-listing-column-gap, 0.6em))); }
   div.letter-section div.back-to-top {
     display: var(--a-z-listing-back-to-top-display, block);
     width: 100%;
