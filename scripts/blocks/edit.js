@@ -17,7 +17,7 @@ import {
 	Spinner,
 	ToggleControl,
 	TextControl,
-	__experimentalUnitControl as UnitControl,
+	// __experimentalUnitControl as UnitControl,
 	// ToolbarGroup,
 } from '@wordpress/components';
 import ServerSideRender from '@wordpress/server-side-render';
@@ -465,11 +465,37 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 											withInputField
 											required
 										/>
-										<UnitControl
+										{/* Waiting for UnitControl to stabilise in Gutenberg */}
+										{/* <UnitControl
 											label={ __( 'Column width', 'a-z-listing' ) }
 											value={ attributes['column-width'] }
 											onChange={ ( value ) =>
 												setAttributes( { 'column-width': value } )
+											}
+											required
+										/>
+										{/* Waiting for UnitControl to stabilise in Gutenberg */}
+										{/* <UnitControl
+											label={ __( 'Column gap', 'a-z-listing' ) }
+											value={ attributes['column-gap'] }
+											onChange={ ( value ) =>
+												setAttributes( { 'column-gap': value } )
+											}
+											required
+										/> */}
+										<TextControl
+											label={ __( 'Column width', 'a-z-listing' ) }
+											value={ attributes['column-width'] }
+											onChange={ ( value ) =>
+												setAttributes( { 'column-width': value } )
+											}
+											required
+										/>
+										<TextControl
+											label={ __( 'Column gap', 'a-z-listing' ) }
+											value={ attributes['column-gap'] }
+											onChange={ ( value ) =>
+												setAttributes( { 'column-gap': value } )
 											}
 											required
 										/>
@@ -487,21 +513,6 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 		</InspectorControls>
 	);
 
-	// const layoutControls = [
-	// 	{
-	// 		icon: list,
-	// 		title: __( 'List view' ),
-	// 		onClick: () => setAttributes( { postLayout: 'list' } ),
-	// 		isActive: postLayout === 'list',
-	// 	},
-	// 	{
-	// 		icon: grid,
-	// 		title: __( 'Grid view' ),
-	// 		onClick: () => setAttributes( { postLayout: 'grid' } ),
-	// 		isActive: postLayout === 'grid',
-	// 	},
-	// ];
-
 	const errors = applyFilters(
 		'a-z-listing-validation-errors',
 		validationErrors
@@ -510,9 +521,6 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 	return (
 		<>
 			{ inspectorControls }
-			{/* <BlockControls>
-				<ToolbarGroup controls={ layoutControls } />
-			</BlockControls> */}
 
 			{ errors.length > 0 ? (
 				<Placeholder icon={ pin } label={ __( 'A-Z Listing', 'a-z-listing' ) }>
@@ -553,27 +561,4 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 	);
 }
 
-// export default withSelect( ( select, props ) => {
-// 	const { featuredImageSizeSlug } = props.attributes;
-// 	const { getSettings } = select( 'core/block-editor' );
-// 	const { imageSizes, imageDimensions } = getSettings();
-
-// 	const imageSizeOptions = imageSizes
-// 		.filter( ( { slug } ) => slug !== 'full' )
-// 		.map( ( { name, slug } ) => ( { value: slug, label: name } ) );
-
-// 	return {
-// 		defaultImageWidth: get(
-// 			imageDimensions,
-// 			[ featuredImageSizeSlug, 'width' ],
-// 			0
-// 		),
-// 		defaultImageHeight: get(
-// 			imageDimensions,
-// 			[ featuredImageSizeSlug, 'height' ],
-// 			0
-// 		),
-// 		imageSizeOptions,
-// 	};
-// } )( A_Z_Listing_Edit );
 export default A_Z_Listing_Edit;

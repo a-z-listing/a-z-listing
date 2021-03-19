@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 use \A_Z_Listing\Shortcode\Extension;
 
 /**
- * Instance ID Query Part extension
+ * Columns Query Part extension
  */
 class Columns extends Extension {
 	/**
@@ -28,9 +28,9 @@ class Columns extends Extension {
 	public $attribute_name = 'columns';
 
 	/**
-	 * The instance_id.
+	 * The number of columns.
 	 *
-	 * @var string
+	 * @var int
 	 */
 	public $columns = 3;
 

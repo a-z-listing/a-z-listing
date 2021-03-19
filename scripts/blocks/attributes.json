@@ -8,7 +8,11 @@
     },
     "column-width": {
       "type": "string",
-      "default": "33.3%"
+      "default": "15em"
+    },
+    "column-gap": {
+        "type": "string",
+        "default": "0.6em"
     },
     "display": {
         "type": "string",

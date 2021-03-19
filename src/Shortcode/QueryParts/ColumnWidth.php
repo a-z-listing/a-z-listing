@@ -1,6 +1,6 @@
 <?php
 /**
- * Instance ID Query Part.
+ * Alphabet Query Part.
  *
  * @package a-z-listing
  */
@@ -16,23 +16,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 use \A_Z_Listing\Shortcode\Extension;
 
 /**
- * Instance ID Query Part extension
+ * Column Width Query Part extension
  */
-class InstanceId extends Extension {
+class ColumnWidth extends Extension {
 	/**
 	 * The attribute for this Query Part.
 	 *
 	 * @since 4.0.0
 	 * @var string
 	 */
-	public $attribute_name = 'instance-id';
+	public $attribute_name = 'column-width';
 
 	/**
-	 * The instance ID.
+	 * The column width.
 	 *
 	 * @var string
 	 */
-	public $instance_id = '';
+	public $column_width = '15em';
 
 	/**
 	 * Update the query with this extension's additional configuration.
@@ -45,17 +45,20 @@ class InstanceId extends Extension {
 	 * @return mixed The updated query.
 	 */
 	public function shortcode_query( $query, string $display, string $key, $value, array $attributes ) {
-		$this->instance_id = $value;
-		$this->add_hook( 'filter', 'a_z_listing_instance_id', array( $this, 'return_instance_id' ), 10, 1 );
+		$this->columns = $value;
+		$this->add_hook( 'filter', 'a_z_listing_styles', array( $this, 'return_styles' ), 10, 3 );
 		return $query;
 	}
 
 	/**
-	 * Return the ID for this instance.
+	 * Return the stylesheet for this instance.
 	 *
+	 * @param string             $styles      The stylesheet.
+	 * @param \A_Z_Listing\Query $a_z_listing The A-Z Listing Query object.
+	 * @param string             $instance_id The instance ID.
 	 * @return string
 	 */
-	public function return_instance_id(): string {
-		return $this->instance_id;
+	public function return_styles( $styles, $a_z_listing, $instance_id ): string {
+		return "$styles\n#a-z-listing-$instance_id { --a-z-listing-column-width: $this->column_width; }";
 	}
 }

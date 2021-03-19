@@ -39,7 +39,7 @@ class HideEmpty_Deprecated extends Extension {
 	 * The types of listing this shortcode extension may be used with.
 	 *
 	 * @since 4.0.0
-	 * @var array
+	 * @var array<string>
 	 */
 	public $display_types = array( 'terms' );
 
