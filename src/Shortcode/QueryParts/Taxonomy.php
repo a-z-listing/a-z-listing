@@ -53,7 +53,7 @@ class Taxonomy extends Extension {
 	 *
 	 * @param \A_Z_Listing\Query $query      The query.
 	 * @param string             $display    The display/query type.
-	 * @param string             $attribute  The name of the attribute.
+	 * @param string             $key        The name of the attribute.
 	 * @param mixed              $value      The shortcode attribute value.
 	 * @param array              $attributes The complete set of shortcode attributes.
 	 * @return mixed The updated query.

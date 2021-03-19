@@ -39,12 +39,12 @@ class Alphabet extends Extension {
 	 *
 	 * @param \A_Z_Listing\Query $query      The query.
 	 * @param string             $display    The display/query type.
-	 * @param string             $attribute  The name of the attribute.
+	 * @param string             $key        The name of the attribute.
 	 * @param mixed              $value      The shortcode attribute value.
 	 * @param array              $attributes The complete set of shortcode attributes.
 	 * @return mixed The updated query.
 	 */
-	public function shortcode_query( $query, string $display, string $attribute, $value, array $attributes ) {
+	public function shortcode_query( $query, string $display, string $key, $value, array $attributes ) {
 		$this->alphabet = $value;
 		$this->add_hook( 'filter', 'a-z-listing-alphabet', array( $this, 'return_alphabet' ), 1, 1 );
 		return $query;
