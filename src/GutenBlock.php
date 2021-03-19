@@ -40,10 +40,10 @@ class GutenBlock extends Singleton implements Extension {
 	 *
 	 * @since 4.0.0
 	 * @return void
-	 * @throws Error When the plugin has not been correctly built.
+	 * @throws \Error When the plugin has not been correctly built.
 	 */
 	final public function initialize() {
-        $script_asset_path = A_Z_LISTING_PLUGIN_DIR . '/build/index.asset.php';
+		$script_asset_path = A_Z_LISTING_PLUGIN_DIR . '/build/index.asset.php';
 		if ( ! file_exists( $script_asset_path ) ) {
 			throw new \Error(
 				'You need to run `npm start` or `npm run build` for the "a-z-listing/block" block first.'
@@ -75,7 +75,7 @@ class GutenBlock extends Singleton implements Extension {
 			A_Z_LISTING_VERSION
 		);
 
-		$attributes = json_decode( file_get_contents( A_Z_LISTING_PLUGIN_DIR . '/scripts/blocks/attributes.json' ), true );
+		$attributes = json_decode( file_get_contents( A_Z_LISTING_PLUGIN_DIR . '/scripts/blocks/attributes.json' ), true );  //phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 		$attributes = apply_filters( 'a_z_listing_get_gutenberg_attributes', $attributes );
 
 		register_block_type(

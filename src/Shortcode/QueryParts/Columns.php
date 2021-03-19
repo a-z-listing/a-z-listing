@@ -37,11 +37,11 @@ class Columns extends Extension {
 	/**
 	 * Update the query with this extension's additional configuration.
 	 *
-	 * @param mixed  $query      The query.
-	 * @param string $display    The display/query type.
-	 * @param string $attribute  The name of the attribute.
-	 * @param mixed  $value      The shortcode attribute value.
-	 * @param array  $attributes The complete set of shortcode attributes.
+	 * @param \A_Z_Listing\Query $query      The query.
+	 * @param string             $display    The display/query type.
+	 * @param string             $attribute  The name of the attribute.
+	 * @param mixed              $value      The shortcode attribute value.
+	 * @param array              $attributes The complete set of shortcode attributes.
 	 * @return mixed The updated query.
 	 */
 	public function shortcode_query( $query, string $display, string $attribute, $value, array $attributes ) {
@@ -51,8 +51,11 @@ class Columns extends Extension {
 	}
 
 	/**
-	 * Return the ID for this instance.
+	 * Return the stylesheet for this instance.
 	 *
+	 * @param string             $styles      The stylesheet.
+	 * @param \A_Z_Listing\Query $a_z_listing The A-Z Listing Query object.
+	 * @param string             $instance_id The instance ID.
 	 * @return string
 	 */
 	public function return_styles( $styles, $a_z_listing, $instance_id ): string {

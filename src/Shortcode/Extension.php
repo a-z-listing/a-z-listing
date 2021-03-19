@@ -148,7 +148,7 @@ abstract class Extension extends Singleton implements \A_Z_Listing\Extension {
 	 * Sanitize the shortcode attribute.
 	 *
 	 * @param mixed $value      The value of the shortcode attribute.
-	 * @param array  $attributes The complete set of shortcode attributes.
+	 * @param array $attributes The complete set of shortcode attributes.
 	 * @return mixed The sanitized value.
 	 */
 	public function sanitize_attribute( $value, array $attributes ) {

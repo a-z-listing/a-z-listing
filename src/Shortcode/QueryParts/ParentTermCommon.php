@@ -30,9 +30,9 @@ abstract class ParentTermCommon extends Extension {
 	/**
 	 * Update the query with this extension's additional configuration.
 	 *
-	 * @param mixed $query      The query.
-	 * @param int   $parent_id  The shortcode attribute value.
-	 * @param array $attributes The complete set of shortcode attributes.
+	 * @param \A_Z_Listing\Query $query      The query.
+	 * @param int                $parent_id  The shortcode attribute value.
+	 * @param array              $attributes The complete set of shortcode attributes.
 	 * @return mixed The updated query.
 	 */
 	public function shortcode_query_with_parent_id( $query, int $parent_id, array $attributes ) {

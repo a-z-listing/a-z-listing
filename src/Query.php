@@ -660,8 +660,10 @@ class Query {
 		 * @param A_Z_Listing\A_Z_Listing $a_z_query   The A-Z Listing Query object
 		 * @param string                  $instance_id The instance ID
 		 */
-		$styles = esc_html( apply_filters( 'a_z_listing_styles', '', $this, $this->instance_id ) );
-		echo "<style>\n$styles\n</style>";
+		$styles = apply_filters( 'a_z_listing_styles', '', $this, $this->instance_id );
+		echo "<style>\n";
+		echo esc_html( $styles );
+		echo "\n</style>";
 
 		_do_template( $this, locate_template( $templates ) );
 

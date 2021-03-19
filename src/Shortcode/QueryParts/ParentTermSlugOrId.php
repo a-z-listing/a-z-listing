@@ -30,11 +30,11 @@ class ParentTermSlugOrId extends ParentTermCommon {
 	/**
 	 * Update the query with this extension's additional configuration.
 	 *
-	 * @param mixed  $query      The query.
-	 * @param string $display    The display/query type.
-	 * @param string $key        The name of the attribute.
-	 * @param mixed  $value      The shortcode attribute value.
-	 * @param array  $attributes The complete set of shortcode attributes.
+	 * @param \A_Z_Listing\Query query      The query.
+	 * @param string             display    The display/query type.
+	 * @param string             key        The name of the attribute.
+	 * @param mixed              value      The shortcode attribute value.
+	 * @param array              attributes The complete set of shortcode attributes.
 	 * @return mixed The updated query.
 	 */
 	public function shortcode_query_for_display_and_attribute( $query, string $display, string $key, $value, array $attributes ) {
