@@ -39,7 +39,7 @@ class InstanceId extends Extension {
 	 *
 	 * @param \A_Z_Listing\Query $query      The query.
 	 * @param string             $display    The display/query type.
-	 * @param string             $key        The name of the attribute.
+	 * @param string             $attribute  The name of the attribute.
 	 * @param mixed              $value      The shortcode attribute value.
 	 * @param array              $attributes The complete set of shortcode attributes.
 	 * @return mixed The updated query.
