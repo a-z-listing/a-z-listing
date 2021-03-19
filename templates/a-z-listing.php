@@ -40,7 +40,7 @@ $a_z_listing_minpercol = 10;
 						1,
 						min(
 							16,
-							ceil($a_z_listing_item_count / $a_z_listing_minpercol)
+							ceil( $a_z_listing_item_count / $a_z_listing_minpercol )
 						)
 					);
 					?>
