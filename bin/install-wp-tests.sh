@@ -39,8 +39,8 @@ elif [[ $WP_VERSION == 'nightly' || $WP_VERSION == 'trunk' ]]; then
 else
 	# http serves a single offer, whereas https serves multiple. we only want one
 	download http://api.wordpress.org/core/version-check/1.7/ /tmp/wp-latest.json
-	grep '[0-9]+\.[0-9]+(\.[0-9]+)?' /tmp/wp-latest.json
-	LATEST_VERSION=$(grep -o '"version":"[^"]*' /tmp/wp-latest.json | sed 's/"version":"//')
+	grep -Ee '[0-9]+\.[0-9]+(\.[0-9]+)?' /tmp/wp-latest.json
+	LATEST_VERSION=$(grep -Eo '"version":"[^"]*' /tmp/wp-latest.json | sed 's/"version":"//')
 	if [[ -z "$LATEST_VERSION" ]]; then
 		echo "Latest WordPress version could not be found"
 		exit 1
@@ -75,7 +75,7 @@ install_wp() {
 			else
 				# otherwise, scan the releases and get the most up to date minor version of the major release
 				local VERSION_ESCAPED=`echo $WP_VERSION | sed 's/\./\\\\./g'`
-				LATEST_VERSION=$(grep -o '"version":"'$VERSION_ESCAPED'[^"]*' $TMPDIR/wp-latest.json | sed 's/"version":"//' | head -1)
+				LATEST_VERSION=$(grep -Eo '"version":"'$VERSION_ESCAPED'[^"]*' $TMPDIR/wp-latest.json | sed 's/"version":"//' | head -1)
 			fi
 			if [[ -z "$LATEST_VERSION" ]]; then
 				local ARCHIVE_NAME="wordpress-$WP_VERSION"
@@ -134,7 +134,7 @@ install_db() {
 	local EXTRA=""
 
 	if [ -n "$DB_HOSTNAME" ] ; then
-		if [ $(echo $DB_SOCK_OR_PORT | grep -e '^[0-9]{1,}$') ]; then
+		if [ $(echo $DB_SOCK_OR_PORT | grep -Ee '^[0-9]{1,}$') ]; then
 			EXTRA=" --host=$DB_HOSTNAME --port=$DB_SOCK_OR_PORT --protocol=tcp"
 		elif [ -n "$DB_SOCK_OR_PORT" ] ; then
 			EXTRA=" --socket=$DB_SOCK_OR_PORT"

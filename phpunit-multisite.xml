@@ -15,4 +15,20 @@
 			<directory prefix="test-" suffix=".php">./tests/</directory>
 		</testsuite>
 	</testsuites>
+	<coverage>
+		<include>
+			<directory suffix=".php">src</directory>
+			<directory suffix=".php">functions</directory>
+			<directory suffix=".php">widgets</directory>
+			<file>a-z-listing.php</file>
+		</include>
+	</coverage>
+	<filter>
+		<whitelist processUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">src</directory>
+			<directory suffix=".php">functions</directory>
+			<directory suffix=".php">widgets</directory>
+			<file>a-z-listing.php</file>
+		</whitelist>
+	</filter>
 </phpunit>
