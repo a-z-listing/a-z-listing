@@ -99,8 +99,8 @@ jobs:
         name: css
         path: css/**/*
 
-  test:
-    name: Test
+  phpunit:
+    name: PHPunit
     needs: build
     strategy:
       matrix:
@@ -215,6 +215,20 @@ jobs:
           phpunit --verbose -c phpunit.xml.dist
         fi
 
+  test:
+    name: Tests completed
+    if: always()
+    needs:
+    - phpunit
+    runs-on: ubuntu-latest
+    steps:
+    - name: Success
+      if: ${{needs.phpunit.result == 'success'}}
+      run: echo "Tests passed"
+    - name: Failure
+      if: ${{needs.phpunit.result != 'success'}}
+      run: echo "Tests failed"; exit 1
+      
   coverage:
     name: coverage
     needs:
