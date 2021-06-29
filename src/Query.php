@@ -168,7 +168,7 @@ class Query {
 		if ( ! defined( 'PHPUNIT_TEST_SUITE' ) || ! PHPUNIT_TEST_SUITE ) {
 			$this->instance_id = apply_filters( 'a_z_listing_instance_id', ++self::$num_instances );
 		} else {
-			$this->instance_id = 'testId';
+			$this->instance_id = 'testid';
 		}
 		$this->alphabet = new Alphabet();
 
@@ -559,7 +559,6 @@ class Query {
 		$that     = $this;
 		$alphabet = $this->alphabet;
 		$indices  = &$this->matched_item_indices;
-		$i        = 0;
 		$ret      = '<ul class="' . esc_attr( implode( ' ', $classes ) ) . '">';
 
 		$alphabet->loop(
@@ -567,24 +566,23 @@ class Query {
 			 * Closure to build each letter in the letter view
 			 *
 			 * @param string     $character
-			 * @param int|string $key
+			 * @param int|string $i
 			 * @param int        $count
 			 * @return void
 			 */
-			function( string $character, $key, int $count ) use ( $that, $target, $alphabet, $indices, $i, &$ret ) {
-				++$i;
+			function( string $character, $i, int $count ) use ( $that, $target, $alphabet, $indices, &$ret ) {
 				$id = $character;
 				if ( $alphabet->get_unknown_letter() === $id ) {
 					$id = '_';
 				}
 
 				$classes = array();
-				if ( 1 === $i ) {
+				if ( 0 === $i ) {
 					$classes[] = 'first';
-				} elseif ( $count === $i ) {
+				} elseif ( $count - 1 === $i ) {
 					$classes[] = 'last';
 				}
-				if ( 0 === $i % 2 ) {
+				if ( 1 === $i % 2 ) {
 					$classes[] = 'even';
 				} else {
 					$classes[] = 'odd';
