@@ -27,7 +27,7 @@ module.exports = function( grunt ) {
 					'README.md': 'readme.txt'
 				},
 				options: {
-					screenshot_url: 'assets/{screenshot}.png',
+					screenshot_url: '.wordpress-org/{screenshot}.png',
 					pre_convert: function( readme ) {
 						readme = readme.replace( new RegExp('^`$[\n\r]+([^`]*)[\n\r]+^`$','gm'), function( codeblock, codeblockContents ) {
 							const blockStartEnd = '```';
