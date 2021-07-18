@@ -456,10 +456,10 @@ If there is code already in your functions.php then add just the lines between `
 ## Screenshots ##
 
 ### 1. An example of the index listing page ###
-![An example of the index listing page](assets/screenshot-1.png)
+![An example of the index listing page](.wordpress-org/screenshot-1.png)
 
 ### 2. The Widget is shown here ###
-![The Widget is shown here](assets/screenshot-2.png)
+![The Widget is shown here](.wordpress-org/screenshot-2.png)
 
 
 ## Changelog ##
