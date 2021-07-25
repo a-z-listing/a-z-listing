@@ -18,6 +18,13 @@ jobs:
       - name: Install dependencies
         run: |
           composer install --no-dev --optimize-autoloader
+          npm install
+      - name: Run build
+        run: |
+          npm run build
+      - name: Trim to production dependencies
+        run: |
+          npm prune --production
       - name: WordPress Plugin Deploy
         uses: 10up/action-wordpress-plugin-deploy@stable
         env:

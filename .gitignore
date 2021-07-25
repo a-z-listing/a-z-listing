@@ -51,3 +51,6 @@ wordpress/
 
 # dotenv environment variables file
 .env
+
+# CSS Source Maps
+*.css.map

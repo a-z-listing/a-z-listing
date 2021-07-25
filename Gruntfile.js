@@ -17,7 +17,7 @@ module.exports = function( grunt ) {
 				options: {
 					updateDomains: true
 				},
-				src: [ '*.php', '**/*.php', '!\.git/**/*', '!bin/**/*', '!node_modules/**/*', '!tests/**/*', '!build/**/*' ]
+				src: [ '*.php', '**/*.php', '!\.git/**/*', '!bin/**/*', '!node_modules/**/*', '!tests/**/*', '!build/**/*', '!vendor/**/*' ]
 			}
 		},
 
@@ -58,7 +58,7 @@ module.exports = function( grunt ) {
 			target: {
 				options: {
 					domainPath: '/languages',
-					exclude: [ '\.git/*', 'bin/*', 'node_modules/*', 'tests/*' ],
+					exclude: [ '\.git/*', 'bin/*', 'node_modules/*', 'tests/*', 'vendor/*' ],
 					mainFile: 'a-z-listing.php',
 					potFilename: 'a-z-listing.pot',
 					potHeaders: {
@@ -102,12 +102,9 @@ module.exports = function( grunt ) {
 
 	grunt.loadNpmTasks( 'grunt-wp-i18n' );
 	grunt.loadNpmTasks( 'grunt-wp-readme-to-markdown' );
-	// grunt.loadNpmTasks( 'grunt-babel' );
 	grunt.loadNpmTasks( 'grunt-sass' );
 	grunt.registerTask( 'default', ['build'] );
-	grunt.registerTask( 'build', [ 'i18n','readme',
-		// 'babel',
-		'sass' ] );
+	grunt.registerTask( 'build', [ 'i18n','readme','sass' ] );
 	grunt.registerTask( 'i18n', ['addtextdomain', 'makepot'] );
 	grunt.registerTask( 'readme', ['wp_readme_to_markdown'] );
 
