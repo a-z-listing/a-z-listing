@@ -18,18 +18,18 @@
   },
   "devDependencies": {
     "@wordpress/env": "^4.1.0",
-    "@wordpress/scripts": "^17.0.0",
+    "@wordpress/scripts": "^17.1.0",
     "babel-core": "^6.26.3",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
-    "eslint": "^7.29.0",
+    "eslint": "^7.31.0",
     "grunt": "^1.4.1",
     "grunt-cli": "^1.4.3",
     "grunt-sass": "^3.1.0",
     "grunt-wp-i18n": "^1.0.3",
     "grunt-wp-readme-to-markdown": "^2.0.1",
-    "sass": "^1.35.2"
+    "sass": "^1.36.0"
   },
   "wp-env": {
     "plugin-dir": "a-z-listing",
@@ -44,17 +44,17 @@
     "welcome-build-command": "npm run dev"
   },
   "dependencies": {
-    "@wordpress/api-fetch": "^5.2.0",
+    "@wordpress/api-fetch": "^5.2.1",
     "@wordpress/block-editor": "^6.2.0",
     "@wordpress/blocks": "^10.0.0",
     "@wordpress/components": "^14.2.0",
     "@wordpress/data": "^5.2.0",
     "@wordpress/element": "^3.2.0",
     "@wordpress/hooks": "^3.2.0",
-    "@wordpress/i18n": "^4.2.0",
+    "@wordpress/i18n": "^4.2.1",
     "@wordpress/icons": "^4.1.0",
     "@wordpress/server-side-render": "^2.2.0",
-    "@wordpress/url": "^3.2.0",
+    "@wordpress/url": "^3.2.1",
     "lodash": "^4.17.20",
     "uuid": "^8.3.2"
   }
