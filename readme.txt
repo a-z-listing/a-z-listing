@@ -1,6 +1,6 @@
 === A-Z Listing ===
 
-Contributors: diddledan
+Contributors: diddledani
 Donate Link: https://liberapay.com/diddledan/donate
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 5.0
