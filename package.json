@@ -2,7 +2,7 @@
   "name": "wp-a-z-listing",
   "version": "4.0.0",
   "main": "build/index.js",
-  "author": "Daniel Llewellyn",
+  "author": "Dani Llewellyn",
   "scripts": {
     "build": "wp-scripts build ./scripts/blocks/index.js && grunt",
     "check-engines": "wp-scripts check-engines",

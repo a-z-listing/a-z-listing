@@ -1,4 +1,4 @@
-# Copyright (C) 2021 Daniel Llewellyn
+# Copyright (C) 2021 Dani Llewellyn
 # This file is distributed under the same license as the A-Z Listing package.
 msgid ""
 msgstr ""
@@ -225,7 +225,7 @@ msgid "Display an A to Z listing of posts"
 msgstr ""
 
 #. Author of the plugin/theme
-msgid "Daniel Llewellyn"
+msgid "Dani Llewellyn"
 msgstr ""
 
 #. Author URI of the plugin/theme

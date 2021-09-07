@@ -3,7 +3,7 @@
  * Plugin Name:     A-Z Listing
  * Plugin URI:      https://a-z-listing.com/
  * Description:     Display an A to Z listing of posts
- * Author:          Daniel Llewellyn
+ * Author:          Dani Llewellyn
  * Author URI:      https://bowlhat.net/
  * Text Domain:     a-z-listing
  * Domain Path:     /languages
