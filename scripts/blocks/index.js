@@ -97,6 +97,13 @@ registerBlockType( 'a-z-listing/wp-a-z-listing-block', {
 				},
 			},
 			{
+				type: 'prefix',
+				prefix: '[a-z-listing]',
+				transform() {
+					return createBlock( 'a-z-listing/wp-a-z-listing-block' );
+				},
+			},
+			{
 				type: 'raw',
 				isMatch: ( node ) => node.nodeName === 'P' && /^\s*\[a-z-listing.*\]\s*$/.test( node.textContent ),
 				transform( node ) {
