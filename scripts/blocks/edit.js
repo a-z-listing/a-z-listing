@@ -98,6 +98,10 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 	useEffect( () => {
 		const attsWithDefaults = {};
 		let addedDefaults = false;
+		if ( attributes['instance-id'] === null || typeof attributes['instance-id'] === 'undefined' ) {
+			attributes['instance-id'] = uuid();
+			addedDefaults = true;
+		}
 		for ( const attributeName in defaults ) {
 			if ( attributes[attributeName] === null || typeof attributes[attributeName] === 'undefined' ) {
 				attsWithDefaults[attributeName] = defaults[attributeName].default;
@@ -346,6 +350,20 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 							<DisplayOptions.Slot>
 								{ ( subFills ) => (
 									<>
+										<TextControl
+											label={ __( 'Listing ID', 'a-z-listing' ) }
+											value={ attributes['instance-id'] }
+											onChange={ (value) =>
+												setAttributes( { 'instance-id': value } )
+											}
+										/>
+										<TextControl
+											label={ __( 'CSS class names', 'a-z-listing' ) }
+											value={ attributes.className }
+											onChange={ ( value ) =>
+												setAttributes( { className: value } )
+											}
+										/>
 										<TextControl
 											label={ __( 'Alphabet', 'a-z-listing' ) }
 											value={ attributes.alphabet }
