@@ -5,16 +5,20 @@
  */
 import { __ } from '@wordpress/i18n';
 
+import { createBlock, registerBlockType } from '@wordpress/blocks';
 import { registerStore } from '@wordpress/data';
 import { createHooks } from '@wordpress/hooks';
-import { registerBlockType } from '@wordpress/blocks';
 import { postList as icon } from '@wordpress/icons';
+import { registerPlugin } from '@wordpress/plugins';
+import { attrs } from '@wordpress/shortcode';
 
 import edit from './edit';
 import attributes from './attributes.json';
 import DisplayOptions from '../components/DisplayOptions';
 import ItemSelection from '../components/ItemSelection';
 import AZInspectorControls from '../components/AZInspectorControls';
+
+import shortcodeUpgrader from './shortcode-upgrader';
 
 const hooks = createHooks();
 
@@ -82,4 +86,28 @@ registerBlockType( 'a-z-listing/wp-a-z-listing-block', {
 	edit,
 
 	save: () => null,
+
+	transforms: {
+		from: [
+			{
+				type: 'prefix',
+				prefix: '[a-z-listing',
+				transform() {
+					return createBlock( 'a-z-listing/wp-a-z-listing-block' );
+				},
+			},
+			{
+				type: 'raw',
+				isMatch: ( node ) => node.nodeName === 'P' && /^\s*\[a-z-listing.*\]\s*$/.test( node.textContent ),
+				transform( node ) {
+					const atts = attrs( node.textContent.trim() );
+					return createBlock( 'a-z-listing/wp-a-z-listing-block', atts );
+				},
+			},
+		],
+	},
+} );
+
+registerPlugin( 'a-z-listing/upgrade-shortcode', {
+	render: shortcodeUpgrader,
 } );
