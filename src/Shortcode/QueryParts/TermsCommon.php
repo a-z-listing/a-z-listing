@@ -51,10 +51,11 @@ abstract class TermsCommon extends Extension {
 						$first  = substr( $term, 0, 1 );
 						if ( '!' === $first ) {
 							$term = substr( $term, 1 );
+							$negate = true;
 						}
 						$term_obj = get_term_by( 'slug', $term, $taxonomy );
 						if ( false !== $term_obj ) {
-							if ( $negate ) {
+							if ( true === $negate ) {
 								return -$term_obj->term_id;
 							}
 							return $term_obj->term_id;
