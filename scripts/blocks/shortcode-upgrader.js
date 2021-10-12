@@ -1,7 +1,6 @@
 import { createBlock } from '@wordpress/blocks';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { attrs } from '@wordpress/shortcode';
-import { transform } from 'lodash';
 
 const validBlocks = ( blocks ) => blocks && blocks.length > 0;
 
