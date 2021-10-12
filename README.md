@@ -1,12 +1,12 @@
 # A-Z Listing #
 
-**Contributors:** [diddledan](https://profiles.wordpress.org/diddledan)  
+**Contributors:** [diddledani](https://profiles.wordpress.org/diddledani)  
 **Donate Link:** https://liberapay.com/diddledan/donate  
 **Tags:** a to z, a-z, archive, listing, widget, index  
 **Requires at least:** 5.0  
 **Requires PHP:** 7.0  
-**Tested up to:** 5.6  
-**Stable tag:** 3.1.2  
+**Tested up to:** 5.8  
+**Stable tag:** 4.0.0  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -35,10 +35,14 @@ This section describes how to install the plugin and get it working.
 
 1. Upload the a-z-listing folder to the `/wp-content/plugins/` directory.
 1. Activate the plugin through the 'Plugins' menu in WordPress.
-1. Use the `[a-z-listing]` short-code on the page or post that you want to show the listing.
+1. Use the `[a-z-listing]` short-code or block in the block editor (gutenberg) on the page or post that you want to show the listing.
 1. Add the A-Z Site Map widget to a sidebar.
 
-## short-code ##
+## block ##
+
+Version 4.0.0 introduces new block editor support. You should use the block in most cases, as it helps to guide you through configuring the various options.
+
+## short-code for compatibility and PHP use ##
 
 The plugin supplies a short-code for the full A-Z listing allowing use without modifying your theme's templates.
 
@@ -204,9 +208,13 @@ To group the alphabet letters into a range:
   * May only contain one value.
   * Must be set to either `listing` to display the default view, or `letters` to show only the letters without any items (posts or terms).
 
-## PHP ##
+## PHP (expert) ##
 
-### Synopsis ###
+### Most compatible method ###
+
+The best way to use the plugin from PHP is to call `do_shortcode( '[a-z-listing]' );` and save or `echo` the returned text. The parameter passed to `do_shortcode()` should be a complete A-Z Listing shortcode with parameters as above.
+
+### Legacy method ###
 
 ```php
 <?php
