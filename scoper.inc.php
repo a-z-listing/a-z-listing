@@ -47,18 +47,18 @@ return [
     //
     // For more see: https://github.com/humbug/php-scoper#patchers
     'patchers' => [
-        function (string $filePath, string $prefix, string $contents): string {
+        static function (string $filePath, string $prefix, string $contents): string {
             $contents = str_replace( "'Composer\\\\Autoload\\\\ClassLoader'", "'$prefix\\\\Composer\\\\Autoload\\\\ClassLoader'", $contents );
             return $contents;
         },
-        function (string $filePath, string $prefix, string $contents): string {
+        static function (string $filePath, string $prefix, string $contents): string {
             $contents = str_replace( '\A_Z_Listing\WP_Post', '\WP_Post', $contents );
             $contents = str_replace( '\A_Z_Listing\WP_Term', '\WP_Term', $contents );
             $contents = str_replace( '\A_Z_Listing\WP_Query', '\WP_Query', $contents );
             $contents = str_replace( '\A_Z_Listing\WP_Error', '\WP_Error', $contents );
             return $contents;
         },
-        // function (string $filePath, string $prefix, string $contents): string {
+        // static function (string $filePath, string $prefix, string $contents): string {
         //     return $contents;
         // },
     ],
@@ -83,15 +83,15 @@ return [
     // If `true` then the user defined constants belonging to the global namespace will not be prefixed.
     //
     // For more see https://github.com/humbug/php-scoper#constants--constants--functions-from-the-global-namespace
-    'whitelist-global-constants' => true,
+    'expose-global-constants' => true,
 
     // If `true` then the user defined classes belonging to the global namespace will not be prefixed.
     //
     // For more see https://github.com/humbug/php-scoper#constants--constants--functions-from-the-global-namespace
-    'whitelist-global-classes' => false,
+    'expose-global-classes' => false,
 
     // If `true` then the user defined functions belonging to the global namespace will not be prefixed.
     //
     // For more see https://github.com/humbug/php-scoper#constants--constants--functions-from-the-global-namespace
-    'whitelist-global-functions' => false,
+    'expose-global-functions' => false,
 ];
