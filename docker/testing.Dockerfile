@@ -7,8 +7,8 @@ ARG PHP_VERSION
 
 FROM a-z-listing:latest-wp${WP_VERSION}-php${PHP_VERSION}
 
-LABEL author=diddledan
-LABEL author_uri=https://github.com/diddledan
+LABEL author=diddledani
+LABEL author_uri=https://github.com/diddledani
 
 SHELL [ "/bin/bash", "-c" ]
 
