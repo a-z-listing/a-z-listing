@@ -1,5 +1,7 @@
 #!/bin/bash
 
+unset WORDPRESS_DB_HOST WORDPRESS_DB_NAME WORDPRESS_DB_PASSWORD WORDPRESS_DB_USER
+
 if [ "$USING_XDEBUG" == "1"  ]; then
     echo "Enabling XDebug 3"
     mv /usr/local/etc/php/conf.d/disabled/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/
