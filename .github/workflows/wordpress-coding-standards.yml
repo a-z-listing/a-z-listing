@@ -1,4 +1,4 @@
-name: WordPress Coding Standards
+name: "🔍 WordPress Coding Standards"
 
 on:
   push:
@@ -9,6 +9,10 @@ on:
     branches:
       - develop
       - master
+    paths:
+      - '**.php'
+      - '.github/workflows/*.yml'
+
 jobs:
   run:
     runs-on: ubuntu-latest
