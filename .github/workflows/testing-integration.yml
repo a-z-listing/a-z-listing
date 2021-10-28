@@ -116,6 +116,5 @@ jobs:
       - name: Push Codecoverage to Coveralls.io
         if: ${{ matrix.coverage == 1 }}
         env:
-          COVERALLS_RUN_LOCALLY: 1
-          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: vendor/bin/php-coveralls -v
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: bash <(curl -s https://codecov.io/bash)

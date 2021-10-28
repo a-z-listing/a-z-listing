@@ -14,9 +14,9 @@ settings:
 coverage:
     enabled: true
     remote: false
-    c3_url: '%WP_URL%/wp-content/plugins/a-z-listing/a-z-listing.php'
+    c3_url: '%WP_URL%/wp-content/plugins/a-z-listing/c3.php'
     include:
-        - src/*
+        - src/*.php
     exclude:
         - a-z-listing.php
         - vendor/*

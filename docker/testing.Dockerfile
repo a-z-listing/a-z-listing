@@ -20,6 +20,7 @@ RUN docker-php-ext-install pdo_mysql
 RUN apt-get install zip unzip -y \
     && if test "$(printf '%s\n' "$PHP_VERSION" "7.1" | sort -V | head -n 1)" != "$PHP_VERSION"; then \
         pecl install pcov; \
+        echo "extension=pcov.so" > /usr/local/etc/php/conf.d/pcov.ini; \
     fi
 
 ENV COVERAGE=0
