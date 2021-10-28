@@ -106,7 +106,6 @@ jobs:
       - name: Run Tests w/ Docker.
         env:
           COVERAGE: ${{ matrix.coverage }}
-          USING_XDEBUG: ${{ matrix.coverage }}
           DEBUG: ${{ matrix.debug }}
           SKIP_TESTS_CLEANUP: ${{ matrix.coverage }}
           SUITES: wpunit
