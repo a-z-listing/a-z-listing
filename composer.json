@@ -29,8 +29,7 @@
         "codeception/module-db": "^1.0",
         "codeception/module-filesystem": "^1.0",
         "codeception/module-cli": "^1.0",
-        "codeception/util-universalframework": "^1.0",
-        "pcov/clobber": "^2.0"
+        "codeception/util-universalframework": "^1.0"
     },
     "replace": {
         "symfony\/polyfill-php54": "*",
