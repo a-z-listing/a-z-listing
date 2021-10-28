@@ -36,19 +36,38 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: json, mbstring
 
-      - name: Get Composer Cache Directory
-        id: composercache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - name: Get Cache Directories
+        id: cache-dirs
+        run: |
+          echo "::set-output name=composer::$(composer config cache-files-dir)"
+          echo "::set-output name=npm::$(npm config get cache)"
 
-      - name: Cache dependencies
+      - name: Cache Composer dependencies
         uses: actions/cache@v2
         with:
-          path: ${{ steps.composercache.outputs.dir }}
+          path: ${{ steps.cache-dirs.outputs.composer }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
+      - name: Cache NPM dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.cache-dirs.outputs.npm }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
+
       - name: Install dependencies
-        run: composer install --no-dev
+        run: |
+          composer install --no-dev
+          npm install
+
+      - name: Run NPM Build
+        run: |
+          npm run build
+
+      - name: Prune NPM dependencies to production-only
+        run: |
+          npm prune --production
 
       - name: Build "testing" Docker Image
         env:
