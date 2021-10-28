@@ -26,24 +26,20 @@ jobs:
         run: |
           npm prune --production
       - name: WordPress Plugin Deploy
+        id: deploy
         uses: 10up/action-wordpress-plugin-deploy@stable
+        with:
+          generate-zip: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SLUG: a-z-listing
-      - name: Create Artifact
-        run: |
-          mkdir plugin-build
-          composer archive -vvv --format=zip --file="plugin-build/a-z-listing"
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: a-z-listing
-          path: plugin-build/a-z-listing.zip
       - name: Upload release asset
-        uses: softprops/action-gh-release@v1
-        with:
-          files: plugin-build/a-z-listing.zip
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ${{ steps.deploy.outputs.zip-path }}
+          asset_name: ${{ github.event.repository.name }}.zip
+          asset_content_type: application/zip
