@@ -33,5 +33,8 @@ phpcs.xml.dist
 phpstan.neon.dist
 phpunit.xml.dist
 README.md
-scoper.inc.php
+Thumbs.db
+wp-cli.local.yml
+yarn.lock
+scoper.php.inc
 *.msbuildproj
