@@ -61,8 +61,10 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
+          php-version: '7.4'
+          coverage: pcov
           extensions: json, mbstring
+          tools: composer
 
       - name: Get Cache Directories
         id: cache-dirs
