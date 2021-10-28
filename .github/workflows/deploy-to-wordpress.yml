@@ -1,4 +1,4 @@
-name: Deploy to WordPress.org
+name: "🚀 RELEASE: To WordPress.org"
 on:
   release:
     types: [ published ]
