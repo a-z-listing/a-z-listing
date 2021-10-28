@@ -38,3 +38,4 @@ wp-cli.local.yml
 yarn.lock
 scoper.php.inc
 *.msbuildproj
+scoper.php.inc

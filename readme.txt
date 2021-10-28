@@ -501,10 +501,6 @@ Check out the two extensions at [A-Z-Listing.com](https://a-z-listing.com/shop).
 
 * Bugfix to squash a PHP deprecation warning when running PHP-7.4+
 
-= 3.1.1 =
-
-* Bugfix to squash a PHP deprecation warning when running PHP-7.4+
-
 = 3.1.0 =
 
 * Ensure paths are correct when loading PHP files.

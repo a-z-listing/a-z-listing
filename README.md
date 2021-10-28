@@ -1,6 +1,6 @@
 # A-Z Listing #
 
-**Contributors:** [diddledani](https://profiles.wordpress.org/diddledani)  
+**Contributors:** [diddledani](https://profiles.wordpress.org/diddledani/)  
 **Donate Link:** https://liberapay.com/diddledan/donate  
 **Tags:** a to z, a-z, archive, listing, widget, index  
 **Requires at least:** 5.0  
@@ -500,10 +500,6 @@ Check out the two extensions at [A-Z-Listing.com](https://a-z-listing.com/shop).
 ### 3.1.2 ###
 
 * Ensure extra composer dependencies aren't included in distribution. Otherwise identical to 3.1.1.
-
-### 3.1.1 ###
-
-* Bugfix to squash a PHP deprecation warning when running PHP-7.4+
 
 ### 3.1.1 ###
 
