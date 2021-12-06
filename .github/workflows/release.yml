@@ -286,10 +286,15 @@ jobs:
       run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -- wp --path=${{ secrets.SITE_DIRECTORY }} parser export ${{ secrets.SITE_DIRECTORY }}/wp-content/plugins/a-z-listing a-z-listing.parsed.json
     
     - name: Delete old documentation
-      run: >
-        ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -- wp --path=${{ secrets.SITE_DIRECTORY }} post list --post_type=wp-parser-method |
-          awk '/^.\s*[0-9]+/ { print $1 }' |
-          xargs ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -- wp --path=${{ secrets.SITE_DIRECTORY }} post delete
+      run: |
+        ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -- \
+          wp --path=${{ secrets.SITE_DIRECTORY }} post list --post_type=wp-parser-method,wp-parser-function,wp-parser-class,wp-parser-hook --format=ids | \
+            xargs ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -- wp --path=${{ secrets.SITE_DIRECTORY }} post delete;
+        for tax in wp-parser-source-file wp-parser-package wp-parser-since wp-parser-namespace; do
+          ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -- \
+            wp --path=${{ secrets.SITE_DIRECTORY }} term list $tax --format=ids | \
+              xargs ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -- wp --path=${{ secrets.SITE_DIRECTORY }} term delete $tax;
+        done
 
     - name: Insert new documentation
-      run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -- wp --path=${{ secrets.SITE_DIRECTORY }} parser import a-z-listing.parsed.json
+      run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -- wp --path=${{ secrets.SITE_DIRECTORY }} parser import a-z-listing.parsed.json --user=diddledani
