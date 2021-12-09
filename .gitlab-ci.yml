@@ -1,7 +1,9 @@
 include:
   - template: Code-Quality.gitlab-ci.yml
-  - template: SAST.gitlab-ci.yml
-  - template: Dependency-Scanning.gitlab-ci.yml
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
+  - template: Security/License-Scanning.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
   - project: a-z-listing/ci-config
     file: /build-and-test.yml
   - project: a-z-listing/ci-config
@@ -11,3 +13,23 @@ stages:
   - build
   - test
   - release
+
+update-docs-on-release:
+  stage: release
+  image: registry.gitlab.com/a-z-listing/ci-config/php:7.4
+  only:
+    - tags
+  before_script:
+    - mkdir -p $HOME/.ssh && cp known_hosts $HOME/.ssh/ && touch $HOME/.ssh/id_rsa && chmod 600 $HOME/.ssh/id_rsa && echo "$SSH_PRIVATE_KEY" > $HOME/.ssh/id_rsa
+  script: |
+    POSTS_TO_DELETE=$(wp --ssh=$SSH_USERNAME@$SSH_HOST:$SITE_DIRECTORY post list \
+      --post_type=wp-parser-function,wp-parser-method,wp-parser-class,wp-parser-hook \
+      --format=ids)
+    wp --ssh=$SSH_USERNAME@$SSH_HOST:$SITE_DIRECTORY post delete $POSTS_TO_DELETE
+
+    for tax in wp-parser-source-file wp-parser-source-file wp-parser-since wp-parser-since; do
+      TERMS_TO_DELETE=$(wp --ssh=$SSH_USERNAME@$SSH_HOST:$SITE_DIRECTORY term list $tax --format=ids)
+      wp --ssh=$SSH_USERNAME@$SSH_HOST:$SITE_DIRECTORY term delete $tax $TERMS_TO_DELETE
+    done
+
+    wp --ssh=$SSH_USERNAME@$SSH_HOST:$SITE_DIRECTORY parser create wp-content/plugins/a-z-listing --user=diddledani
