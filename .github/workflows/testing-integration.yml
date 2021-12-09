@@ -1,0 +1,124 @@
+name: "🧪 Testing Integration"
+
+on:
+  push:
+    branches:
+      - develop
+      - master
+  pull_request:
+    branches:
+      - develop
+      - master
+    paths:
+      - '**.php'
+      - '.github/workflows/*.yml'
+
+jobs:
+  continuous_integration:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          # PHP 7.0
+          - { php: '7.0', wordpress: '5.0' }
+          # PHP 7.1
+          - { php: '7.1', wordpress: '5.1' }
+          - { php: '7.1', wordpress: '5.2' }
+          - { php: '7.1', wordpress: '5.3' }
+          # PHP 7.2
+          - { php: '7.2', wordpress: '5.2' }
+          - { php: '7.2', wordpress: '5.3' }
+          - { php: '7.2', wordpress: '5.4' }
+          - { php: '7.2', wordpress: '5.5' }
+          - { php: '7.2', wordpress: '5.6' }
+          # PHP 7.3
+          - { php: '7.3', wordpress: '5.3' }
+          - { php: '7.3', wordpress: '5.4' }
+          - { php: '7.3', wordpress: '5.5' }
+          - { php: '7.3', wordpress: '5.6' }
+          - { php: '7.3', wordpress: '5.7' }
+          - { php: '7.3', wordpress: '5.8' }
+          # PHP 7.4
+          - { php: '7.4', wordpress: '5.3' }
+          - { php: '7.4', wordpress: '5.4' }
+          - { php: '7.4', wordpress: '5.5' }
+          - { php: '7.4', wordpress: '5.6' }
+          - { php: '7.4', wordpress: '5.7' }
+          - { php: '7.4', wordpress: '5.8' }
+          # PHP 8.0
+          - { php: '8.0', wordpress: '5.6' }
+          - { php: '8.0', wordpress: '5.7' }
+          - { php: '8.0', wordpress: '5.8' }
+          # PHP 8.1
+          - { php: '8.1', wordpress: '5.8' }
+
+          # Coverage
+          - { php: '7.4', wordpress: '5.8', coverage: 1 }
+      fail-fast: false
+    name: WordPress ${{ matrix.wordpress }} on PHP ${{ matrix.php }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          coverage: pcov
+          extensions: json, mbstring
+          tools: composer
+
+      - name: Get Cache Directories
+        id: cache-dirs
+        run: |
+          echo "::set-output name=composer::$(composer config cache-files-dir)"
+          echo "::set-output name=npm::$(npm config get cache)"
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.cache-dirs.outputs.composer }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Cache NPM dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.cache-dirs.outputs.npm }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: |
+          composer install --no-dev
+          npm install
+
+      - name: Run NPM Build
+        run: |
+          npm run build
+
+      - name: Prune NPM dependencies to production-only
+        run: |
+          npm prune --production
+
+      - name: Build "testing" Docker Image
+        env:
+          PHP_VERSION: ${{ matrix.php }}
+          WP_VERSION: ${{ matrix.wordpress }}
+        run: composer build-test
+
+      - name: Run Tests w/ Docker.
+        env:
+          COVERAGE: ${{ matrix.coverage }}
+          DEBUG: ${{ matrix.debug }}
+          SKIP_TESTS_CLEANUP: ${{ matrix.coverage }}
+          SUITES: wpunit
+          PHP_VERSION: ${{ matrix.php }}
+          WP_VERSION: ${{ matrix.wordpress }}
+        run: composer run-test
+
+      - name: Push Codecoverage to Coveralls.io
+        if: ${{ matrix.coverage == 1 }}
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: bash <(curl -s https://codecov.io/bash)
