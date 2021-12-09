@@ -103,7 +103,7 @@ jobs:
   phpcs:
     name: phpcs
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'Upvision'
+    if: github.repository_owner == 'a-z-listing'
     steps:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
@@ -242,7 +242,7 @@ jobs:
   deploy_to_worg:
     name: Deploy to WordPress.org
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'Upvision'
+    if: github.repository_owner == 'a-z-listing'
     needs:
     - build
     - phpcs
@@ -259,3 +259,42 @@ jobs:
         SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
         SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
         SLUG: a-z-listing
+
+  create_azlisting_com_docs:
+    name: Create documentation on A-Z-Listing.com
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'a-z-listing'
+    needs: deploy_to_worg
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download build files
+      uses: actions/download-artifact@v2
+
+    - name: Configure deployment credentials
+      run: |
+        mkdir -p $HOME/.ssh
+        cp known_hosts $HOME/.ssh/
+        touch $HOME/.ssh/id_rsa
+        chmod 600 $HOME/.ssh/id_rsa
+        echo "$SSH_PRIVATE_KEY" > $HOME/.ssh/id_rsa
+
+    - name: Copy plugin to A-Z-Listing.com
+      run: rsync -rv --chmod=u=rwX,go=rX --exclude-from=.distignore --delete ./ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.SITE_DIRECTORY }}/wp-content/plugins/a-z-listing/
+    
+    - name: Generate new documentation
+      run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -- wp --path=${{ secrets.SITE_DIRECTORY }} parser export ${{ secrets.SITE_DIRECTORY }}/wp-content/plugins/a-z-listing a-z-listing.parsed.json
+    
+    - name: Delete old documentation
+      run: |
+        ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -- \
+          wp --path=${{ secrets.SITE_DIRECTORY }} post list --post_type=wp-parser-method,wp-parser-function,wp-parser-class,wp-parser-hook --format=ids | \
+            xargs ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -- wp --path=${{ secrets.SITE_DIRECTORY }} post delete;
+        for tax in wp-parser-source-file wp-parser-package wp-parser-since wp-parser-namespace; do
+          ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -- \
+            wp --path=${{ secrets.SITE_DIRECTORY }} term list $tax --format=ids | \
+              xargs ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -- wp --path=${{ secrets.SITE_DIRECTORY }} term delete $tax;
+        done
+
+    - name: Insert new documentation
+      run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -- wp --path=${{ secrets.SITE_DIRECTORY }} parser import a-z-listing.parsed.json --user=diddledani

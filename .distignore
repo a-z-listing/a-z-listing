@@ -43,3 +43,4 @@ Thumbs.db
 wp-cli.local.yml
 yarn.lock
 *.msbuildproj
+scoper.php.inc

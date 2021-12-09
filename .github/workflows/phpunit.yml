@@ -99,8 +99,8 @@ jobs:
         name: css
         path: css/**/*
 
-  test:
-    name: Test
+  phpunit:
+    name: PHPunit
     needs: build
     strategy:
       matrix:
@@ -215,6 +215,20 @@ jobs:
           phpunit --verbose -c phpunit.xml.dist
         fi
 
+  test:
+    name: Tests completed
+    if: always()
+    needs:
+    - phpunit
+    runs-on: ubuntu-latest
+    steps:
+    - name: Success
+      if: ${{needs.phpunit.result == 'success'}}
+      run: echo "Tests passed"
+    - name: Failure
+      if: ${{needs.phpunit.result != 'success'}}
+      run: echo "Tests failed"; exit 1
+      
   coverage:
     name: coverage
     needs:
@@ -237,7 +251,7 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: '7.4'
-        extensions: iconv, intl, soap, mbstring, mysql, mysqli, gd
+        extensions: iconv, intl, soap, mbstring, mysql, mysqli, gd, xdebug
         ini-values: phar.readonly=0
         tools: phpunit:6.5.5
 
@@ -251,7 +265,7 @@ jobs:
 
     - uses: paambaati/codeclimate-action@v2.7.5
       env:
-        CC_TEST_REPORTER_ID: 6d7dda243546c14b3eb3897386f7f8a7807cbe0984a8d51ac9c1cf37a07a4e55
+        CC_TEST_REPORTER_ID: a87f7b864fc39049553eb306ee6f6fdc2cf424fc20c7879df6a2beeb4dabe94f
       with:
         coverageCommand: phpunit --verbose -c phpunit.xml.dist --coverage-clover clover.xml
-        coverateLocations: ${{github.workspace}}/clover.xml:clover
+        coverageLocations: ${{github.workspace}}/clover.xml:clover
