@@ -5,8 +5,8 @@ Donate Link: https://liberapay.com/diddledan/donate
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 4.6
 Requires PHP: 5.6
-Tested up to: 5.5
-Stable tag: 3.1.0
+Tested up to: 5.8
+Stable tag: 3.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,7 +14,6 @@ Provides an A to Z index page and widget. The widget links to the index page at 
 
 == Description ==
 
-[![Build Status](https://travis-ci.org/bowlhat/wp-a-z-listing.svg?branch=master)](https://travis-ci.org/bowlhat/wp-a-z-listing)
 [![LiberaPay](https://img.shields.io/liberapay/receives/diddledan.svg?logo=liberapay)](https://liberapay.com/diddledan/donate)
 
 Show your posts, pages, and terms alphabetically in a Rolodex-, catalogue-, or directory-style list with the A-Z Listing plugin!
@@ -457,19 +456,23 @@ If there is code already in your functions.php then add just the lines between `
 
 == Changelog ==
 
+= 3.1.2 =
+
+* Ensure extra composer dependencies aren't included in distribution. Otherwise identical to 3.1.1.
+
+**NEW EXTENSIONS**
+
+Check out the two new extensions at [A-Z-Listing.com](https://a-z-listing.com/shop). These extensions provide convinience functionality. Purchasing one or both will help towards the cost of maintaining the A-Z Listing plugin.
+
 = 3.1.1 =
 
-* NPM dependencies update.
+* Bugfix to squash a PHP deprecation warning when running PHP-7.4+
 
 = 3.1.0 =
 
 * Ensure paths are correct when loading PHP files.
 * Add hook to customise sorting of items within each letter.
 * Fix broken permalinks on hierarchical post-types, e.g. page.
-
-**NEW EXTENSIONS**
-
-Check out the two new extensions at [A-Z-Listing.com](https://a-z-listing.com/shop). These extensions provide convinience functionality. Purchasing one or both will help towards the cost of maintaining the A-Z Listing plugin.
 
 = 3.0.2 =
 
