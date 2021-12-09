@@ -28,6 +28,7 @@ changelog.md
 codeception.dist.yml
 codeception.yml
 docker-compose.yml
+Gruntfile.js
 phive.xml
 phpcs.xml.dist
 phpstan.neon.dist
@@ -38,4 +39,3 @@ wp-cli.local.yml
 yarn.lock
 scoper.php.inc
 *.msbuildproj
-scoper.php.inc
