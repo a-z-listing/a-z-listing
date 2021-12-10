@@ -1,21 +1,11 @@
 {
     "name": "bowlhat/wp-a-z-listing",
     "description": "The A-Z Listing plugin for WordPress",
-    "require": {
-        "symfony/polyfill-mbstring": "^1.19"
-    },
-    "require-dev": {
-        "squizlabs/php_codesniffer": "^3.4",
-        "wp-coding-standards/wpcs": "^2.1",
-        "phpcompatibility/phpcompatibility-wp": "*",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
-        "phpunit/phpunit": "^6"
-    },
     "license": "GPL-2.0-or-later",
     "authors": [
         {
-            "name": "Daniel Llewellyn",
-            "email": "daniel@bowlhat.net"
+            "name": "Dani Llewellyn",
+            "email": "dani@bowlhat.net"
         }
     ],
     "config": {
@@ -23,7 +13,58 @@
             "php": "7.0"
         }
     },
+    "require": {
+        "symfony\/polyfill-mbstring": "=1.19"
+    },
+    "require-dev": {
+        "wp-coding-standards\/wpcs": "^2.3",
+        "phpcompatibility\/phpcompatibility-wp": "*",
+        "dealerdirect\/phpcodesniffer-composer-installer": "^0.7.1",
+        "squizlabs\/php_codesniffer": "^3.5",
+        "phpunit\/phpunit": "^6",
+        "lucatume/wp-browser": "^3.0",
+        "codeception/module-asserts": "^1.3",
+        "codeception/module-phpbrowser": "^1.0",
+        "codeception/module-webdriver": "^1.0",
+        "codeception/module-db": "^1.0",
+        "codeception/module-filesystem": "^1.0",
+        "codeception/module-cli": "^1.0",
+        "codeception/util-universalframework": "^1.0"
+    },
+    "replace": {
+        "symfony\/polyfill-php54": "*",
+        "symfony\/polyfill-php55": "*",
+        "symfony\/polyfill-php56": "*",
+        "symfony\/polyfill-php70": "*"
+    },
     "autoload": {
-        "psr-4": {"A_Z_Listing\\": "src/"}
+        "psr-4": {
+            "A_Z_Listing\\": "src\/"
+        }
+    },
+    "scripts": {
+        "install-test-env": "bash bin/install-test-env.sh",
+        "docker-build": "bash bin/run-docker.sh build",
+        "docker-run": "bash bin/run-docker.sh run",
+        "docker-destroy": "docker-compose down",
+        "build-and-run": [
+            "@docker-build",
+            "@docker-run"
+        ],
+        "build-app": "@docker-build -a",
+        "build-test": "@docker-build -t",
+        "run-app": "@docker-run -a",
+        "run-test": "@docker-run -t",
+        "lint": "vendor/bin/phpcs",
+        "phpcs-i": [
+            "php ./vendor/bin/phpcs -i"
+        ],
+        "check-cs": [
+            "php ./vendor/bin/phpcs"
+        ],
+        "fix-cs": [
+            "php ./vendor/bin/phpcbf"
+        ],
+        "phpstan": ["phpstan analyze --ansi --memory-limit=1G"]
     }
 }

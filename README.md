@@ -1,12 +1,12 @@
 # A-Z Listing #
 
-**Contributors:** [diddledan](https://profiles.wordpress.org/diddledan)  
+**Contributors:** [diddledani](https://profiles.wordpress.org/diddledani/)  
 **Donate Link:** https://liberapay.com/diddledan/donate  
 **Tags:** a to z, a-z, archive, listing, widget, index  
-**Requires at least:** 4.6  
-**Requires PHP:** 5.6  
-**Tested up to:** 5.6  
-**Stable tag:** 3.1.2  
+**Requires at least:** 5.0  
+**Requires PHP:** 7.0  
+**Tested up to:** 5.8  
+**Stable tag:** 4.0.0  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -35,10 +35,14 @@ This section describes how to install the plugin and get it working.
 
 1. Upload the a-z-listing folder to the `/wp-content/plugins/` directory.
 1. Activate the plugin through the 'Plugins' menu in WordPress.
-1. Use the `[a-z-listing]` short-code on the page or post that you want to show the listing.
+1. Use the `[a-z-listing]` short-code or block in the block editor (gutenberg) on the page or post that you want to show the listing.
 1. Add the A-Z Site Map widget to a sidebar.
 
-## short-code ##
+## block ##
+
+Version 4.0.0 introduces new block editor support. You should use the block in most cases, as it helps to guide you through configuring the various options.
+
+## short-code for compatibility and PHP use ##
 
 The plugin supplies a short-code for the full A-Z listing allowing use without modifying your theme's templates.
 
@@ -52,7 +56,7 @@ To specify a post-type to display instead of `page` then use, e.g. `post`:
 
 To filter the posts by a term from a taxonomy:
 
-    [a-z-listing display="posts" taxonomy="category" terms="my-term-slug"]
+    [a-z-listing display="posts" post-type="post" taxonomy="category" terms="my-term-slug"]
 
 To display pages that are direct children of the page with ID `24`:
 
@@ -122,6 +126,10 @@ To group the alphabet letters into a range:
   * Default value: `false`.
   * May only contain one value.
   * Must be set to `true`, `yes`, `on`, or `1` to group items beginning with a numeral in a single collection. All other values will keep the default behaviour.
+* `symbols-first`: Tells the plugin to put the unknown alphabet letter (symbols) group before the main alphabet.
+  * Default value: `false`.
+  * May only contain one value.
+  * Must be set to `true`, `yes`, `on`, or `1` to put the symbols group before the alphabet. All other values will keep the default behaviour.
 * `alphabet`: allows you to override the alphabet that the plugin uses.
   * Default value: `unset`.
   * When this attribute is not defined, the plugin will either use the untranslated default, or if [glotpress](https://translate.wordpress.org/projects/wp-plugins/a-z-listing) includes a translation for your site's language as set in `Admin -> Settings -> Site Language` it will use that translation.
@@ -200,9 +208,13 @@ To group the alphabet letters into a range:
   * May only contain one value.
   * Must be set to either `listing` to display the default view, or `letters` to show only the letters without any items (posts or terms).
 
-## PHP ##
+## PHP (expert) ##
 
-### Synopsis ###
+### Most compatible method ###
+
+The best way to use the plugin from PHP is to call `do_shortcode( '[a-z-listing]' );` and save or `echo` the returned text. The parameter passed to `do_shortcode()` should be a complete A-Z Listing shortcode with parameters as above.
+
+### Legacy method ###
 
 ```php
 <?php
@@ -452,21 +464,42 @@ If there is code already in your functions.php then add just the lines between `
 ## Screenshots ##
 
 ### 1. An example of the index listing page ###
-![An example of the index listing page](assets/screenshot-1.png)
+![An example of the index listing page](.wordpress-org/screenshot-1.png)
 
 ### 2. The Widget is shown here ###
-![The Widget is shown here](assets/screenshot-2.png)
+![The Widget is shown here](.wordpress-org/screenshot-2.png)
 
 
 ## Changelog ##
 
+### 4.0.0 ###
+
+This is a major version change, which means that it might break your site when you upgrade. Please check in a test site first!
+
+* NEW: Block Editor support
+* NEW: symbols-first display
+* NEW: post-ID and parent-post name
+* Bump minimum PHP requirement to 7.0
+* Bump minimum WordPress requirement to 5.0
+* Update stylesheet to use CSS Variables
+* Refactor for better maintainability
+* Namespace all classes
+* Improve documentation
+* Add legacy non-namespaced backwards-compatibility classes
+* Add PHP type hints
+* Add strict PHP types checking
+* Add extra template name to match the displayed post-type
+* Always load CSS styles to reduce unstyled listings cases
+* Use php-scoper to reduce conflicts with other plugins
+* Update NPM dependencies
+
+#### EXTENSIONS ####
+
+Check out the two extensions at [A-Z-Listing.com](https://a-z-listing.com/shop). These extensions provide convinience functionality. Purchasing one or both will help towards the cost of maintaining the A-Z Listing plugin.
+
 ### 3.1.2 ###
 
 * Ensure extra composer dependencies aren't included in distribution. Otherwise identical to 3.1.1.
-
-#### NEW EXTENSIONS ####
-
-Check out the two new extensions at [A-Z-Listing.com](https://a-z-listing.com/shop). These extensions provide convinience functionality. Purchasing one or both will help towards the cost of maintaining the A-Z Listing plugin.
 
 ### 3.1.1 ###
 
@@ -496,22 +529,6 @@ This is a major version change, which means that it might break your site when y
 * Complete refactor to use more modern PHP features.
 * Minor refactoring of `get_the_item_object`, `get_item_meta`, and `get_the_item_count` template tags.
 * Miscellaneous documentation Fixes.
-
-### 2.3.0 ###
-
-* Add multiple taxonomy support to taxonomy terms listing.
-* Add site health-check feature compatibility.
-* Fix `hide-empty-terms` in a taxonomy terms listing. Previously completely broken.
-* Fix hard-coded `admin-ajax.php` URL in widget configuration javascript.
-* Improve documentation in the readme.txt file, which is shown on the plugin page at WordPress.org.
-
-### 2.2.0 ###
-
-* Add `get_the_item_post_count` and `the_item_post_count` template methods to get or display the number of posts associated with a term.
-* Add support for `get-all-children` when specifying a `parent-term`.
-* Add extra filename for template matching: `a-z-listing-$slug.php` where `$slug` is the slug of the post containing the short-code.
-* Deprecate PHP 5.3-5.5. Please ensure you are running at least PHP 5.6. The plugin may work on older PHP versions, but compatibility is not guaranteed.
-* Bugfix for incorrect behaviour of `exclude-terms` in the short-code. Thanks go to Chris Skrzypchak for finding this.
 
 ### BREAKING CHANGES in 2.0.0+ ###
 
