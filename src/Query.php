@@ -875,19 +875,14 @@ class Query {
 	 */
 	public function get_the_item_post_count(): int {
 		if ( is_string( $this->current_item['item'] ) ) {
-			$item = explode( ':', $this->current_item['item'], 2 );
-			$term = null;
-			if ( 'term' === $item[0] ) {
-				$term = get_term( intval( $item[1] ) );
-				if ( ! empty( $term ) ) {
+			if ( 'term' === $this->get_the_item_type() ) {
+				$term = get_term( intval( $this->get_the_item_id() ) );
+				if ( $term ) {
 					return $term->count;
 				}
 			}
 		} elseif ( $this->current_item['item'] instanceof \WP_Term ) {
-			$term = get_term( $this->current_item['item'] );
-			if ( ! empty( $term ) ) {
-				return $term->count;
-			}
+			return $this->current_item['item']->count;
 		}
 		return 0;
 	}
