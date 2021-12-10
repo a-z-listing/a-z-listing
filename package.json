@@ -53,7 +53,7 @@
     "@wordpress/hooks": "^3.2.1",
     "@wordpress/i18n": "^4.2.3",
     "@wordpress/icons": "^6.0.0",
-    "@wordpress/server-side-render": "^3.0.3",
+    "@wordpress/server-side-render": "^3.0.7",
     "@wordpress/url": "^3.2.3",
     "lodash": "^4.17.20",
     "uuid": "^8.3.2"
