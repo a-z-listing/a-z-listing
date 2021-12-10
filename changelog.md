@@ -1,5 +1,26 @@
 # Full Changelog #
 
+## 4.0.0 ##
+
+This is a major version change, which means that it might break your site when you upgrade. Please check in a test site first!
+
+* NEW: Block Editor support
+* NEW: symbols-first display
+* NEW: post-ID and parent-post name
+* Bump minimum PHP requirement to 7.0
+* Bump minimum WordPress requirement to 5.0
+* Update stylesheet to use CSS Variables
+* Refactor for better maintainability
+* Namespace all classes
+* Improve documentation
+* Add legacy non-namespaced backwards-compatibility classes
+* Add PHP type hints
+* Add strict PHP types checking
+* Add extra template name to match the displayed post-type
+* Always load CSS styles to reduce unstyled listings cases
+* Use php-scoper to reduce conflicts with other plugins
+* Update NPM dependencies
+
 ## 3.1.2 ##
 
 * Ensure extra composer dependencies aren't included in distribution. Otherwise identical to 3.1.1.

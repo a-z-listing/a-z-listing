@@ -1,114 +1,173 @@
 .az-letters,
 .a-z-listing-widget .az-letters,
 .a-z-listing-widget.widget .az-letters {
-  white-space: unset; }
-  .az-letters > ul.az-links,
-  .a-z-listing-widget .az-letters > ul.az-links,
-  .a-z-listing-widget.widget .az-letters > ul.az-links {
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center; }
-    .az-letters > ul.az-links > li,
-    .a-z-listing-widget .az-letters > ul.az-links > li,
-    .a-z-listing-widget.widget .az-letters > ul.az-links > li {
-      list-style: none;
-      width: 2em;
-      height: 2em;
-      box-sizing: border-box;
-      margin: 0 0 0.6em;
-      border: 2px solid #e5e5e5;
-      background: #f5f5f5;
-      color: #adadad;
-      display: flex;
-      align-items: center;
-      justify-content: center; }
-      .az-letters > ul.az-links > li a,
-      .a-z-listing-widget .az-letters > ul.az-links > li a,
-      .a-z-listing-widget.widget .az-letters > ul.az-links > li a {
-        color: #1f7d9a;
-        text-decoration: none;
-        border: 0;
-        box-shadow: none; }
+  white-space: initial;
+}
+.az-letters > ul.az-links,
+.a-z-listing-widget .az-letters > ul.az-links,
+.a-z-listing-widget.widget .az-letters > ul.az-links {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 1.2em;
+}
+.az-letters > ul.az-links > li,
+.a-z-listing-widget .az-letters > ul.az-links > li,
+.a-z-listing-widget.widget .az-letters > ul.az-links > li {
+  list-style: none;
+  width: 2.6em;
+  height: 2.4em;
+  box-sizing: border-box;
+  margin: 0 0.1em 0.6em;
+  border: 2px solid #e5e5e5;
+  background: #f5f5f5;
+  color: #adadad;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.az-letters > ul.az-links > li:before, .az-letters > ul.az-links > li:after,
+.a-z-listing-widget .az-letters > ul.az-links > li:before,
+.a-z-listing-widget .az-letters > ul.az-links > li:after,
+.a-z-listing-widget.widget .az-letters > ul.az-links > li:before,
+.a-z-listing-widget.widget .az-letters > ul.az-links > li:after {
+  content: initial;
+}
+.az-letters > ul.az-links > li a,
+.a-z-listing-widget .az-letters > ul.az-links > li a,
+.a-z-listing-widget.widget .az-letters > ul.az-links > li a {
+  color: #1f7d9a;
+  text-decoration: none;
+  border: 0;
+  box-shadow: none;
+}
 
-.letter-section {
+div.letter-section {
   margin-bottom: 2em;
-  white-space: unset; }
-  .letter-section h2.letter-title {
-    border-bottom: 1px solid black;
-    margin-bottom: 0.2em;
-    padding-bottom: 0.2em;
-    width: 100%; }
-  .letter-section ul,
-  .letter-section ul > li {
-    list-style: none;
-    margin: 0;
-    padding: 0; }
-  .letter-section ul.columns {
-    width: 100%;
-    box-sizing: border-box;
-    column-gap: 0.6em;
-    column-width: 15em;
-    line-height: 1.6em; }
-    .letter-section ul.columns > li {
-      display: block; }
-    .letter-section ul.columns.max-0-columns, .letter-section ul.columns.max-1-columns {
-      column-count: 1;
-      max-width: 15.6em; }
-    .letter-section ul.columns.max-2-columns {
-      column-count: 2;
-      max-width: 30.6em; }
-    .letter-section ul.columns.max-3-columns {
-      column-count: 3;
-      max-width: 46.2em; }
-    .letter-section ul.columns.max-4-columns {
-      column-count: 4;
-      max-width: 61.8em; }
-    .letter-section ul.columns.max-5-columns {
-      column-count: 5;
-      max-width: 77.4em; }
-    .letter-section ul.columns.max-6-columns {
-      column-count: 6;
-      max-width: 93em; }
-    .letter-section ul.columns.max-7-columns {
-      column-count: 7;
-      max-width: 108.6em; }
-    .letter-section ul.columns.max-8-columns {
-      column-count: 8;
-      max-width: 124.2em; }
-    .letter-section ul.columns.max-9-columns {
-      column-count: 9;
-      max-width: 139.8em; }
-    .letter-section ul.columns.max-10-columns {
-      column-count: 10;
-      max-width: 155.4em; }
-    .letter-section ul.columns.max-11-columns {
-      column-count: 11;
-      max-width: 171em; }
-    .letter-section ul.columns.max-12-columns {
-      column-count: 12;
-      max-width: 186.6em; }
-    .letter-section ul.columns.max-13-columns {
-      column-count: 13;
-      max-width: 202.2em; }
-    .letter-section ul.columns.max-14-columns {
-      column-count: 14;
-      max-width: 217.8em; }
-    .letter-section ul.columns.max-15-columns {
-      column-count: 15;
-      max-width: 233.4em; }
-  .letter-section div.back-to-top {
-    width: 100%;
-    text-align: right; }
-    .letter-section div.back-to-top a {
-      text-transform: uppercase;
-      font-size: 0.7em; }
-      .letter-section div.back-to-top a:before, .letter-section div.back-to-top a:after {
-        font-family: dashicons;
-        content: "\f343";
-        padding: 0.2em; }
+  white-space: initial;
+}
+div.letter-section h2.letter-title {
+  border-bottom: 1px solid black;
+  margin-bottom: 0.2em;
+  padding-bottom: 0.2em;
+  width: 100%;
+}
+div.letter-section > ul.az-columns {
+  margin: 0;
+  width: 100%;
+  float: initial;
+  box-sizing: border-box;
+  line-height: 1.6em;
+  column-count: 3;
+  column-gap: 0.6em;
+  column-width: 15em;
+  column-count: var(--a-z-listing-column-count, 3);
+  column-gap: var(--a-z-listing-column-gap, 0.6em);
+  column-width: var(--a-z-listing-column-width, 15em);
+}
+div.letter-section > ul.az-columns > li {
+  padding: 0;
+  margin: 0 0 0.6em;
+  list-style: none;
+  display: block;
+}
+div.letter-section > ul.az-columns.max-1-columns {
+  column-count: min(var(--a-z-listing-column-count, 3), 1);
+  max-width: 15em;
+  max-width: calc((1 * var(--a-z-listing-column-width, 15em)) + (1 - 1) * var(--a-z-listing-column-gap, 0.6em));
+}
+div.letter-section > ul.az-columns.max-2-columns {
+  column-count: min(var(--a-z-listing-column-count, 3), 2);
+  max-width: 30.6em;
+  max-width: calc((2 * var(--a-z-listing-column-width, 15em)) + (2 - 1) * var(--a-z-listing-column-gap, 0.6em));
+}
+div.letter-section > ul.az-columns.max-3-columns {
+  column-count: min(var(--a-z-listing-column-count, 3), 3);
+  max-width: 46.2em;
+  max-width: calc((3 * var(--a-z-listing-column-width, 15em)) + (3 - 1) * var(--a-z-listing-column-gap, 0.6em));
+}
+div.letter-section > ul.az-columns.max-4-columns {
+  column-count: min(var(--a-z-listing-column-count, 3), 4);
+  max-width: 61.8em;
+  max-width: calc((4 * var(--a-z-listing-column-width, 15em)) + (4 - 1) * var(--a-z-listing-column-gap, 0.6em));
+}
+div.letter-section > ul.az-columns.max-5-columns {
+  column-count: min(var(--a-z-listing-column-count, 3), 5);
+  max-width: 77.4em;
+  max-width: calc((5 * var(--a-z-listing-column-width, 15em)) + (5 - 1) * var(--a-z-listing-column-gap, 0.6em));
+}
+div.letter-section > ul.az-columns.max-6-columns {
+  column-count: min(var(--a-z-listing-column-count, 3), 6);
+  max-width: 93em;
+  max-width: calc((6 * var(--a-z-listing-column-width, 15em)) + (6 - 1) * var(--a-z-listing-column-gap, 0.6em));
+}
+div.letter-section > ul.az-columns.max-7-columns {
+  column-count: min(var(--a-z-listing-column-count, 3), 7);
+  max-width: 108.6em;
+  max-width: calc((7 * var(--a-z-listing-column-width, 15em)) + (7 - 1) * var(--a-z-listing-column-gap, 0.6em));
+}
+div.letter-section > ul.az-columns.max-8-columns {
+  column-count: min(var(--a-z-listing-column-count, 3), 8);
+  max-width: 124.2em;
+  max-width: calc((8 * var(--a-z-listing-column-width, 15em)) + (8 - 1) * var(--a-z-listing-column-gap, 0.6em));
+}
+div.letter-section > ul.az-columns.max-9-columns {
+  column-count: min(var(--a-z-listing-column-count, 3), 9);
+  max-width: 139.8em;
+  max-width: calc((9 * var(--a-z-listing-column-width, 15em)) + (9 - 1) * var(--a-z-listing-column-gap, 0.6em));
+}
+div.letter-section > ul.az-columns.max-10-columns {
+  column-count: min(var(--a-z-listing-column-count, 3), 10);
+  max-width: 155.4em;
+  max-width: calc((10 * var(--a-z-listing-column-width, 15em)) + (10 - 1) * var(--a-z-listing-column-gap, 0.6em));
+}
+div.letter-section > ul.az-columns.max-11-columns {
+  column-count: min(var(--a-z-listing-column-count, 3), 11);
+  max-width: 171em;
+  max-width: calc((11 * var(--a-z-listing-column-width, 15em)) + (11 - 1) * var(--a-z-listing-column-gap, 0.6em));
+}
+div.letter-section > ul.az-columns.max-12-columns {
+  column-count: min(var(--a-z-listing-column-count, 3), 12);
+  max-width: 186.6em;
+  max-width: calc((12 * var(--a-z-listing-column-width, 15em)) + (12 - 1) * var(--a-z-listing-column-gap, 0.6em));
+}
+div.letter-section > ul.az-columns.max-13-columns {
+  column-count: min(var(--a-z-listing-column-count, 3), 13);
+  max-width: 202.2em;
+  max-width: calc((13 * var(--a-z-listing-column-width, 15em)) + (13 - 1) * var(--a-z-listing-column-gap, 0.6em));
+}
+div.letter-section > ul.az-columns.max-14-columns {
+  column-count: min(var(--a-z-listing-column-count, 3), 14);
+  max-width: 217.8em;
+  max-width: calc((14 * var(--a-z-listing-column-width, 15em)) + (14 - 1) * var(--a-z-listing-column-gap, 0.6em));
+}
+div.letter-section > ul.az-columns.max-15-columns {
+  column-count: min(var(--a-z-listing-column-count, 3), 15);
+  max-width: 233.4em;
+  max-width: calc((15 * var(--a-z-listing-column-width, 15em)) + (15 - 1) * var(--a-z-listing-column-gap, 0.6em));
+}
+div.letter-section > ul.az-columns.max-16-columns {
+  column-count: min(var(--a-z-listing-column-count, 3), 16);
+  max-width: 249em;
+  max-width: calc((16 * var(--a-z-listing-column-width, 15em)) + (16 - 1) * var(--a-z-listing-column-gap, 0.6em));
+}
+div.letter-section div.back-to-top {
+  display: var(--a-z-listing-back-to-top-display, block);
+  width: 100%;
+  text-align: right;
+}
+div.letter-section div.back-to-top a {
+  text-transform: uppercase;
+  font-size: 0.7em;
+}
+div.letter-section div.back-to-top a:before, div.letter-section div.back-to-top a:after {
+  font-family: dashicons;
+  content: "\f343";
+  padding: 0.2em;
+}
 
 /*# sourceMappingURL=a-z-listing-default.css.map */

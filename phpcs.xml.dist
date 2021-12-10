@@ -4,27 +4,44 @@
 
 	<!-- What to scan -->
 	<file>.</file>
+
+	<!-- Exclude built assets -->
 	<exclude-pattern>/build/</exclude-pattern>
-	<exclude-pattern>/node_modules/</exclude-pattern>
+
+    <!-- Exclude node_modules -->
+    <exclude-pattern>*/node_modules/*</exclude-pattern>
+
+	<!-- Exclude tests -->
 	<exclude-pattern>/tests/</exclude-pattern>
-	<exclude-pattern>/vendor/</exclude-pattern>
+    <!-- Exclude vendor directories -->
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+
 	<exclude-pattern>/wp-includes</exclude-pattern>
 	<exclude-pattern>scoper.inc.php</exclude-pattern>
 
-	<!-- How to scan -->
-	<!-- Usage instructions: https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage -->
-	<!-- Annotated ruleset: https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml -->
-	<arg value="sp"/> <!-- Show sniff and progress -->
-	<arg name="basepath" value="./"/><!-- Strip the file paths down to the relevant bit -->
-	<arg name="colors"/>
-	<arg name="extensions" value="php"/>
-	<arg name="parallel" value="8"/><!-- Enables parallel processing when available for faster results. -->
+    <!-- Colors! Nice! -->
+    <arg name="colors"/>
+
+    <!--- Only check PHP files -->
+    <arg name="extensions" value="php"/>
+
+    <!-- Commandline options for PHPCS -->
+    <arg value="s"/>
+    <arg value="n"/>
+
+	<!-- Strip the file paths down to the relevant bit -->
+	<arg name="basepath" value="./"/>
+
+	<!-- Enables parallel processing when available for faster results. -->
+	<arg name="parallel" value="8"/>
 
 	<!-- Rules: Check PHP version compatibility -->
 	<!-- https://github.com/PHPCompatibility/PHPCompatibility#sniffing-your-code-for-compatibility-with-specific-php-versions -->
 	<config name="testVersion" value="7.0-"/>
 	<!-- https://github.com/PHPCompatibility/PHPCompatibilityWP -->
 	<rule ref="PHPCompatibilityWP"/>
+
+	<rule ref="Squiz.PHP.Eval"/>
 
 	<!-- Rules: WordPress Coding Standards -->
 	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards -->
