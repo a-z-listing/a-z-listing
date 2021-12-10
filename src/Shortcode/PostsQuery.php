@@ -89,7 +89,7 @@ class PostsQuery extends Query {
 			return $item;
 		}
 
-		return get_term( $item_id );
+		return get_post( $item );
 	}
 
 	/**

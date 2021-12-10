@@ -267,7 +267,7 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 									<>
 										<SelectControl
 											label={ __( 'Display mode', 'a-z-listing' ) }
-											value={ attributes.display }
+											value={ attributes.display ?? 'posts' }
 											options={ displayTypes }
 											onChange={ ( value ) =>
 												setAttributes(
@@ -282,7 +282,7 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 										{ 'posts' === attributes.display && (
 											<SelectControl
 												label={ __( 'Post Type', 'a-z-listing' ) }
-												value={ attributes['post-type'] }
+												value={ attributes['post-type'] ?? 'page' }
 												options={ postTypesSelectOptions }
 												onChange={ ( value ) =>
 													setAttributes(
@@ -297,11 +297,11 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 
 										{ (
 											'posts' === attributes.display &&
-											postTypesMap[ attributes.postType ]?.hierarchical
+											postTypesMap && postTypesMap[ attributes.postType ]?.hierarchical
 										) && (
 											<PostParent
-												pageId={ attributes.parentId }
-												postTypeSlug={ attributes.postType }
+												pageId={ attributes.parentId ?? -1 }
+												postTypeSlug={ attributes.postType ?? 'page' }
 												onChange={ ( parentId ) => setAttributes( { 'parent-post': parentId } ) }
 											/>
 										) }
@@ -312,7 +312,7 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 										) && (
 											<SelectControl
 												label={ __( 'Taxonomy', 'a-z-listing' ) }
-												value={ attributes.taxonomy }
+												value={ attributes.taxonomy ?? '' }
 												options={
 													'posts' === attributes.display
 													? postTypesTaxonomiesSelectOptions
@@ -333,7 +333,7 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 											!! attributes.taxonomy && (
 												<FormTokenField
 													label={ __( 'Taxonomy terms', 'a-z-listing' ) }
-													value={ attributes.terms }
+													value={ attributes.terms ?? [] }
 													onChange={ ( value ) =>
 														setAttributes( { terms: value } )
 													}
@@ -359,21 +359,21 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 										/>
 										<TextControl
 											label={ __( 'CSS class names', 'a-z-listing' ) }
-											value={ attributes.className }
+											value={ attributes.className ?? '' }
 											onChange={ ( value ) =>
 												setAttributes( { className: value } )
 											}
 										/>
 										<TextControl
 											label={ __( 'Alphabet', 'a-z-listing' ) }
-											value={ attributes.alphabet }
+											value={ attributes.alphabet ?? '' }
 											onChange={ ( value ) =>
 												setAttributes( { alphabet: value } )
 											}
 										/>
 										<SelectControl
 											label={ __( 'Numbers', 'a-z-listing' ) }
-											value={ attributes.numbers }
+											value={ attributes.numbers ?? '' }
 											options={ [
 												{
 													value: 'hide',
@@ -413,9 +413,7 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 												'The number of letters to include in a single group',
 												'a-z-listing'
 											) }
-											value={
-												attributes.grouping
-											}
+											value={attributes.grouping ?? ''}
 											min={ 1 }
 											max={ 10 }
 											onChange={ ( value ) =>
@@ -462,7 +460,7 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 
 										<ToggleControl
 											label={ __( 'Display symbols entry first', 'a-z-listing' ) }
-											checked={ attributes['symbols-first'] }
+											checked={ !!attributes['symbols-first'] }
 											onChange={ ( value ) =>
 												setAttributes( {
 													'symbols-first': value,
@@ -472,7 +470,7 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 
 										<RangeControl
 											label={ __( 'Columns', 'a-z-listing' ) }
-											value={ attributes.columns }
+											value={ attributes.columns ?? MAX_POSTS_COLUMNS }
 											onChange={ ( value ) =>
 												setAttributes( { columns: value } )
 											}

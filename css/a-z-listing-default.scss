@@ -74,15 +74,13 @@ div.letter-section {
 
 		@for $column from 1 to 17 {
 			&.max-#{$column}-columns {
-				column-count: unquote('min(var(--a-z-listing-column-count, #{$defaultColumnCount}), #{$column})');
+				column-count: unquote('min(var(--a-z-listing-column-count, #{$defaultColumnCount}),#{$column})');
 				// Legacy
 				max-width:
 					($column * $defaultColumnWidth)
 					+ (($column - 1) * $defaultColumnGap);
 				// Browsers that support calc() and var()
-				max-width: calc(
-					(#{$column} * var(--a-z-listing-column-width, #{$defaultColumnWidth}))
-					+ ((#{$column} - 1) * var(--a-z-listing-column-gap, #{$defaultColumnGap})));
+				max-width: unquote('calc((min(var(--a-z-listing-column-count,#{$defaultColumnCount}),#{$column}) * var(--a-z-listing-column-width,#{$defaultColumnWidth})) + ((min(var(--a-z-listing-column-count,#{$defaultColumnCount}),#{$column}) - 1) * var(--a-z-listing-column-gap,#{$defaultColumnGap})))');
 			}
 		}
 	}

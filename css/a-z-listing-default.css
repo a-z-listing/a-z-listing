@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .az-letters,
 .a-z-listing-widget .az-letters,
 .a-z-listing-widget.widget .az-letters {
@@ -76,84 +77,84 @@ div.letter-section > ul.az-columns > li {
   display: block;
 }
 div.letter-section > ul.az-columns.max-1-columns {
-  column-count: min(var(--a-z-listing-column-count, 3), 1);
+  column-count: min(var(--a-z-listing-column-count, 3),1);
   max-width: 15em;
-  max-width: calc((1 * var(--a-z-listing-column-width, 15em)) + (1 - 1) * var(--a-z-listing-column-gap, 0.6em));
+  max-width: calc((min(var(--a-z-listing-column-count,3),1) * var(--a-z-listing-column-width,15em)) + ((min(var(--a-z-listing-column-count,3),1) - 1) * var(--a-z-listing-column-gap,0.6em)));
 }
 div.letter-section > ul.az-columns.max-2-columns {
-  column-count: min(var(--a-z-listing-column-count, 3), 2);
+  column-count: min(var(--a-z-listing-column-count, 3),2);
   max-width: 30.6em;
-  max-width: calc((2 * var(--a-z-listing-column-width, 15em)) + (2 - 1) * var(--a-z-listing-column-gap, 0.6em));
+  max-width: calc((min(var(--a-z-listing-column-count,3),2) * var(--a-z-listing-column-width,15em)) + ((min(var(--a-z-listing-column-count,3),2) - 1) * var(--a-z-listing-column-gap,0.6em)));
 }
 div.letter-section > ul.az-columns.max-3-columns {
-  column-count: min(var(--a-z-listing-column-count, 3), 3);
+  column-count: min(var(--a-z-listing-column-count, 3),3);
   max-width: 46.2em;
-  max-width: calc((3 * var(--a-z-listing-column-width, 15em)) + (3 - 1) * var(--a-z-listing-column-gap, 0.6em));
+  max-width: calc((min(var(--a-z-listing-column-count,3),3) * var(--a-z-listing-column-width,15em)) + ((min(var(--a-z-listing-column-count,3),3) - 1) * var(--a-z-listing-column-gap,0.6em)));
 }
 div.letter-section > ul.az-columns.max-4-columns {
-  column-count: min(var(--a-z-listing-column-count, 3), 4);
+  column-count: min(var(--a-z-listing-column-count, 3),4);
   max-width: 61.8em;
-  max-width: calc((4 * var(--a-z-listing-column-width, 15em)) + (4 - 1) * var(--a-z-listing-column-gap, 0.6em));
+  max-width: calc((min(var(--a-z-listing-column-count,3),4) * var(--a-z-listing-column-width,15em)) + ((min(var(--a-z-listing-column-count,3),4) - 1) * var(--a-z-listing-column-gap,0.6em)));
 }
 div.letter-section > ul.az-columns.max-5-columns {
-  column-count: min(var(--a-z-listing-column-count, 3), 5);
+  column-count: min(var(--a-z-listing-column-count, 3),5);
   max-width: 77.4em;
-  max-width: calc((5 * var(--a-z-listing-column-width, 15em)) + (5 - 1) * var(--a-z-listing-column-gap, 0.6em));
+  max-width: calc((min(var(--a-z-listing-column-count,3),5) * var(--a-z-listing-column-width,15em)) + ((min(var(--a-z-listing-column-count,3),5) - 1) * var(--a-z-listing-column-gap,0.6em)));
 }
 div.letter-section > ul.az-columns.max-6-columns {
-  column-count: min(var(--a-z-listing-column-count, 3), 6);
+  column-count: min(var(--a-z-listing-column-count, 3),6);
   max-width: 93em;
-  max-width: calc((6 * var(--a-z-listing-column-width, 15em)) + (6 - 1) * var(--a-z-listing-column-gap, 0.6em));
+  max-width: calc((min(var(--a-z-listing-column-count,3),6) * var(--a-z-listing-column-width,15em)) + ((min(var(--a-z-listing-column-count,3),6) - 1) * var(--a-z-listing-column-gap,0.6em)));
 }
 div.letter-section > ul.az-columns.max-7-columns {
-  column-count: min(var(--a-z-listing-column-count, 3), 7);
+  column-count: min(var(--a-z-listing-column-count, 3),7);
   max-width: 108.6em;
-  max-width: calc((7 * var(--a-z-listing-column-width, 15em)) + (7 - 1) * var(--a-z-listing-column-gap, 0.6em));
+  max-width: calc((min(var(--a-z-listing-column-count,3),7) * var(--a-z-listing-column-width,15em)) + ((min(var(--a-z-listing-column-count,3),7) - 1) * var(--a-z-listing-column-gap,0.6em)));
 }
 div.letter-section > ul.az-columns.max-8-columns {
-  column-count: min(var(--a-z-listing-column-count, 3), 8);
+  column-count: min(var(--a-z-listing-column-count, 3),8);
   max-width: 124.2em;
-  max-width: calc((8 * var(--a-z-listing-column-width, 15em)) + (8 - 1) * var(--a-z-listing-column-gap, 0.6em));
+  max-width: calc((min(var(--a-z-listing-column-count,3),8) * var(--a-z-listing-column-width,15em)) + ((min(var(--a-z-listing-column-count,3),8) - 1) * var(--a-z-listing-column-gap,0.6em)));
 }
 div.letter-section > ul.az-columns.max-9-columns {
-  column-count: min(var(--a-z-listing-column-count, 3), 9);
+  column-count: min(var(--a-z-listing-column-count, 3),9);
   max-width: 139.8em;
-  max-width: calc((9 * var(--a-z-listing-column-width, 15em)) + (9 - 1) * var(--a-z-listing-column-gap, 0.6em));
+  max-width: calc((min(var(--a-z-listing-column-count,3),9) * var(--a-z-listing-column-width,15em)) + ((min(var(--a-z-listing-column-count,3),9) - 1) * var(--a-z-listing-column-gap,0.6em)));
 }
 div.letter-section > ul.az-columns.max-10-columns {
-  column-count: min(var(--a-z-listing-column-count, 3), 10);
+  column-count: min(var(--a-z-listing-column-count, 3),10);
   max-width: 155.4em;
-  max-width: calc((10 * var(--a-z-listing-column-width, 15em)) + (10 - 1) * var(--a-z-listing-column-gap, 0.6em));
+  max-width: calc((min(var(--a-z-listing-column-count,3),10) * var(--a-z-listing-column-width,15em)) + ((min(var(--a-z-listing-column-count,3),10) - 1) * var(--a-z-listing-column-gap,0.6em)));
 }
 div.letter-section > ul.az-columns.max-11-columns {
-  column-count: min(var(--a-z-listing-column-count, 3), 11);
+  column-count: min(var(--a-z-listing-column-count, 3),11);
   max-width: 171em;
-  max-width: calc((11 * var(--a-z-listing-column-width, 15em)) + (11 - 1) * var(--a-z-listing-column-gap, 0.6em));
+  max-width: calc((min(var(--a-z-listing-column-count,3),11) * var(--a-z-listing-column-width,15em)) + ((min(var(--a-z-listing-column-count,3),11) - 1) * var(--a-z-listing-column-gap,0.6em)));
 }
 div.letter-section > ul.az-columns.max-12-columns {
-  column-count: min(var(--a-z-listing-column-count, 3), 12);
+  column-count: min(var(--a-z-listing-column-count, 3),12);
   max-width: 186.6em;
-  max-width: calc((12 * var(--a-z-listing-column-width, 15em)) + (12 - 1) * var(--a-z-listing-column-gap, 0.6em));
+  max-width: calc((min(var(--a-z-listing-column-count,3),12) * var(--a-z-listing-column-width,15em)) + ((min(var(--a-z-listing-column-count,3),12) - 1) * var(--a-z-listing-column-gap,0.6em)));
 }
 div.letter-section > ul.az-columns.max-13-columns {
-  column-count: min(var(--a-z-listing-column-count, 3), 13);
+  column-count: min(var(--a-z-listing-column-count, 3),13);
   max-width: 202.2em;
-  max-width: calc((13 * var(--a-z-listing-column-width, 15em)) + (13 - 1) * var(--a-z-listing-column-gap, 0.6em));
+  max-width: calc((min(var(--a-z-listing-column-count,3),13) * var(--a-z-listing-column-width,15em)) + ((min(var(--a-z-listing-column-count,3),13) - 1) * var(--a-z-listing-column-gap,0.6em)));
 }
 div.letter-section > ul.az-columns.max-14-columns {
-  column-count: min(var(--a-z-listing-column-count, 3), 14);
+  column-count: min(var(--a-z-listing-column-count, 3),14);
   max-width: 217.8em;
-  max-width: calc((14 * var(--a-z-listing-column-width, 15em)) + (14 - 1) * var(--a-z-listing-column-gap, 0.6em));
+  max-width: calc((min(var(--a-z-listing-column-count,3),14) * var(--a-z-listing-column-width,15em)) + ((min(var(--a-z-listing-column-count,3),14) - 1) * var(--a-z-listing-column-gap,0.6em)));
 }
 div.letter-section > ul.az-columns.max-15-columns {
-  column-count: min(var(--a-z-listing-column-count, 3), 15);
+  column-count: min(var(--a-z-listing-column-count, 3),15);
   max-width: 233.4em;
-  max-width: calc((15 * var(--a-z-listing-column-width, 15em)) + (15 - 1) * var(--a-z-listing-column-gap, 0.6em));
+  max-width: calc((min(var(--a-z-listing-column-count,3),15) * var(--a-z-listing-column-width,15em)) + ((min(var(--a-z-listing-column-count,3),15) - 1) * var(--a-z-listing-column-gap,0.6em)));
 }
 div.letter-section > ul.az-columns.max-16-columns {
-  column-count: min(var(--a-z-listing-column-count, 3), 16);
+  column-count: min(var(--a-z-listing-column-count, 3),16);
   max-width: 249em;
-  max-width: calc((16 * var(--a-z-listing-column-width, 15em)) + (16 - 1) * var(--a-z-listing-column-gap, 0.6em));
+  max-width: calc((min(var(--a-z-listing-column-count,3),16) * var(--a-z-listing-column-width,15em)) + ((min(var(--a-z-listing-column-count,3),16) - 1) * var(--a-z-listing-column-gap,0.6em)));
 }
 div.letter-section div.back-to-top {
   display: var(--a-z-listing-back-to-top-display, block);
@@ -166,7 +167,7 @@ div.letter-section div.back-to-top a {
 }
 div.letter-section div.back-to-top a:before, div.letter-section div.back-to-top a:after {
   font-family: dashicons;
-  content: "\f343";
+  content: "";
   padding: 0.2em;
 }
 

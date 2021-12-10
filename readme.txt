@@ -6,7 +6,7 @@ Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 5.0
 Requires PHP: 7.0
 Tested up to: 5.8
-Stable tag: 4.0.0
+Stable tag: 4.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -468,9 +468,11 @@ If there is code already in your functions.php then add just the lines between `
 
 == Changelog ==
 
-= 4.0.0 =
+= 4.0.1 =
 
-This is a major version change, which means that it might break your site when you upgrade. Please check in a test site first!
+Bug fixes for the 4.0.0 release
+
+*Updates from 4.0.0*
 
 * NEW: Block Editor support
 * NEW: symbols-first display
@@ -492,6 +494,27 @@ This is a major version change, which means that it might break your site when y
 **EXTENSIONS**
 
 Check out the two extensions at [A-Z-Listing.com](https://a-z-listing.com/shop). These extensions provide convinience functionality. Purchasing one or both will help towards the cost of maintaining the A-Z Listing plugin.
+
+= 4.0.0 =
+
+This is a major version change, which means that it might break your site when you upgrade. Please check in a test site first!
+
+* NEW: Block Editor support
+* NEW: symbols-first display
+* NEW: post-ID and parent-post name
+* Bump minimum PHP requirement to 7.0
+* Bump minimum WordPress requirement to 5.0
+* Update stylesheet to use CSS Variables
+* Refactor for better maintainability
+* Namespace all classes
+* Improve documentation
+* Add legacy non-namespaced backwards-compatibility classes
+* Add PHP type hints
+* Add strict PHP types checking
+* Add extra template name to match the displayed post-type
+* Always load CSS styles to reduce unstyled listings cases
+* Use php-scoper to reduce conflicts with other plugins
+* Update NPM dependencies
 
 = 3.1.2 =
 

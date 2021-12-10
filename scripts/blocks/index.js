@@ -45,7 +45,7 @@ registerStore( 'a-z-listing/slotfills', {
  *
  * @see https://developer.wordpress.org/block-editor/developers/block-api/#registering-a-block
  */
-registerBlockType( 'a-z-listing/wp-a-z-listing-block', {
+registerBlockType( 'a-z-listing/block', {
 	/**
 	 * This is the display title for your block, which can be translated with `i18n` functions.
 	 * The block inserter will show this name.
@@ -93,14 +93,14 @@ registerBlockType( 'a-z-listing/wp-a-z-listing-block', {
 				type: 'prefix',
 				prefix: '[a-z-listing',
 				transform() {
-					return createBlock( 'a-z-listing/wp-a-z-listing-block' );
+					return createBlock( 'a-z-listing/block' );
 				},
 			},
 			{
 				type: 'prefix',
 				prefix: '[a-z-listing]',
 				transform() {
-					return createBlock( 'a-z-listing/wp-a-z-listing-block' );
+					return createBlock( 'a-z-listing/block' );
 				},
 			},
 			{
@@ -108,13 +108,13 @@ registerBlockType( 'a-z-listing/wp-a-z-listing-block', {
 				isMatch: ( node ) => node.nodeName === 'P' && /^\s*\[a-z-listing.*\]\s*$/.test( node.textContent ),
 				transform( node ) {
 					const atts = attrs( node.textContent.trim() );
-					return createBlock( 'a-z-listing/wp-a-z-listing-block', atts );
+					return createBlock( 'a-z-listing/block', atts );
 				},
 			},
 		],
 	},
 } );
 
-registerPlugin( 'a-z-listing/upgrade-shortcode', {
+registerPlugin( 'a-z-listing-upgrade-shortcode', {
 	render: shortcodeUpgrader,
 } );
