@@ -1,14 +1,14 @@
 # A-Z Listing #
 
-**Contributors:** [diddledani](https://profiles.wordpress.org/diddledani)  
-**Donate Link:** https://liberapay.com/diddledan/donate  
-**Tags:** a to z, a-z, archive, listing, widget, index  
-**Requires at least:** 5.0  
-**Requires PHP:** 7.0  
-**Tested up to:** 5.8  
-**Stable tag:** 4.0.1  
-**License:** GPLv2 or later  
-**License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
+**Contributors:** [diddledani](https://profiles.wordpress.org/diddledani)
+**Donate Link:** https://liberapay.com/diddledan/donate
+**Tags:** a to z, a-z, archive, listing, widget, index
+**Requires at least:** 5.0
+**Requires PHP:** 7.0
+**Tested up to:** 5.8
+**Stable tag:** 4.0.1
+**License:** GPLv2 or later
+**License URI:** http://www.gnu.org/licenses/gpl-2.0.html
 
 Provides an A to Z index page and widget. The widget links to the index page at the appropriate letter.
 
