@@ -6,7 +6,7 @@ const validBlocks = ( blocks ) => blocks && blocks.length > 0;
 
 const blockHandler = ( block ) => {
 	const atts = attrs( block.attributes.text )
-	return createBlock( 'a-z-listing/wp-a-z-listing-block', atts );
+	return createBlock( 'a-z-listing/block', atts );
 }
 
 const transform = ( block ) => {
@@ -35,4 +35,5 @@ export default () => {
 	if ( validBlocks( blocks ) ) {
 		convertBlocks( blocks, 1, 3 );
 	}
+	return null;
 }
