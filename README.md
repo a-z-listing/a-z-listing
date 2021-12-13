@@ -6,7 +6,7 @@
 **Requires at least:** 5.0  
 **Requires PHP:** 7.0  
 **Tested up to:** 5.8  
-**Stable tag:** 4.0.1  
+**Stable tag:** 4.1.0  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -472,9 +472,9 @@ If there is code already in your functions.php then add just the lines between `
 
 ## Changelog ##
 
-### 4.0.1 ###
+### 4.1.0 ###
 
-Bug fixes for the 4.0.0 release
+* Introduce more robust sorting mechanism that fixes sorting errors introduced by version 4.0.0
 
 ##### Updates from 4.0.0 #####
 
@@ -498,6 +498,10 @@ Bug fixes for the 4.0.0 release
 #### EXTENSIONS ####
 
 Check out the two extensions at [A-Z-Listing.com](https://a-z-listing.com/shop). These extensions provide convinience functionality. Purchasing one or both will help towards the cost of maintaining the A-Z Listing plugin.
+
+### 4.0.1 ###
+
+Bug fixes for the 4.0.0 release
 
 ### 4.0.0 ###
 
