@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the A-Z Listing package.
 msgid ""
 msgstr ""
-"Project-Id-Version: A-Z Listing 4.0.1\n"
+"Project-Id-Version: A-Z Listing 4.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/a-z-listing\n"
-"POT-Creation-Date: 2021-12-10 19:57:54+00:00\n"
+"POT-Creation-Date: 2021-12-13 13:33:26+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -58,7 +58,7 @@ msgid ""
 "for your site."
 msgstr ""
 
-#: src/Alphabet.php:63
+#: src/Alphabet.php:71
 #. translators: List the aphabet of your language in the order that your
 #. language prefers. list as groups of identical meanings but different
 #. characters together, e.g. in English we group A with a because they are both
@@ -76,7 +76,7 @@ msgid ""
 "OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz"
 msgstr ""
 
-#: src/Alphabet.php:65
+#: src/Alphabet.php:73
 #. translators: This should be a single character to denote "all entries that
 #. didn't fit under one of the alphabet character groups defined". This is used
 #. in English to categorise posts whose title begins with a numeric (0 through

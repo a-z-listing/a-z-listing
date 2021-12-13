@@ -459,8 +459,9 @@ class Query {
 			wp_reset_postdata();
 		}
 
-		$this->alphabet->loop(
-			function( string $character ) use ( $indexed_items ) {
+		$alphabet = $this->alphabet;
+		$alphabet->loop(
+			function( string $character ) use ( &$indexed_items, $alphabet ) {
 				if ( ! empty( $indexed_items[ $character ] ) ) {
 					usort(
 						$indexed_items[ $character ],
@@ -470,11 +471,72 @@ class Query {
 						 * @param array<string,string> $a
 						 * @param array<string,string> $b
 						 */
-						function ( array $a, array $b ): int {
+						function ( array $a, array $b ) use ( $alphabet ): int {
 							$atitle = strtolower( $a['title'] );
 							$btitle = strtolower( $b['title'] );
 
-							$default_sort = strcmp( $atitle, $btitle );
+							$atitle_array = Strings::mb_string_to_array( $atitle );
+							$btitle_array = Strings::mb_string_to_array( $btitle );
+
+							$atitle_array = array_map(
+								function( $letter ) use ( $alphabet ) {
+									$normalised_letter = $alphabet->get_letter_for_key( $letter );
+									if ( $normalised_letter === $alphabet->unknown_letter ) {
+										$normalised_letter = $letter;
+									}
+									return $normalised_letter;
+								},
+								$atitle_array
+							);
+							$btitle_array = array_map(
+								function( $letter ) use ( $alphabet ) {
+									$normalised_letter = $alphabet->get_letter_for_key( $letter );
+									if ( $normalised_letter === $alphabet->unknown_letter ) {
+										$normalised_letter = $letter;
+									}
+									return $normalised_letter;
+								},
+								$btitle_array
+							);
+
+							$default_sort = 0;
+							if ( implode( '', $atitle_array ) != implode( '', $btitle_array ) ) {
+								$min_length = min( count( $atitle_array ), count( $btitle_array ) );
+								for ( $idx = 0; $idx < $min_length; ++$idx ) {
+									$a_has_symbol = false;
+									$b_has_symbol = false;
+
+									$aletter = array_search( $atitle_array[ $idx ], $alphabet->alphabet_keys );
+									$bletter = array_search( $btitle_array[ $idx ], $alphabet->alphabet_keys );
+
+									if ( ! is_int( $aletter ) ) {
+										$aletter = $atitle_array[ $idx ];
+										$a_has_symbol = true;
+									}
+									if ( ! is_int( $bletter ) ) {
+										$bletter = $btitle_array[ $idx ];
+										$b_has_symbol = true;
+									}
+
+									if ( $a_has_symbol && ! $b_has_symbol ) {
+										$default_sort = $alphabet->symbols_first ? -1 : 1;
+									} elseif ( ! $a_has_symbol && $b_has_symbol ) {
+										$default_sort = $alphabet->symbols_first ? 1 : -1;
+									} elseif ( $a_has_symbol && $b_has_symbol ) {
+										$default_sort = $aletter <=> $bletter;
+									} else {
+										$default_sort = $aletter <=> $bletter;
+									}
+
+									if ( 0 !== $default_sort ) {
+										break;
+									}
+								}
+
+								if ( 0 === $default_sort ) {
+									$default_sort = count( $atitle_array ) <=> count( $btitle_array );
+								}
+							}
 
 							/**
 							 * Compare two titles to determine sorting order.
@@ -493,7 +555,8 @@ class Query {
 							);
 
 							if ( is_int( $sort ) ) {
-								return $sort;
+								// normalise the returned value to -1, 0, or 1.
+								return $sort <=> 0;
 							}
 
 							if ( defined( 'AZLISTINGLOG' ) && AZLISTINGLOG ) {
