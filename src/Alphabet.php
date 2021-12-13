@@ -26,7 +26,7 @@ class Alphabet {
 	 * @since 4.0.0
 	 * @var string
 	 */
-	private $unknown_letter;
+	public $unknown_letter;
 
 	/**
 	 * All available characters of the alphabet in order. For example, with the
@@ -38,7 +38,7 @@ class Alphabet {
 	 * @var array<int,string>
 	 * @see $keyed_alphabet
 	 */
-	private $alphabet_keys;
+	public $alphabet_keys;
 
 	/**
 	 * All available letters in groups of similarity. For example, by default `A`,
@@ -51,7 +51,15 @@ class Alphabet {
 	 * @var array<string,string>
 	 * @see $alphabet_keys
 	 */
-	private $keyed_alphabet;
+	public $keyed_alphabet;
+
+	/**
+	 * Any unknown letter is sorted to be before the rest of the alphabet
+	 *
+	 * @since 4.1.0
+	 * @var bool
+	 */
+	public $unknown_letter_is_first = false;
 
 	/**
 	 * Build a translated alphabet
