@@ -485,7 +485,7 @@ class Query {
 										$normalised_letter = $letter;
 									}
 									return $normalised_letter;
-							    },
+								},
 								$atitle_array
 							);
 							$btitle_array = array_map(
@@ -495,7 +495,7 @@ class Query {
 										$normalised_letter = $letter;
 									}
 									return $normalised_letter;
-							    },
+								},
 								$btitle_array
 							);
 
@@ -528,12 +528,12 @@ class Query {
 										$default_sort = $aletter <=> $bletter;
 									}
 
-									if ( $default_sort !== 0 ) {
+									if ( 0 !== $default_sort ) {
 										break;
 									}
 								}
 
-								if ( $default_sort === 0 ) {
+								if ( 0 === $default_sort ) {
 									$default_sort = count( $atitle_array ) <=> count( $btitle_array );
 								}
 							}
@@ -556,7 +556,7 @@ class Query {
 
 							if ( is_int( $sort ) ) {
 								// normalise the returned value to -1, 0, or 1.
-								return  $sort <=> 0;
+								return $sort <=> 0;
 							}
 
 							if ( defined( 'AZLISTINGLOG' ) && AZLISTINGLOG ) {
