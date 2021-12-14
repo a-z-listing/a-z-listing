@@ -6,7 +6,7 @@ Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 5.0
 Requires PHP: 7.0
 Tested up to: 5.8
-Stable tag: 4.1.0
+Stable tag: 4.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -468,9 +468,9 @@ If there is code already in your functions.php then add just the lines between `
 
 == Changelog ==
 
-= 4.1.0 =
+= 4.1.1 =
 
-* Introduce more robust sorting mechanism that fixes sorting errors introduced by version 4.0.0
+* Fix undefined `A_Z_Listing\Alphabet::$symbols_first` error
 
 *Updates from 4.0.0*
 
@@ -494,6 +494,10 @@ If there is code already in your functions.php then add just the lines between `
 **EXTENSIONS**
 
 Check out the two extensions at [A-Z-Listing.com](https://a-z-listing.com/shop). These extensions provide convinience functionality. Purchasing one or both will help towards the cost of maintaining the A-Z Listing plugin.
+
+= 4.1.0 =
+
+* Introduce more robust sorting mechanism that fixes sorting errors introduced by version 4.0.0
 
 = 4.0.1 =
 

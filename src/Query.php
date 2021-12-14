@@ -519,9 +519,9 @@ class Query {
 									}
 
 									if ( $a_has_symbol && ! $b_has_symbol ) {
-										$default_sort = $alphabet->symbols_first ? -1 : 1;
+										$default_sort = $alphabet->unknown_letter_is_first ? -1 : 1;
 									} elseif ( ! $a_has_symbol && $b_has_symbol ) {
-										$default_sort = $alphabet->symbols_first ? 1 : -1;
+										$default_sort = $alphabet->unknown_letter_is_first ? 1 : -1;
 									} elseif ( $a_has_symbol && $b_has_symbol ) {
 										$default_sort = $aletter <=> $bletter;
 									} else {
