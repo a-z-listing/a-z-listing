@@ -961,13 +961,13 @@ class Query {
 	}
 
 	/**
-	 * Retrieve the number of posts within the current letter
+	 * Retrieve the number of items within the current letter
 	 *
 	 * @since 0.7
 	 * @since 1.0.0 deprecated.
 	 * @see A_Z_Listing::get_the_letter_items_count()
 	 * @deprecated use A_Z_Listing::get_the_letter_items_count()
-	 * @return int The number of posts.
+	 * @return int The number of items.
 	 */
 	public function num_a_z_posts(): int {
 		_deprecated_function( __METHOD__, '1.0.0', 'A_Z_Listing::get_the_letter_items_count' );
@@ -975,7 +975,7 @@ class Query {
 	}
 
 	/**
-	 * Retrieve the number of posts within the current letter
+	 * Retrieve the number of items within the current letter
 	 *
 	 * @since 0.7
 	 * @since 1.0.0 deprecated.
@@ -989,7 +989,31 @@ class Query {
 	}
 
 	/**
-	 * Print the number of posts within the current letter
+	 * Print the number of items within the current letter
+	 *
+	 * @since 1.0.0
+	 * @since 4.0.0 deprecated.
+	 * @return void
+	 */
+	public function the_letter_count() {
+		_deprecated_function( __METHOD__, '4.0.0', 'A_Z_Listing::the_letter_items_count' );
+		$this->the_letter_items_count();
+	}
+
+	/**
+	 * Retrieve the number of items within the current letter
+	 *
+	 * @since 1.0.0
+	 * @since 4.0.0 deprecated.
+	 * @return int The number of items.
+	 */
+	public function get_the_letter_count(): int {
+		_deprecated_function( __METHOD__, '4.0.0', 'A_Z_Listing::get_the_letter_items_count' );
+		return $this->get_the_letter_items_count();
+	}
+
+	/**
+	 * Print the number of items within the current letter
 	 *
 	 * @since 1.0.0
 	 * @return void
@@ -999,10 +1023,10 @@ class Query {
 	}
 
 	/**
-	 * Retrieve the number of posts within the current letter
+	 * Retrieve the number of items within the current letter
 	 *
 	 * @since 1.0.0
-	 * @return int The number of posts
+	 * @return int The number of items
 	 */
 	public function get_the_letter_items_count(): int {
 		return count( $this->current_letter_items );
