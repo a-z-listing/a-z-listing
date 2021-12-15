@@ -95,24 +95,6 @@ const displayTypes = applyFilters(
 const defaultAlphabet = __( 'AÁÀÄÂaáàäâ,Bb,CÇcç,Dd,EÉÈËÊeéèëê,Ff,Gg,Hh,IÍÌÏÎiíìïî,Jj,Kk,Ll,Mm,Nn,OÓÒÖÔoóòöô,Pp,Qq,Rr,Ssß,Tt,UÚÙÜÛuúùüû,Vv,Ww,Xx,Yy,Zz', 'a-z-listing' );
 
 const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
-	useEffect( () => {
-		const attsWithDefaults = {};
-		let addedDefaults = false;
-		if ( attributes['instance-id'] === null || typeof attributes['instance-id'] === 'undefined' ) {
-			attributes['instance-id'] = uuid();
-			addedDefaults = true;
-		}
-		for ( const attributeName in defaults ) {
-			if ( attributes[attributeName] === null || typeof attributes[attributeName] === 'undefined' ) {
-				attsWithDefaults[attributeName] = defaults[attributeName].default;
-				addedDefaults = true;
-			}
-		}
-		if ( addedDefaults ) {
-			setAttributes( attsWithDefaults );
-		}
-	} );
-
 	const { postTypes, allTaxonomies } = useSelect( ( select ) => {
 		const { getPostTypes, getTaxonomies } = select( coreStore );
 		const excludedPostTypes = [ 'attachment' ];
@@ -181,6 +163,7 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 		}
 		return errors;
 	}, [ attributes.display, attributes.taxonomy ] );
+
 
 	const inspectorControls = (
 		<InspectorControls>
@@ -267,7 +250,7 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 									<>
 										<SelectControl
 											label={ __( 'Display mode', 'a-z-listing' ) }
-											value={ attributes.display ?? 'posts' }
+											value={ attributes.display ?? defaults['display'].default }
 											options={ displayTypes }
 											onChange={ ( value ) =>
 												setAttributes(
@@ -282,7 +265,7 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 										{ 'posts' === attributes.display && (
 											<SelectControl
 												label={ __( 'Post Type', 'a-z-listing' ) }
-												value={ attributes['post-type'] ?? 'page' }
+												value={ attributes['post-type'] ?? defaults['post-type'].default }
 												options={ postTypesSelectOptions }
 												onChange={ ( value ) =>
 													setAttributes(
@@ -307,7 +290,7 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 										) }
 
 										{ (
-											'posts' === attributes.display ||
+											( 'posts' === attributes.display && postTypesTaxonomiesSelectOptions.length > 1 ) ||
 											'terms' === attributes.display
 										) && (
 											<SelectControl
@@ -352,7 +335,7 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 									<>
 										<TextControl
 											label={ __( 'Listing ID', 'a-z-listing' ) }
-											value={ attributes['instance-id'] }
+											value={ attributes['instance-id'] ?? uuid() }
 											onChange={ (value) =>
 												setAttributes( { 'instance-id': value } )
 											}
@@ -366,14 +349,14 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 										/>
 										<TextControl
 											label={ __( 'Alphabet', 'a-z-listing' ) }
-											value={ attributes.alphabet ?? '' }
+											value={ attributes.alphabet ?? defaults['alphabet'].default }
 											onChange={ ( value ) =>
 												setAttributes( { alphabet: value } )
 											}
 										/>
 										<SelectControl
 											label={ __( 'Numbers', 'a-z-listing' ) }
-											value={ attributes.numbers ?? '' }
+											value={ attributes.numbers ?? defaults['numbers'].default }
 											options={ [
 												{
 													value: 'hide',
@@ -413,7 +396,7 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 												'The number of letters to include in a single group',
 												'a-z-listing'
 											) }
-											value={attributes.grouping ?? ''}
+											value={ attributes.grouping ?? defaults['grouping'].default }
 											min={ 1 }
 											max={ 10 }
 											onChange={ ( value ) =>
@@ -440,11 +423,7 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 														'Group 0-9 as a single letter',
 														'a-z-listing'
 													) }
-													checked={
-														!! attributes[
-															'group-numbers'
-														]
-													}
+													checked={ !! attributes['group-numbers'] }
 													onChange={ ( value ) =>
 														setAttributes(
 															applyFilters(
@@ -462,9 +441,7 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 											label={ __( 'Display symbols entry first', 'a-z-listing' ) }
 											checked={ !!attributes['symbols-first'] }
 											onChange={ ( value ) =>
-												setAttributes( {
-													'symbols-first': value,
-												} )
+												setAttributes( { 'symbols-first': value } )
 											}
 										/>
 
@@ -499,7 +476,7 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 										/> */}
 										<TextControl
 											label={ __( 'Column width', 'a-z-listing' ) }
-											value={ attributes['column-width'] }
+											value={ attributes['column-width'] ?? defaults['column-width'].default }
 											onChange={ ( value ) =>
 												setAttributes( { 'column-width': value } )
 											}
@@ -507,7 +484,7 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 										/>
 										<TextControl
 											label={ __( 'Column gap', 'a-z-listing' ) }
-											value={ attributes['column-gap'] }
+											value={ attributes['column-gap'] ?? defaults['column-gap'].default }
 											onChange={ ( value ) =>
 												setAttributes( { 'column-gap': value } )
 											}
