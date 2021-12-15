@@ -9,7 +9,6 @@ import { createBlock, registerBlockType } from '@wordpress/blocks';
 import { registerStore } from '@wordpress/data';
 import { createHooks } from '@wordpress/hooks';
 import { postList as icon } from '@wordpress/icons';
-import { registerPlugin } from '@wordpress/plugins';
 import { attrs } from '@wordpress/shortcode';
 
 import edit from './edit';
@@ -115,6 +114,4 @@ registerBlockType( 'a-z-listing/block', {
 	},
 } );
 
-registerPlugin( 'a-z-listing-upgrade-shortcode', {
-	render: shortcodeUpgrader,
-} );
+shortcodeUpgrader();

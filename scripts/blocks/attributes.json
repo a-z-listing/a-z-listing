@@ -37,7 +37,7 @@
     "numbers": {
         "type": "string",
         "enum": ["before", "after", "hide"],
-        "default": "after"
+        "default": "hide"
     },
     "symbols-first": {
         "type": "boolean",

@@ -26,8 +26,7 @@ function getTitle( post ) {
 }
 
 export function PostParent( { pageId, postTypeSlug, onChange } ) {
-	console.dir({pageId, postTypeSlug, onChange})
-	const [ fieldValue, setFieldValue ] = useState( false );
+	const [ fieldValue, setFieldValue ] = useState( '' );
 	const isSearching = fieldValue;
 	const { parentPost, parentPostId, items, postType } = useSelect(
 		( select ) => {
@@ -113,17 +112,15 @@ export function PostParent( { pageId, postTypeSlug, onChange } ) {
 	const handleKeydown = ( inputValue ) => {
 		setFieldValue( inputValue );
 	};
-	console.log('HI MOM')
 
 	return (
-		<><p>MOO</p>
 		<ComboboxControl
 			label={ __( 'Parent post', 'a-z-listing' ) }
 			value={ parentPostId }
 			options={ parentOptions }
 			onFilterValueChange={ debounce( handleKeydown, 300 ) }
 			onChange={ onChange }
-		/></>
+		/>
 	);
 }
 

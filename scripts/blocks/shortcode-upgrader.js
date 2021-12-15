@@ -1,5 +1,5 @@
 import { createBlock } from '@wordpress/blocks';
-import { useSelect, useDispatch } from '@wordpress/data';
+import { subscribe, select, dispatch } from '@wordpress/data';
 import { attrs } from '@wordpress/shortcode';
 
 const validBlocks = ( blocks ) => blocks && blocks.length > 0;
@@ -10,16 +10,16 @@ const blockHandler = ( block ) => {
 }
 
 const transform = ( block ) => {
-	if ( block.name === 'core/shortcode' ) {
-		const dispatch = useDispatch( 'core/block-editor' );
-		dispatch.replaceBlock( block.clientId, blockHandler( block ) );
+	if ( block.name === 'core/shortcode' && block.attributes.text.startsWith( '[a-z-listing' ) ) {
+		dispatch('core/block-editor')
+			.replaceBlocks( [ block.clientId ], [ blockHandler( block ) ] );
 	} else if ( validBlocks( block.innerBlocks ) ) {
 		convertBlocks( block.innerBlocks );
 	}
 }
 
 const convertBlocks = ( blocks, depth = 1, maxDepth = 3 ) => {
-	for ( const block in blocks) {
+	for ( const block of blocks) {
 		const innerBlocks = { block };
 		transform( block );
 		if (depth <= maxDepth && validBlocks( innerBlocks ) ) {
@@ -29,11 +29,13 @@ const convertBlocks = ( blocks, depth = 1, maxDepth = 3 ) => {
 }
 
 export default () => {
-	const coreEditor = useSelect( 'core/block-editor' );
-	const blocks = coreEditor.getBlocks();
+	const unsubscribe = subscribe( () => {
+		const coreEditor = select( 'core/block-editor' );
+		const blocks = coreEditor.getBlocks();
 
-	if ( validBlocks( blocks ) ) {
-		convertBlocks( blocks, 1, 3 );
-	}
-	return null;
+		if ( validBlocks( blocks ) ) {
+			unsubscribe();
+			convertBlocks( blocks, 1, 3 );
+		}
+	} )
 }
