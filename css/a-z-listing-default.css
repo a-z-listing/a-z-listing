@@ -1,4 +1,3 @@
-@charset "UTF-8";
 .az-letters,
 .a-z-listing-widget .az-letters,
 .a-z-listing-widget.widget .az-letters {
@@ -167,7 +166,7 @@ div.letter-section div.back-to-top a {
 }
 div.letter-section div.back-to-top a:before, div.letter-section div.back-to-top a:after {
   font-family: dashicons;
-  content: "";
+  content: "\f343";
   padding: 0.2em;
 }
 
