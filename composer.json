@@ -1,7 +1,8 @@
 {
-    "name": "bowlhat/wp-a-z-listing",
+    "name": "a-z-listing/a-z-listing",
     "description": "The A-Z Listing plugin for WordPress",
     "license": "GPL-2.0-or-later",
+    "type": "library",
     "authors": [
         {
             "name": "Dani Llewellyn",
