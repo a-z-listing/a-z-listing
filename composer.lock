@@ -812,6 +812,9 @@
                 "sebastian/comparator": ">=1.2.4 <3.0",
                 "sebastian/diff": ">=1.4 <4.0"
             },
+            "replace": {
+                "codeception/phpunit-wrapper": "*"
+            },
             "require-dev": {
                 "codeception/specify": "*",
                 "vlucas/phpdotenv": "^3.0"
@@ -1760,6 +1763,9 @@
                 "bordoni/phpass": "0.3.*",
                 "illuminate/support": ">=4.0.0",
                 "php": ">=5.3.0"
+            },
+            "replace": {
+                "mikemclin/laravel-wp-password": "self.version"
             },
             "require-dev": {
                 "mockery/mockery": "~0.9",
@@ -5344,5 +5350,5 @@
     "platform-overrides": {
         "php": "7.0"
     },
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.1.0"
 }
