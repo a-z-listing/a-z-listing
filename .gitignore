@@ -54,3 +54,6 @@ wordpress/
 
 # CSS Source Maps
 *.css.maptests/_data/dump.sql
+
+# Database dumps
+*.sql

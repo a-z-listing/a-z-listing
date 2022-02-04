@@ -89,6 +89,40 @@ class AZ_Shortcode_Tests extends \Codeception\TestCase\WPTestCase {
 		$this->tester->seeHTMLEquals( $expected, $actual );
 	}
 
+	public function testPopulatedAllChildrenListing() {
+		$parent          = static::factory()->post->create(
+			array(
+				'post_title' => 'Parent post',
+				'post_type'  => 'page',
+				)
+			);
+		$childtitle      = 'Test Page';
+		$child           = static::factory()->post->create(
+			array(
+				'post_title'  => $childtitle,
+				'post_type'   => 'page',
+				'post_parent' => $parent,
+			)
+		);
+		$grandchildtitle = 'Test Page grandchild';
+		$grandchild      = static::factory()->post->create(
+			array(
+				'post_title'  => $grandchildtitle,
+				'post_type'   => 'page',
+				'post_parent' => $child,
+			)
+		);
+
+		$childurl      = sprintf( '?page_id=%s', $child );
+		$grandchildurl = sprintf( '?page_id=%s', $grandchild );
+
+		$expected  = trim( sprintf( file_get_contents( 'tests/_data/populated-listing-all-children.txt' ), $childtitle, $childurl, $grandchildtitle, $grandchildurl ) );
+		$shortcode = sprintf( '[a-z-listing parent-post="%s" get-all-children="true"]', $parent );
+		$actual    = do_shortcode( $shortcode );
+
+		$this->tester->seeHTMLEquals( $expected, $actual );
+	}
+
 	public function testPopulatedTaxonomyListing() {
 		$title = 'test category';
 		$t     = static::factory()->term->create(

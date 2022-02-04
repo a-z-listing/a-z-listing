@@ -3,6 +3,7 @@
 ## 4.2.1 ##
 
 * Fix broken `hide-empty-terms` feature.
+* Fix empty listings when combining `display-posts`, `post-parent` and `get-all-children`.
 
 ## 4.2.0 ##
 

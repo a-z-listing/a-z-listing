@@ -471,6 +471,7 @@ If there is code already in your functions.php then add just the lines between `
 = 4.2.1 =
 
 * Fix broken `hide-empty-terms` feature.
+* Fix empty listings when combining `display-posts`, `post-parent` and `get-all-children`.
 
 **EXTENSIONS**
 
