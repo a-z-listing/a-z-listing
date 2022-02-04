@@ -46,8 +46,8 @@ class HideEmptyTerms extends Extension {
 	 * @return mixed The updated query.
 	 */
 	public function shortcode_query_for_display_and_attribute( $query, string $display, string $key, $value, array $attributes ) {
-		if ( ! isset( $query['hide_empty'] ) && a_z_listing_is_truthy( $value ) ) {
-			$query['hide_empty'] = true;
+		if ( ! isset( $query['hide_empty'] ) || empty( $query['hide_empty'] ) ) {
+			$query['hide_empty'] = a_z_listing_is_truthy( $value );
 		}
 		return $query;
 	}

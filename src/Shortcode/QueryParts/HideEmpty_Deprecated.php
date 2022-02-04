@@ -28,14 +28,6 @@ class HideEmpty_Deprecated extends Extension {
 	public $attribute_name = 'hide-empty';
 
 	/**
-	 * The default value for the attribute.
-	 *
-	 * @since 4.0.0
-	 * @var string
-	 */
-	public $default_value = 'false';
-
-	/**
 	 * The types of listing this shortcode extension may be used with.
 	 *
 	 * @since 4.0.0
@@ -54,7 +46,9 @@ class HideEmpty_Deprecated extends Extension {
 	 * @return mixed The updated query.
 	 */
 	public function shortcode_query_for_display_and_attribute( $query, string $display, string $key, $value, array $attributes ) {
-		$query['hide_empty'] = a_z_listing_is_truthy( $value );
+		if ( ! isset( $query['hide_empty'] ) || empty( $query['hide_empty'] ) ) {
+			$query['hide_empty'] = a_z_listing_is_truthy( $value );
+		}
 		return $query;
 	}
 }

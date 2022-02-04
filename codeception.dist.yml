@@ -73,9 +73,7 @@ modules:
             adminEmail: '%ADMIN_EMAIL%'
             title: 'Test'
             plugins:
-                - a-z-listing/tests/_bootstrap/bootstrap.php
                 - a-z-listing/a-z-listing.php
             activatePlugins:
-                - a-z-listing/tests/_bootstrap/bootstrap.php
                 - a-z-listing/a-z-listing.php
             configFile: 'tests/_data/config.php'

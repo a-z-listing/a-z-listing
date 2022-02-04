@@ -53,4 +53,4 @@ wordpress/
 .env
 
 # CSS Source Maps
-*.css.map
+*.css.maptests/_data/dump.sql

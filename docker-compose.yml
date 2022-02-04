@@ -19,7 +19,7 @@ services:
       local:
 
   app_db:
-    image: mysql:5.7
+    image: mysql/mysql-server:8.0
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE:      wordpress

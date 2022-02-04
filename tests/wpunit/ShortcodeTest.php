@@ -7,7 +7,7 @@ class AZ_Shortcode_Tests extends \Codeception\TestCase\WPTestCase {
      * @var \UnitTester
      */
     protected $tester;
-    
+
     public function setUp()
     {
         // Before...
@@ -98,13 +98,55 @@ class AZ_Shortcode_Tests extends \Codeception\TestCase\WPTestCase {
 			)
 		);
 		$url = sprintf( '?cat=%s', $t );
-	
+
 		$expected = sprintf( file_get_contents( 'tests/_data/populated-taxonomy-listing.txt' ), $title, $url );
 		$actual   = do_shortcode( '[a-z-listing display="terms" taxonomy="category"]' );
-	
+
 		$this->tester->seeHTMLEquals( $expected, $actual );
 	}
-	
+
+	public function testPopulatedTaxonomyWithHideEmptyListing() {
+		static::factory()->term->create(
+			array(
+				'name'     => 'test category',
+				'taxonomy' => 'category',
+			)
+		);
+
+		static::factory()->post->create(
+			array(
+				'title'      => 'Test Post',
+				'post_type'  => 'post',
+			)
+		);
+
+		$expected = trim( file_get_contents( 'tests/_data/populated-taxonomy-listing-hide-empty.txt' ) );
+		$actual   = do_shortcode( '[a-z-listing display="terms" taxonomy="category" hide-empty="true"]' );
+
+		$this->tester->seeHTMLEquals( $expected, $actual );
+	}
+
+	public function testPopulatedTaxonomyWithHideEmptyTermsListing() {
+		static::factory()->term->create(
+			array(
+				'name'     => 'test category',
+				'taxonomy' => 'category',
+			)
+		);
+
+		static::factory()->post->create(
+			array(
+				'title'      => 'Test Post',
+				'post_type'  => 'post',
+			)
+		);
+
+		$expected = trim( file_get_contents( 'tests/_data/populated-taxonomy-listing-hide-empty.txt' ) );
+		$actual   = do_shortcode( '[a-z-listing display="terms" taxonomy="category" hide-empty-terms="true"]' );
+
+		$this->tester->seeHTMLEquals( $expected, $actual );
+	}
+
 	public function testPopulatedMultipleTaxonomyListing() {
 		$cat_title = 'Test Category';
 		$cat       = static::factory()->term->create(
@@ -122,10 +164,10 @@ class AZ_Shortcode_Tests extends \Codeception\TestCase\WPTestCase {
 			)
 		);
 		$tag_url = sprintf( '?tag=%s', 'test-tag' );
-	
+
 		$expected = sprintf( file_get_contents( 'tests/_data/populated-multiple-taxonomy-listing.txt' ), $cat_title, $cat_url, $tag_title, $tag_url );
 		$actual   = do_shortcode( '[a-z-listing display="terms" taxonomy="category,post_tag"]' );
-	
+
 		$this->tester->seeHTMLEquals( $expected, $actual );
 	}
 

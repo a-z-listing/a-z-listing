@@ -9,7 +9,7 @@ class AZ_Listing_Tests extends \Codeception\TestCase\WPTestCase {
      * @var \UnitTester
      */
     protected $tester;
-    
+
     public function setUp()
     {
         // Before...
@@ -164,6 +164,34 @@ class AZ_Listing_Tests extends \Codeception\TestCase\WPTestCase {
 		$this->tester->seeHTMLEquals( $expected, $actual );
 	}
 
+	public function testPopulatedTaxonomyListingWithHideEmptyArrayQuery() {
+		static::factory()->term->create(
+			array(
+				'name'     => 'Test Category',
+				'taxonomy' => 'category',
+			)
+		);
+
+		static::factory()->post->create(
+			array(
+				'title'      => 'Test Post',
+				'post_type'  => 'post',
+			)
+		);
+
+		$expected    = trim( file_get_contents( 'tests/_data/populated-taxonomy-listing-hide-empty.txt' ) );
+		$a_z_listing = new \A_Z_Listing\Query(
+			array(
+				'taxonomy'   => 'category',
+				'hide_empty' => true,
+			),
+			'terms'
+		);
+		$actual      = $a_z_listing->get_the_listing();
+
+		$this->tester->seeHTMLEquals( $expected, $actual );
+	}
+
 	public function testPopulatedMultipleTaxonomyListingArrayQuery() {
 		$cat_title = 'Test Category';
 		$cat       = static::factory()->term->create(
@@ -243,7 +271,7 @@ class AZ_Listing_Tests extends \Codeception\TestCase\WPTestCase {
 				'post_type'  => 'page',
 			)
 		);
-		
+
 		$url = sprintf( '?page_id=%s', $p );
 
 		$q     = new WP_Query(
