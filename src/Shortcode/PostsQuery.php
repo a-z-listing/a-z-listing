@@ -41,16 +41,30 @@ class PostsQuery extends Query {
 		if ( $query instanceof \WP_Query ) {
 			$items = $query->posts;
 		} else {
-			$query = wp_parse_args(
-				$query,
-				array(
-					'posts_per_page' => -1,
-					'nopaging'       => true,
-				)
-			);
 			if ( isset( $query['child_of'] ) ) {
-				$items = get_pages( $query );
+				if ( is_array( $query['post_type'] ) ) {
+					// We set post_type as an array of types even with a single value. `get_posts` does
+					// not work with an array of post types, so we fetch each type's posts separately.
+					$items = array();
+					foreach ( $query['post_type'] as $post_type ) {
+						$partial_query = $query;
+						$partial_query['post_type'] = $post_type;
+						$partial_items = get_pages( $partial_query );
+						if ( false != $partial_items ) {
+							$items = array_merge( $items, $partial_items );
+						}
+					}
+				} else {
+					$items = get_pages( $query );
+				}
 			} else {
+				$query = wp_parse_args(
+					$query,
+					array(
+						'posts_per_page' => -1,
+						'nopaging'       => true,
+					)
+				);
 				$items = ( new \WP_Query( $query ) )->posts;
 			}
 		}

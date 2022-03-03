@@ -90,16 +90,16 @@
     "packages-dev": [
         {
             "name": "antecedent/patchwork",
-            "version": "2.1.17",
+            "version": "2.1.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/antecedent/patchwork.git",
-                "reference": "df5aba175a44c2996ced4edf8ec9f9081b5348c0"
+                "reference": "25c1fa0cd9a6e6d0d13863d8df8f050b6733f16d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/antecedent/patchwork/zipball/df5aba175a44c2996ced4edf8ec9f9081b5348c0",
-                "reference": "df5aba175a44c2996ced4edf8ec9f9081b5348c0",
+                "url": "https://api.github.com/repos/antecedent/patchwork/zipball/25c1fa0cd9a6e6d0d13863d8df8f050b6733f16d",
+                "reference": "25c1fa0cd9a6e6d0d13863d8df8f050b6733f16d",
                 "shasum": ""
             },
             "require": {
@@ -132,9 +132,9 @@
             ],
             "support": {
                 "issues": "https://github.com/antecedent/patchwork/issues",
-                "source": "https://github.com/antecedent/patchwork/tree/2.1.17"
+                "source": "https://github.com/antecedent/patchwork/tree/2.1.21"
             },
-            "time": "2021-10-21T14:22:43+00:00"
+            "time": "2022-02-07T07:28:34+00:00"
         },
         {
             "name": "behat/gherkin",
@@ -258,23 +258,23 @@
         },
         {
             "name": "codeception/codeception",
-            "version": "4.1.23",
+            "version": "4.1.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "27d18cd5d5a1d77d3f1b01ea776238676faf5dcc"
+                "reference": "f8dec8f2bf5347cc596aaf141753f4fb2504c17c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/27d18cd5d5a1d77d3f1b01ea776238676faf5dcc",
-                "reference": "27d18cd5d5a1d77d3f1b01ea776238676faf5dcc",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/f8dec8f2bf5347cc596aaf141753f4fb2504c17c",
+                "reference": "f8dec8f2bf5347cc596aaf141753f4fb2504c17c",
                 "shasum": ""
             },
             "require": {
                 "behat/gherkin": "^4.4.0",
-                "codeception/lib-asserts": "^1.0",
+                "codeception/lib-asserts": "^1.0 | 2.0.*@dev",
                 "codeception/phpunit-wrapper": ">6.0.15 <6.1.0 | ^6.6.1 | ^7.7.1 | ^8.1.1 | ^9.0",
-                "codeception/stub": "^2.0 | ^3.0",
+                "codeception/stub": "^2.0 | ^3.0 | ^4.0",
                 "ext-curl": "*",
                 "ext-json": "*",
                 "ext-mbstring": "*",
@@ -287,11 +287,11 @@
                 "symfony/yaml": ">=2.7 <6.0"
             },
             "require-dev": {
-                "codeception/module-asserts": "1.*@dev",
-                "codeception/module-cli": "1.*@dev",
-                "codeception/module-db": "1.*@dev",
-                "codeception/module-filesystem": "1.*@dev",
-                "codeception/module-phpbrowser": "1.*@dev",
+                "codeception/module-asserts": "^1.0 | 2.0.*@dev",
+                "codeception/module-cli": "^1.0 | 2.0.*@dev",
+                "codeception/module-db": "^1.0 | 2.0.*@dev",
+                "codeception/module-filesystem": "^1.0 | 2.0.*@dev",
+                "codeception/module-phpbrowser": "^1.0 | 2.0.*@dev",
                 "codeception/specify": "~0.3",
                 "codeception/util-universalframework": "*@dev",
                 "monolog/monolog": "~1.8",
@@ -314,13 +314,13 @@
                 "branch-alias": []
             },
             "autoload": {
+                "files": [
+                    "functions.php"
+                ],
                 "psr-4": {
                     "Codeception\\": "src/Codeception",
                     "Codeception\\Extension\\": "ext"
-                },
-                "files": [
-                    "functions.php"
-                ]
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -344,7 +344,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Codeception/Codeception/issues",
-                "source": "https://github.com/Codeception/Codeception/tree/4.1.23"
+                "source": "https://github.com/Codeception/Codeception/tree/4.1.29"
             },
             "funding": [
                 {
@@ -352,7 +352,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2021-12-11T18:05:26+00:00"
+            "time": "2022-01-29T16:56:03+00:00"
         },
         {
             "name": "codeception/lib-asserts",
@@ -916,27 +916,27 @@
         },
         {
             "name": "dealerdirect/phpcodesniffer-composer-installer",
-            "version": "v0.7.1",
+            "version": "v0.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Dealerdirect/phpcodesniffer-composer-installer.git",
-                "reference": "fe390591e0241955f22eb9ba327d137e501c771c"
+                "reference": "1c968e542d8843d7cd71de3c5c9c3ff3ad71a1db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Dealerdirect/phpcodesniffer-composer-installer/zipball/fe390591e0241955f22eb9ba327d137e501c771c",
-                "reference": "fe390591e0241955f22eb9ba327d137e501c771c",
+                "url": "https://api.github.com/repos/Dealerdirect/phpcodesniffer-composer-installer/zipball/1c968e542d8843d7cd71de3c5c9c3ff3ad71a1db",
+                "reference": "1c968e542d8843d7cd71de3c5c9c3ff3ad71a1db",
                 "shasum": ""
             },
             "require": {
                 "composer-plugin-api": "^1.0 || ^2.0",
                 "php": ">=5.3",
-                "squizlabs/php_codesniffer": "^2.0 || ^3.0 || ^4.0"
+                "squizlabs/php_codesniffer": "^2.0 || ^3.1.0 || ^4.0"
             },
             "require-dev": {
                 "composer/composer": "*",
-                "phpcompatibility/php-compatibility": "^9.0",
-                "sensiolabs/security-checker": "^4.1.0"
+                "php-parallel-lint/php-parallel-lint": "^1.3.1",
+                "phpcompatibility/php-compatibility": "^9.0"
             },
             "type": "composer-plugin",
             "extra": {
@@ -957,6 +957,10 @@
                     "email": "franck.nijhof@dealerdirect.com",
                     "homepage": "http://www.frenck.nl",
                     "role": "Developer / IT Manager"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/Dealerdirect/phpcodesniffer-composer-installer/graphs/contributors"
                 }
             ],
             "description": "PHP_CodeSniffer Standards Composer Installer Plugin",
@@ -968,6 +972,7 @@
                 "codesniffer",
                 "composer",
                 "installer",
+                "phpcbf",
                 "phpcs",
                 "plugin",
                 "qa",
@@ -982,7 +987,7 @@
                 "issues": "https://github.com/dealerdirect/phpcodesniffer-composer-installer/issues",
                 "source": "https://github.com/dealerdirect/phpcodesniffer-composer-installer"
             },
-            "time": "2020-12-07T18:04:37+00:00"
+            "time": "2022-02-04T12:51:07+00:00"
         },
         {
             "name": "dg/mysql-dump",
@@ -1346,12 +1351,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\Psr7\\": "src/"
-                },
                 "files": [
                     "src/functions_include.php"
-                ]
+                ],
+                "psr-4": {
+                    "GuzzleHttp\\Psr7\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1504,12 +1509,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Illuminate\\Support\\": ""
-                },
                 "files": [
                     "helpers.php"
-                ]
+                ],
+                "psr-4": {
+                    "Illuminate\\Support\\": ""
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1594,16 +1599,16 @@
         },
         {
             "name": "lucatume/wp-browser",
-            "version": "3.0.15",
+            "version": "3.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lucatume/wp-browser.git",
-                "reference": "389f7055e2f25618b955721fc27f63df777f620e"
+                "reference": "35a8dcef9b06367405100071cd6fb9d2123691fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lucatume/wp-browser/zipball/389f7055e2f25618b955721fc27f63df777f620e",
-                "reference": "389f7055e2f25618b955721fc27f63df777f620e",
+                "url": "https://api.github.com/repos/lucatume/wp-browser/zipball/35a8dcef9b06367405100071cd6fb9d2123691fc",
+                "reference": "35a8dcef9b06367405100071cd6fb9d2123691fc",
                 "shasum": ""
             },
             "require": {
@@ -1620,6 +1625,15 @@
                 "vria/nodiacritic": "^0.1.2",
                 "wp-cli/wp-cli": ">=2.0 <3.0.0",
                 "zordius/lightncandy": "^1.2"
+            },
+            "conflict": {
+                "codeception/module-asserts": ">=2.0",
+                "codeception/module-cli": ">=2.0",
+                "codeception/module-db": ">=2.0",
+                "codeception/module-filesystem": ">=2.0",
+                "codeception/module-phpbrowser": ">=2.0",
+                "codeception/module-webdriver": ">=2.0",
+                "codeception/util-universalframework": ">=2.0"
             },
             "require-dev": {
                 "erusev/parsedown": "^1.7",
@@ -1675,7 +1689,7 @@
             ],
             "support": {
                 "issues": "https://github.com/lucatume/wp-browser/issues",
-                "source": "https://github.com/lucatume/wp-browser/tree/3.0.15"
+                "source": "https://github.com/lucatume/wp-browser/tree/3.1.3"
             },
             "funding": [
                 {
@@ -1683,7 +1697,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-12-10T09:27:07+00:00"
+            "time": "2022-02-01T09:21:06+00:00"
         },
         {
             "name": "mikehaertl/php-shellcommand",
@@ -1873,12 +1887,12 @@
             },
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "DeepCopy\\": "src/DeepCopy/"
-                },
                 "files": [
                     "src/DeepCopy/deep_copy.php"
-                ]
+                ],
+                "psr-4": {
+                    "DeepCopy\\": "src/DeepCopy/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -2258,16 +2272,16 @@
         },
         {
             "name": "phpcompatibility/phpcompatibility-wp",
-            "version": "2.1.2",
+            "version": "2.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCompatibility/PHPCompatibilityWP.git",
-                "reference": "a792ab623069f0ce971b2417edef8d9632e32f75"
+                "reference": "d55de55f88697b9cdb94bccf04f14eb3b11cf308"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCompatibility/PHPCompatibilityWP/zipball/a792ab623069f0ce971b2417edef8d9632e32f75",
-                "reference": "a792ab623069f0ce971b2417edef8d9632e32f75",
+                "url": "https://api.github.com/repos/PHPCompatibility/PHPCompatibilityWP/zipball/d55de55f88697b9cdb94bccf04f14eb3b11cf308",
+                "reference": "d55de55f88697b9cdb94bccf04f14eb3b11cf308",
                 "shasum": ""
             },
             "require": {
@@ -2308,7 +2322,7 @@
                 "issues": "https://github.com/PHPCompatibility/PHPCompatibilityWP/issues",
                 "source": "https://github.com/PHPCompatibility/PHPCompatibilityWP"
             },
-            "time": "2021-07-21T11:09:57+00:00"
+            "time": "2021-12-30T16:37:40+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -4500,12 +4514,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Intl\\Idn\\": ""
-                },
                 "files": [
                     "bootstrap.php"
-                ]
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Intl\\Idn\\": ""
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -4585,12 +4599,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Intl\\Normalizer\\": ""
-                },
                 "files": [
                     "bootstrap.php"
                 ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Intl\\Normalizer\\": ""
+                },
                 "classmap": [
                     "Resources/stubs"
                 ]
@@ -4666,12 +4680,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Php72\\": ""
-                },
                 "files": [
                     "bootstrap.php"
-                ]
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Php72\\": ""
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -5149,21 +5163,21 @@
         },
         {
             "name": "wp-cli/wp-cli",
-            "version": "v2.5.0",
+            "version": "v2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/wp-cli.git",
-                "reference": "0bcf0c54f4d35685211d435e25219cc7acbe6d48"
+                "reference": "dee13c2baf6bf972484a63f8b8dab48f7220f095"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/wp-cli/zipball/0bcf0c54f4d35685211d435e25219cc7acbe6d48",
-                "reference": "0bcf0c54f4d35685211d435e25219cc7acbe6d48",
+                "url": "https://api.github.com/repos/wp-cli/wp-cli/zipball/dee13c2baf6bf972484a63f8b8dab48f7220f095",
+                "reference": "dee13c2baf6bf972484a63f8b8dab48f7220f095",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
-                "mustache/mustache": "~2.13",
+                "mustache/mustache": "^2.14.1",
                 "php": "^5.6 || ^7.0 || ^8.0",
                 "rmccue/requests": "^1.8",
                 "symfony/finder": ">2.7",
@@ -5171,12 +5185,12 @@
                 "wp-cli/php-cli-tools": "~0.11.2"
             },
             "require-dev": {
-                "roave/security-advisories": "dev-master",
+                "roave/security-advisories": "dev-latest",
                 "wp-cli/db-command": "^1.3 || ^2",
                 "wp-cli/entity-command": "^1.2 || ^2",
                 "wp-cli/extension-command": "^1.1 || ^2",
                 "wp-cli/package-command": "^1 || ^2",
-                "wp-cli/wp-cli-tests": "^3.0.7"
+                "wp-cli/wp-cli-tests": "^3.1.3"
             },
             "suggest": {
                 "ext-readline": "Include for a better --prompt implementation",
@@ -5189,7 +5203,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.5.x-dev"
+                    "dev-master": "2.6.x-dev"
                 }
             },
             "autoload": {
@@ -5216,7 +5230,7 @@
                 "issues": "https://github.com/wp-cli/wp-cli/issues",
                 "source": "https://github.com/wp-cli/wp-cli"
             },
-            "time": "2021-05-14T13:44:51+00:00"
+            "time": "2022-01-25T16:31:27+00:00"
         },
         {
             "name": "wp-coding-standards/wpcs",
@@ -5336,5 +5350,5 @@
     "platform-overrides": {
         "php": "7.0"
     },
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.1.0"
 }

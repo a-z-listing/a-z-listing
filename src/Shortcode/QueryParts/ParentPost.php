@@ -47,11 +47,10 @@ class ParentPost extends Extension {
 	 */
 	public function shortcode_query_for_display_and_attribute( $query, string $display, string $key, $value, array $attributes ) {
 		if ( isset( $attributes['get-all-children'] ) && a_z_listing_is_truthy( $attributes['get-all-children'] ) ) {
-			$child_query = array( 'child_of' => $value );
+			$query['child_of'] = $value;
 		} else {
-			$child_query = array( 'post_parent' => $value );
+			$query['post_parent'] = $value;
 		}
-		$query = wp_parse_args( $query, $child_query );
 
 		return $query;
 	}

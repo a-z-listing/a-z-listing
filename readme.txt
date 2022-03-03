@@ -5,8 +5,8 @@ Donate Link: https://liberapay.com/diddledan/donate
 Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 5.0
 Requires PHP: 7.0
-Tested up to: 5.8
-Stable tag: 4.2.0
+Tested up to: 5.9
+Stable tag: 4.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -468,33 +468,19 @@ If there is code already in your functions.php then add just the lines between `
 
 == Changelog ==
 
-= 4.2.0 =
+= 4.2.1 =
 
-* Ensure that we wait for the block editor to be fully loaded before registering the block
-  * Fixes: extension plugins registration order
-
-*Updates from 4.0.0*
-
-* NEW: Block Editor support
-* NEW: symbols-first display
-* NEW: post-ID and parent-post name
-* Bump minimum PHP requirement to 7.0
-* Bump minimum WordPress requirement to 5.0
-* Update stylesheet to use CSS Variables
-* Refactor for better maintainability
-* Namespace all classes
-* Improve documentation
-* Add legacy non-namespaced backwards-compatibility classes
-* Add PHP type hints
-* Add strict PHP types checking
-* Add extra template name to match the displayed post-type
-* Always load CSS styles to reduce unstyled listings cases
-* Use php-scoper to reduce conflicts with other plugins
-* Update NPM dependencies
+* Fix broken `hide-empty-terms` feature.
+* Fix empty listings when combining `display-posts`, `post-parent` and `get-all-children`.
 
 **EXTENSIONS**
 
 Check out the two extensions at [A-Z-Listing.com](https://a-z-listing.com/shop). These extensions provide convinience functionality. Purchasing one or both will help towards the cost of maintaining the A-Z Listing plugin.
+
+= 4.2.0 =
+
+* Ensure that we wait for the block editor to be fully loaded before registering the block
+  * Fixes: extension plugins registration order
 
 = 4.1.3 =
 
@@ -539,55 +525,6 @@ This is a major version change, which means that it might break your site when y
 * Always load CSS styles to reduce unstyled listings cases
 * Use php-scoper to reduce conflicts with other plugins
 * Update NPM dependencies
-
-= 3.1.2 =
-
-* Ensure extra composer dependencies aren't included in distribution. Otherwise identical to 3.1.1.
-
-= 3.1.1 =
-
-* Bugfix to squash a PHP deprecation warning when running PHP-7.4+
-
-= 3.1.0 =
-
-* Ensure paths are correct when loading PHP files.
-* Add hook to customise sorting of items within each letter.
-* Fix broken permalinks on hierarchical post-types, e.g. page.
-
-= 3.0.2 =
-
-* Fix for causing "This site is experiencing difficulties" errors on some sites.
-
-= 3.0.1 =
-
-* Fix broken permalinks in 3.0.0
-
-= 3.0.0 =
-
-This is a major version change, which means that it might break your site when you upgrade. Please check in a test site first!
-
-* Add `get_the_item_id` and `the_item_id` template tags.
-* Add `get_the_item_type` template tag.
-* Add support for extensions.
-* Complete refactor to use more modern PHP features.
-* Minor refactoring of `get_the_item_object`, `get_item_meta`, and `get_the_item_count` template tags.
-* Miscellaneous documentation Fixes.
-
-= BREAKING CHANGES in 2.0.0+ =
-
-*Multi column example*
-
-* If you have copied the multi-column example in previous releases to your theme folder then you will need to perform some manual steps.
-* If you have not edited the file, just delete it and the new template from the plugin will take control and perform the same functionality.
-* If you have modified the example template then you will need to compare with the file in the plugin at `templates/a-z-listing.php` and merge any changes into your template.
-
-*Template customisations*
-
-* If you have customised the in-built templates or written your own then you may experience breakage due to the post object not being loaded automatically.
-* If you require the template to access more than the post title and URL then you will need to add an additional call after `the_item()` to load the full `WP_Post` object into memory.
-* To load the post object you need to call `$a_z_query->get_the_item_object( 'I understand the issues!' );`.
-  __The argument must read exactly as written here to confirm that you understand that this might cause slowness or memory usage problems.__
-  _This step is purposely omitted to save memory and try to improve performance._
 
 = Previous =
 

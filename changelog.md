@@ -1,5 +1,38 @@
 # Full Changelog #
 
+## 4.2.1 ##
+
+* Fix broken `hide-empty-terms` feature.
+* Fix empty listings when combining `display-posts`, `post-parent` and `get-all-children`.
+
+## 4.2.0 ##
+
+* Ensure that we wait for the block editor to be fully loaded before registering the block
+  * Fixes: extension plugins registration order
+
+## 4.1.3 ##
+
+* Fix CSS Style rules to ensure the expected number of columns is displayed
+
+## 4.1.2 ##
+
+* Reimplement obsoleted template tag methods that were incorrectly removed in version 4.0.0:
+  * `the_letter_count`
+  * `get_the_letter_count`
+* Fix block editor crash when opening a post or page that holds a previously written A-Z Listing shortcode
+
+## 4.1.1 ##
+
+* Fix undefined `A_Z_Listing\Alphabet::$symbols_first` error
+
+## 4.1.0 ##
+
+* Introduce more robust sorting mechanism that fixes sorting errors introduced by version 4.0.0
+
+## 4.0.1 ##
+
+Bug fixes for the 4.0.0 release
+
 ## 4.0.0 ##
 
 This is a major version change, which means that it might break your site when you upgrade. Please check in a test site first!
