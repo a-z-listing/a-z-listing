@@ -6,7 +6,7 @@ Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 5.0
 Requires PHP: 7.0
 Tested up to: 6.0
-Stable tag: 4.2.1
+Stable tag: 4.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -468,14 +468,18 @@ If there is code already in your functions.php then add just the lines between `
 
 == Changelog ==
 
-= 4.2.1 =
+= 4.3.0 =
 
-* Fix broken `hide-empty-terms` feature.
-* Fix empty listings when combining `display-posts`, `post-parent` and `get-all-children`.
+* Update to better support the premium extensions in the block editor
 
 **EXTENSIONS**
 
 Check out the two extensions at [A-Z-Listing.com](https://a-z-listing.com/shop). These extensions provide convinience functionality. Purchasing one or both will help towards the cost of maintaining the A-Z Listing plugin.
+
+= 4.2.1 =
+
+* Fix broken `hide-empty-terms` feature.
+* Fix empty listings when combining `display-posts`, `post-parent` and `get-all-children`.
 
 = 4.2.0 =
 

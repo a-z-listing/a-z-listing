@@ -6,7 +6,7 @@
 import { __ } from '@wordpress/i18n';
 
 import { createBlock, registerBlockType } from '@wordpress/blocks';
-import { registerStore } from '@wordpress/data';
+import { createReduxStore, register } from '@wordpress/data';
 import domReady from '@wordpress/dom-ready';
 import { applyFilters } from '@wordpress/hooks';
 import { postList as icon } from '@wordpress/icons';
@@ -16,15 +16,15 @@ import edit from './edit';
 import globalAttributes from './attributes.json';
 import DisplayOptions from '../components/DisplayOptions';
 import ItemSelection from '../components/ItemSelection';
+import Extensions from '../components/Extensions';
 import AZInspectorControls from '../components/AZInspectorControls';
 
 import shortcodeUpgrader from './shortcode-upgrader';
 
-registerStore( 'a-z-listing/slotfills', {
+const store = createReduxStore( 'a-z-listing/slotfills', {
 	reducer( state = {} ) {
 		return state;
 	},
-	actions: {},
 	selectors: {
 		getDisplayOptions() {
 			return DisplayOptions;
@@ -32,11 +32,15 @@ registerStore( 'a-z-listing/slotfills', {
 		getItemSelection() {
 			return ItemSelection;
 		},
+		getExtensions() {
+			return Extensions;
+		},
 		getInspectorControls() {
 			return AZInspectorControls;
 		},
 	},
 } );
+register( store );
 
 domReady( () => {
 	const attributes = applyFilters( 'a_z_listing_attributes', globalAttributes );

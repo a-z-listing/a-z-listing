@@ -49,6 +49,7 @@ import { MAX_POSTS_COLUMNS } from './constants';
 import defaults from './attributes.json';
 import ItemSelection from '../components/ItemSelection';
 import DisplayOptions from '../components/DisplayOptions';
+import Extensions from '../components/Extensions';
 import AZInspectorControls from '../components/AZInspectorControls';
 import PostParent from '../components/PostParent';
 
@@ -496,6 +497,10 @@ const A_Z_Listing_Edit = ( { attributes, setAttributes } ) => {
 								) }
 							</DisplayOptions.Slot>
 						</PanelBody>
+
+						<Extensions.Slot>
+							{ ( subFills ) => ( <> { subFills } </> ) }
+						</Extensions.Slot>
 
 						{ fills }
 					</>
