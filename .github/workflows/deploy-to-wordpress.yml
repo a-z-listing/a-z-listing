@@ -46,15 +46,30 @@ jobs:
           asset_content_type: application/zip
 
       - name: Update website docs
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SITE_DIRECTORY: ${{ secrets.SITE_DIRECTORY }}
         run: |
-          POSTS_TO_DELETE=$(wp --ssh=$SSH_USERNAME@$SSH_HOST:$SITE_DIRECTORY post list \
+          curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+          mv wp-cli.phar /tmp/wp
+          chmod +x /tmp/wp
+
+          mkdir -p $HOME/.ssh
+          cp known_hosts $HOME/.ssh/
+          touch $HOME/.ssh/id_rsa
+          chmod 600 $HOME/.ssh/id_rsa
+          echo "$SSH_PRIVATE_KEY" > $HOME/.ssh/id_rsa
+
+          POSTS_TO_DELETE=$(/tmp/wp --ssh=$SSH_USERNAME@$SSH_HOST:$SITE_DIRECTORY post list \
             --post_type=wp-parser-function,wp-parser-method,wp-parser-class,wp-parser-hook \
             --format=ids)
-          wp --ssh=$SSH_USERNAME@$SSH_HOST:$SITE_DIRECTORY post delete $POSTS_TO_DELETE
+          /tmp/wp --ssh=$SSH_USERNAME@$SSH_HOST:$SITE_DIRECTORY post delete $POSTS_TO_DELETE
 
           for tax in wp-parser-source-file wp-parser-source-file wp-parser-since wp-parser-since; do
-            TERMS_TO_DELETE=$(wp --ssh=$SSH_USERNAME@$SSH_HOST:$SITE_DIRECTORY term list $tax --format=ids)
-            wp --ssh=$SSH_USERNAME@$SSH_HOST:$SITE_DIRECTORY term delete $tax $TERMS_TO_DELETE
+            TERMS_TO_DELETE=$(/tmp/wp --ssh=$SSH_USERNAME@$SSH_HOST:$SITE_DIRECTORY term list $tax --format=ids)
+            /tmp/wp --ssh=$SSH_USERNAME@$SSH_HOST:$SITE_DIRECTORY term delete $tax $TERMS_TO_DELETE
           done
 
-          wp --ssh=$SSH_USERNAME@$SSH_HOST:$SITE_DIRECTORY parser create wp-content/plugins/a-z-listing --user=diddledani
+          /tmp/wp --ssh=$SSH_USERNAME@$SSH_HOST:$SITE_DIRECTORY parser create wp-content/plugins/a-z-listing --user=diddledani
