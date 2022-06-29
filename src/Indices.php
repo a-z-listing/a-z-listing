@@ -98,7 +98,7 @@ class Indices extends Singleton implements Extension {
 		 */
 		$title = apply_filters( 'a_z_listing_pre_index_item_title', $title, $item, $type );
 
-		$index = Strings::maybe_mb_substr( $title, 0, 1 );
+		$index = Strings::maybe_mb_substr( trim( $title ), 0, 1 );
 
 		/**
 		 * Modify the indice(s) to group this item under
