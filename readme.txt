@@ -6,7 +6,7 @@ Tags: a to z, a-z, archive, listing, widget, index
 Requires at least: 5.0
 Requires PHP: 7.0
 Tested up to: 6.0
-Stable tag: 4.3.0
+Stable tag: 4.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -468,13 +468,17 @@ If there is code already in your functions.php then add just the lines between `
 
 == Changelog ==
 
-= 4.3.0 =
+= 4.3.1 =
 
-* Update to better support the premium extensions in the block editor
+* Bugfix: Add whitespace trimming of the titles before detecting the index letter for an item. This should fix issues with the Search and Replace extension, and custom coded title manipulations that some users have written, that caused all entries to be indexed under the "other" category (i.e. `#`).
 
 **EXTENSIONS**
 
 Check out the two extensions at [A-Z-Listing.com](https://a-z-listing.com/shop). These extensions provide convinience functionality. Purchasing one or both will help towards the cost of maintaining the A-Z Listing plugin.
+
+= 4.3.0 =
+
+* Update to better support the premium extensions in the block editor
 
 = 4.2.1 =
 
