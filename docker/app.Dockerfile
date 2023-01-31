@@ -64,7 +64,7 @@ RUN echo "upload_max_filesize = 50M" >> /usr/local/etc/php/conf.d/custom.ini \
     ;
 
 # Install XDebug 3
-RUN if test "$(printf '%s\n' "$PHP_VERSION" "7.4" | sort -V | head -n 1)" != "$PHP_VERSION"; then \
+RUN if test "7.4" = "$PHP_VERSION"; then \
         echo "Installing XDebug 3 (in disabled state)" \
         && pecl install xdebug-3.1.6 \
         && mkdir -p /usr/local/etc/php/conf.d/disabled \
